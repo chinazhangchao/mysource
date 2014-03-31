@@ -1,0 +1,5 @@
+<UUVersion req="1">
+        <Name>FBDCore</Name>
+        <Version>0.0.3.0</Version>
+        <Crypt>AES,RC4</Crypt>
+</UUVersion>
