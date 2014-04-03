@@ -19,10 +19,10 @@ public:
         return (*pInstance);
     }
 
-    virtual ~Singleton(){}
-
 protected:
     Singleton(){}
+    virtual ~Singleton(){}
+    
 private:
     Singleton(const Singleton&);
     Singleton& operator = (const Singleton&);
