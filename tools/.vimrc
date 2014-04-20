@@ -44,6 +44,7 @@ syntax enable
 syntax on
 
 set ts=4
+set sw=4
 set expandtab
 set autoindent
 set fileencodings=utf-8,gb2312,gbk,big5
