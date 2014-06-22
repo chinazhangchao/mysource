@@ -48,11 +48,15 @@ set sw=4
 set expandtab
 set autoindent
 set fileencodings=utf-8,gb2312,gbk,big5
+set ruler
+set statusline+=%f
 
 set tags=tags
 set tags+=./tags "add current directory's   generated tags file
 set tags+=/usr/include/tags
-set tags+=/usr/local/include/tags
+set tags+=/Users/zhangchao/Qt5.2.1/5.2.1/clang_64/lib/QtCore.framework/Headers/tags
+set tags+=/Users/zhangchao/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Headers/tags
+set tags+=/Users/zhangchao/Qt5.2.1/5.2.1/clang_64/lib/QtWidgets.framework/Versions/5/Headers/tags
 
 "-- omnicppcomplete setting --
 set completeopt=menu,menuone
