@@ -84,6 +84,7 @@ let NERDTreeWinSize=31
 nnoremap <F2> :NERDTreeToggle<CR>
 
 map <F3> :TlistToggle<CR>
+map <F5> :!python %<CR>
 
 "cscope setting
 if has("cscope")
