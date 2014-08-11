@@ -37,7 +37,10 @@ filetype plugin on
 filetype indent on
 
 map <silent> <F8> :!csfile.sh<CR> :cs add cscope.out<CR>
+nnoremap <silent> <leader>fc : FufCoverageFile<CR>
+nnoremap <silent> <leader>ff : FufFile<CR>
 
+set nocompatible
 set hlsearch
 set number
 syntax enable
