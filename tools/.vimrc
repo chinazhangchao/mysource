@@ -40,6 +40,7 @@ map <silent> <F8> :!csfile.sh<CR> :cs add cscope.out<CR>
 nnoremap <silent> <leader>fc : FufCoverageFile<CR>
 nnoremap <silent> <leader>ff : FufFile<CR>
 
+set runtimepath^=~/.vim/bundle/ctrlp.vim
 set nocompatible
 set hlsearch
 set number
