@@ -2,88 +2,91 @@ require "open-uri"
 require 'nokogiri'
 require 'Open3'
 
-module Constant
-  MaxTryTime = 5
+module DownLoadConfig
+  MaxTryTime = 2
+  MaxConcurrent = 20
 end
 
 module Helper
   LinkStruct = Struct.new(:href, :locPath)
+  ProcessInfo = Struct.new(:stdIn, :stdOut, :stdErr, :waitThr)
 end
 
-def downLoad(url, locPath)
-  parseHtml(url) do |data|
-    open(locPath, "wb"){|f| f.write(data); f.close}
-  end
-end
-
-def parseHtml(url)
+def getUrlData(url)
     data = open(url){|f| f.read }
     yield data
 end
 
-def get_response_with_redirect(loc)
-  begin
-    r = Net::HTTP.get_response(URI(loc))
-    i=0
-    while r.code == "301"
-      loc=r.header['location']
-      puts "redirect location:#{r}"
-      r = Net::HTTP.get_response(URI(loc))
-      i+=1
-      puts i
-    end
-  rescue URI::InvalidURIError => e
-    URI(URI.escape(loc))
+def downLoad(url, locPath)
+  getUrlData(url) do |data|
+    open(locPath, "wb"){|f| f.write(data); f.close}
   end
-  puts "code:#{r.code}"
 end
 
-def downUseCurl(href, locPath, failedList)
-  puts "curl -L -o #{locPath} #{href}"
-  Open3.popen3("curl -L -o #{locPath} #{href}") {|stdin, stdout, stderr, wait_thr|
-  exit_status = wait_thr.value
-  if exit_status.exitstatus != 0
-    failedList.push( Helper::LinkStruct.new(href, locPath))
-    puts "failed,href:#{href}\nlocPath:#{locPath}\nerror msg:#{stderr.gets}"
-  end
-}
-end
-
-def downWithStatus(href, locPath, failedList)
-    begin
-      downLoad(href, locPath)
-      #puts "#{link.content}, #{link['href']}"
-    rescue OpenURI::HTTPError => httpErr
-      puts "http error:#{httpErr}\n href:#{href} \nlocPath:#{locPath}" 
-      failedList.push( Helper::LinkStruct.new(href, locPath))
-    rescue Exception => err
-      puts "unkown error:#{err}"
+def multiThreadDown(linkStructList, successList, failedList, tryTimes = 0)
+  threads = []
+  mutexFailed = Mutex.new
+  mutexSucceed = Mutex.new
+  linkStructList.each do |e|
+    pInfo = Helper::ProcessInfo.new
+    unless File.exist?(e.locPath)
+      threads << Thread.new {
+        cmdLine = "curl --retry #{tryTimes} -L -o \"#{e.locPath}\" \"#{e.href}\""
+        puts cmdLine
+        Open3.popen3(cmdLine) {|stdin, stdout, stderr, wait_thr|
+          exit_status = wait_thr.value
+          if exit_status.exitstatus != 0
+            mutexFailed.synchronize{failedList.push( Helper::LinkStruct.new(e.href, e.locPath))}
+            puts "failed,exitstatus:#{exit_status.exitstatus},\nhref:#{e.href}\nlocPath:#{e.locPath}\nerror msg:#{stderr.gets}"
+          else
+            mutexSucceed.synchronize{successList << Helper::LinkStruct.new(e.href, e.locPath)}
+          end
+          stdin.close
+          stdout.close
+          stderr.close
+        }
+      }
     end
+  end
+  puts "threads size:#{threads.size}"
+  threads.each { |thr| thr.join }
 end
 
-def saveArticle(data)
+def batchDownList(downList)
+  failedList = []
+  successList = []
+  index = 0
+  puts "total size:#{downList.size}"
+
+  proList = downList[index, DownLoadConfig::MaxConcurrent]
+  while proList!=nil && proList.size > 0
+    multiThreadDown(proList, successList, failedList)
+    index += DownLoadConfig::MaxConcurrent
+    proList = downList[index, DownLoadConfig::MaxConcurrent]
+  end
+
+  puts "successList size:#{successList.size}"
+  puts "failedList size:#{failedList.size}"
+end
+
+def saveArticleConcurrent(data, downDir, filePostFix)
+  puts "get data complete"
   doc=Nokogiri::HTML(data)
   listGroup=doc.css("ul.list-group")
   linkList = listGroup.css("a")
+  puts "extrat href complete"
 
-  failedList = []
+  downList = []
   linkList.each do |link|
     href=link['href']
-    locPath = "wy/"+link.content+".html"
-    downUseCurl(href, locPath, failedList) unless File.exist?(locPath)
-    puts "one complete"
+    locPath = downDir+link.content+filePostFix
+    downList.push( Helper::LinkStruct.new(href, locPath))
   end
-  tryTimes=0
-  while !failedList.empty? && tryTimes < Constant::MaxTryTime
-    puts "failed size:#{failedList.size}"
-    fL = []
-    failedList.each { |obj| downUseCurl(obj.href, obj.locPath, fL) }
-    failedList = fL
-    tryTimes+=1
-  end
+  puts "down list complete"
+  batchDownList(downList)
 end
 
 def wangyinArticle
-  parseHtml("http://www.yinwang.org/"){|data| saveArticle(data)}
+  getUrlData("http://www.yinwang.org/"){|data| saveArticleConcurrent(data, "new/", ".html")}
 end
 wangyinArticle
