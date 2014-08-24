@@ -1,5 +1,9 @@
 require_relative 'spider.rb'
 
+def allComplete(successList, failedList)
+  puts "allComplete,successList:\n#{successList}\n,failedList:#{failedList}"
+end
+
 def saveWYArticle(successList, failedList)
   puts "get index complete"
   if successList.size > 0
@@ -8,14 +12,17 @@ def saveWYArticle(successList, failedList)
     linkList = listGroup.css("a")
     puts "extrat href complete"
 
+    downDir = "new/"
+    FileUtils.mkdir_p(downDir) unless Dir.exist?(downDir)
+
     downList = []
     linkList.each do |link|
       href = link['href']
-      locPath = "new/" + link.content + ".html"
+      locPath = downDir + link.content + ".html"
       downList.push( Helper::LinkStruct.new(href, locPath))
     end
     puts "down list complete"
-    batchDownList(downList)
+    batchDownList(downList, self.method(:allComplete))
   end
 end
 

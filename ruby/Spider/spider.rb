@@ -4,7 +4,8 @@ require 'Open3'
 require 'fileutils'
 
 module DownLoadConfig
-  MaxTryTime = 0
+  TimeOutLimit = 3*60 #3 minutes
+  MaxTryTimes = 0
   MaxConcurrent = 20
   OverrideExist = false
 end
@@ -25,7 +26,7 @@ def downLoad(url, locPath)
   end
 end
 
-def multiThreadDown(linkStructList, successList, failedList, tryTimes = 0)
+def multiThreadDown(linkStructList, successList, failedList)
   threads = []
   mutexFailed = Mutex.new
   mutexSucceed = Mutex.new
@@ -35,7 +36,8 @@ def multiThreadDown(linkStructList, successList, failedList, tryTimes = 0)
       successList << Helper::LinkStruct.new(e.href, e.locPath)
     else
       threads << Thread.new {
-        cmdLine = "curl --retry #{tryTimes} -L -o \"#{e.locPath}\" \"#{e.href}\""
+        cmdLine = "curl -m #{DownLoadConfig::TimeOutLimit} \
+        --retry #{DownLoadConfig::MaxTryTimes} -L -o \"#{e.locPath}\" \"#{e.href}\""
         puts cmdLine
         Open3.popen3(cmdLine) {|stdin, stdout, stderr, wait_thr|
           exit_status = wait_thr.value
@@ -72,7 +74,7 @@ def batchDownList(downList, callBack = nil)
   successList = []
   index = 0
   puts "total size:#{downList.size}"
-  multiThreadDown(downList, successList, failedList, DownLoadConfig::MaxTryTime)
+  multiThreadDown(downList, successList, failedList)
   puts "successList size:#{successList.size}"
   puts "failedList size:#{failedList.size}"
   callBack.call(successList, failedList) unless callBack.nil?
