@@ -1,7 +1,7 @@
 require_relative 'spider.rb'
 
 def allComplete(successList, failedList)
-  puts "allComplete,successList:\n#{successList}\n,failedList:#{failedList}"
+  puts "allComplete,failedList:#{failedList}"
 end
 
 def saveWYArticle(successList, failedList)
@@ -22,9 +22,9 @@ def saveWYArticle(successList, failedList)
       downList.push( Helper::LinkStruct.new(href, locPath))
     end
     puts "down list complete"
-    batchDownList(downList, self.method(:allComplete))
+    batchDownList(downList, :allComplete)
   end
 end
 
 parseDownLoadUrl("http://www.yinwang.org/",\
- "wyIndex", "index.html", self.method(:saveWYArticle))
+ "wyIndex", "index.html", :saveWYArticle)
