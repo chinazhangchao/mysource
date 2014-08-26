@@ -31,7 +31,7 @@ module Spider
   class << self
     def getUrlData(url)
       data = open(url){|f| f.read }
-      yield data
+      yield data if block_given?
     end
 
     def downLoad(url, locPath)
