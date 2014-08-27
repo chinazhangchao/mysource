@@ -67,9 +67,6 @@ module Spider
                   successList << Helper::LinkStruct.new(e.href, e.locPath)
                 }
               end
-              stdin.close
-              stdout.close
-              stderr.close
             }
           }
           if threads.size >= DownLoadConfig::MaxConcurrent
