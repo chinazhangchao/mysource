@@ -1,24 +1,53 @@
 require 'curb'
-
-#c = Curl::Easy.new("http://www.baidu.com")
-c = Curl::Easy.new("http://www.lookmw.cn/")
-c.follow_location = true
-c.timeout=3
-c.perform
-puts "content_type:#{c.content_type}"
-puts c.body.encoding
-puts c.body.valid_encoding?
-#out=File.new("lookmw.html", "w")
-#out << c.body.encode(Encoding::UTF_8, Encoding::GB2312)
-#puts c.head
-puts "content_type:#{c.content_type}"
-
-=begin
-easy_options = {:follow_location => true}
-multi_options = {:pipeline => true}
-
-Curl::Multi.get('url1','url2','url3','url4','url5', easy_options, multi_options) do|easy|
-  # do something interesting with the easy response
-  puts easy.last_effective_url
+require_relative 'spider.rb'
+require 'rchardet'
+def toUtf8(_string)
+  cd = CharDet.detect(_string)      #用于检测编码格式  在gem rchardet9里
+  if cd["confidence"] > 0.6
+    _string.force_encoding(cd["encoding"])
+  end
+  #_string.encode!("utf-8", :undef => :replace, :replace => "?", :invalid => :replace)
+  _string.encode!(Encoding::UTF_8)
+  return _string
 end
-=end
+
+def test
+  c2 = Curl::Easy.new("http://www.baidu.com")
+  c1 = Curl::Easy.new("http://www.lookmw.cn/")
+  c1.follow_location = true
+  c1.timeout=3
+  #c1.perform
+  m = Curl::Multi.new
+
+  m.add( c1 )
+  m.add( c2 )
+
+  m.perform
+  puts "c1 content_type:#{c1.content_type}"
+  puts c1.response_code
+  #out=File.new("lookmw.html", "w")
+  #out << c1.body.encode(Encoding::UTF_8, Encoding::GB2312)
+  #puts c1.head
+  puts "c2 content_type:#{c2.content_type}"
+end
+
+def test_remote_requests
+  downList = []
+  href = "http://www.baidu.com"
+  locPath = "baidu.html"
+  downList.push( Helper::LinkStruct.new(href, locPath))
+  downList.push(Helper::LinkStruct.new("http://www.lookmw.cn/","mw.html"))
+  m = Curl::Multi.new
+  # add a few easy handles
+  downList.each do |link|
+    c = Curl::Easy.new(link.href) do|curl|
+      curl.follow_location = true
+      curl.timeout=3
+      curl.on_success{ File.new(link.locPath, "w") << toUtf8(curl.body)}
+    end
+    m.add(c)
+  end
+
+  m.perform
+end
+test_remote_requests
