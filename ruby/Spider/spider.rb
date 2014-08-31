@@ -2,6 +2,8 @@ require "open-uri"
 require 'nokogiri'
 require 'Open3'
 require 'fileutils'
+require 'curb'
+require_relative '../Util/helper'
 
 module DownLoadConfig
   TimeOutLimit = 3*60 #3 minutes
@@ -80,12 +82,52 @@ module Spider
       threads.each { |thr| thr.join }
     end
 
+    def multiProcessDown(linkStructList, successList, failedList)
+      #mutexFailed = Mutex.new
+      #mutexSucceed = Mutex.new
+      m = Curl::Multi.new
+      linkStructList.each do |e|
+        if !DownLoadConfig::OverrideExist && File.exist?(e.locPath)
+          #mutexSucceed.synchronize{
+          successList << Helper::LinkStruct.new(e.href, e.locPath)
+          #}
+        else
+          c = Curl::Easy.new(e.href) do|curl|
+            curl.follow_location = true
+            curl.timeout = 3*60
+            curl.on_success do |c|
+              begin
+                File.new(e.locPath, "w") << toUtf8(curl.body)
+                #mutexSucceed.synchronize{
+                puts "#{e.locPath} succeed"
+                puts "c:#{c}"
+                successList << Helper::LinkStruct.new(e.href, e.locPath)
+                #}
+              rescue Exception => e
+                puts e
+              end
+            end
+            curl.on_failure do |c,r|
+              #mutexFailed.synchronize{
+              puts "#{e.locPath} failed"
+              puts "c:#{c},r:#{r}"
+              failedList.push( Helper::LinkStruct.new(e.href, e.locPath))
+              #}
+            end
+          end
+          m.add(c)
+        end
+        m.perform
+      end
+    end
+
     def batchDownList(downList, callBack = nil)
       failedList = []
       successList = []
       index = 0
       puts "total size:#{downList.size}"
-      multiThreadDown(downList, successList, failedList)
+      #multiThreadDown(downList, successList, failedList)
+      multiProcessDown(downList, successList, failedList)
       puts "successList size:#{successList.size}"
       puts "failedList size:#{failedList.size}"
       callBack.call(successList, failedList) unless callBack.nil?

@@ -38,7 +38,6 @@ def test_remote_requests
   downList.push( Helper::LinkStruct.new(href, locPath))
   downList.push(Helper::LinkStruct.new("http://www.lookmw.cn/","mw.html"))
   m = Curl::Multi.new
-  # add a few easy handles
   downList.each do |link|
     c = Curl::Easy.new(link.href) do|curl|
       curl.follow_location = true
