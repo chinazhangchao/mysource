@@ -8,7 +8,7 @@ require_relative '../Util/helper'
 module DownLoadConfig
   TimeOutLimit = 3*60 #3 minutes
   MaxTryTimes = 0
-  MaxConcurrent = 20
+  MaxConcurrent = 50
   OverrideExist = false
 end
 
@@ -42,7 +42,7 @@ module Spider
       end
     end
 
-    def multiThreadDown(linkStructList, successList, failedList)
+    def multiProcessDown(linkStructList, successList, failedList)
       threads = []
       mutexFailed = Mutex.new
       mutexSucceed = Mutex.new
@@ -82,7 +82,52 @@ module Spider
       threads.each { |thr| thr.join }
     end
 
-    def multiProcessDown(linkStructList, successList, failedList)
+    def multiThreadDown(linkStructList, successList, failedList)
+      threads = []
+      mutexFailed = Mutex.new
+      mutexSucceed = Mutex.new
+      linkStructList.each do |e|
+        pInfo = Helper::ProcessInfo.new
+        if !DownLoadConfig::OverrideExist && File.exist?(e.locPath)
+          successList << Helper::LinkStruct.new(e.href, e.locPath)
+        else
+          threads << Thread.new {
+            c = Curl::Easy.new(e.href) do|curl|
+              curl.follow_location = true
+              curl.timeout =DownLoadConfig::TimeOutLimit
+              curl.on_success do |c|
+                begin
+                  File.new(e.locPath, "w") << toUtf8(curl.body)
+                  puts "#{e.locPath} succeed"
+                  mutexSucceed.synchronize{
+                    successList << Helper::LinkStruct.new(e.href, e.locPath)
+                  }
+                rescue Exception => e
+                  puts e
+                end
+              end
+              curl.on_failure do |c,r|
+                puts "#{e.locPath} failed"
+                puts "reason:#{r}"
+                mutexFailed.synchronize{
+                  failedList.push( Helper::LinkStruct.new(e.href, e.locPath))
+                }
+              end
+            end
+            c.perform
+          }
+          if threads.size >= DownLoadConfig::MaxConcurrent
+            puts "threads size:#{threads.size}"
+            threads.each { |thr| thr.join }
+            threads.clear
+          end
+        end
+      end
+      puts "threads size:#{threads.size}"
+      threads.each { |thr| thr.join }
+    end
+
+    def curlMultiDown(linkStructList, successList, failedList)
       #mutexFailed = Mutex.new
       #mutexSucceed = Mutex.new
       m = Curl::Multi.new
@@ -94,13 +139,12 @@ module Spider
         else
           c = Curl::Easy.new(e.href) do|curl|
             curl.follow_location = true
-            curl.timeout = 3*60
+            curl.timeout =DownLoadConfig::TimeOutLimit
             curl.on_success do |c|
               begin
                 File.new(e.locPath, "w") << toUtf8(curl.body)
                 #mutexSucceed.synchronize{
                 puts "#{e.locPath} succeed"
-                puts "c:#{c}"
                 successList << Helper::LinkStruct.new(e.href, e.locPath)
                 #}
               rescue Exception => e
@@ -110,7 +154,7 @@ module Spider
             curl.on_failure do |c,r|
               #mutexFailed.synchronize{
               puts "#{e.locPath} failed"
-              puts "c:#{c},r:#{r}"
+              puts "reason:#{r}"
               failedList.push( Helper::LinkStruct.new(e.href, e.locPath))
               #}
             end
@@ -126,8 +170,11 @@ module Spider
       successList = []
       index = 0
       puts "total size:#{downList.size}"
+      begTime = Time.now
       #multiThreadDown(downList, successList, failedList)
       multiProcessDown(downList, successList, failedList)
+      endTime = Time.now
+      puts "use time:#{endTime-begTime} seconds"
       puts "successList size:#{successList.size}"
       puts "failedList size:#{failedList.size}"
       callBack.call(successList, failedList) unless callBack.nil?
