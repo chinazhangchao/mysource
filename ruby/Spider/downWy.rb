@@ -4,7 +4,20 @@ def allComplete(successList, failedList)
   puts "allComplete,failedList:#{failedList}"
 end
 
-def saveWYArticle(successList, failedList)
+def eventAllComplete(multi, successList, failedList)
+  puts "success"
+  puts multi.responses[:callback].size
+  puts "error"
+  puts multi.responses[:errback].size
+  puts multi.responses[:errback].keys
+end
+
+def saveWYArticle(multi, successList, failedList)
+  puts "success"
+  puts multi.responses[:callback].size
+  puts "error"
+  puts multi.responses[:errback].size
+  puts multi.responses[:errback].keys
   puts "get index complete"
   if successList.size > 0
     doc = Nokogiri::HTML(open(successList[0].locPath))
@@ -22,7 +35,8 @@ def saveWYArticle(successList, failedList)
       downList.push( DownStruct::LinkStruct.new(href, locPath))
     end
     puts "down list complete"
-    batchDownList(downList, :allComplete)
+    batchDownList(downList, eventAllComplete)
+    #batchDownList(downList, :allComplete)
   end
 end
 

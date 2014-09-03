@@ -1,4 +1,5 @@
 require "open-uri"
+require 'em-http-request'
 require 'nokogiri'
 require 'Open3'
 require 'fileutils'
@@ -176,13 +177,60 @@ module Spider
       downList << DownStruct::LinkStruct.new(url, downDir + fileName)
       batchDownList(downList, callBack)
     end
-  end
-end
+
+    def eventMachineDown(linkStructList, successList, failedList, callback = nil)
+      multi = EventMachine::MultiRequest.new
+      linkStructList.each do |e|
+        if !DownLoadConfig::OverrideExist && File.exist?(e.locPath)
+          successList << DownStruct::LinkStruct.new(e.href, e.locPath)
+        else
+          w=EventMachine::HttpRequest.new(e.href).get
+          w.callback {
+            #puts w.response.class
+            #puts w.response.encoding
+            File.new(e.locPath, "w") << toUtf8( w.response)
+          }
+          multi.add e.locPath, w
+        end
+      end
+
+      multi.callback do
+        if callback.nil?
+          EventMachine.stop
+        else
+          callback.call(multi, successList, failedList)
+        end
+      end
+
+    end
+
+    def evenMachineStart(url, downDir, fileName, callBack = nil)
+      downDir << "/" unless downDir.end_with?("/")
+      FileUtils.mkdir_p(downDir) unless Dir.exist?(downDir)
+      downList = []
+      downList << DownStruct::LinkStruct.new(url, downDir + fileName)
+      EventMachine.run {
+      failedList = []
+      successList = []
+      index = 0
+      puts "total size:#{downList.size}"
+      begTime = Time.now
+      eventMachineDown(downList, successList, failedList, callBack)
+      endTime = Time.now
+      puts "use time:#{endTime-begTime} seconds"
+      puts "successList size:#{successList.size}"
+      puts "failedList size:#{failedList.size}"
+      }
+    end
+
+  end#self end
+end#Spider end
 
 def batchDownList(downList, methodName = nil, objectName = nil)
   Spider.batchDownList(downList, Helper.formMethod(methodName, objectName))
 end
 
 def parseDownLoadUrl(url, downDir, fileName, methodName = nil, objectName = nil)
-  Spider.parseDownLoadUrl(url, downDir, fileName, Helper.formMethod(methodName, objectName))
+  #Spider.parseDownLoadUrl(url, downDir, fileName, Helper.formMethod(methodName, objectName))
+  Spider.evenMachineStart(url, downDir, fileName, Helper.formMethod(methodName, objectName))
 end
