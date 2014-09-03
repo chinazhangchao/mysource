@@ -1,6 +1,7 @@
 require 'rchardet'
 
 def toUtf8(_string)
+  return _string if _string.encoding == Encoding::UTF_8
   cd = CharDet.detect(_string)
   if cd["confidence"] > 0.6
     _string.force_encoding(cd["encoding"])
