@@ -1,28 +1,44 @@
 require 'rchardet'
 
-def toUtf8(_string)
-  case _string.encoding 
-  when Encoding::UTF_8 #utf-8不做处理
-  when Encoding::ASCII-8BIT
-    cd = CharDet.detect(_string)
-    if cd["confidence"] > 0.6
-      _string.force_encoding(cd["encoding"])
+module Helper
+
+  class << self
+
+    def stringToUri(l)
+      begin
+        u=URI.parse(l)
+      rescue URI::InvalidURIError => e
+        l=URI.escape(l)
+        u=URI.parse(l)
+      end
     end
-    #_string.encode!("utf-8", :undef => :replace, :replace => "?", :invalid => :replace)
-    _string.encode!(Encoding::UTF_8)
-  else
-    _string.encode!(Encoding::UTF_8)
+
+    def toUtf8(_string)
+      strEncoding = _string.encoding 
+      if strEncoding == Encoding::ASCII_8BIT
+        cd = CharDet.detect(_string)
+        if cd["confidence"] > 0.6
+          _string.force_encoding(cd["encoding"])
+        end
+        #_string.encode!("utf-8", :undef => :replace, :replace => "?", :invalid => :replace)
+        _string.encode!(Encoding::UTF_8)
+      elsif strEncoding != Encoding::UTF_8
+        _string.encode!(Encoding::UTF_8)
+      end
+
+      return _string
+    end
+
+    def formMethod(methodNameSymbol, objectName)
+      if methodNameSymbol == nil
+        return nil
+      elsif objectName == nil
+        method(methodNameSymbol)
+      else
+        return objectName.method(methodNameSymbol)
+      end
+    end
+
   end
 
-  return _string
-end
-
-def formMethod(methodNameSymbol, objectName)
-  if methodNameSymbol == nil
-    return nil
-  elsif objectName == nil
-    method(methodNameSymbol)
-  else
-    return objectName.method(methodNameSymbol)
-  end
 end

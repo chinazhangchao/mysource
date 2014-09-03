@@ -19,7 +19,7 @@ def saveWYArticle(successList, failedList)
     linkList.each do |link|
       href = link['href']
       locPath = downDir + link.content + ".html"
-      downList.push( Helper::LinkStruct.new(href, locPath))
+      downList.push( DownStruct::LinkStruct.new(href, locPath))
     end
     puts "down list complete"
     batchDownList(downList, :allComplete)

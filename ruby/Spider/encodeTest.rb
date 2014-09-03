@@ -5,16 +5,6 @@ f.write("a line")
 f.close
 =end
 require 'rchardet'
-def toUtf8(_string)
-  return _string if _string.encoding == Encoding::UTF_8
-  cd = CharDet.detect(_string)      #用于检测编码格式  在gem rchardet9里
-  if cd.confidence > 0.6
-    _string.force_encoding(cd.encoding)
-  end
-  #_string.encode!("utf-8", :undef => :replace, :replace => "?", :invalid => :replace)
-  _string.encode!(Encoding::UTF_8)
-  return _string
-end
 
 f = File.new("gb2312.html", "rt", internal_encoding:Encoding::UTF_8, external_encoding: Encoding::GB2312)
 #f = File.new("gb2312.html", "rt")

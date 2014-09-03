@@ -12,20 +12,9 @@ module DownLoadConfig
   OverrideExist = false
 end
 
-module Helper
+module DownStruct
   LinkStruct = Struct.new(:href, :locPath)
   ProcessInfo = Struct.new(:stdIn, :stdOut, :stdErr, :waitThr)
-  class << self
-    def formMethod(methodNameSymbol, objectName)
-      if methodNameSymbol == nil
-        return nil
-      elsif objectName == nil
-        method(methodNameSymbol)
-      else
-        return objectName.method(methodNameSymbol)
-      end
-    end
-  end
 end
 
 module Spider
@@ -47,9 +36,9 @@ module Spider
       mutexFailed = Mutex.new
       mutexSucceed = Mutex.new
       linkStructList.each do |e|
-        pInfo = Helper::ProcessInfo.new
+        pInfo = DownStruct::ProcessInfo.new
         if !DownLoadConfig::OverrideExist && File.exist?(e.locPath)
-          successList << Helper::LinkStruct.new(e.href, e.locPath)
+          successList << DownStruct::LinkStruct.new(e.href, e.locPath)
         else
           threads << Thread.new {
             cmdLine = "curl -m #{DownLoadConfig::TimeOutLimit} \
@@ -59,14 +48,14 @@ module Spider
               exit_status = wait_thr.value
               if exit_status.exitstatus != 0
                 mutexFailed.synchronize{
-                  failedList.push( Helper::LinkStruct.new(e.href, e.locPath))
+                  failedList.push( DownStruct::LinkStruct.new(e.href, e.locPath))
                 }
                 puts "failed,exitstatus:#{exit_status.exitstatus},\
                 \nhref:#{e.href}\nlocPath:#{e.locPath}\nerror msg:#{stderr.gets}\
                 \nstdout:#{stdout.gets}"
               else
                 mutexSucceed.synchronize{
-                  successList << Helper::LinkStruct.new(e.href, e.locPath)
+                  successList << DownStruct::LinkStruct.new(e.href, e.locPath)
                 }
               end
             }
@@ -87,9 +76,9 @@ module Spider
       mutexFailed = Mutex.new
       mutexSucceed = Mutex.new
       linkStructList.each do |e|
-        pInfo = Helper::ProcessInfo.new
+        pInfo = DownStruct::ProcessInfo.new
         if !DownLoadConfig::OverrideExist && File.exist?(e.locPath)
-          successList << Helper::LinkStruct.new(e.href, e.locPath)
+          successList << DownStruct::LinkStruct.new(e.href, e.locPath)
         else
           threads << Thread.new {
             c = Curl::Easy.new(e.href) do|curl|
@@ -100,7 +89,7 @@ module Spider
                   File.new(e.locPath, "w") << toUtf8(curl.body)
                   puts "#{e.locPath} succeed"
                   mutexSucceed.synchronize{
-                    successList << Helper::LinkStruct.new(e.href, e.locPath)
+                    successList << DownStruct::LinkStruct.new(e.href, e.locPath)
                   }
                 rescue Exception => e
                   puts e
@@ -110,7 +99,7 @@ module Spider
                 puts "#{e.locPath} failed"
                 puts "reason:#{r}"
                 mutexFailed.synchronize{
-                  failedList.push( Helper::LinkStruct.new(e.href, e.locPath))
+                  failedList.push( DownStruct::LinkStruct.new(e.href, e.locPath))
                 }
               end
             end
@@ -134,7 +123,7 @@ module Spider
       linkStructList.each do |e|
         if !DownLoadConfig::OverrideExist && File.exist?(e.locPath)
           #mutexSucceed.synchronize{
-          successList << Helper::LinkStruct.new(e.href, e.locPath)
+          successList << DownStruct::LinkStruct.new(e.href, e.locPath)
           #}
         else
           c = Curl::Easy.new(e.href) do|curl|
@@ -145,7 +134,7 @@ module Spider
                 File.new(e.locPath, "w") << toUtf8(curl.body)
                 #mutexSucceed.synchronize{
                 puts "#{e.locPath} succeed"
-                successList << Helper::LinkStruct.new(e.href, e.locPath)
+                successList << DownStruct::LinkStruct.new(e.href, e.locPath)
                 #}
               rescue Exception => e
                 puts e
@@ -155,7 +144,7 @@ module Spider
               #mutexFailed.synchronize{
               puts "#{e.locPath} failed"
               puts "reason:#{r}"
-              failedList.push( Helper::LinkStruct.new(e.href, e.locPath))
+              failedList.push( DownStruct::LinkStruct.new(e.href, e.locPath))
               #}
             end
           end
@@ -184,7 +173,7 @@ module Spider
       downDir << "/" unless downDir.end_with?("/")
       FileUtils.mkdir_p(downDir) unless Dir.exist?(downDir)
       downList = []
-      downList << Helper::LinkStruct.new(url, downDir + fileName)
+      downList << DownStruct::LinkStruct.new(url, downDir + fileName)
       batchDownList(downList, callBack)
     end
   end
