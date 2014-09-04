@@ -162,7 +162,8 @@ module Spider
       puts "total size:#{downList.size}"
       begTime = Time.now
       #multiThreadDown(downList, successList, failedList)
-      multiProcessDown(downList, successList, failedList)
+      #multiProcessDown(downList, successList, failedList)
+      eventMachineDown(downList, successList, failedList)
       endTime = Time.now
       puts "use time:#{endTime-begTime} seconds"
       puts "successList size:#{successList.size}"
@@ -184,11 +185,13 @@ module Spider
         if !DownLoadConfig::OverrideExist && File.exist?(e.locPath)
           successList << DownStruct::LinkStruct.new(e.href, e.locPath)
         else
+          puts "add #{e.href}"
           w=EventMachine::HttpRequest.new(e.href).get
           w.callback {
+            #puts w.status
             #puts w.response.class
             #puts w.response.encoding
-            File.new(e.locPath, "w") << toUtf8( w.response)
+            File.new(e.locPath, "w") << Helper.toUtf8( w.response)
           }
           multi.add e.locPath, w
         end
@@ -210,16 +213,16 @@ module Spider
       downList = []
       downList << DownStruct::LinkStruct.new(url, downDir + fileName)
       EventMachine.run {
-      failedList = []
-      successList = []
-      index = 0
-      puts "total size:#{downList.size}"
-      begTime = Time.now
-      eventMachineDown(downList, successList, failedList, callBack)
-      endTime = Time.now
-      puts "use time:#{endTime-begTime} seconds"
-      puts "successList size:#{successList.size}"
-      puts "failedList size:#{failedList.size}"
+        failedList = []
+        successList = []
+        index = 0
+        puts "total size:#{downList.size}"
+        begTime = Time.now
+        eventMachineDown(downList, successList, failedList, callBack)
+        endTime = Time.now
+        puts "use time:#{endTime-begTime} seconds"
+        puts "successList size:#{successList.size}"
+        puts "failedList size:#{failedList.size}"
       }
     end
 

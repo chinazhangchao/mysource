@@ -35,7 +35,7 @@ def saveWYArticle(multi, successList, failedList)
       downList.push( DownStruct::LinkStruct.new(href, locPath))
     end
     puts "down list complete"
-    batchDownList(downList, eventAllComplete)
+    batchDownList(downList, :eventAllComplete)
     #batchDownList(downList, :allComplete)
   end
 end
