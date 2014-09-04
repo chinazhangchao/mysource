@@ -163,12 +163,18 @@ module Spider
       begTime = Time.now
       #multiThreadDown(downList, successList, failedList)
       #multiProcessDown(downList, successList, failedList)
-      eventMachineDown(downList, successList, failedList)
       endTime = Time.now
       puts "use time:#{endTime-begTime} seconds"
       puts "successList size:#{successList.size}"
       puts "failedList size:#{failedList.size}"
+      puts "batchDownList callBack:#{callBack}"
       callBack.call(successList, failedList) unless callBack.nil?
+    end
+
+    def eventBatchDownList(downList, callBack = nil)
+      failedList = []
+      successList = []
+      eventMachineDown(downList, successList, failedList, callBack)
     end
 
     def parseDownLoadUrl(url, downDir, fileName, callBack = nil)
@@ -179,30 +185,47 @@ module Spider
       batchDownList(downList, callBack)
     end
 
-    def eventMachineDown(linkStructList, successList, failedList, callback = nil)
+    def eventMachineDown(linkStructList, successList, failedList, callBack = nil)
+      puts "eventMachineDown callBack:#{callBack}"
       multi = EventMachine::MultiRequest.new
+      noJob = true
+      begTime = Time.now
       linkStructList.each do |e|
         if !DownLoadConfig::OverrideExist && File.exist?(e.locPath)
           successList << DownStruct::LinkStruct.new(e.href, e.locPath)
         else
+          noJob = false
           puts "add #{e.href}"
           w=EventMachine::HttpRequest.new(e.href).get
           w.callback {
-            #puts w.status
-            #puts w.response.class
-            #puts w.response.encoding
+            s = w.response_header.status
+            puts "callback:#{s}"
             File.new(e.locPath, "w") << Helper.toUtf8( w.response)
+            successList << DownStruct::LinkStruct.new(e.href, e.locPath)
+          }
+          w.errback {
+            s = w.response_header.status
+            puts "errback:#{s}"
+            failedList.push( DownStruct::LinkStruct.new(e.href, e.locPath))
           }
           multi.add e.locPath, w
         end
       end
 
-      multi.callback do
-        if callback.nil?
+      cb = Proc.new do
+        endTime = Time.now
+        puts "use time:#{endTime-begTime} seconds"
+        if callBack.nil?
           EventMachine.stop
         else
-          callback.call(multi, successList, failedList)
+          callBack.call(multi, successList, failedList)
         end
+      end
+
+      if noJob #没有任务直接调回调
+        cb.call
+      else
+        multi.callback &cb
       end
 
     end

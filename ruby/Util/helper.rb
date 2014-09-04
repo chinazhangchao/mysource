@@ -29,7 +29,7 @@ module Helper
       return _string
     end
 
-    def formMethod(methodNameSymbol, objectName)
+    def formMethod(methodNameSymbol, objectName = nil)
       if methodNameSymbol == nil
         return nil
       elsif objectName == nil

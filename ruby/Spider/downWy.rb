@@ -6,20 +6,24 @@ end
 
 def eventAllComplete(multi, successList, failedList)
   puts "success"
+  #puts multi.responses[:callback]
   puts multi.responses[:callback].size
   puts "error"
   puts multi.responses[:errback].size
   puts multi.responses[:errback].keys
+  EventMachine.stop
 end
 
 def saveWYArticle(multi, successList, failedList)
   puts "success"
+  #puts multi.responses[:callback]
   puts multi.responses[:callback].size
   puts "error"
   puts multi.responses[:errback].size
   puts multi.responses[:errback].keys
   puts "get index complete"
   if successList.size > 0
+  #if successList.size > 0
     doc = Nokogiri::HTML(open(successList[0].locPath))
     listGroup=doc.css("ul.list-group")
     linkList = listGroup.css("a")
@@ -35,7 +39,7 @@ def saveWYArticle(multi, successList, failedList)
       downList.push( DownStruct::LinkStruct.new(href, locPath))
     end
     puts "down list complete"
-    batchDownList(downList, :eventAllComplete)
+    Spider.eventBatchDownList(downList, Helper.formMethod(:eventAllComplete))
     #batchDownList(downList, :allComplete)
   end
 end
