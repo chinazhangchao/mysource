@@ -11,7 +11,7 @@ EventMachine.run {
         puts "use time:#{endTime - begTime}"
         EventMachine.stop
       }
-  EM::Iterator.new(urls, 1).each( proc { |url,iter|
+  EM::Iterator.new(urls, 1).each { |url,iter|
   puts url
   puts iter
   w=EventMachine::HttpRequest.new(url).get :redirects =>20
@@ -21,7 +21,7 @@ EventMachine.run {
   }
           multi.add iter, w
   iter.next
-}, proc {puts "first done"})
+}
 =begin
 EM::Iterator.new(urls2, 10).each( proc { |url,iter|
   puts url

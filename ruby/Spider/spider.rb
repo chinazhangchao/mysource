@@ -10,7 +10,7 @@ module DownLoadConfig
   TimeOutLimit = 3*60 #3 minutes
   MaxTryTimes = 0
   MaxRedirects = 20
-  MaxConcurrent = 50
+  MaxConcurrent = 0
   OverrideExist = false
 end
 
@@ -173,6 +173,7 @@ module Spider
     end
 
     def eventBatchDownList(downList, callBack = nil)
+      puts "eventBatchDownList"
       failedList = []
       successList = []
       eventMachineDown(downList, successList, failedList, callBack)
@@ -191,7 +192,9 @@ module Spider
       multi = EventMachine::MultiRequest.new
       noJob = true
       begTime = Time.now
-      linkStructList.each do |e|
+
+      foreachPro = proc do |e|
+        puts e.locPath
         if !DownLoadConfig::OverrideExist && File.exist?(e.locPath)
           successList << DownStruct::LinkStruct.new(e.href, e.locPath)
         else
@@ -211,6 +214,11 @@ module Spider
         end
       end
 
+      emForeachPro = proc do |e, iter|
+        foreachPro.call(e)
+        iter.next
+      end
+
       cb = Proc.new do
         endTime = Time.now
         puts "use time:#{endTime-begTime} seconds"
@@ -221,12 +229,20 @@ module Spider
         end
       end
 
-      if noJob #没有任务直接调回调
-        cb.call
-      else
-        multi.callback &cb
-      end
+      afterProc = proc {
+        if noJob #没有任务直接调回调
+          cb.call
+        else
+          multi.callback &cb
+        end
+      }
 
+      if DownLoadConfig::MaxConcurrent <= 0
+        linkStructList.each &foreachPro
+        afterProc.call
+      else
+        EM::Iterator.new(linkStructList, DownLoadConfig::MaxConcurrent).each(emForeachPro, afterProc)
+      end
     end
 
     def evenMachineStart(url, downDir, fileName, callBack = nil)
