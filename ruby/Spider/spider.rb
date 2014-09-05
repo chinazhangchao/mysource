@@ -9,6 +9,7 @@ require_relative '../Util/helper'
 module DownLoadConfig
   TimeOutLimit = 3*60 #3 minutes
   MaxTryTimes = 0
+  MaxRedirects = 20
   MaxConcurrent = 50
   OverrideExist = false
 end
@@ -195,11 +196,9 @@ module Spider
           successList << DownStruct::LinkStruct.new(e.href, e.locPath)
         else
           noJob = false
-          puts "add #{e.href}"
-          w=EventMachine::HttpRequest.new(e.href).get
+          w=EventMachine::HttpRequest.new(e.href).get :redirects => DownLoadConfig::MaxRedirects
           w.callback {
             s = w.response_header.status
-            puts "callback:#{s}"
             File.new(e.locPath, "w") << Helper.toUtf8( w.response)
             successList << DownStruct::LinkStruct.new(e.href, e.locPath)
           }
