@@ -26,18 +26,38 @@ def eventMachineDown(linkStructList, successList, failedList)
   end
 end
 
+def wf(http,i)
+    fn = "#{i}.html"
+    http.callback {
+      p http.response_header.status
+      p http.response_header
+      puts fn
+      File.new(fn , "w") << Helper.toUtf8( http.response)
+    }
+end
+
 EventMachine.run {
-=begin
-  http = EventMachine::HttpRequest.new("http://www.yinwang.org/").get
+  #=begin
+  #http = EventMachine::HttpRequest.new("http://www.yinwang.org/").get
+  multi = EventMachine::MultiRequest.new
+  #conn = EventMachine::HttpRequest.new("http://caipiao.jd.com/notice/betResult_noticeInfo.html") 
+  for i in 1..5
+    #http = conn.post :keepalive => true, :body => {"issueQuery.lotteryType" => 1, "issueQuery.beginTimeTo" => "2014-09-02 20:59:00", "page" => i}
+  conn = EventMachine::HttpRequest.new("http://caipiao.jd.com/notice/betResult_noticeInfo.html") 
+    http = conn.post  :body => {"issueQuery.lotteryType" => 1, "issueQuery.beginTimeTo" => "2014-09-02 20:59:00", "page" => i}
 
-  http.errback { p 'Uh oh'; EM.stop }
-  http.callback {
-    p http.response_header.status
-    p http.response_header
-    p http.response
+    http.errback {
+      p 'Uh oh'
+      p http.response_header.status
+      p http.response_header
+    }
+    wf(http, i)
+    multi.add "#{i}.html", http
+  end
 
+  multi.callback {
+    puts "all complete"
     EventMachine.stop
   }
-=end
-
+  #=end
 }
