@@ -3,6 +3,7 @@ require 'haml'
 
 configure do
   #set :server, :webrick
+  set :server, :thin
   set :port, 80
 end
 
