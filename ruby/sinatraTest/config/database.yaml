@@ -1,13 +1,10 @@
 development:
-  hosts: 
-    - localhost
-  port: 27017
+  uri: mongodb://localhost
   database: app_dev
   logfile: development.log
     
 production:
-  hosts: localhost
-  port: 27017
+  uri: mongodb://localhost
   database: app_prod
   logfile: production.log
     
