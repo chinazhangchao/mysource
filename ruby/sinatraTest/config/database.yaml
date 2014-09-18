@@ -1,0 +1,14 @@
+development:
+  hosts: 
+    - localhost
+  port: 27017
+  database: app_dev
+  logfile: development.log
+    
+production:
+  hosts: localhost
+  port: 27017
+  database: app_prod
+  logfile: production.log
+    
+environment: development
