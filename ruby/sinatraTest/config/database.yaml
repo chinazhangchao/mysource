@@ -1,11 +1,9 @@
 development:
-  uri: mongodb://localhost
-  database: app_dev
+  uri: mongodb://localhost/dm
   logfile: development.log
     
 production:
-  uri: mongodb://localhost
-  database: app_prod
+  uri: mongodb://localhost/app_prod
   logfile: production.log
     
 environment: development
