@@ -1,0 +1,9 @@
+development:
+  uri: mongodb://localhost/dm
+  logfile: development.log
+    
+production:
+  uri: mongodb://localhost/app_prod
+  logfile: production.log
+    
+environment: development
