@@ -12,9 +12,9 @@ class DictionaryModel
 end
 
 configure do
-  set :server, :webrick
-  #set :server, :thin
-  set :port, 4568
+  #set :server, :webrick
+  set :server, :thin
+  set :port, 80
   MongoMapper.setup(@config, @environment)
 end
 
