@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'haml'
-#require 'mongo_mapper'
-require 'mongoid'
+require 'mongo_mapper'
+#require 'mongoid'
 require './config/init'
 
 class DictionaryModel
@@ -22,6 +22,6 @@ get '/' do
   @test = "This is a test"
   existing = DictionaryModel.where(:word => 'Brandon')
   @dmArray=[]
-  existing.all.each{|e|dmArray << e.to_json}
+  existing.all.each{|e|@dmArray << e.to_json}
   haml :index
 end
