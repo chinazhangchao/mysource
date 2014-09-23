@@ -1,27 +1,30 @@
 require 'sinatra'
 require 'haml'
-require 'mongo_mapper'
-#require 'mongoid'
-require './config/init'
+require 'mongoid'
 
 class DictionaryModel
-  include MongoMapper::Document
-  
-  key :word, String, :required => true
-  key :meaning, String, :required => true
+  include Mongoid::Document
+  field :word, type: String
+  field :meaning, type: String
+  index({ word: 1 }, { unique: true })
 end
 
 configure do
   #set :server, :webrick
   set :server, :thin
   set :port, 80
-  MongoMapper.setup(@config, @environment)
+  Mongoid.load!("config/mongoid.yml", :development)
 end
 
 get '/' do
   @test = "This is a test"
-  existing = DictionaryModel.where(:word => 'Brandon')
-  @dmArray=[]
-  existing.all.each{|e|@dmArray << e.to_json}
+  rc = DictionaryModel.where(word: 'Brandon')
+  @dmArray=rc.entries
+  puts @dmArray
   haml :index
 end
+
+=begin
+itm1 = DictionaryModel.new(:word => 'w2', :meaning => 'm2')
+itm1.save
+=end

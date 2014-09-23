@@ -1,0 +1,6 @@
+development:
+  sessions:
+    default:
+      database: dm
+      hosts:
+        - localhost:27017
