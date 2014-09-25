@@ -2,61 +2,40 @@ require 'json'
 require 'set'
 
 module ParseConfig
-  TypeMap = {"".class => "QString", 1.class => "NSInteger", 1.0.class => "double",
-    true.class => "bool", false.class => "bool"}
+  TypeMap = {"".class => "@property (nonatomic,copy)   NSString*", 1.class => "@property (nonatomic,assign) NSInteger", 1.0.class => "@property (nonatomic,copy)   NSFloat",
+    true.class => "@property (nonatomic,assign)   BOOL", false.class => "@property (nonatomic,assign)   BOOL"}
 
-  ToFuncMap = {"".class => "toString", 1.class => "toDouble", 1.0.class => "toDouble",
+  ToFuncMap = {1.class => "integerValue", 1.0.class => "toDouble",
     true.class => "toBool", false.class => "toBool"}
 
-  SourceBody = Struct.new(:construct, :toJson, :varDeclare, :includeList, :initList)
+  NeedDealloc = ["".class]
 end
 
-def ProcessKV(k, v, sourceContent)
-  construct = sourceContent[:construct]
-  toJson = sourceContent[:toJson]
-  varDeclare = sourceContent[:varDeclare]
-  includeList = sourceContent[:includeList]
-  initList = sourceContent[:initList]
+def ProcessKV(k, v, varDeclare, deallocList, fromDic)
   vclass = v.class
-  formatstr = "\t%-16s %s;\n"
-  if $typeMap.include?(vclass)
-    construct << "\t\t#{k} = val[\"#{k}\"].#{$toFuncMap[vclass]}();\n"
-    toJson << "\t\tobj.insert(\"#{k}\", #{k});\n"
-    varDeclare << (formatstr % ["#{$typeMap[vclass]}", "#{k}"])
-    includeList << "#include <QString>\n" if vclass == "".class
-    if vclass == 1.class || vclass == 1.0.class
-      initList << "\t\t#{k} = 0;\n"
-    elsif vclass == true.class || vclass == false.class
-      initList << "\t\t#{k} = false;\n"
-    end
-  elsif vclass == [].class
-    eleclass = v[0].class
-    arrTemplate = "\t\tQJsonArray #{k}Arr;\n\t\tfor (auto i : #{k})\n\t\t{\n\t\t\t#{k}Arr.push_back(ELE);\n\t\t}\n\t\tobj.insert(\"#{k}\", #{k}Arr);\n"
-    includeList << "#include <QList>\n"
-    if $typeMap.include?(eleclass)
-      varName = "#{k}List"
-      varDeclare << (formatstr % ["QList<#{$typeMap[eleclass]}>", "#{varName}"])
-      arrTemplate = arrTemplate.gsub(/\bELE\b/, "i")
-      construct << "\t\tfor (auto i : val[\"#{k}\"].toArray())\n\t\t{\n\t\t\t#{varName}.push_back(i.#{$toFuncMap[eleclass]}());\n\t\t}\n"
-    elsif eleclass == {"k"=>"v"}.class
-      GenerateStruct("#{k}", v[0])
-      varName = "#{k.downcase}List"
-      includeList << "#include \"#{k}.h\"\n"
-      varDeclare << (formatstr % ["QList<#{k}>", "#{varName}"])
-      arrTemplate = arrTemplate.gsub(/\bELE\b/, "i.ToJson()")
-      construct << "\t\tfor (auto i : val[\"#{k}\"].toArray())\n\t\t{\n\t\t\t#{varName}.push_back(#{k}(i));\n\t\t}\n"
+  formatstr = "%s %s;\n"
+  if ParseConfig::TypeMap.include?(vclass)
+    varDeclare << (formatstr % ["#{ParseConfig::TypeMap[vclass]}", "#{k}"])
+    deallocList << "\tSAFE_RELEASE(_#{k});\n" if ParseConfig::NeedDealloc.find_index(vclass)
+
+    if ParseConfig::ToFuncMap.include?(vclass)
+      fromDic << "\tif ([dic objectForKey:@\"#{k}\"]) {\n\t\tnode.#{k} = [[dic objectForKey:@\"#{k}\"] #{ParseConfig::ToFuncMap[vclass]}];\n\t}\n"
     else
-      puts "unkonwn:#{eleclass} #{vclass[0]}"
+      str = <<TEST
+    if ([dic objectForKey:@\"#{k}\"]) {
+        node.#{k} = [dic objectForKey:@\"#{k}\"];
+    }
+TEST
+      fromDic << str
     end
-    toJson << arrTemplate
   elsif vclass == nil.class
     puts "warning:null object #{k}, #{v}"
-  elsif vclass == {"k"=>"v"}.class
-    GenerateStruct("#{k}", v)
-    construct << "\t\t#{k.downcase} = #{k}(val[\"#{k.downcase}\"].toObject());\n"
-    includeList << "#include \"#{k}.h\"\n"
-    varDeclare << (formatstr % ["#{k}", "#{k.downcase}"])
-    toJson << "\t\tobj.insert(\"#{k}\", #{k}.ToJson());\n"
+  # elsif vclass == {"k"=>"v"}.class
+  #   GenerateStruct("#{k}", v)
+  #   construct << "\t\t#{k.downcase} = #{k}(val[\"#{k.downcase}\"].toObject());\n"
+  #   includeList << "#include \"#{k}.h\"\n"
+  #   varDeclare << (formatstr % ["#{k}", "#{k.downcase}"])
+  #   toJson << "\t\tobj.insert(\"#{k}\", #{k}.ToJson());\n"
   else
     puts "unkonwn:#{vclass} #{k}, #{v}"
   end
@@ -66,27 +45,41 @@ def GenerateStruct(structName, structHash)
   headFileName = structName + ".h"
   #return if File.exist?(headFileName)
 
-  sourceFileName = structName + ".cpp"
+  sourceFileName = structName + ".m"
 
   headFile = File.new(headFileName, "wt")
+  sourceFile = File.new(sourceFileName, "wt")
+
+  import = "#import <Foundation/Foundation.h>\n\n@interface #{structName} : NSObject\n"
   varDeclare = ""
-  construct = "\t#{structName}(const QJsonObject &val)\n\t{\n"
-  toJson = "\tQJsonObject ToJson()\n\t{\n\t\tQJsonObject obj;\n"
-  includeList = Set.new
-  initList = ""
-  sourceContent = SourceBody.new(construct, toJson, varDeclare, includeList, initList)
-  structHash.each{|k,v| ProcessKV(k, v, sourceContent)}
-  headFile << "\n"
-  construct << "\t}\n\n"
-  toJson << "\t\treturn obj;\n\t}\n\n"
-  headFile << structHead
-  headFile << toJson
-  headFile << varDeclare
+  fromJson = "+(#{structName} *) fromDic:(NSDictionary *)dic;\n+(BOOL) addToArrayFromDic: (NSMutableArray*)resultArray r:(NSDictionary *)dic;\n"
+  deallocList = "- (void)dealloc\n{\n"
+  fromDic = "+(#{structName} *) fromDic:(NSDictionary *)dic\n{\n\t#{structName} *node = [[#{structName} alloc]init];\n"
+  addToArrayFromDic = <<HERE
++(BOOL) addToArrayFromDic: (NSMutableArray*)resultArray r:(NSDictionary *)dic
+{
+    if (!dic) return NO;
+    #{structName} *p = [#{structName} fromDic:dic];
+    [resultArray addObject:p];
+    [p release];
+    return YES;
+}
+HERE
+  structHash.each{|k,v| ProcessKV(k, v, varDeclare, deallocList, fromDic)}
+  deallocList<< "\n\t[super dealloc];\n}\n\n"
+  fromDic << "\treturn node;\n}\n\n"
+
+  headFile << import << "\n" << varDeclare << "\n" << fromJson << "\n@end"
+
+  sourceFile << "\#import \"#{headFileName}\"\n\n@implementation #{structName}\n\n"
+  sourceFile << deallocList << fromDic << addToArrayFromDic<<"\n@end"
+
   headFile.close
+  sourceFile.close
 end
 
 def parseJsonFile(fileName)
-	f = File.new('SS.json', "rt", encoding: Encoding::UTF_8)
+	f = File.new('SS.json', "rt")
 
   jsonStr = f.read
   my_hash = JSON.parse(jsonStr)
@@ -94,10 +87,13 @@ def parseJsonFile(fileName)
   orgClassName = my_hash.keys[0]
   className = orgClassName.chomp("_list")
   className = className.chomp("List")
+  className << "Node"
 
   messageHash = my_hash[orgClassName]
 
   GenerateStruct(className, messageHash)
 end
 
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
 parseJsonFile('SS.json')

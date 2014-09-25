@@ -12,6 +12,7 @@ end
 configure do
   #set :server, :webrick
   set :server, :thin
+  set :bind, '0.0.0.0'
   set :port, 80
   Mongoid.load!("config/mongoid.yml", :development)
 end
