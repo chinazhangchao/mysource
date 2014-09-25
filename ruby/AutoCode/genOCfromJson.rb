@@ -3,12 +3,12 @@ require 'set'
 
 module ParseConfig
   TypeMap = {"".class => "@property (nonatomic,copy)   NSString*", 1.class => "@property (nonatomic,assign) NSInteger", 1.0.class => "@property (nonatomic,copy)   NSFloat",
-    true.class => "@property (nonatomic,assign)   BOOL", false.class => "@property (nonatomic,assign)   BOOL"}
+    true.class => "@property (nonatomic,assign)   BOOL", false.class => "@property (nonatomic,assign)   BOOL", [].class => "@property (nonatomic,retain) NSMutableArray *"}
 
   ToFuncMap = {1.class => "integerValue", 1.0.class => "toDouble",
     true.class => "toBool", false.class => "toBool"}
 
-  NeedDealloc = ["".class]
+  NeedDealloc = ["".class, [].class]
 end
 
 def ProcessKV(k, v, varDeclare, deallocList, fromDic)
@@ -28,6 +28,20 @@ def ProcessKV(k, v, varDeclare, deallocList, fromDic)
 TEST
       fromDic << str
     end
+  elsif vclass == [].class
+    cn = "#{k}"
+    cn.chomp("_list")
+
+    str=<<HERE
+      NSArray* array = [dic objectForKey:@"brand_list"];
+    if (array) {
+        for (NSInteger i =0; i<array.count; i++) {
+            NSDictionary* result = [array objectAtIndex:i];
+            Brand *n = [Brand fromDic :result];
+            [_brandArray addObject:p];
+        }
+    }
+HERE
   elsif vclass == nil.class
     puts "warning:null object #{k}, #{v}"
   # elsif vclass == {"k"=>"v"}.class
