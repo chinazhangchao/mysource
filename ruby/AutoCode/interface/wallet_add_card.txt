@@ -1,0 +1,9 @@
+{
+    "success": true,
+    "code": 1,
+    "result": {
+        "result": 0,
+        "fail_log": "ÉèÖÃÃÜÂë³É¹¦",
+        "card_id": 1212
+    }
+}

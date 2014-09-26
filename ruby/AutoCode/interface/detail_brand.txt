@@ -1,0 +1,19 @@
+{
+    "success": true,
+    "code": 1,
+    "result": {
+        "total": 2,
+        "brand_list": [
+            {
+                "brand_id": 1,
+                "brand_name": "ÐÇ°Í¿Ë",
+                "brand_logo_pic": "daasssas.jpg"
+            },
+            {
+                "brand_id": 2,
+                "brand_name": "COSTA",
+                "brand_logo_pic": "daaaasssas.jpg"
+            }
+        ]
+    }
+}

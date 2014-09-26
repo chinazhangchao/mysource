@@ -31,7 +31,7 @@ TEST
   elsif vclass == [].class
     eleclass = v[0].class
     cn = "#{k}"
-    cn=cn.chomp("_list")
+    cn.chomp!("_list")
     varDeclare << "@property (nonatomic,retain) NSMutableArray *#{cn}Array;\n"
     nestType = ""
     str=""
@@ -42,12 +42,12 @@ TEST
     if (array) {
       for (NSInteger i =0; i<array.count; i++) {
         #{nestType} result = [array objectAtIndex:i];
-        [_#{cn}Array addObject:result];
+        [[node #{cn}Array] addObject:result];
       }
     }
 HERE
     elsif eleclass == {"k"=>"v"}.class
-      nestType=cn.upcase[0]+cn[1..-1]+"Node"
+      nestType="Pbcrc"+cn.upcase[0]+cn[1..-1]+"Node"
       GenerateStruct(nestType, v[0])
       includeList << "#import \"#{nestType}.h\"\n"
       str=<<HERE
@@ -56,7 +56,7 @@ HERE
       for (NSInteger i =0; i<array.count; i++) {
         NSDictionary* result = [array objectAtIndex:i];
         #{nestType} *n = [#{nestType} fromDic :result];
-        [_#{cn}Array addObject:p];
+        [[node #{cn}Array] addObject:n];
       }
     }
 HERE
@@ -118,8 +118,8 @@ def parseJsonFile(fileName)
 
   orgClassName = my_hash.keys[0]
   className = orgClassName.chomp("_list")
-  className = className.chomp("List")
-  className << "Node"
+  className.chomp!("List")
+  className = className.upcase[0]+className[1..-1]+"Node"
 
   messageHash = my_hash[orgClassName]
 

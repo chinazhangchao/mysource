@@ -1,0 +1,25 @@
+{
+    "success": true,
+        "code": 1,
+        "result": {
+            "total": 2,
+            "pbcrc_list": [
+            {
+                "pbcrc_id": 1,
+                "pbcrc_name": "星巴克",
+                "bank_id": 1,
+                "bank_name": "招商银行",
+                "pbcrc_pic": "aaaaa.jpg",
+                "pbcrc_dic": "daadasdadsas"
+            },
+            {
+                "pbcrc_id": 1,
+                "pbcrc_name": "星巴克",
+                "bank_id": 1,
+                "bank_name": "招商银行",
+                "pbcrc_pic": "aaaaa.jpg",
+                "pbcrc_dic": "daadasdadsas"
+            }
+            ]
+        }
+}

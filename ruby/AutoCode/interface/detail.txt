@@ -1,0 +1,29 @@
+{
+    "success": true,
+    "code": 1,
+    "result": {
+        "pbcrc_id": 1,
+        "pbcrc_name": "yueshushshshshshshs",
+        "bank_id": 1,
+        "bank_name": "招商银行",
+        "card_constraint": "yueshushshshshshshs",
+        "rule": "adasdfasdfasdfasdfasdfasdfasdasdfasdfasdfasd",
+        "pbcrc_pic": "daasssas.jpg",
+        "time_scope": "2014年1月1日 – 2014年12月31日",
+        "card_type": 1,
+        "total": 2,
+        "brand_list": [
+            {
+                "id": 1,
+                "city_brd_name": "星巴克",
+                "city_brd_logo": "daasssas.jpg"
+            },
+            {
+                "id": 2,
+                "city_brd_name": "COSTA",
+                "city_brd_logo": "daaaasssas.jpg"
+            }
+        ]
+    }
+}
+ 

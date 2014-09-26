@@ -1,0 +1,31 @@
+{
+    "success": true,
+    "code": 1,
+    "result": {
+        "total": 2,
+        "bill_list": [
+            {
+                "card_id": 1,
+                "card_type": "信用卡",
+                "card_num": "*** **** **** **** 1234",
+                "bank_id": 1221,
+                "bank_name": "招商银行",
+                "bank_logo": "dasdaa.jpg",
+                "pbcrc_name": "包商银行咖啡节",
+                "pbcrc_id": 123,
+                "money": 12.32
+            },
+            {
+                "card_id": 1,
+                "card_type": "信用卡",
+                "card_num": "*** **** **** **** 1234",
+                "bank_id": 1221,
+                "bank_name": "招商银行",
+                "bank_logo": "dasdaa.jpg",
+                "pbcrc_name": "包商银行咖啡节",
+                "pbcrc_id": 123,
+                "money": 12.32
+            }
+        ]
+    }
+}
