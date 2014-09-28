@@ -47,7 +47,7 @@ TEST
     }
 HERE
     elsif eleclass == {"k"=>"v"}.class
-      nestType="Pbcrc"+cn.upcase[0]+cn[1..-1]+"Node"
+      nestType="Pbcrc"+cn.capitalize+"Node"
       GenerateStruct(nestType, v[0])
       includeList << "#import \"#{nestType}.h\"\n"
       str=<<HERE
@@ -119,7 +119,7 @@ def parseJsonFile(fileName)
   orgClassName = my_hash.keys[0]
   className = orgClassName.chomp("_list")
   className.chomp!("List")
-  className = className.upcase[0]+className[1..-1]+"Node"
+  className = className.capitalize+"Node"
 
   messageHash = my_hash[orgClassName]
 

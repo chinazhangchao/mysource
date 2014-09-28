@@ -70,7 +70,7 @@ HERE
     elsif eleclass == {"k"=>"v"}.class
       nestType = cn.chomp("_list")
       nestType.chomp!("List")
-      nestType="Pbcrc"+nestType.upcase[0]+nestType[1..-1]
+      nestType = "Pbcrc" + nestType.capitalize
       GenerateStruct(nestType, v[0])
       includeList << "import com.imohoo.favorablecard.model.apitype.#{nestType};\n"
       str=<<HERE
@@ -122,7 +122,7 @@ def parseJsonFile(fileName)
   orgClassName = my_hash.keys[0]
   className = orgClassName.chomp("_list")
   className.chomp!("List")
-  className = className.upcase[0]+className[1..-1]+"Result"
+  className = className.capitalize+"Result"
 
   messageHash = my_hash[orgClassName]
 
