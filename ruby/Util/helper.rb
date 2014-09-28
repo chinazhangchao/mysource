@@ -15,7 +15,7 @@ module Helper
 
     def toUtf8(_string)
       strEncoding = _string.encoding 
-      if strEncoding == Encoding::ASCII_8BIT
+      if strEncoding == Encoding::ASCII_8BIT || strEncoding == Encoding::US_ASCII
         cd = CharDet.detect(_string)
         if cd["confidence"] > 0.6
           _string.force_encoding(cd["encoding"])

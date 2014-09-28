@@ -1,7 +1,5 @@
 {
-    "success": true,
-    "code": 1,
-    "result": {
+    "PbcrcStoreList": {
         "pbcrc_id": 1,
         "city_id": 1,
         "page_index": 1222,
@@ -11,19 +9,19 @@
         "store_list": [
             {
                 "store_id": 1,
-                "store_name": "ĞÇ°Í¿Ë",
-                "store_address": "Ë³ÒåÇøÈÊºÍÂ·45ºÅ",
+                "store_name": "æ˜Ÿå·´å…‹",
+                "store_address": "é¡ºä¹‰åŒºä»å’Œè·¯45å·",
                 "lac": 1.21212121,
                 "lon": 1.3333333,
-                "distance": 123Ã×
+                "distance": "123ç±³"
             },
             {
                 "store_id": 1,
-                "store_name": "ĞÇ°Í¿Ë",
-                "store_address": "Ë³ÒåÇøÈÊºÍÂ·78ºÅ",
+                "store_name": "æ˜Ÿå·´å…‹",
+                "store_address": "é¡ºä¹‰åŒºä»å’Œè·¯78å·",
                 "lac": 1.21212121,
                 "lon": 1.3333333,
-                "distance": 1.6mk
+                "distance": "1.6mk"
             }
         ]
     }
