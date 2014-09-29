@@ -33,7 +33,7 @@ def ProcessKV(k, v, includeList, varDeclare, getVar)
       fieldName = fieldName[underIndex+1..-1]
     end
     varDeclare << "\tprivate #{ParseConfig::TypeMap[vclass]} #{fieldName};\n"
-    getMethod = "get#{fieldName[0].upcase+fieldName[1..-1]}"
+    getMethod = "get#{fieldName.capitalize}"
     getStr = ""
     if vclass == "".class
       getStr=<<HERE
@@ -46,11 +46,11 @@ def ProcessKV(k, v, includeList, varDeclare, getVar)
 HERE
     else
       getStr =<<HERE
-      public long #{getMethod}() {
+      public #{ParseConfig::TypeMap[vclass]} #{getMethod}() {
         return #{fieldName};
     }
 HERE
-      getVar << getStr << "\n"
+    getVar << getStr << "\n"
     end
   elsif vclass == [].class
     eleclass = v[0].class

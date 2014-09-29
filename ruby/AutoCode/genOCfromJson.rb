@@ -1,14 +1,31 @@
 require 'json'
 require 'set'
+require 'rchardet'
 
 module ParseConfig
-  TypeMap = {"".class => "@property (nonatomic,copy)   NSString*", 1.class => "@property (nonatomic,assign) NSInteger", 1.0.class => "@property (nonatomic,copy)   NSFloat",
+  TypeMap = {"".class => "@property (nonatomic,copy)   NSString*", 1.class => "@property (nonatomic,assign) NSInteger", 1.0.class => "@property (nonatomic,assign)   float",
     true.class => "@property (nonatomic,assign)   BOOL", false.class => "@property (nonatomic,assign)   BOOL"}
 
-  ToFuncMap = {1.class => "integerValue", 1.0.class => "toDouble",
-    true.class => "toBool", false.class => "toBool"}
+  ToFuncMap = {1.class => "integerValue", 1.0.class => "floatValue",
+    true.class => "boolValue", false.class => "boolValue"}
 
   NeedDealloc = ["".class, [].class]
+end
+
+def toUtf8(_string)
+  strEncoding = _string.encoding 
+  if strEncoding == Encoding::ASCII_8BIT || strEncoding == Encoding::US_ASCII
+    cd = CharDet.detect(_string)
+    if cd["confidence"] > 0.6
+      _string.force_encoding(cd["encoding"])
+    end
+    #_string.encode!("utf-8", :undef => :replace, :replace => "?", :invalid => :replace)
+    _string.encode!(Encoding::UTF_8)
+  elsif strEncoding != Encoding::UTF_8
+    _string.encode!(Encoding::UTF_8)
+  end
+
+  return _string
 end
 
 def ProcessKV(k, v, includeList, varDeclare, deallocList, fromDic)
@@ -33,6 +50,7 @@ TEST
     cn = "#{k}"
     cn.chomp!("_list")
     varDeclare << "@property (nonatomic,retain) NSMutableArray *#{cn}Array;\n"
+    deallocList << "\tSAFE_RELEASE(_#{cn}Array);\n"
     nestType = ""
     str=""
     if ParseConfig::TypeMap.include?(eleclass)
@@ -40,14 +58,17 @@ TEST
       str=<<HERE
     NSArray* array = [dic objectForKey:@"#{k}"];
     if (array) {
-      for (NSInteger i =0; i<array.count; i++) {
-        #{nestType} result = [array objectAtIndex:i];
-        [[node #{cn}Array] addObject:result];
-      }
+        if (node.brandArray == nil) {
+              node.brandArray = [NSMutableArray new];
+          }
+        for (NSInteger i =0; i<array.count; i++) {
+          #{nestType} result = [array objectAtIndex:i];
+          [node.#{cn}Array addObject:result];
+        }
     }
 HERE
     elsif eleclass == {"k"=>"v"}.class
-      nestType="Pbcrc"+cn.capitalize+"Node"
+      nestType="Pbcrc"+cn[0].upcase+cn[1..-1]+"Node"
       GenerateStruct(nestType, v[0])
       includeList << "#import \"#{nestType}.h\"\n"
       str=<<HERE
@@ -57,6 +78,7 @@ HERE
         NSDictionary* result = [array objectAtIndex:i];
         #{nestType} *n = [#{nestType} fromDic :result];
         [[node #{cn}Array] addObject:n];
+        [n release];
       }
     }
 HERE
@@ -114,18 +136,17 @@ def parseJsonFile(fileName)
 	f = File.new(fileName, "rt")
 
   jsonStr = f.read
+  toUtf8(jsonStr)
   my_hash = JSON.parse(jsonStr)
 
   orgClassName = my_hash.keys[0]
   className = orgClassName.chomp("_list")
   className.chomp!("List")
-  className = className.capitalize+"Node"
+  className = "Pbcrc" + className.capitalize + "Node"
 
   messageHash = my_hash[orgClassName]
 
   GenerateStruct(className, messageHash)
 end
 
-Encoding.default_external = Encoding::UTF_8
-Encoding.default_internal = Encoding::UTF_8
-parseJsonFile('ylproto/pbcrcdetail.json')
+parseJsonFile('interface/detail_store_list.txt')

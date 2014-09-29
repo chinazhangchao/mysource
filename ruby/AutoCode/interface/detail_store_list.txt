@@ -1,5 +1,5 @@
 {
-    "PbcrcStoreList": {
+    "StoreResult": {
         "pbcrc_id": 1,
         "city_id": 1,
         "page_index": 1222,
