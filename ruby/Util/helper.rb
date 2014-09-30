@@ -20,20 +20,17 @@ module Helper
       "UTF-32LE"=>"\xFF\xFE\x00\x00".force_encoding("UTF-32LE")}
 
     def toUtf8(_string)
-      strEncoding = _string.encoding 
-      if strEncoding == Encoding::ASCII_8BIT || strEncoding == Encoding::US_ASCII
-        cd = CharDet.detect(_string)
-        if cd["confidence"] > 0.6
-          _string.force_encoding(cd["encoding"])
-          #移除BOM头
-          bomHeader = BomHeaderMap[cd["encoding"]]
-          _string.sub!(bomHeader, "") if bomHeader
-        end
-        #_string.encode!("utf-8", :undef => :replace, :replace => "?", :invalid => :replace)
-        _string.encode!(Encoding::UTF_8)
-      elsif strEncoding != Encoding::UTF_8
-        _string.encode!(Encoding::UTF_8)
+      #解决windows下CharDet库编译为ASCII_8BIT，无法与UTF-8兼容问题
+      _string.force_encoding(Encoding::ASCII_8BIT)
+      cd = CharDet.detect(_string)
+      if cd["confidence"] > 0.6
+        _string.force_encoding(cd["encoding"])
+        #移除BOM头
+        bomHeader = BomHeaderMap[cd["encoding"]]
+        _string.sub!(bomHeader, "") if bomHeader
       end
+      #_string.encode!("utf-8", :undef => :replace, :replace => "?", :invalid => :replace)
+      _string.encode!(Encoding::UTF_8)
 
       return _string
     end
