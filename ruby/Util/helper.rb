@@ -29,9 +29,8 @@ module Helper
         bomHeader = BomHeaderMap[cd["encoding"]]
         _string.sub!(bomHeader, "") if bomHeader
       end
-      #_string.encode!("utf-8", :undef => :replace, :replace => "?", :invalid => :replace)
-      _string.encode!(Encoding::UTF_8)
-
+      _string.encode!(Encoding::UTF_8, :undef => :replace, :replace => "?", :invalid => :replace)
+      
       return _string
     end
 
