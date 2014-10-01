@@ -2,6 +2,7 @@ require 'json'
 require 'set'
 require 'rchardet'
 require '../Util/helper.rb'
+require 'rails'
 
 module ParseConfig
   TypeMap = {"".class => "@property (nonatomic,copy)   NSString*", 1.class => "@property (nonatomic,assign) NSInteger", 1.0.class => "@property (nonatomic,assign)   float",
@@ -53,7 +54,7 @@ TEST
     }
 HERE
     elsif eleclass == {"k"=>"v"}.class
-      nestType="Pbcrc"+cn[0].upcase+cn[1..-1]+"Node"
+      nestType=cn.camelize+"Node"
       GenerateStruct(nestType, v[0])
       includeList << "#import \"#{nestType}.h\"\n"
       str=<<HERE
@@ -127,11 +128,12 @@ def parseJsonFile(fileName)
   orgClassName = my_hash.keys[0]
   className = orgClassName.chomp("_list")
   className.chomp!("List")
-  className = "Pbcrc" + className.capitalize + "Node"
+  className = className.camelize + "Node"
 
   messageHash = my_hash[orgClassName]
 
   GenerateStruct(className, messageHash)
 end
 
-parseJsonFile('interface/detail_store_list.txt')
+Dir.glob("pbcrc/*.txt"){|f| parseJsonFile(f)}
+# parseJsonFile('pbcrc/wallet_bill_list.txt')

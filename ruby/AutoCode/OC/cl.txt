@@ -1,0 +1,10 @@
+SetWalletPassword
+ValidateWalletPassword
+ApplyCard
+KahuiWallet
+AddCard
+Withdraw
+WalletBill
+ChangeWalletPass
+ForgetWalletPass
+MyProfit

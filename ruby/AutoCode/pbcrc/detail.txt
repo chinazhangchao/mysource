@@ -1,0 +1,26 @@
+{
+    "detail": {
+        "pbcrc_id": 1,
+        "pbcrc_name": "咖啡节",
+        "bank_id": 1,
+        "bank_name": "招商银行",
+        "card_constraint": "yueshushshshshshshs",
+        "rule": "刷100反50",
+        "pbcrc_pic": "http://www.rztong.com.cn/uploadfiles/20092411333807.jpg",
+        "time_scope": "2014年1月1日 – 2014年12月31日",
+        "card_type": 1,
+        "total": 2,
+        "brand_list": [
+            {
+                "id": 1,
+                "city_brd_name": "肯德基",
+                "city_brd_logo": "http://www.rztong.com.cn/uploadfiles/20092411333807.jpg"
+            },
+            {
+                "id": 2,
+                "city_brd_name": "肯德基",
+                "city_brd_logo": "http://www.rztong.com.cn/uploadfiles/20092411333807.jpg"
+            }
+        ]
+    }
+}

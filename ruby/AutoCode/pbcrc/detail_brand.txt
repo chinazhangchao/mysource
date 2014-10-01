@@ -1,0 +1,17 @@
+﻿{
+    "detail_brand": {
+        "total": 2,
+        "brand_list": [
+            {
+                "id": 1,
+                "city_brd_name": "肯德基",
+                "city_brd_logo": "http://www.rztong.com.cn/uploadfiles/20092411333807.jpg"
+            },
+            {
+                "id": 2,
+                "city_brd_name": "肯德基",
+                "city_brd_logo": "http://www.rztong.com.cn/uploadfiles/20092411333807.jpg"
+            }
+        ]
+    }
+}

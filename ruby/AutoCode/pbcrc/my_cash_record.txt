@@ -1,0 +1,23 @@
+﻿{
+    "my_cash_record": {
+        "total": 2,
+        "my_cash_list": [
+            {
+                "pbcrc_id": 1,
+                "pbcrc_num": "包商银行咖啡节",
+                "bank_id": 1221,
+                "bank_name": "招商银行",
+                "time_scope": "2014年8月1日--2014年12月31日",
+                "card_num": "*** **** **** **** 3221"
+            },
+            {
+                "pbcrc_id": 2,
+                "pbcrc_num": "包商银行咖啡节",
+                "bank_id": 1221,
+                "bank_name": "招商银行",
+                "time_scope": "2014年8月1日--2014年12月31日",
+                "card_num": "*** **** **** **** 3221"
+            }
+        ]
+    }
+}
