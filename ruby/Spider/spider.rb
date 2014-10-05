@@ -194,7 +194,6 @@ module Spider
       begTime = Time.now
 
       foreachPro = proc do |e|
-        puts e.locPath
         if !DownLoadConfig::OverrideExist && File.exist?(e.locPath)
           successList << DownStruct::LinkStruct.new(e.href, e.locPath)
         else
@@ -268,10 +267,9 @@ module Spider
 end#Spider end
 
 def batchDownList(downList, methodName = nil, objectName = nil)
-  Spider.batchDownList(downList, Helper.formMethod(methodName, objectName))
+  Spider.eventBatchDownList(downList, Helper.formMethod(methodName, objectName))
 end
 
 def parseDownLoadUrl(url, downDir, fileName, methodName = nil, objectName = nil)
-  #Spider.parseDownLoadUrl(url, downDir, fileName, Helper.formMethod(methodName, objectName))
   Spider.evenMachineStart(url, downDir, fileName, Helper.formMethod(methodName, objectName))
 end

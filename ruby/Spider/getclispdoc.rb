@@ -1,10 +1,9 @@
 require_relative 'spider.rb'
-
-def allComplete(successList, failedList)
-  puts "allComplete,failedList:#{failedList}"
-end
+require 'Set'
 
 def eventAllComplete(multi, successList, failedList)
+  puts "all complete"
+  #puts multi.responses[:callback]
   puts "success"
   puts multi.responses[:callback].size
   puts "error"
@@ -13,8 +12,9 @@ def eventAllComplete(multi, successList, failedList)
   EventMachine.stop
 end
 
-def saveWYArticle(multi, successList, failedList)
+def downOtherNode(multi, successList, failedList)
   puts "success"
+  puts multi.responses[:callback]
   puts multi.responses[:callback].size
   puts "error"
   puts multi.responses[:errback].size
@@ -22,23 +22,24 @@ def saveWYArticle(multi, successList, failedList)
   puts "get index complete"
   if successList.size > 0
     doc = Nokogiri::HTML(open(successList[0].locPath))
-    listGroup=doc.css("ul.list-group")
-    linkList = listGroup.css("a")
+    linkList = doc.css("a")
     puts "extrat href complete"
 
-    downDir = "new/"
+    downDir = "clispdoc/"
     FileUtils.mkdir_p(downDir) unless Dir.exist?(downDir)
 
     downList = []
+    setList = Set.new
     linkList.each do |link|
       href = link['href']
-      locPath = downDir + link.content + ".html"
-      downList.push( DownStruct::LinkStruct.new(href, locPath))
+      next if href.nil? || !href.end_with?(".html") || !setList.add?(href)
+      locPath = downDir + href
+      downList.push( DownStruct::LinkStruct.new("https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/" + href, locPath))
     end
     puts "down list complete"
     batchDownList(downList, :eventAllComplete)
   end
 end
 
-parseDownLoadUrl("http://www.yinwang.org/",\
- "wyIndex", "index.html", :saveWYArticle)
+parseDownLoadUrl("https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/index.html",\
+ "clispdoc", "index.html", :downOtherNode)
