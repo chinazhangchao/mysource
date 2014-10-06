@@ -41,3 +41,14 @@
     tr
     (cons (our-copy-tree (car tr))
           (our-copy-tree (cdr tr)))))
+
+(defun mirror?(s)
+  (let ((len (length s)))
+    (and (evenp len)
+      (let ((mid (/ len 2)))
+        (equal (subseq s 0 mid)
+          (reverse (subseq s mid)))))))
+
+(defun second-word(str)
+  (let ((p1 (+ (position #\  str) 1)))
+    (subseq str p1 (position #\  str :start p1))))
