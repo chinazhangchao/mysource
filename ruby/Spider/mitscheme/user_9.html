@@ -1,0 +1,851 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme User's Manual: Release Notes</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme User's Manual: Release Notes">
+<META NAME="keywords" CONTENT="MIT Scheme User's Manual: Release Notes">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC67"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC66"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC68"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC59"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_10.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> A. Release Notes </H1>
+<!--docid::SEC67::-->
+<P>
+
+The previous full release of MIT Scheme was version 7.4.7 in 1998.  This
+section describes major changes that have occurred since that time.  For
+more detailed information, see the <TT>`RCS.log'</TT> files in the source
+code.
+</P><P>
+
+Note that MIT Scheme still conforms to the <CITE>Revised^4 Report on the
+Algorithmic Language Scheme</CITE>, but not to the <CITE>Revised^5 Report on
+The Algorithmic Language Scheme</CITE>.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_9.html#SEC68">A.1 Recent Changes</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_9.html#SEC69">A.2 Overall Changes</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_9.html#SEC70">A.3 Base System Changes</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_9.html#SEC71">A.4 Edwin Changes</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_9.html#SEC72">A.5 Windows Changes</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Recent Changes"></A>
+<HR SIZE="6">
+<A NAME="SEC68"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC69"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_10.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> A.1 Recent Changes </H2>
+<!--docid::SEC68::-->
+<P>
+
+These are the changes since release 7.5.0:
+</P><P>
+
+<UL>
+<LI>
+Release 7.5.17 includes enhancements to <FONT SIZE="-1">IMAIL</FONT> and many bug
+fixes.  <FONT SIZE="-1">IMAIL</FONT> now has a Dired-like browser for folders; the
+<SAMP>`rmail:'</SAMP> and <SAMP>`umail:'</SAMP> folder types have been retired in favor
+of a more uniform <SAMP>`file:'</SAMP> type; and some problems using
+<FONT SIZE="-1">IMAIL</FONT> with Microsoft Exchange have been fixed.  Many people
+experienced trouble trying to compile release 7.5.16 from source code; a
+number of bugs have been fixed and this release should now build cleanly
+on most unix systems.  Finally, the representation of character-set
+objects has been changed; unfortunately this requires recompiling any
+code that refers to the procedures
+<CODE>substring-find-next-char-in-set</CODE> or
+<CODE>substring-find-previous-char-in-set</CODE>.
+<P>
+
+<LI>
+Release 7.5.16 fixes two limitations in email support.  First, the
+mail-sending interface has been reworked to generate the formatted
+message to a temporary file rather than a buffer.  This allows sending
+very large attachments.  Second, <FONT SIZE="-1">IMAIL</FONT>'s handling of
+file-based folders has been reworked to store a copy of the file in an
+"external string" The in-heap data structures no longer contain excerpts
+from the file, but instead keep indexes into the file and extract the
+excerpts on demand.  This allows reading very large mail files with
+reasonably-sized heaps (however it does require enough virtual memory to
+hold an image of the file).  The actual in-heap storage is quite small,
+approximately 100 bytes per message.
+<P>
+
+<LI>
+Release 7.5.15 has no user-visible changes.  The crypto code in the
+system has been re-engineered so that it can be dynamically loaded on
+GNU/Linux systems, thus avoiding a direct dependence on crypto
+libraries.  This allows Scheme to be used without crypto libraries
+(except for the crypto support, of course).
+<P>
+
+<LI>
+Release 7.5.14 has changed the way that the crypto libraries are
+handled.  We now support OpenSSL and mcrypt in addition to mhash and the
+older, more custom libraries we were using.  Additional bug fixes:
+transcript files now record output as they are supposed to; Edwin Info
+mode doesn't complain if Scheme's private Info directory is missing;
+termcap support has been reworked to eliminate compilation errors on Red
+Hat 7.0.
+<P>
+
+<LI>
+Release 7.5.13 finishes the source-tree reorganization; this software is
+now packaged for Debian.  A fatal bug in the bchscheme garbage collector
+has been fixed.  X graphics procedures now accept any coordinate
+argument that satisfies the <CODE>real?</CODE> predicate; previously it did
+not accept exact rational numbers or complex numbers with inexact
+imaginary zero.  Quite a few bugs have been fixed in <FONT SIZE="-1">IMAIL</FONT>,
+including some changes needed to interact properly with <FONT SIZE="-1">UW</FONT>
+<FONT SIZE="-1">IMAP</FONT>.  <FONT SIZE="-1">IMAIL</FONT>'s user interface has been tweaked a
+bit.  Edwin now has a <CODE>debian-changelog</CODE> mode.
+<P>
+
+<LI>
+Release 7.5.12 is a complete reorganization of the source tree to use
+modern configuration techniques based on Autoconf.  The purpose of this
+reorganization is to simplify maintenance, porting, and the generation
+of binary packages (e.g. Debian <SAMP>`.deb'</SAMP> packages).  The C code has
+been extensively modified to support this, and a lot of general cleanup
+has been done.  There should be no user-visible changes due to the
+reorganization, aside from the usual crop of bug fixes.
+<P>
+
+<LI>
+Release 7.5.11 includes unencumbered support for Blowfish encryption,
+reflecting recent changes to <FONT SIZE="-1">US</FONT> export controls.  More bug
+fixes, including a fatal bug in the <CODE>purify</CODE> procedure when running
+<CODE>bchscheme</CODE>, which has been around for many years and never noticed.
+<P>
+
+<LI>
+Release 7.5.10 fixes numerous bugs, and offers significant speed
+improvements to the basic operation of <FONT SIZE="-1">IMAIL</FONT>.  This release
+also provides a shell script to build the system from source code (works
+on GNU/Linux and FreeBSD systems only).
+<P>
+
+<LI>
+Release 7.5.9 adds the <FONT SIZE="-1">IMAIL</FONT> mail reader; <FONT SIZE="-1">IMAIL</FONT> is a
+new Rmail-like mail reader that supports <FONT SIZE="-1">IMAP</FONT> and
+<FONT SIZE="-1">MIME</FONT>.  Edwin's mail-sending support has also been enhanced to
+understand <FONT SIZE="-1">MIME</FONT>, so that it is now possible to send
+<FONT SIZE="-1">MIME</FONT> attachments.  Numerous changes to the runtime system and
+to Edwin have been made to support these changes.
+<P>
+
+Additional changes:
+</P><P>
+
+<UL>
+<LI>
+Edwin now has rudimentary support for a mouse wheel.
+<P>
+
+<LI>
+Edwin buffer-menu now does better job aligning its columns.
+<P>
+
+<LI>
+In Edwin, <KBD>M-x vc-version-other-window</KBD> now defaults the version if
+unspecified.
+<P>
+
+<LI>
+<CODE>string-&#62;decoded-time</CODE> (and consequently other procedures that
+convert <FONT SIZE="-1">RFC-822</FONT> time strings) now accepts two-digit years,
+pivoting around 1970.  This is a crock, but we have seen recent email
+messages utilizing such strings.
+<P>
+
+<LI>
+New procedure <CODE>set-string-maximum-length!</CODE>.
+</UL>
+<P>
+
+<LI>
+Release 7.5.8 fixes a nasty uninitialized-memory bug in the Win32
+event-handling code.  No other system is affected.
+<P>
+
+<LI>
+Release 7.5.7 changes: add support for the mhash library under
+GNU/Linux; fix bug in international keyboard support under Windows
+(thanks to Jacques Herry); beep now works properly in Edwin under
+Windows 9x; fix a fatal Edwin bug triggered by deleting a continued line
+at the top of the window; fix assorted bugs in Edwin's VC mode.
+<P>
+
+<LI>
+Release 7.5.6 has a number of changes mostly having to do with
+<FONT SIZE="-1">CVS</FONT>: sources converted from <FONT SIZE="-1">RCS</FONT> to <FONT SIZE="-1">CVS</FONT>;
+change logs converted to GNU ChangeLog format; <FONT SIZE="-1">VC</FONT>
+now supports <FONT SIZE="-1">CVS</FONT>; <FONT SIZE="-1">VC</FONT> program logic cleaned up;
+several bugs fixed in abbrev support; new procedures convert times
+to/from <FONT SIZE="-1">ISO</FONT> C <CODE>ctime()</CODE> format.
+<P>
+
+<LI>
+Release 7.5.5 changes the implementation of <CODE>sort</CODE> (and
+<CODE>merge-sort</CODE>) when applied to lists: previously this procedure was
+recursive to a depth of half the length of the list being sorted; the
+new implementation recurses only to a depth of lg(N).  Additionally,
+this release provides new procedures <CODE>flo:&#60;=</CODE>, <CODE>flo:&#62;=</CODE>,
+<CODE>flo:max</CODE> and <CODE>flo:min</CODE>.
+<P>
+
+<LI>
+Release 7.5.4 fixes some bugs in the <FONT SIZE="-1">SOS</FONT> object instantiation
+code (reported by Joe Marshall).  It also includes several improvements
+to Edwin: implementation of abbrevs; implementation of adaptive fill;
+change incremental search to terminate on <KBD>RET</KBD> rather than
+<KBD>ESC</KBD>; show mode-specific key bindings in <KBD>C-h m</KBD>.
+<P>
+
+<LI>
+Release 7.5.3 fixes problems in the Windows port that caused errors when
+trying to read gzipped Info files.  This release also fixes a bug that
+prevented the code from compiling properly when using egcs or GCC 2.95.x
+under GNU/Linux.
+<P>
+
+<LI>
+Release 7.5.2 adds support for FreeBSD; no other system is affected.
+The code for GNU/Linux has been re-compiled but should otherwise be
+unchanged.
+<P>
+
+<LI>
+Release 7.5.1 fixes some bugs in Edwin Rmail and in how Edwin displays
+characters with codes between <CODE>#x80</CODE> and <CODE>#xA0</CODE>.
+</UL>
+<P>
+
+<A NAME="Overall Changes"></A>
+<HR SIZE="6">
+<A NAME="SEC69"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC68"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC70"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_10.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> A.2 Overall Changes </H2>
+<!--docid::SEC69::-->
+<P>
+
+The following changes affect the entire system:
+</P><P>
+
+<UL>
+
+<LI>
+MIT Scheme has been re-released under the GNU General Public License.
+<P>
+
+<LI>
+With this release we no longer support Windows 3.1 or any form of
+<FONT SIZE="-1">DOS</FONT>.  The only supported Microsoft operating systems are
+Windows 95, Windows 98, and Windows NT.  We have tested on Windows 95,
+Windows 98, and Windows NT 4.0.
+<P>
+
+<LI>
+Although there have been no significant changes to the compiler, there
+have been some low-level representation changes to records and
+structures that make compiled code in this release incompatible with
+that from the previous release.
+<P>
+
+<LI>
+<FONT SIZE="-1">SOS</FONT> object-oriented programming extensions are now included in
+the base release.  They are not loaded by default; evaluate
+<CODE>(load-option 'sos)</CODE> to load them.
+<P>
+
+<LI>
+The documentation has been overhauled.  The Reference Manual has
+sections describing both new facilities and also some older facilities
+that were never properly documented.  The User's Manual has new material
+in the Installation, Debugging, and Edwin chapters, and has been revised
+throughout.
+<P>
+
+</UL>
+<P>
+
+<A NAME="Base System Changes"></A>
+<HR SIZE="6">
+<A NAME="SEC70"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC69"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC71"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_10.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> A.3 Base System Changes </H2>
+<!--docid::SEC70::-->
+<P>
+
+These are the major changes to the base system:
+</P><P>
+
+<UL>
+
+<LI>
+Command-line options:
+<P>
+
+<UL>
+<LI>
+The <CODE>-compiler</CODE> and <CODE>-edwin</CODE> command-line options can now be
+specified together, meaning that a band containing both compiler and
+Edwin support should be loaded.
+<P>
+
+<LI>
+The heap-sizing code now automatically defaults the <CODE>-constant</CODE>
+command-line option to the correct size for the band being loaded, and
+adds the heap used by the band to the requested heap size.  In
+consequence, it should rarely be necessary to specify <CODE>-constant</CODE>.
+An additional benefit is that the <CODE>-heap</CODE> command-line option now
+specifies exactly how much heap space is available when Scheme is
+started; previously the available amount was less than the specified
+amount due to the band's heap usage.
+<P>
+
+<LI>
+Command-line arguments can now be defined by user code.
+</UL>
+<P>
+
+<LI>
+Numeric input/output:
+<P>
+
+<UL>
+<LI>
+Several changes to the number reader and printer have resulted in
+greatly improved performance, particularly for floating-point numbers.
+<P>
+
+<LI>
+The variable <CODE>flonum-unparser-cutoff</CODE> can now specify the format in
+which the numbers are to be printed, e.g. <CODE>scientific</CODE> or
+<CODE>engineering</CODE>.
+<P>
+
+<LI>
+The parser now treats <CODE>*parser-radix*</CODE> differently: if it is set to
+a value other than <CODE>10</CODE> and the parser encounters radix-10 syntax
+(e.g. a decimal point), an error is signalled.
+</UL>
+<P>
+
+<LI>
+Strings and characters:
+<P>
+
+<UL>
+<LI>
+Regular-expression match and search are now available for strings.
+<P>
+
+<LI>
+String search procedures are now implemented, using Boyer-Moore search
+when appropriate.
+<P>
+
+<LI>
+Characters now have 16 bits of character code (instead of 7) to allow
+8-bit ISO latin and Unicode characters.  Strings are still based on
+8-bit characters.
+</UL>
+<P>
+
+<LI>
+Ports:
+<P>
+
+<UL>
+<LI>
+The <CODE>fresh-line</CODE> operation is now supported by all common port
+types.
+<P>
+
+<LI>
+<CODE>close-input-port</CODE> and <CODE>close-output-port</CODE> now close
+only one side of a bidirectional port; previously they closed both
+sides.
+<P>
+
+<LI>
+The following port operations have been eliminated:
+<CODE>write-string</CODE>, <CODE>read-chars</CODE>, and <CODE>write-chars</CODE>.
+<P>
+
+<LI>
+The low-level port data abstraction has been overhauled.  The new design
+has <EM>port types</EM> that implement the operations for the port, and are
+shared between all ports of a given type.
+</UL>
+<P>
+
+<LI>
+Operating-system interface:
+<P>
+
+<UL>
+<LI>
+Synchronous subprocesses can now be run from Scheme code.
+<P>
+
+<LI>
+Date and time support has been fleshed out and now provides a rich set
+of representations and conversions.  Unfortunately, this support depends
+on underlying support of the C library, which is sometimes of low
+quality.
+<P>
+
+<LI>
+A bug in socket support has been fixed: port numbers are now specified
+normally and automatically translated to network order.  Previously it
+was necessary to translate them to network order by hand.
+<P>
+
+<LI>
+<CODE>open-tcp-stream-socket</CODE> and <CODE>open-unix-stream-socket</CODE> now
+return one <FONT SIZE="-1">I/O</FONT> port rather than an input port and an output
+port.  <FONT SIZE="-1">TCP</FONT> sockets now use <CODE>"\r\n"</CODE> end-of-line marker
+regardless of the operating system.
+<P>
+
+<LI>
+Under Linux, Scheme now detects various foreign filesystems such as
+<CODE>msdos</CODE>, <CODE>vfat</CODE>, <CODE>ntfs</CODE>, and <CODE>hpfs</CODE>, and sets the
+default line translation for files on those systems to <CODE>"\r\n"</CODE>.
+</UL>
+<P>
+
+<LI>
+Red-black trees now support operations to read or delete the minimum or
+maximum element of a tree.
+<P>
+
+<LI>
+Both <CODE>merge-sort</CODE> and <CODE>quick-sort</CODE> are now available.  As
+before, <CODE>sort</CODE> defaults to <CODE>merge-sort</CODE>.
+<P>
+
+<LI>
+Pathname objects can now be written (using <CODE>fasdump</CODE>) on one
+operating system and read (using <CODE>fasload</CODE>) on another.  Previously
+this didn't work between unlike operating systems, such as Windows and
+unix, because Scheme only loaded the pathname support for the operating
+system it was running on.  Now support for all operating systems is
+loaded, no matter what system is being used.
+<P>
+
+<LI>
+Numerous fixes to stream code, eliminating premature dereferencing of
+streams, and dropping pointers to streams as soon as possible.
+<P>
+
+<LI>
+Transcripts (i.e. <CODE>transcript-on</CODE>) are now local to a particular
+<FONT SIZE="-1">REPL</FONT>.  This is usually relevant only when using Edwin, where
+there can be several <FONT SIZE="-1">REPL</FONT> buffers.  Previously transcripts
+only recorded activity on the Scheme console, and ignored any other
+<FONT SIZE="-1">REPL</FONT>s, including Edwin <FONT SIZE="-1">REPL</FONT> buffers.
+<P>
+
+<LI>
+<CODE>bkpt</CODE> is no longer a macro.  Instead, it extracts an environment
+from the continuation it is called with, by looking at the innermost
+stack frame.  In order for this to work properly, it must not be called
+in a tail-recursive position.  Calling it in a tail-recursive position
+will not generate any errors, but will cause the breakpoint to be
+visiting the wrong environment.
+<P>
+
+<LI>
+Under X11, the BackSpace keysym is treated as Delete, as long as
+BackSpace is bound to <FONT SIZE="-1">ASCII</FONT> backspace.
+<P>
+
+<LI>
+The <TT>`hppacach'</TT> program knows how to find kernel files for HP-UX
+10.x and later.
+<P>
+
+<LI>
+OS/2:
+<P>
+
+<UL>
+<LI>
+Under OS/2, the default font for the Scheme console window has been
+changed to <CODE>"8.Courier"</CODE>.
+<P>
+
+<LI>
+More sophisticated heuristics are used to discover the user's home
+directory on OS/2 systems.
+<P>
+
+<LI>
+Under OS/2 Warp 4.0, Scheme now reports the operating-system version
+correctly.
+</UL>
+<P>
+
+<LI>
+A new undocumented generic-procedure dispatch mechanism and its
+associated tagged data structures provides a high-performance substrate
+for building <FONT SIZE="-1">CLOS</FONT>-like object-oriented programming systems.
+This mechanism has been fully integrated into the existing record and
+<CODE>defstruct</CODE> code.  The <FONT SIZE="-1">SOS</FONT> system (which <EM>is</EM>
+documented) has been added as a load option to allow writing
+object-oriented code.
+<P>
+
+<LI>
+Undocumented interfaces now provide support for <CODE>gdbm</CODE>,
+<FONT SIZE="-1">MD5</FONT> checksums, and blowfish encryption.  The blowfish
+encryption is disabled by default, but we may later distribute a key to
+enable it.
+<P>
+
+</UL>
+<P>
+
+<A NAME="Edwin Changes"></A>
+<HR SIZE="6">
+<A NAME="SEC71"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC70"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC72"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_10.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> A.4 Edwin Changes </H2>
+<!--docid::SEC71::-->
+<P>
+
+These changes affect only Edwin:
+</P><P>
+
+<UL>
+
+<LI>
+The following are new language modes: <FONT SIZE="-1">HTML</FONT>, Java,
+<FONT SIZE="-1">PHP</FONT>, Verilog, <FONT SIZE="-1">VHDL</FONT>.  Some of these modes are pretty
+sketchy, consisting of little more than syntax and indentation -- they
+are not to be confused with the more powerful modes provided by Emacs.
+<P>
+
+<LI>
+Edwin can read and write files compressed with <CODE>bzip2</CODE>,
+<CODE>gzip</CODE>, or <CODE>compress</CODE>.  It can also read and write files
+encrypted with blowfish (but this is currently disabled due to export
+restrictions).
+<P>
+
+<LI>
+On PC systems, compressed files, encrypted files, and Rmail files
+do not have line translation; they are stored in Scheme's native format
+(i.e. with newlines as line terminators).
+<P>
+
+<LI>
+Edwin now indirects through symbolic links to find the true file being
+edited, and backup files go in the directory of the true file rather
+than the link.
+<P>
+
+<LI>
+Commands that read arguments from the minibuffer now have prompt
+histories, which can be accessed by using <KBD>M-p</KBD> and <KBD>M-n</KBD>.
+<P>
+
+<LI>
+The command <CODE>eval-expression</CODE> is now bound to <KBD>M-:</KBD> for
+compatibility with newer versions of Emacs.
+<P>
+
+<LI>
+A new command <CODE>insert-filename</CODE>, bound to <KBD>C-c C-i</KBD>, prompts
+for a filename in the minibuffer, then inserts it at point.  The
+formatting of the filename is controlled by the variable
+<CODE>insert-filename-format</CODE>, which by default uses Scheme string
+format.
+<P>
+
+<LI>
+Shell buffers now implement command completion.  This is overloaded onto
+the filename-completion command <KBD>C-M-i</KBD> just as in Emacs.
+<P>
+
+<LI>
+A new command-line option <CODE>-edit</CODE> causes the editor to start up
+when Scheme is started.
+<P>
+
+<LI>
+A new command <CODE>inferior-repl-flush-output</CODE>, bound to <KBD>C-c C-o</KBD>,
+deletes output from the previous command.  This works similarly to the
+corresponding command in shell buffers.
+<P>
+
+<LI>
+Errors in the <FONT SIZE="-1">REPL</FONT> buffer now prompt in the <FONT SIZE="-1">REPL</FONT>
+buffer itself, rather than in the minibuffer as previously.  The new
+prompts are less intrusive.
+<P>
+
+<LI>
+The evaluation commands now permit the evaluation environment to be set
+to the name of a package, and use the package's environment if
+available.  If the package's environment is unavailable, or if the
+package doesn't exist, the global environment is used instead.
+<P>
+
+<LI>
+The command <CODE>repl</CODE> now treats its argument differently, simplifying
+the creation of multiple inferior <FONT SIZE="-1">REPL</FONT> buffers.  A new command
+<CODE>set-inferior-repl-buffer</CODE> associates a Scheme buffer with an
+arbitrary inferior <FONT SIZE="-1">REPL</FONT> buffer, so that evaluation commands in
+that Scheme buffer use the specified <FONT SIZE="-1">REPL</FONT> buffer.
+<P>
+
+<LI>
+Info now supports the variable <CODE>info-directory-list</CODE>, which works
+like that in Emacs.
+<P>
+
+<LI>
+The command <CODE>manual-entry</CODE> now uses multiple buffers with Emacs 19
+naming conventions.
+<P>
+
+<LI>
+Frame-related commands are now bound to <KBD>C-x 5</KBD> as in Emacs, e.g.
+<KBD>C-x 5 f</KBD> finds a file in another frame.  The command
+<CODE>split-window-horizontally</CODE> has been moved to <KBD>C-x 3</KBD>, again as
+in Emacs.
+<P>
+
+<LI>
+All commands operating on frames now use the noun "frame" in their
+names, for consistency with Emacs.  Previously they used "screen".
+<P>
+
+<LI>
+New commands <CODE>show-frame-size</CODE>, <CODE>show-frame-position</CODE>,
+<CODE>set-frame-size</CODE>, and <CODE>set-frame-position</CODE>.
+<P>
+
+<LI>
+Under X11, Edwin now distinguishes between its primary frame and all
+other frames when finding resources.  The new X resource name for these
+secondary frames is <CODE>edwinSecondary</CODE>.
+<P>
+
+<LI>
+Sending mail is now supported through a direct <FONT SIZE="-1">SMTP</FONT> interface.
+This interface will work on any operating system that supports sockets
+(all of the systems we current distribute for).  See the variables
+<CODE>mail-relay-host</CODE> and <CODE>smtp-require-valid-recipients</CODE>.
+<P>
+
+</UL>
+<P>
+
+<A NAME="Changes to the Windows Port"></A>
+<HR SIZE="6">
+<A NAME="SEC72"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC71"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_10.html#SEC73"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_10.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> A.5 Windows Changes </H2>
+<!--docid::SEC72::-->
+<P>
+
+Many substantial changes have been made to the Windows port, mostly to
+bring it up to par with the other ports.
+</P><P>
+
+<UL>
+
+<LI>
+There is now a single input queue for events, which fixes various small
+but annoying bugs having to do with events not being read at times when
+they should have been.
+<P>
+
+<LI>
+The command-line parser has been improved so that it will accept
+arguments with spaces in them.  In order for this to work properly, the
+argument must be surrounded by double quotes.  This fix allows Scheme to
+be installed in a directory whose name contains spaces.
+<P>
+
+<LI>
+Scheme now understands about Windows 98 version strings, and furthermore
+provides more detailed information about specifics of the platform.
+<P>
+
+<LI>
+Scheme now more aggressively allocates low memory, and consequently is
+able to allocate slightly larger heaps.  Unfortunately there are
+inherent limitations on the heap size that cannot easily be worked
+around in this fashion.  If you need more memory, you must use a
+friendlier operating system, or wait for Windows 64-bit addressing
+support.
+<P>
+
+<LI>
+The Scheme microcode now compiles using Visual C++ 5.0 or later.
+However it is probably not desirable to do this, because Visual C++
+links in certain libraries at key places in the memory image, and
+consequently limits the heap to fairly small sizes.  The microcode we
+distribute is compiled with Watcom C/C++ 11.0, which does not restrict
+our heap allocation as much.
+<P>
+
+<LI>
+Various pop-up error dialogs are now suppressed, e.g. for inaccessible
+floppy devices.
+<P>
+
+<LI>
+International keyboards should now work properly.  However, this hasn't
+been tested properly; we'd appreciate information about how well it
+works.
+<P>
+
+<LI>
+Subprocesses and sockets are now supported.  However, Edwin's shell mode
+works only under Windows NT; there is something wrong with the Windows
+9x subprocess support that we don't yet understand.
+<P>
+
+<LI>
+Scheme now uses more sophisticated heuristics to discover the user's
+home directory on Windows systems.  It is no longer necessary to bind
+the <CODE>HOME</CODE> environment variable under Windows NT.
+<P>
+
+<LI>
+Edwin has its own copy of <TT>`gzip.exe'</TT> to guarantee that there's
+support for <CODE>gzip</CODE>-compressed files.
+<P>
+
+<LI>
+Edwin now recognizes the standard Windows shell prompt in shell buffers.
+<P>
+
+<LI>
+Edwin printing commands now work.
+<P>
+
+<LI>
+Edwin now supports cut and paste using the kill and yank commands.
+<P>
+
+<LI>
+All Dired commands are now supported.  Dired formats directory listings
+in native format rather than unix format.  The <KBD>M</KBD> command changes
+mode bits, which are specified much like arguments to the <CODE>attrib</CODE>
+command.  The <KBD>S</KBD> command toggles whether or not hidden/system files
+are shown; by default these files do not appear in Dired listings.
+<P>
+
+<LI>
+New undocumented primitives provide access to the registry.
+<P>
+
+</UL>
+<P>
+
+<A NAME="GNU Free Documentation License"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_10.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

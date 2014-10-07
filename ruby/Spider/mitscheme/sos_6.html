@@ -1,0 +1,431 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>The SOS Reference Manual: Methods</TITLE>
+
+<META NAME="description" CONTENT="The SOS Reference Manual: Methods">
+<META NAME="keywords" CONTENT="The SOS Reference Manual: Methods">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC17"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_5.html#SEC16"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC18"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_5.html#SEC13"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_7.html#SEC22"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_9.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 5. Methods </H1>
+<!--docid::SEC17::-->
+<P>
+
+<A NAME="IDX126"></A>
+A method contains a method procedure and a sequence of <EM>parameter
+specializers</EM> that specify when the given method is applicable.
+</P><P>
+
+A method is not a procedure and cannot be invoked as a procedure.
+Methods are invoked by the effective method procedure when a generic
+procedure is called.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sos_6.html#SEC18">5.1 Method Datatype</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sos_6.html#SEC19">5.2 Method Syntax</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sos_6.html#SEC20">5.3 Chained Methods</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sos_6.html#SEC21">5.4 Computed Methods</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Method Datatype"></A>
+<HR SIZE="6">
+<A NAME="SEC18"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC17"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC19"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC17"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC17"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_7.html#SEC22"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_9.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.1 Method Datatype </H2>
+<!--docid::SEC18::-->
+<P>
+
+The following procedures are used to construct and inspect methods.
+</P><P>
+
+<A NAME="IDX127"></A>
+<DL>
+<DT><U>Procedure:</U> <B>make-method</B> <I>specializers procedure</I>
+<DD>Creates and returns a new method.  Note that <VAR>specializers</VAR> may have
+fewer elements than the number of required parameters in
+<VAR>procedure</VAR>; the trailing parameters are considered to be
+specialized by <CODE>&#60;object&#62;</CODE>.
+</P><P>
+
+After the returned method is stored in a generic procedure,
+<VAR>Procedure</VAR> is called by the effective method procedure of the
+generic procedure when the generic procedure is called with arguments
+satisfying <VAR>specializers</VAR>.  In simple cases, when no method
+combination occurs, <VAR>procedure</VAR> <EM>is</EM> the effective method
+procedure.
+</DL>
+</P><P>
+
+<A NAME="IDX128"></A>
+<DL>
+<DT><U>Procedure:</U> <B>method?</B> <I>object</I>
+<DD>Returns <CODE>#t</CODE> iff <VAR>object</VAR> is a method, otherwise returns
+<CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX129"></A>
+<DL>
+<DT><U>Generic Procedure:</U> <B>method-specializers</B> <I>method</I>
+<DD>Returns the specializers of <VAR>method</VAR>.  This list must not be
+modified.
+</DL>
+</P><P>
+
+<A NAME="IDX130"></A>
+<DL>
+<DT><U>Generic Procedure:</U> <B>method-procedure</B> <I>method</I>
+<DD>Returns the procedure of <VAR>method</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX131"></A>
+<DL>
+<DT><U>Procedure:</U> <B>method-applicable?</B> <I>method classes</I>
+<DD>This predicate is used to determine the applicability of <VAR>method</VAR>.
+When a method is contained in a generic procedure, and the procedure is
+applied to some arguments, the method is <EM>applicable</EM> if each
+argument is an instance of the corresponding method specializer, or
+equivalently, if each argument's class is a subclass of the
+corresponding method specializer.
+</P><P>
+
+<CODE>method-applicable?</CODE> determines whether <VAR>method</VAR> would be
+applicable if the given arguments had the classes specified by
+<VAR>classes</VAR>.  It returns <CODE>#t</CODE> if each element of <VAR>classes</VAR> is
+a subclass of the corresponding specializer of <VAR>method</VAR>, and
+<CODE>#f</CODE> otherwise.
+</DL>
+</P><P>
+
+<A NAME="Method Syntax"></A>
+<HR SIZE="6">
+<A NAME="SEC19"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC18"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC20"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC17"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC17"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_7.html#SEC22"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_9.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.2 Method Syntax </H2>
+<!--docid::SEC19::-->
+<P>
+
+The following syntactic forms greatly simplify the definition of
+methods, and of adding them to generic procedures.
+</P><P>
+
+<A NAME="IDX132"></A>
+<DL>
+<DT><U>Syntax:</U> <B>define-method</B> <I>generic-procedure lambda-list body <small>...</small></I>
+<DD>Defines a method of <VAR>generic-procedure</VAR>.  <VAR>Lambda-list</VAR> is like
+the parameter list of a <CODE>lambda</CODE> special form, except that the
+required parameters may have associated specializers.  A parameter with
+an associated specializer is written as a list of two elements: the
+first element is the parameter's name, and the second element is an
+expression that evaluates to a class.
+</P><P>
+
+<VAR>Lambda-list</VAR> must contain at least one required parameter, and at
+least one required parameter must be specialized.
+</P><P>
+
+A <CODE>define-method</CODE> special form expands into the following:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(add-method <VAR>generic-procedure</VAR>
+  (make-method (list <VAR>specializer</VAR> <small>...</small>)
+    (lambda (call-next-method . <VAR>stripped-lambda-list</VAR>)
+      <VAR>body</VAR> <small>...</small>)))
+</pre></td></tr></table></P><P>
+
+where <VAR>stripped-lambda-list</VAR> is <VAR>lambda-list</VAR> with the
+specialized parameters replaced by their names, and the
+<VAR>specializer</VAR>s are the corresponding expressions from the
+specialized parameters.  If necessary, the <VAR>specializer</VAR>s are
+interspersed with references to <CODE>&#60;object&#62;</CODE> in order to make them
+occur in the correct position in the sequence.
+</P><P>
+
+For example,
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-method add ((x &#60;integer&#62;) (y &#60;rational&#62;)) ...)
+</pre></td></tr></table></P><P>
+
+expands into
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(add-method add
+  (make-method (list &#60;integer&#62; &#60;rational&#62;)
+    (lambda (call-next-method x y) ...)))
+</pre></td></tr></table></P><P>
+
+Note that the list of specializers passed to <CODE>make-method</CODE> will
+correspond to the required parameters of the method; the specializer
+corresponding to a non-specialized required parameter is
+<CODE>&#60;object&#62;</CODE>.
+</P><P>
+
+Further note that, within the body of a <CODE>define-method</CODE> special
+form, the free variable <CODE>call-next-method</CODE> is bound to a
+"call-next-method" procedure (see <CODE>make-chained-method</CODE> for
+details).  If the <CODE>define-method</CODE> body refers to this variable, the
+defined method is a chained method, otherwise it is an ordinary method.
+</DL>
+</P><P>
+
+<A NAME="IDX133"></A>
+<DL>
+<DT><U>Syntax:</U> <B>method</B> <I>lambda-list body <small>...</small></I>
+<DD>This special form evaluates to an anonymous method in the same way that
+<CODE>lambda</CODE> evaluates to an anonymous procedure.  <VAR>Lambda-list</VAR>
+and <VAR>body</VAR> have exactly the same syntax and semantics as the
+corresponding parts of <CODE>define-method</CODE>.  Note that the following
+are completely equivalent:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-method g ((a &#60;foo&#62;) b)
+  (cons b a))
+
+(add-method g
+  (method ((a &#60;foo&#62;) b)
+    (cons b a)))
+
+(add-method g
+  (make-method (list &#60;foo&#62;)
+    (lambda (a b)
+      (cons b a))))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Chained Methods"></A>
+<HR SIZE="6">
+<A NAME="SEC20"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC19"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC21"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC17"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC17"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_7.html#SEC22"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_9.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.3 Chained Methods </H2>
+<!--docid::SEC20::-->
+<P>
+
+<A NAME="IDX134"></A>
+Sometimes it is useful to have a method that adds functionality to
+existing methods.  <EM>Chained methods</EM> provide a mechanism to
+accomplish this.  A chained method, when invoked, can call the method
+that would have been called had this method not been defined: it is
+passed a procedure that will call the inherited method.  The chained
+method can run arbitrary code both before and after calling the
+inherited method.
+</P><P>
+
+<A NAME="IDX135"></A>
+<DL>
+<DT><U>Procedure:</U> <B>make-chained-method</B> <I>specializers procedure</I>
+<DD>Create and return a chained method.  <VAR>Procedure</VAR> must be a procedure
+of one argument that returns a procedure.  When the chained method is
+combined, its procedure will be called with one argument, a
+"call-next-method" procedure; it must then return another procedure
+that will be called when the method is invoked.  The
+"call-next-method" procedure may called by the method procedure at any
+time, which will invoke the next less-specific method.  The
+"call-next-method" procedure must be called with the same number of
+arguments as the method procedure; normally these are the same
+arguments, but that is not required.
+</DL>
+</P><P>
+
+<A NAME="IDX136"></A>
+<DL>
+<DT><U>Procedure:</U> <B>chained-method?</B> <I>object</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>object</VAR> is a chained method, otherwise returns
+<CODE>#f</CODE>.  Note that every chained method satisfies <CODE>method?</CODE>.
+</DL>
+</P><P>
+
+<A NAME="Computed Methods"></A>
+<HR SIZE="6">
+<A NAME="SEC21"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC20"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_7.html#SEC22"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC17"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC17"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_7.html#SEC22"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_9.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.4 Computed Methods </H2>
+<!--docid::SEC21::-->
+<P>
+
+<A NAME="IDX137"></A>
+A <EM>computed method</EM> is a powerful mechanism that provides the
+ability to generate methods "on the fly".  A computed method is like
+an ordinary method, except that its procedure is called during method
+combination, and is passed the classes of the arguments in place of the
+arguments themselves.  Based on these classes, the computed method
+returns an ordinary method, which is combined in the usual way.
+</P><P>
+
+Note that computed methods and computed EMPs both satisfy the
+predicate <CODE>method?</CODE>.  They are not really methods in that they
+cannot be combined with other methods to form an effective method
+procedure; however, they are treated as methods by procedures such as
+<CODE>add-method</CODE> and <CODE>method-specializers</CODE>.
+</P><P>
+
+<A NAME="IDX138"></A>
+<DL>
+<DT><U>Procedure:</U> <B>make-computed-method</B> <I>specializers procedure</I>
+<DD>Create and return a computed method.  <VAR>Procedure</VAR> will be called
+during method combination with the classes of the generic-procedure
+arguments as its arguments.  It must return one of the following:
+</P><P>
+
+<UL>
+<LI>
+An ordinary method (as returned by <CODE>make-method</CODE> or
+<CODE>make-chained-method</CODE>).  The returned method's specializers must be
+restrictions of <VAR>specializers</VAR>, i.e. each specializer in the
+returned method must be a subclass of the corresponding specializer in
+<VAR>specializers</VAR>.  In the usual case, the returned method's
+specializers are the same as <VAR>specializers</VAR>.
+<P>
+
+<LI>
+A procedure, which is converted into an ordinary method by calling
+<CODE>make-method</CODE> on <VAR>specializers</VAR> and the returned procedure.
+<P>
+
+<LI>
+<CODE>#f</CODE>, which means that the computed method declines to generate a
+method.
+</UL>
+</DL>
+<P>
+
+<A NAME="IDX139"></A>
+<DL>
+<DT><U>Procedure:</U> <B>computed-method?</B> <I>object</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>object</VAR> is a computed method, otherwise
+returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX140"></A>
+A <EM>computed EMP</EM> takes the computed-method mechanism one step
+further.  A computed EMP is like a computed method, except that it
+returns an effective method procedure rather than a method.
+<CODE>compute-effective-method-procedure</CODE> tries each of the applicable
+computed EMPs, and if exactly one of them returns an EMP, that
+is the resulting effective method procedure.
+</P><P>
+
+<A NAME="IDX141"></A>
+<DL>
+<DT><U>Procedure:</U> <B>make-computed-emp</B> <I>key specializers procedure</I>
+<DD>Create and return a computed EMP.  <VAR>Procedure</VAR> will be called
+during method combination with the classes of the generic-procedure
+arguments as its arguments.  It must return either an EMP or
+<CODE>#f</CODE>.
+</P><P>
+
+<VAR>Key</VAR> is an arbitrary object that is used to identify the computed
+EMP.  The <VAR>key</VAR> is used by <CODE>add-method</CODE> and
+<CODE>delete-method</CODE> to decide whether two computed EMPs are
+the same; they are the same if their <VAR>key</VAR>s are <CODE>equal?</CODE>.  This
+is necessary because a generic procedure may have more than one computed
+EMP with the same specializers.
+</DL>
+</P><P>
+
+<A NAME="IDX142"></A>
+<DL>
+<DT><U>Procedure:</U> <B>computed-emp?</B> <I>object</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>object</VAR> is a computed EMP, otherwise
+returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX143"></A>
+<DL>
+<DT><U>Generic Procedure:</U> <B>computed-emp-key</B> <I>computed-emp</I>
+<DD>Returns the key for <VAR>computed-emp</VAR>.
+</DL>
+</P><P>
+
+<A NAME="Printing"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC17"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_7.html#SEC22"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_9.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

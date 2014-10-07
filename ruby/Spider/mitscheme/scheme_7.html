@@ -1,0 +1,1451 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme Reference: Strings</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme Reference: Strings">
+<META NAME="keywords" CONTENT="MIT Scheme Reference: Strings">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC61"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC60"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC62"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 6. Strings </H1>
+<!--docid::SEC61::-->
+<P>
+
+<A NAME="IDX722"></A>
+<A NAME="IDX723"></A>
+A <EM>string</EM> is a mutable sequence of characters.  In the current
+implementation of MIT Scheme, the elements of a string must all
+satisfy the predicate <CODE>char-ascii?</CODE>; if someone ports MIT
+Scheme to a non-<FONT SIZE="-1">ASCII</FONT> operating system this requirement will
+change.
+</P><P>
+
+<A NAME="IDX724"></A>
+<A NAME="IDX725"></A>
+<A NAME="IDX726"></A>
+<A NAME="IDX727"></A>
+<A NAME="IDX728"></A>
+<A NAME="IDX729"></A>
+<A NAME="IDX730"></A>
+<A NAME="IDX731"></A>
+A string is written as a sequence of characters enclosed within double
+quotes <CODE>" "</CODE>.  To include a double quote inside a string, precede
+the double quote with a backslash <CODE>\</CODE> (escape it), as in
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>"The word \"recursion\" has many meanings."
+</pre></td></tr></table></P><P>
+
+The printed representation of this string is
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>The word "recursion" has many meanings.
+</pre></td></tr></table></P><P>
+
+To include a backslash inside a string, precede it with another
+backslash; for example,
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>"Use #\\Control-q to quit."
+</pre></td></tr></table></P><P>
+
+The printed representation of this string is
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>Use #\Control-q to quit.
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX732"></A>
+<A NAME="IDX733"></A>
+<A NAME="IDX734"></A>
+<A NAME="IDX735"></A>
+<A NAME="IDX736"></A>
+<A NAME="IDX737"></A>
+The effect of a backslash that doesn't precede a double quote or
+backslash is unspecified in standard Scheme, but MIT Scheme
+specifies the effect for three other characters: <CODE>\t</CODE>, <CODE>\n</CODE>,
+and <CODE>\f</CODE>.  These escape sequences are respectively translated into
+the following characters: <CODE>#\tab</CODE>, <CODE>#\newline</CODE>, and
+<CODE>#\page</CODE>.  Finally, a backslash followed by exactly three octal
+digits is translated into the character whose <FONT SIZE="-1">ASCII</FONT> code is those
+digits.
+</P><P>
+
+If a string literal is continued from one line to another, the string
+will contain the newline character (<CODE>#\newline</CODE>) at the line break.
+Standard Scheme does not specify what appears in a string literal at a
+line break.
+</P><P>
+
+<A NAME="IDX738"></A>
+<A NAME="IDX739"></A>
+<A NAME="IDX740"></A>
+<A NAME="IDX741"></A>
+<A NAME="IDX742"></A>
+The <EM>length</EM> of a string is the number of characters that it
+contains.  This number is an exact non-negative integer that is
+established when the string is created
+(but see section <A HREF="scheme_7.html#SEC71">6.10 Variable-Length Strings</A>).
+Each character in a string has an <EM>index</EM>, which is a
+number that indicates the character's position in the string.  The index
+of the first (leftmost) character in a string is 0, and the index of the
+last character is one less than the length of the string.  The
+<EM>valid indexes</EM> of a string are the exact non-negative integers less
+than the length of the string.
+</P><P>
+
+<A NAME="IDX743"></A>
+<A NAME="IDX744"></A>
+<A NAME="IDX745"></A>
+A number of the string procedures operate on substrings.  A
+<EM>substring</EM> is a segment of a <VAR>string</VAR>, which is specified by
+two integers <VAR>start</VAR> and <VAR>end</VAR> satisfying these relationships:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>0 &#60;= <VAR>start</VAR> &#60;= <VAR>end</VAR> &#60;= (string-length <VAR>string</VAR>)
+</pre></td></tr></table></P><P>
+
+<VAR>Start</VAR> is the index of the first character in the substring, and
+<VAR>end</VAR> is one greater than the index of the last character in the
+substring.  Thus if <VAR>start</VAR> and <VAR>end</VAR> are equal, they refer to
+an empty substring, and if <VAR>start</VAR> is zero and <VAR>end</VAR> is the
+length of <VAR>string</VAR>, they refer to all of <VAR>string</VAR>.
+</P><P>
+
+<A NAME="IDX746"></A>
+<A NAME="IDX747"></A>
+Some of the procedures that operate on strings ignore the difference
+between uppercase and lowercase.  The versions that ignore case include
+<SAMP>`-ci'</SAMP> (for "case insensitive") in their names.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_7.html#SEC62">6.1 Construction of Strings</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_7.html#SEC63">6.2 Selecting String Components</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_7.html#SEC64">6.3 Comparison of Strings</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_7.html#SEC65">6.4 Alphabetic Case in Strings</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_7.html#SEC66">6.5 Cutting and Pasting Strings</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_7.html#SEC67">6.6 Searching Strings</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_7.html#SEC68">6.7 Matching Strings</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_7.html#SEC69">6.8 Regular Expressions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_7.html#SEC70">6.9 Modification of Strings</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_7.html#SEC71">6.10 Variable-Length Strings</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_7.html#SEC72">6.11 Byte Vectors</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Construction of Strings"></A>
+<HR SIZE="6">
+<A NAME="SEC62"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC63"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.1 Construction of Strings </H2>
+<!--docid::SEC62::-->
+<P>
+
+<A NAME="IDX748"></A>
+<DL>
+<DT><U>procedure:</U> <B>make-string</B> <I>k [char]</I>
+<DD>Returns a newly allocated string of length <VAR>k</VAR>.  If you specify
+<VAR>char</VAR>, all elements of the string are initialized to <VAR>char</VAR>,
+otherwise the contents of the string are unspecified.  <VAR>Char</VAR> must
+satisfy the predicate <CODE>char-ascii?</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(make-string 10 #\x)              =>  "xxxxxxxxxx"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX749"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string</B> <I>char <small>...</small></I>
+<DD>Returns a newly allocated string consisting of the specified characters.
+The arguments must all satisfy <CODE>char-ascii?</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string #\a)                                =>  "a"
+(string #\a #\b #\c)                        =>  "abc"
+(string #\a #\space #\b #\space #\c)        =>  "a b c"
+(string)                                    =>  ""
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX750"></A>
+<DL>
+<DT><U>procedure:</U> <B>list-&#62;string</B> <I>char-list</I>
+<DD><A NAME="IDX751"></A>
+<A NAME="IDX752"></A>
+<VAR>Char-list</VAR> must be a list of <FONT SIZE="-1">ASCII</FONT> characters.
+<CODE>list-&#62;string</CODE> returns a newly allocated string formed from the
+elements of <VAR>char-list</VAR>.  This is equivalent to <CODE>(apply string
+<VAR>char-list</VAR>)</CODE>.  The inverse of this operation is
+<CODE>string-&#62;list</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(list-&#62;string '(#\a #\b))           =>  "ab"
+(string-&#62;list "Hello")              =>  (#\H #\e #\l #\l #\o)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX753"></A>
+<DL>
+<DT><U>procedure:</U> <B>string-copy</B> <I>string</I>
+<DD><A NAME="IDX754"></A>
+Returns a newly allocated copy of <VAR>string</VAR>.
+</P><P>
+
+Note regarding variable-length strings: the maximum length of the result
+depends only on the length of <VAR>string</VAR>, not its maximum length.  If
+you wish to copy a string and preserve its maximum length, do the
+following:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (string-copy-preserving-max-length string)
+  (let ((length))
+    (dynamic-wind 
+     (lambda ()
+       (set! length (string-length string))
+       (set-string-length! string
+                           (string-maximum-length string)))
+     (lambda ()
+       (string-copy string))
+     (lambda ()
+       (set-string-length! string length)))))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Selecting String Components"></A>
+<HR SIZE="6">
+<A NAME="SEC63"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC62"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC64"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.2 Selecting String Components </H2>
+<!--docid::SEC63::-->
+<P>
+
+<A NAME="IDX755"></A>
+<DL>
+<DT><U>procedure:</U> <B>string?</B> <I>object</I>
+<DD><A NAME="IDX756"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a string; otherwise returns
+<CODE>#f</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string? "Hi")                  =>  #t
+(string? 'Hi)                   =>  #f
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX757"></A>
+<DL>
+<DT><U>procedure:</U> <B>string-length</B> <I>string</I>
+<DD>Returns the length of <VAR>string</VAR> as an exact non-negative integer.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-length "")              =>  0
+(string-length "The length")    =>  10
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX758"></A>
+<DL>
+<DT><U>procedure:</U> <B>string-null?</B> <I>string</I>
+<DD><A NAME="IDX759"></A>
+<A NAME="IDX760"></A>
+Returns <CODE>#t</CODE> if <VAR>string</VAR> has zero length; otherwise returns
+<CODE>#f</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-null? "")               =>  #t
+(string-null? "Hi")             =>  #f
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX761"></A>
+<DL>
+<DT><U>procedure:</U> <B>string-ref</B> <I>string k</I>
+<DD>Returns character <VAR>k</VAR> of <VAR>string</VAR>.  <VAR>K</VAR> must be a valid index
+of <VAR>string</VAR>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-ref "Hello" 1)          =>  #\e
+(string-ref "Hello" 5)          error--> 5 not in correct range
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX762"></A>
+<DL>
+<DT><U>procedure:</U> <B>string-set!</B> <I>string k char</I>
+<DD>Stores <VAR>char</VAR> in element <VAR>k</VAR> of <VAR>string</VAR> and returns an
+unspecified value.  <VAR>K</VAR> must be a valid index of <VAR>string</VAR>, and
+<VAR>char</VAR> must satisfy the predicate <CODE>char-ascii?</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define str "Dog")              =>  unspecified
+(string-set! str 0 #\L)         =>  unspecified
+str                             =>  "Log"
+(string-set! str 3 #\t)         error--> 3 not in correct range
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Comparison of Strings"></A>
+<HR SIZE="6">
+<A NAME="SEC64"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC63"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC65"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.3 Comparison of Strings </H2>
+<!--docid::SEC64::-->
+<P>
+
+<A NAME="IDX763"></A>
+<DL>
+<DT><U>procedure:</U> <B>string=?</B> <I>string1 string2</I>
+<DD><A NAME="IDX764"></A>
+<DT><U>procedure+:</U> <B>substring=?</B> <I>string1 start end string2 start end</I>
+<DD><A NAME="IDX765"></A>
+<DT><U>procedure:</U> <B>string-ci=?</B> <I>string1 string2</I>
+<DD><A NAME="IDX766"></A>
+<DT><U>procedure+:</U> <B>substring-ci=?</B> <I>string1 start end string2 start end</I>
+<DD><A NAME="IDX767"></A>
+Returns <CODE>#t</CODE> if the two strings (substrings) are the same length
+and contain the same characters in the same (relative) positions;
+otherwise returns <CODE>#f</CODE>.  <CODE>string-ci=?</CODE> and
+<CODE>substring-ci=?</CODE> don't distinguish uppercase and lowercase letters,
+but <CODE>string=?</CODE> and <CODE>substring=?</CODE> do.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string=? "PIE" "PIE")                  =>  #t
+(string=? "PIE" "pie")                  =>  #f
+(string-ci=? "PIE" "pie")               =>  #t
+(substring=? "Alamo" 1 3 "cola" 2 4)    =>  #t ; compares "la"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX768"></A>
+<DL>
+<DT><U>procedure:</U> <B>string&#60;?</B> <I>string1 string2</I>
+<DD><A NAME="IDX769"></A>
+<DT><U>procedure+:</U> <B>substring&#60;?</B> <I>string1 start1 end1 string2 start2 end2</I>
+<DD><A NAME="IDX770"></A>
+<DT><U>procedure:</U> <B>string&#62;?</B> <I>string1 string2</I>
+<DD><A NAME="IDX771"></A>
+<DT><U>procedure:</U> <B>string&#60;=?</B> <I>string1 string2</I>
+<DD><A NAME="IDX772"></A>
+<DT><U>procedure:</U> <B>string&#62;=?</B> <I>string1 string2</I>
+<DD><A NAME="IDX773"></A>
+<DT><U>procedure:</U> <B>string-ci&#60;?</B> <I>string1 string2</I>
+<DD><A NAME="IDX774"></A>
+<DT><U>procedure+:</U> <B>substring-ci&#60;?</B> <I>string1 start1 end1 string2 start2 end2</I>
+<DD><A NAME="IDX775"></A>
+<DT><U>procedure:</U> <B>string-ci&#62;?</B> <I>string1 string2</I>
+<DD><A NAME="IDX776"></A>
+<DT><U>procedure:</U> <B>string-ci&#60;=?</B> <I>string1 string2</I>
+<DD><A NAME="IDX777"></A>
+<DT><U>procedure:</U> <B>string-ci&#62;=?</B> <I>string1 string2</I>
+<DD>These procedures compare strings (substrings) according to the order of
+the characters they contain (also see section <A HREF="scheme_6.html#SEC56">5.2 Comparison of Characters</A>).
+The arguments are compared using a lexicographic (or dictionary) order.
+If two strings differ in length but are the same up to the length of the
+shorter string, the shorter string is considered to be less than the
+longer string.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string&#60;? "cat" "dog")          =>  #t
+(string&#60;? "cat" "DOG")          =>  #f
+(string-ci&#60;? "cat" "DOG")       =>  #t
+(string&#62;? "catkin" "cat")       =>  #t ; shorter is lesser
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX778"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-compare</B> <I>string1 string2 if-eq if-lt if-gt</I>
+<DD><A NAME="IDX779"></A>
+<DT><U>procedure+:</U> <B>string-compare-ci</B> <I>string1 string2 if-eq if-lt if-gt</I>
+<DD><VAR>If-eq</VAR>, <VAR>if-lt</VAR>, and <VAR>if-gt</VAR> are procedures of no arguments
+(thunks).  The two strings are compared; if they are equal, <VAR>if-eq</VAR>
+is applied, if <VAR>string1</VAR> is less than <VAR>string2</VAR>, <VAR>if-lt</VAR> is
+applied, else if <VAR>string1</VAR> is greater than <VAR>string2</VAR>,
+<VAR>if-gt</VAR> is applied.  The value of the procedure is the value of the
+thunk that is applied.
+</P><P>
+
+<CODE>string-compare</CODE> distinguishes uppercase and lowercase letters;<BR>
+<CODE>string-compare-ci</CODE> does not.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (cheer) (display "Hooray!"))
+(define (boo)   (display "Boo-hiss!"))
+(string-compare "a" "b"  cheer  (lambda() 'ignore)  boo)
+        -|  Hooray!
+        =>  unspecified
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX780"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-hash</B> <I>string</I>
+<DD><A NAME="IDX781"></A>
+<DT><U>procedure+:</U> <B>string-hash-mod</B> <I>string k</I>
+<DD><A NAME="IDX782"></A>
+<A NAME="IDX783"></A>
+<A NAME="IDX784"></A>
+<CODE>string-hash</CODE> returns an exact non-negative integer that can be used
+for storing the specified <VAR>string</VAR> in a hash table.  Equal strings
+(in the sense of <CODE>string=?</CODE>) return equal (<CODE>=</CODE>) hash codes,
+and non-equal but similar strings are usually mapped to distinct hash
+codes.
+</P><P>
+
+<CODE>string-hash-mod</CODE> is like <CODE>string-hash</CODE>, except that it limits
+the result to a particular range based on the exact non-negative integer
+<VAR>k</VAR>.  The following are equivalent:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-hash-mod <VAR>string</VAR> <VAR>k</VAR>)
+(modulo (string-hash <VAR>string</VAR>) <VAR>k</VAR>)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Alphabetic Case in Strings"></A>
+<HR SIZE="6">
+<A NAME="SEC65"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC64"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC66"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.4 Alphabetic Case in Strings </H2>
+<!--docid::SEC65::-->
+<P>
+
+<A NAME="IDX785"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-capitalized?</B> <I>string</I>
+<DD><A NAME="IDX786"></A>
+<DT><U>procedure+:</U> <B>substring-capitalized?</B> <I>string start end</I>
+<DD>These procedures return <CODE>#t</CODE> if the first word in the string
+(substring) is capitalized, and any subsequent words are either lower
+case or capitalized.  Otherwise, they return <CODE>#f</CODE>.  A word is
+defined as a non-null contiguous sequence of alphabetic characters,
+delimited by non-alphabetic characters or the limits of the string
+(substring).  A word is capitalized if its first letter is upper case
+and all its remaining letters are lower case.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(map string-capitalized? '(""    "A"    "art"  "Art"  "ART"))
+                       => (#f    #t     #f     #t     #f)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX787"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-upper-case?</B> <I>string</I>
+<DD><A NAME="IDX788"></A>
+<DT><U>procedure+:</U> <B>substring-upper-case?</B> <I>string start end</I>
+<DD><A NAME="IDX789"></A>
+<DT><U>procedure+:</U> <B>string-lower-case?</B> <I>string</I>
+<DD><A NAME="IDX790"></A>
+<DT><U>procedure+:</U> <B>substring-lower-case?</B> <I>string start end</I>
+<DD>These procedures return <CODE>#t</CODE> if all the letters in the string
+(substring) are of the correct case, otherwise they return <CODE>#f</CODE>.
+The string (substring) must contain at least one letter or the
+procedures return <CODE>#f</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(map string-upper-case?  '(""    "A"    "art"  "Art"  "ART"))
+                       => (#f    #t     #f     #f     #t)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX791"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-capitalize</B> <I>string</I>
+<DD><A NAME="IDX792"></A>
+<DT><U>procedure+:</U> <B>string-capitalize!</B> <I>string</I>
+<DD><A NAME="IDX793"></A>
+<DT><U>procedure+:</U> <B>substring-capitalize!</B> <I>string start end</I>
+<DD><CODE>string-capitalize</CODE> returns a newly allocated copy of <VAR>string</VAR>
+in which the first alphabetic character is uppercase and the remaining
+alphabetic characters are lowercase.  For example, <CODE>"abcDEF"</CODE>
+becomes <CODE>"Abcdef"</CODE>.  <CODE>string-capitalize!</CODE> is the destructive
+version of <CODE>string-capitalize</CODE>: it alters <VAR>string</VAR> and returns
+an unspecified value.  <CODE>substring-capitalize!</CODE> destructively
+capitalizes the specified part of <VAR>string</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX794"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-downcase</B> <I>string</I>
+<DD><A NAME="IDX795"></A>
+<DT><U>procedure+:</U> <B>string-downcase!</B> <I>string</I>
+<DD><A NAME="IDX796"></A>
+<DT><U>procedure+:</U> <B>substring-downcase!</B> <I>string start end</I>
+<DD><CODE>string-downcase</CODE> returns a newly allocated copy of <VAR>string</VAR> in
+which all uppercase letters are changed to lowercase.
+<CODE>string-downcase!</CODE> is the destructive version of
+<CODE>string-downcase</CODE>: it alters <VAR>string</VAR> and returns an
+unspecified value.  <CODE>substring-downcase!</CODE> destructively changes the
+case of the specified part of <VAR>string</VAR>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define str "ABCDEFG")          =>  unspecified
+(substring-downcase! str 3 5)   =>  unspecified
+str                             =>  "ABCdeFG"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX797"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-upcase</B> <I>string</I>
+<DD><A NAME="IDX798"></A>
+<DT><U>procedure+:</U> <B>string-upcase!</B> <I>string</I>
+<DD><A NAME="IDX799"></A>
+<DT><U>procedure+:</U> <B>substring-upcase!</B> <I>string start end</I>
+<DD><CODE>string-upcase</CODE> returns a newly allocated copy of <VAR>string</VAR> in
+which all lowercase letters are changed to uppercase.
+<CODE>string-upcase!</CODE> is the destructive version of
+<CODE>string-upcase</CODE>: it alters <VAR>string</VAR> and returns an unspecified
+value.  <CODE>substring-upcase!</CODE> destructively changes the case of the
+specified part of <VAR>string</VAR>.
+</DL>
+</P><P>
+
+<A NAME="Cutting and Pasting Strings"></A>
+<HR SIZE="6">
+<A NAME="SEC66"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC65"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC67"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.5 Cutting and Pasting Strings </H2>
+<!--docid::SEC66::-->
+<P>
+
+<A NAME="IDX800"></A>
+<DL>
+<DT><U>procedure:</U> <B>string-append</B> <I>string <small>...</small></I>
+<DD><A NAME="IDX801"></A>
+Returns a newly allocated string made from the concatenation of the given
+strings.  With no arguments, <CODE>string-append</CODE> returns the empty
+string (<CODE>""</CODE>).
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-append)                         =>  ""
+(string-append "*" "ace" "*")           =>  "*ace*"
+(string-append "" "" "")                =>  ""
+(eq? str (string-append str))           =>  #f ; newly allocated
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX802"></A>
+<DL>
+<DT><U>procedure:</U> <B>substring</B> <I>string start end</I>
+<DD>Returns a newly allocated string formed from the characters of
+<VAR>string</VAR> beginning with index <VAR>start</VAR> (inclusive) and ending
+with <VAR>end</VAR> (exclusive).
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(substring "" 0 0)              => ""
+(substring "arduous" 2 5)       => "duo"
+(substring "arduous" 2 8)       error--> 8 not in correct range
+
+(define (string-copy s)
+  (substring s 0 (string-length s)))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX803"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-head</B> <I>string end</I>
+<DD>Returns a newly allocated copy of the initial substring of <VAR>string</VAR>,
+up to but excluding <VAR>end</VAR>.  It could have been defined by:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (string-head string end)
+  (substring string 0 end))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX804"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-tail</B> <I>string start</I>
+<DD>Returns a newly allocated copy of the final substring of <VAR>string</VAR>,
+starting at index <VAR>start</VAR> and going to the end of <VAR>string</VAR>.  It
+could have been defined by:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (string-tail string start)
+  (substring string start (string-length string)))
+
+(string-tail "uncommon" 2)      =>  "common"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX805"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-pad-left</B> <I>string k [char]</I>
+<DD><A NAME="IDX806"></A>
+<DT><U>procedure+:</U> <B>string-pad-right</B> <I>string k [char]</I>
+<DD><A NAME="IDX807"></A>
+<A NAME="IDX808"></A>
+These procedures return a newly allocated string created by padding
+<VAR>string</VAR> out to length <VAR>k</VAR>, using <VAR>char</VAR>.  If <VAR>char</VAR> is
+not given, it defaults to <CODE>#\space</CODE>.  If <VAR>k</VAR> is less than the
+length of <VAR>string</VAR>, the resulting string is a truncated form of
+<VAR>string</VAR>.  <CODE>string-pad-left</CODE> adds padding characters or
+truncates from the beginning of the string (lowest indices), while
+<CODE>string-pad-right</CODE> does so at the end of the string (highest
+indices).
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-pad-left "hello" 4)             =>  "ello"
+(string-pad-left "hello" 8)             =>  "   hello"
+(string-pad-left "hello" 8 #\*)         =>  "***hello"
+(string-pad-right "hello" 4)            =>  "hell"
+(string-pad-right "hello" 8)            =>  "hello   "
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX809"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-trim</B> <I>string [char-set]</I>
+<DD><A NAME="IDX810"></A>
+<DT><U>procedure+:</U> <B>string-trim-left</B> <I>string [char-set]</I>
+<DD><A NAME="IDX811"></A>
+<DT><U>procedure+:</U> <B>string-trim-right</B> <I>string [char-set]</I>
+<DD><A NAME="IDX812"></A>
+<A NAME="IDX813"></A>
+Returns a newly allocated string created by removing all characters that
+are not in <VAR>char-set</VAR> from: (<CODE>string-trim</CODE>) both ends of
+<VAR>string</VAR>; (<CODE>string-trim-left</CODE>) the beginning of <VAR>string</VAR>;
+or (<CODE>string-trim-right</CODE>) the end of <VAR>string</VAR>.  <VAR>Char-set</VAR>
+defaults to <CODE>char-set:not-whitespace</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-trim "  in the end  ")          =>  "in the end"
+(string-trim "              ")          =>  ""
+(string-trim "100th" char-set:numeric)  =>  "100"
+(string-trim-left "-.-+-=-" (char-set #\+))
+                                        =>  "+-=-"
+(string-trim "but (+ x y) is" (char-set #\( #\)))
+                                        =>  "(+ x y)"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Searching Strings"></A>
+<HR SIZE="6">
+<A NAME="SEC67"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC66"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC68"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.6 Searching Strings </H2>
+<!--docid::SEC67::-->
+<P>
+
+The first few procedures in this section perform <EM>string search</EM>, in
+which a given string (the <EM>text</EM>) is searched to see if it contains
+another given string (the <EM>pattern</EM>) as a proper substring.  At
+present these procedures are implemented using a hybrid strategy.  For
+short patterns of less than 4 characters, the naive string-search
+algorithm is used.  For longer patterns, the Boyer-Moore string-search
+algorithm is used.
+</P><P>
+
+<A NAME="IDX814"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-search-forward</B> <I>pattern string</I>
+<DD><A NAME="IDX815"></A>
+<DT><U>procedure+:</U> <B>substring-search-forward</B> <I>pattern string start end</I>
+<DD><VAR>Pattern</VAR> must be a string.  Searches <VAR>string</VAR> for the leftmost
+occurrence of the substring <VAR>pattern</VAR>.  If successful, the index of
+the first character of the matched substring is returned; otherwise,
+<CODE>#f</CODE> is returned.
+</P><P>
+
+<CODE>substring-search-forward</CODE> limits its search to the specified
+substring of <VAR>string</VAR>; <CODE>string-search-forward</CODE> searches all of
+<VAR>string</VAR>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-search-forward "rat" "pirate")
+    => 2
+(string-search-forward "rat" "pirate rating")
+    => 2
+(substring-search-forward "rat" "pirate rating" 4 13)
+    => 7
+(substring-search-forward "rat" "pirate rating" 9 13)
+    => #f
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX816"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-search-backward</B> <I>pattern string</I>
+<DD><A NAME="IDX817"></A>
+<DT><U>procedure+:</U> <B>substring-search-backward</B> <I>pattern string start end</I>
+<DD><VAR>Pattern</VAR> must be a string.  Searches <VAR>string</VAR> for the rightmost
+occurrence of the substring <VAR>pattern</VAR>.  If successful, the index to
+the right of the last character of the matched substring is returned;
+otherwise, <CODE>#f</CODE> is returned.
+</P><P>
+
+<CODE>substring-search-backward</CODE> limits its search to the specified
+substring of <VAR>string</VAR>; <CODE>string-search-backward</CODE> searches all of
+<VAR>string</VAR>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-search-backward "rat" "pirate")
+    => 5
+(string-search-backward "rat" "pirate rating")
+    => 10
+(substring-search-backward "rat" "pirate rating" 1 8)
+    => 5
+(substring-search-backward "rat" "pirate rating" 9 13)
+    => #f
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX818"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-search-all</B> <I>pattern string</I>
+<DD><A NAME="IDX819"></A>
+<DT><U>procedure+:</U> <B>substring-search-all</B> <I>pattern string start end</I>
+<DD><VAR>Pattern</VAR> must be a string.  Searches <VAR>string</VAR> to find all
+occurrences of the substring <VAR>pattern</VAR>.  Returns a list of the
+occurrences; each element of the list is an index pointing to the first
+character of an occurrence.
+</P><P>
+
+<CODE>substring-search-all</CODE> limits its search to the specified substring
+of <VAR>string</VAR>; <CODE>string-search-all</CODE> searches all of <VAR>string</VAR>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-search-all "rat" "pirate")
+    => (2)
+(string-search-all "rat" "pirate rating")
+    => (2 7)
+(substring-search-all "rat" "pirate rating" 4 13)
+    => (7)
+(substring-search-all "rat" "pirate rating" 9 13)
+    => ()
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX820"></A>
+<DL>
+<DT><U>procedure+:</U> <B>substring?</B> <I>pattern string</I>
+<DD><VAR>Pattern</VAR> must be a string.  Searches <VAR>string</VAR> to see if it
+contains the substring <VAR>pattern</VAR>.  Returns <CODE>#t</CODE> if
+<VAR>pattern</VAR> is a substring of <VAR>string</VAR>, otherwise returns
+<CODE>#f</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(substring? "rat" "pirate")             =>  #t
+(substring? "rat" "outrage")            =>  #f
+(substring? "" any-string)              =>  #t
+(if (substring? "moon" text)
+    (process-lunar text)
+    'no-moon)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX821"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-find-next-char</B> <I>string char</I>
+<DD><A NAME="IDX822"></A>
+<DT><U>procedure+:</U> <B>substring-find-next-char</B> <I>string start end char</I>
+<DD><A NAME="IDX823"></A>
+<DT><U>procedure+:</U> <B>string-find-next-char-ci</B> <I>string char</I>
+<DD><A NAME="IDX824"></A>
+<DT><U>procedure+:</U> <B>substring-find-next-char-ci</B> <I>string start end char</I>
+<DD>Returns the index of the first occurrence of <VAR>char</VAR> in the string
+(substring); returns <CODE>#f</CODE> if <VAR>char</VAR> does not appear in the
+string.  For the substring procedures, the index returned is relative to
+the entire string, not just the substring.  The <CODE>-ci</CODE> procedures
+don't distinguish uppercase and lowercase letters.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-find-next-char "Adam" #\A)              =>  0 
+(substring-find-next-char "Adam" 1 4 #\A)       =>  #f
+(substring-find-next-char-ci "Adam" 1 4 #\A)    =>  2 
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX825"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-find-next-char-in-set</B> <I>string char-set</I>
+<DD><A NAME="IDX826"></A>
+<DT><U>procedure+:</U> <B>substring-find-next-char-in-set</B> <I>string start end char-set</I>
+<DD>Returns the index of the first character in the string (or substring)
+that is also in <VAR>char-set</VAR>, or returns <CODE>#f</CODE> if none of the
+characters in <VAR>char-set</VAR> occur in <VAR>string</VAR>.
+For the substring procedure, only the substring is searched, but the
+index returned is relative to the entire string, not just the substring.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-find-next-char-in-set my-string char-set:alphabetic)
+    =>  start position of the first word in my-string
+; Can be used as a predicate:
+(if (string-find-next-char-in-set my-string
+                                  (char-set #\( #\) ))
+    'contains-parentheses
+    'no-parentheses)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX827"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-find-previous-char</B> <I>string char</I>
+<DD><A NAME="IDX828"></A>
+<DT><U>procedure+:</U> <B>substring-find-previous-char</B> <I>string start end char</I>
+<DD><A NAME="IDX829"></A>
+<DT><U>procedure+:</U> <B>string-find-previous-char-ci</B> <I>string char</I>
+<DD><A NAME="IDX830"></A>
+<DT><U>procedure+:</U> <B>substring-find-previous-char-ci</B> <I>string start end char</I>
+<DD>Returns the index of the last occurrence of <VAR>char</VAR> in the string
+(substring); returns <CODE>#f</CODE> if <VAR>char</VAR> doesn't appear in the
+string.  For the substring procedures, the index returned is relative to
+the entire string, not just the substring.  The <CODE>-ci</CODE> procedures
+don't distinguish uppercase and lowercase letters.
+</DL>
+</P><P>
+
+<A NAME="IDX831"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-find-previous-char-in-set</B> <I>string char-set</I>
+<DD><A NAME="IDX832"></A>
+<DT><U>procedure+:</U> <B>substring-find-previous-char-in-set</B> <I>string start end char-set</I>
+<DD>Returns the index of the last character in the string (substring) that
+is also in <VAR>char-set</VAR>.  For the substring procedure, the index
+returned is relative to the entire string, not just the substring.
+</DL>
+</P><P>
+
+<A NAME="Matching Strings"></A>
+<HR SIZE="6">
+<A NAME="SEC68"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC67"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC69"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.7 Matching Strings </H2>
+<!--docid::SEC68::-->
+<P>
+
+<A NAME="IDX833"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-match-forward</B> <I>string1 string2</I>
+<DD><A NAME="IDX834"></A>
+<DT><U>procedure+:</U> <B>substring-match-forward</B> <I>string1 start end string2 start end</I>
+<DD><A NAME="IDX835"></A>
+<DT><U>procedure+:</U> <B>string-match-forward-ci</B> <I>string1 string2</I>
+<DD><A NAME="IDX836"></A>
+<DT><U>procedure+:</U> <B>substring-match-forward-ci</B> <I>string1 start end string2 start end</I>
+<DD>Compares the two strings (substrings), starting from the beginning, and
+returns the number of characters that are the same.  If the two strings
+(substrings) start differently, returns 0.  The <CODE>-ci</CODE> procedures
+don't distinguish uppercase and lowercase letters.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-match-forward "mirror" "micro") =>  2  ; matches "mi"
+(string-match-forward "a" "b")          =>  0  ; no match
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX837"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-match-backward</B> <I>string1 string2</I>
+<DD><A NAME="IDX838"></A>
+<DT><U>procedure+:</U> <B>substring-match-backward</B> <I>string1 start end string2 start end</I>
+<DD><A NAME="IDX839"></A>
+<DT><U>procedure+:</U> <B>string-match-backward-ci</B> <I>string1 string2</I>
+<DD><A NAME="IDX840"></A>
+<DT><U>procedure+:</U> <B>substring-match-backward-ci</B> <I>string1 start end string2 start end</I>
+<DD>Compares the two strings (substrings), starting from the end and
+matching toward the front, returning the number of characters that are
+the same.  If the two strings (substrings) end differently, returns 0.
+The <CODE>-ci</CODE> procedures don't distinguish uppercase and lowercase
+letters.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-match-backward-ci "BULBOUS" "fractious")
+                                        =>  3  ; matches "ous"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX841"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-prefix?</B> <I>string1 string2</I>
+<DD><A NAME="IDX842"></A>
+<DT><U>procedure+:</U> <B>substring-prefix?</B> <I>string1 start1 end1 string2 start2 end2</I>
+<DD><A NAME="IDX843"></A>
+<DT><U>procedure+:</U> <B>string-prefix-ci?</B> <I>string1 string2</I>
+<DD><A NAME="IDX844"></A>
+<DT><U>procedure+:</U> <B>substring-prefix-ci?</B> <I>string1 start1 end1 string2 start2 end2</I>
+<DD><A NAME="IDX845"></A>
+These procedures return <CODE>#t</CODE> if the first string (substring) forms
+the prefix of the second; otherwise returns <CODE>#f</CODE>.  The <CODE>-ci</CODE>
+procedures don't distinguish uppercase and lowercase letters.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-prefix? "abc" "abcdef")         =>  #t
+(string-prefix? "" any-string)          =>  #t
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX846"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-suffix?</B> <I>string1 string2</I>
+<DD><A NAME="IDX847"></A>
+<DT><U>procedure+:</U> <B>substring-suffix?</B> <I>string1 start1 end1 string2 start2 end2</I>
+<DD><A NAME="IDX848"></A>
+<DT><U>procedure+:</U> <B>string-suffix-ci?</B> <I>string1 string2</I>
+<DD><A NAME="IDX849"></A>
+<DT><U>procedure+:</U> <B>substring-suffix-ci?</B> <I>string1 start1 end1 string2 start2 end2</I>
+<DD><A NAME="IDX850"></A>
+These procedures return <CODE>#t</CODE> if the first string (substring) forms
+the suffix of the second; otherwise returns <CODE>#f</CODE>.  The <CODE>-ci</CODE>
+procedures don't distinguish uppercase and lowercase letters.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-suffix? "ous" "bulbous")        =>  #t
+(string-suffix? "" any-string)          =>  #t
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Regular Expressions"></A>
+<HR SIZE="6">
+<A NAME="SEC69"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC68"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC70"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.8 Regular Expressions </H2>
+<!--docid::SEC69::-->
+<P>
+
+MIT Scheme provides support for using regular expressions to search and
+match strings.  This manual does not define regular expressions; instead
+see section `Syntax of Regular Expressions' in <CITE>The Emacs Editor</CITE>.
+</P><P>
+
+The regular-expression support is a run-time-loadable option.  To use
+it, execute
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(load-option 'regular-expression)
+</pre></td></tr></table></P><P>
+
+once before calling any of the procedures defined here.
+</P><P>
+
+Procedures that perform regular-expression match and search accept
+standardized arguments.  <VAR>Regexp</VAR> is the regular expression; it is a
+string.  <VAR>String</VAR> is the string being matched or searched.
+Procedures that operate on substrings also accept <VAR>start</VAR> and
+<VAR>end</VAR> index arguments with the usual meaning.  The optional argument
+<VAR>case-fold?</VAR> says whether the match/search is case-sensitive; if
+<VAR>case-fold?</VAR> is <CODE>#f</CODE>, it is case-sensitive, otherwise it is
+case-insensitive.  The optional argument <VAR>syntax-table</VAR> is a
+character syntax table that defines the character syntax, such as which
+characters are legal word constituents.  This feature is primarily for
+Edwin, so character syntax tables will not be documented here.
+Supplying <CODE>#f</CODE> for (or omitting) <VAR>syntax-table</VAR> will select the
+default character syntax, equivalent to Edwin's <CODE>fundamental</CODE>
+mode.
+</P><P>
+
+<A NAME="IDX851"></A>
+<DL>
+<DT><U>procedure+:</U> <B>re-string-match</B> <I>regexp string [case-fold? [syntax-table]]</I>
+<DD><A NAME="IDX852"></A>
+<DT><U>procedure+:</U> <B>re-substring-match</B> <I>regexp string start end [case-fold? [syntax-table]]</I>
+<DD>These procedures match <VAR>regexp</VAR> against the respective string or
+substring, returning <CODE>#f</CODE> for no match, or a set of match registers
+(see below) if the match succeeds.  Here is an example showing how to
+extract the matched substring:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(let ((r (re-substring-match <VAR>regexp</VAR> <VAR>string</VAR> <VAR>start</VAR> <VAR>end</VAR>)))
+  (and r
+       (substring <VAR>string</VAR> <VAR>start</VAR> (re-match-end-index 0 r))))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX853"></A>
+<DL>
+<DT><U>procedure+:</U> <B>re-string-search-forward</B> <I>regexp string [case-fold? [syntax-table]]</I>
+<DD><A NAME="IDX854"></A>
+<DT><U>procedure+:</U> <B>re-substring-search-forward</B> <I>regexp string start end [case-fold? [syntax-table]]</I>
+<DD>Searches <VAR>string</VAR> for the leftmost substring matching <VAR>regexp</VAR>.
+Returns a set of match registers (see below) if the search is
+successful, or <CODE>#f</CODE> if it is unsuccessful.
+</P><P>
+
+<CODE>re-substring-search-forward</CODE> limits its search to the specified
+substring of <VAR>string</VAR>; <CODE>re-string-search-forward</CODE> searches all
+of <VAR>string</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX855"></A>
+<DL>
+<DT><U>procedure+:</U> <B>re-string-search-backward</B> <I>regexp string [case-fold? [syntax-table]]</I>
+<DD><A NAME="IDX856"></A>
+<DT><U>procedure+:</U> <B>re-substring-search-backward</B> <I>regexp string start end [case-fold? [syntax-table]]</I>
+<DD>Searches <VAR>string</VAR> for the rightmost substring matching <VAR>regexp</VAR>.
+Returns a set of match registers (see below) if the search is
+successful, or <CODE>#f</CODE> if it is unsuccessful.
+</P><P>
+
+<CODE>re-substring-search-backward</CODE> limits its search to the specified
+substring of <VAR>string</VAR>; <CODE>re-string-search-backward</CODE> searches all
+of <VAR>string</VAR>.
+</DL>
+</P><P>
+
+When a successful match or search occurs, the above procedures return a
+set of <EM>match registers</EM>.  The match registers are a set of index
+registers that record indexes into the matched string.  Each index
+register corresponds to an instance of the regular-expression grouping
+operator <SAMP>`\('</SAMP>, and records the start index (inclusive) and end
+index (exclusive) of the matched group.  These registers are numbered
+from <CODE>1</CODE> to <CODE>9</CODE>, corresponding left-to-right to the grouping
+operators in the expression.  Additionally, register <CODE>0</CODE>
+corresponds to the entire substring matching the regular expression.
+</P><P>
+
+<A NAME="IDX857"></A>
+<DL>
+<DT><U>procedure+:</U> <B>re-match-start-index</B> <I>n registers</I>
+<DD><A NAME="IDX858"></A>
+<DT><U>procedure+:</U> <B>re-match-end-index</B> <I>n registers</I>
+<DD><VAR>N</VAR> must be an exact integer between <CODE>0</CODE> and <CODE>9</CODE>
+inclusive.  <VAR>Registers</VAR> must be a match-registers object as returned
+by one of the regular-expression match or search procedures above.
+<CODE>re-match-start-index</CODE> returns the start index of the corresponding
+regular-expression register, and <CODE>re-match-end-index</CODE> returns the
+corresponding end index.
+</DL>
+</P><P>
+
+<A NAME="IDX859"></A>
+<DL>
+<DT><U>procedure+:</U> <B>re-match-extract</B> <I>string registers n</I>
+<DD><VAR>Registers</VAR> must be a match-registers object as returned by one of
+the regular-expression match or search procedures above.  <VAR>String</VAR>
+must be the string that was passed as an argument to the procedure that
+returned <VAR>registers</VAR>.  <VAR>N</VAR> must be an exact integer between
+<CODE>0</CODE> and <CODE>9</CODE> inclusive.  If the matched regular expression
+contained <VAR>m</VAR> grouping operators, then the value of this procedure
+is undefined for <VAR>n</VAR> strictly greater than <VAR>m</VAR>.
+</P><P>
+
+This procedure extracts the substring corresponding to the match
+register specified by <VAR>registers</VAR> and <VAR>n</VAR>.  This is equivalent
+to the following expression:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(substring <VAR>string</VAR>
+           (re-match-start-index <VAR>n</VAR> <VAR>registers</VAR>)
+           (re-match-end-index <VAR>n</VAR> <VAR>registers</VAR>))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX860"></A>
+<DL>
+<DT><U>procedure+:</U> <B>regexp-group</B> <I>alternative <small>...</small></I>
+<DD>Each <VAR>alternative</VAR> must be a regular expression.  The returned value
+is a new regular expression that consists of the <VAR>alternative</VAR>s
+combined by a grouping operator.  For example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(regexp-group "foo" "bar" "baz")
+  => "\\(foo\\|bar\\|baz\\)"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Modification of Strings"></A>
+<HR SIZE="6">
+<A NAME="SEC70"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC69"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC71"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.9 Modification of Strings </H2>
+<!--docid::SEC70::-->
+<P>
+
+<A NAME="IDX861"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-replace</B> <I>string char1 char2</I>
+<DD><A NAME="IDX862"></A>
+<DT><U>procedure+:</U> <B>substring-replace</B> <I>string start end char1 char2</I>
+<DD><A NAME="IDX863"></A>
+<DT><U>procedure+:</U> <B>string-replace!</B> <I>string char1 char2</I>
+<DD><A NAME="IDX864"></A>
+<DT><U>procedure+:</U> <B>substring-replace!</B> <I>string start end char1 char2</I>
+<DD>These procedures replace all occurrences of <VAR>char1</VAR> with <VAR>char2</VAR>
+in the original string (substring).  <CODE>string-replace</CODE> and
+<CODE>substring-replace</CODE> return a newly allocated string containing the
+result.  <CODE>string-replace!</CODE> and <CODE>substring-replace!</CODE>
+destructively modify <VAR>string</VAR> and return an unspecified value.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define str "a few words")              =>  unspecified
+(string-replace str #\space #\-)        =>  "a-few-words"
+(substring-replace str 2 9 #\space #\-) =>  "a few-words"
+str                                     =>  "a few words"
+(string-replace! str #\space #\-)       =>  unspecified
+str                                     =>  "a-few-words"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX865"></A>
+<DL>
+<DT><U>procedure:</U> <B>string-fill!</B> <I>string char</I>
+<DD>Stores <VAR>char</VAR> in every element of <VAR>string</VAR> and returns an
+unspecified value.
+</DL>
+</P><P>
+
+<A NAME="IDX866"></A>
+<DL>
+<DT><U>procedure+:</U> <B>substring-fill!</B> <I>string start end char</I>
+<DD>Stores <VAR>char</VAR> in elements <VAR>start</VAR> (inclusive) to <VAR>end</VAR>
+(exclusive) of <VAR>string</VAR> and returns an unspecified value.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define s (make-string 10 #\space))     =>  unspecified
+(substring-fill! s 2 8 #\*)             =>  unspecified
+s                                       =>  "  ******  "
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX867"></A>
+<DL>
+<DT><U>procedure+:</U> <B>substring-move-left!</B> <I>string1 start1 end1 string2 start2</I>
+<DD><A NAME="IDX868"></A>
+<DT><U>procedure+:</U> <B>substring-move-right!</B> <I>string1 start1 end1 string2 start2</I>
+<DD><A NAME="IDX869"></A>
+Copies the characters from <VAR>start1</VAR> to <VAR>end1</VAR> of <VAR>string1</VAR>
+into <VAR>string2</VAR> at the <VAR>start2</VAR>-th position.  The characters are
+copied as follows (note that this is only important when <VAR>string1</VAR>
+and <VAR>string2</VAR> are <CODE>eqv?</CODE>):
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>substring-move-left!</CODE>
+<DD>The copy starts at the left end and moves toward the right (from smaller
+indices to larger).  Thus if <VAR>string1</VAR> and <VAR>string2</VAR> are the
+same, this procedure moves the characters toward the left inside the
+string.
+<P>
+
+<DT><CODE>substring-move-right!</CODE>
+<DD>The copy starts at the right end and moves toward the left (from larger
+indices to smaller).  Thus if <VAR>string1</VAR> and <VAR>string2</VAR> are the
+same, this procedure moves the characters toward the right inside the
+string.
+</DL>
+<P>
+
+The following example shows how these procedures can be used to build up
+a string (it would have been easier to use <CODE>string-append</CODE>):
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define answer (make-string 9 #\*))         =>  unspecified
+answer                                      =>  "*********"
+(substring-move-left! "start" 0 5 answer 0) =>  unspecified
+answer                                      =>  "start****"
+(substring-move-left! "-end" 0 4 answer 5)  =>  unspecified
+answer                                      =>  "start-end"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX870"></A>
+<DL>
+<DT><U>procedure+:</U> <B>reverse-string</B> <I>string</I>
+<DD><A NAME="IDX871"></A>
+<DT><U>procedure+:</U> <B>reverse-substring</B> <I>string start end</I>
+<DD><A NAME="IDX872"></A>
+<DT><U>procedure+:</U> <B>reverse-string!</B> <I>string</I>
+<DD><A NAME="IDX873"></A>
+<DT><U>procedure+:</U> <B>reverse-substring!</B> <I>string start end</I>
+<DD>Reverses the order of the characters in the given string or substring.
+<CODE>reverse-string</CODE> and <CODE>reverse-substring</CODE> return newly
+allocated strings; <CODE>reverse-string!</CODE> and <CODE>reverse-substring!</CODE>
+modify their argument strings and return an unspecified value.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(reverse-string "foo bar baz")          => "zab rab oof"
+(reverse-substring "foo bar baz" 4 7)   => "rab"
+(let ((foo "foo bar baz"))
+  (reverse-string! foo)
+  foo)                                  => "zab rab oof"
+(let ((foo "foo bar baz"))
+  (reverse-substring! foo 4 7)
+  foo)                                  => "foo rab baz"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Variable-Length Strings"></A>
+<HR SIZE="6">
+<A NAME="SEC71"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC70"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC72"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.10 Variable-Length Strings </H2>
+<!--docid::SEC71::-->
+<P>
+
+<A NAME="IDX874"></A>
+<A NAME="IDX875"></A>
+MIT Scheme allows the length of a string to be dynamically adjusted in a
+limited way.  When a new string is allocated, by whatever method, it has
+a specific length.  At the time of allocation, it is also given a
+<EM>maximum length</EM>, which is guaranteed to be at least as large as the
+string's length.  (Sometimes the maximum length will be slightly larger
+than the length, but it is a bad idea to count on this.  Programs should
+assume that the maximum length is the same as the length at the time of
+the string's allocation.)  After the string is allocated, the operation
+<CODE>set-string-length!</CODE> can be used to alter the string's length to
+any value between 0 and the string's maximum length, inclusive.
+</P><P>
+
+<A NAME="IDX876"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-maximum-length</B> <I>string</I>
+<DD>Returns the maximum length of <VAR>string</VAR>.  The following is
+guaranteed:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(&#60;= (string-length string)
+    (string-maximum-length string))     =>  #t
+</pre></td></tr></table><A NAME="IDX877"></A>
+</P><P>
+
+The maximum length of a string never changes.
+</DL>
+</P><P>
+
+<A NAME="IDX878"></A>
+<DL>
+<DT><U>procedure+:</U> <B>set-string-length!</B> <I>string k</I>
+<DD>Alters the length of <VAR>string</VAR> to be <VAR>k</VAR>, and returns an
+unspecified value.  <VAR>K</VAR> must be less than or equal to the maximum
+length of <VAR>string</VAR>.  <CODE>set-string-length!</CODE> does not change the
+maximum length of <VAR>string</VAR>.
+</DL>
+</P><P>
+
+<A NAME="Byte Vectors"></A>
+<HR SIZE="6">
+<A NAME="SEC72"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC71"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.11 Byte Vectors </H2>
+<!--docid::SEC72::-->
+<P>
+
+<A NAME="IDX879"></A>
+MIT Scheme implements strings as packed vectors of 8-bit <FONT SIZE="-1">ASCII</FONT>
+bytes.  Most of the string operations, such as <CODE>string-ref</CODE>, coerce
+these 8-bit codes into character objects.  However, some lower-level
+operations are made available for use.
+</P><P>
+
+<A NAME="IDX880"></A>
+<DL>
+<DT><U>procedure+:</U> <B>vector-8b-ref</B> <I>string k</I>
+<DD>Returns character <VAR>k</VAR> of <VAR>string</VAR> as an <FONT SIZE="-1">ASCII</FONT> code.
+<VAR>K</VAR> must be a valid index of <VAR>string</VAR>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(vector-8b-ref "abcde" 2)               =>  99 ; ascii for `c'
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX881"></A>
+<DL>
+<DT><U>procedure+:</U> <B>vector-8b-set!</B> <I>string k ascii</I>
+<DD>Stores <VAR>ascii</VAR> in element <VAR>k</VAR> of <VAR>string</VAR> and returns an
+unspecified value.  <VAR>K</VAR> must be a valid index of <VAR>string</VAR>, and
+<VAR>ascii</VAR> must be a valid <FONT SIZE="-1">ASCII</FONT> code.
+</DL>
+</P><P>
+
+<A NAME="IDX882"></A>
+<DL>
+<DT><U>procedure+:</U> <B>vector-8b-fill!</B> <I>string start end ascii</I>
+<DD>Stores <VAR>ascii</VAR> in elements <VAR>start</VAR> (inclusive) to <VAR>end</VAR>
+(exclusive) of <VAR>string</VAR> and returns an unspecified value.
+<VAR>Ascii</VAR> must be a valid <FONT SIZE="-1">ASCII</FONT> code.
+</DL>
+</P><P>
+
+<A NAME="IDX883"></A>
+<DL>
+<DT><U>procedure+:</U> <B>vector-8b-find-next-char</B> <I>string start end ascii</I>
+<DD><A NAME="IDX884"></A>
+<DT><U>procedure+:</U> <B>vector-8b-find-next-char-ci</B> <I>string start end ascii</I>
+<DD>Returns the index of the first occurrence of <VAR>ascii</VAR> in the given
+substring; returns <CODE>#f</CODE> if <VAR>ascii</VAR> does not appear.  The index
+returned is relative to the entire string, not just the substring.
+<VAR>Ascii</VAR> must be a valid <FONT SIZE="-1">ASCII</FONT> code.
+</P><P>
+
+<CODE>vector-8b-find-next-char-ci</CODE> doesn't distinguish uppercase and
+lowercase letters.
+</DL>
+</P><P>
+
+<A NAME="IDX885"></A>
+<DL>
+<DT><U>procedure+:</U> <B>vector-8b-find-previous-char</B> <I>string start end ascii</I>
+<DD><A NAME="IDX886"></A>
+<DT><U>procedure+:</U> <B>vector-8b-find-previous-char-ci</B> <I>string start end ascii</I>
+<DD>Returns the index of the last occurrence of <VAR>ascii</VAR> in the given
+substring; returns <CODE>#f</CODE> if <VAR>ascii</VAR> does not appear.  The index
+returned is relative to the entire string, not just the substring.
+<VAR>Ascii</VAR> must be a valid <FONT SIZE="-1">ASCII</FONT> code.
+</P><P>
+
+<CODE>vector-8b-find-previous-char-ci</CODE> doesn't distinguish uppercase and
+lowercase letters.
+</DL>
+</P><P>
+
+<A NAME="Lists"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

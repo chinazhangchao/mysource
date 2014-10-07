@@ -1,0 +1,837 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>The SOS Reference Manual: Classes</TITLE>
+
+<META NAME="description" CONTENT="The SOS Reference Manual: Classes">
+<META NAME="keywords" CONTENT="The SOS Reference Manual: Classes">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC2"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_1.html#SEC1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_3.html#SEC7"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_9.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 1. Classes </H1>
+<!--docid::SEC2::-->
+<P>
+
+<A NAME="IDX1"></A>
+<A NAME="IDX2"></A>
+A <EM>class</EM> is an object that determines the structure and behavior of
+a set of other objects, which are called its <EM>instances</EM>.  However,
+in this document, the word <EM>instance</EM> usually means an instance of
+the class <CODE>&#60;instance&#62;</CODE>.
+</P><P>
+
+<A NAME="IDX3"></A>
+<A NAME="IDX4"></A>
+A class can inherit structure and behavior from other classes.  A class
+whose definition refers to other classes for the purpose of inheriting
+from them is said to be a <EM>subclass</EM> of each of those classes.  The
+classes that are designated for purposes of inheritance are said to be
+<EM>superclasses</EM> of the inheriting class.
+</P><P>
+
+<A NAME="IDX5"></A>
+<A NAME="IDX6"></A>
+A class can have a <EM>name</EM>.  The procedure <CODE>class-name</CODE> takes a
+class object and returns its name.  The name of an anonymous class is
+<CODE>#f</CODE>.
+</P><P>
+
+<A NAME="IDX7"></A>
+<A NAME="IDX8"></A>
+<A NAME="IDX9"></A>
+<A NAME="IDX10"></A>
+A class <VAR>C_1</VAR> is a <EM>direct superclass</EM> of a class <VAR>C_2</VAR> if
+<VAR>C_2</VAR> explicitly designates <VAR>C_1</VAR> as a superclass in its
+definition.  In this case, <VAR>C_2</VAR> is a <EM>direct subclass</EM> of
+<VAR>C_1</VAR>.  A class <VAR>C_n</VAR> is a <EM>superclass</EM> of a class <VAR>C_1</VAR>
+if there exists a series of classes <VAR>C_2</VAR>, <small>...</small>, <VAR>C_n-1</VAR> such
+that <VAR>C_i+1</VAR> is a direct superclass of <VAR>C_i</VAR> for all <VAR>i</VAR>
+between <VAR>1</VAR> and <VAR>n</VAR>.  In this case, <VAR>C_1</VAR> is a
+<EM>subclass</EM> of <VAR>C_n</VAR>.  A class is considered neither a superclass
+nor a subclass of itself.  That is, if <VAR>C_1</VAR> is a superclass of
+<VAR>C_2</VAR>, then <VAR>C_1</VAR> is different from <VAR>C_2</VAR>.  The set of
+classes consisting of some given class <VAR>C</VAR> along with all of its
+superclasses is called "<VAR>C</VAR> and its superclasses."
+</P><P>
+
+<A NAME="IDX11"></A>
+<A NAME="IDX12"></A>
+Each class has a <EM>class precedence list</EM>, which is a total ordering
+on the set of the given class and its superclasses.  The total ordering
+is expressed as a list ordered from the most specific to the least
+specific.  The class precedence list is used in several ways.  In
+general, more specific classes can <EM>shadow</EM>, or override, features
+that would otherwise be inherited from less specific classes.  The
+method selection and combination process uses the class precedence list
+to order methods from most specific to least specific.
+</P><P>
+
+<A NAME="IDX13"></A>
+<A NAME="IDX14"></A>
+<A NAME="IDX15"></A>
+When a class is defined, the order in which its direct superclasses are
+mentioned in the defining form is important.  Each class has a
+<EM>local precedence order</EM>, which is a list consisting of the class
+followed by its direct superclasses in the order mentioned in the
+defining form.
+</P><P>
+
+A class precedence list is always consistent with the local precedence
+order of each class in the list.  The classes in each local precedence
+order appear within the class precedence list in the same order.  If the
+local precedence orders are inconsistent with each other, no class
+precedence list can be constructed, and an error is signalled.
+</P><P>
+
+Classes are organized into a <EM>directed acyclic graph</EM>.  There are
+two distinguished classes, named <CODE>&#60;object&#62;</CODE> and <CODE>&#60;instance&#62;</CODE>.
+The class named <CODE>&#60;object&#62;</CODE> has no superclasses.  It is a superclass
+of every class except itself.  The class named <CODE>&#60;instance&#62;</CODE> is a
+direct subclass of <CODE>&#60;object&#62;</CODE> and is the base class for
+<EM>instance</EM> objects.  Instances are special because SOS has
+efficient mechanisms for dispatching on them and for accessing their
+slots.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sos_2.html#SEC3">1.1 Class Datatype</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sos_2.html#SEC4">1.2 Predefined Classes</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sos_2.html#SEC5">1.3 Record Classes</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sos_2.html#SEC6">1.4 Specializers</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Class Datatype"></A>
+<HR SIZE="6">
+<A NAME="SEC3"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC2"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC4"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_3.html#SEC7"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_9.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 1.1 Class Datatype </H2>
+<!--docid::SEC3::-->
+<P>
+
+The procedures in this section may be used to construct and inspect
+classes.
+</P><P>
+
+<A NAME="IDX16"></A>
+<DL>
+<DT><U>Procedure:</U> <B>make-class</B> <I>name direct-superclasses direct-slots</I>
+<DD>Creates and returns a new class object.
+</P><P>
+
+<VAR>Name</VAR> is used for debugging: it is a symbol that appears in the
+printed representation of the class and has no role in the semantics of
+the class.  Alternatively, <VAR>name</VAR> may be <CODE>#f</CODE> to indicate that
+the class is anonymous.
+</P><P>
+
+<VAR>Direct-superclasses</VAR> must be a list of class objects.  The new
+class inherits both methods and slots from the classes in this list.
+Specifying the empty list for <VAR>direct-superclasses</VAR> is equivalent to
+specifying <CODE>(list &#60;instance&#62;)</CODE>.
+</P><P>
+
+<VAR>Direct-slots</VAR> describes additional slots that instances of this
+class will have.  It is a list, each element of which must have one of
+the following forms:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre><VAR>name</VAR>
+(<VAR>name</VAR> . <VAR>plist</VAR>)
+</pre></td></tr></table></P><P>
+
+where <VAR>name</VAR> is a symbol, and <VAR>plist</VAR> is a property list.  The
+first of these two forms is equivalent to the second with an empty
+<VAR>plist</VAR>.
+</P><P>
+
+Each of the elements of <VAR>direct-slots</VAR> defines one slot named
+<VAR>name</VAR>.  <VAR>Plist</VAR> is used to describe additional properties of
+that slot.  The following properties are recognized:
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>initial-value</CODE>
+<DD>This property specifies the default initial value for the slot, i.e.
+the value stored in the slot when an instance is created and no value is
+explicitly specified by the instance constructor.  If neither the
+<CODE>initial-value</CODE> nor the <CODE>initializer</CODE> property is specified,
+the slot has no default initial value.
+<P>
+
+<DT><CODE>initializer</CODE>
+<DD>This property specifies a procedure of no arguments that is called by an
+instance constructor whenever an instance containing this slot is
+created.  The value returned by the <CODE>initializer</CODE> procedure is the
+initial value of the slot.
+<P>
+
+<DT><CODE>accessor</CODE>
+<DD>This property specifies a generic procedure; <CODE>make-class</CODE> will add
+an accessor method for this slot to the procedure.  See section <A HREF="sos_4.html#SEC8">3. Slots</A>.
+<P>
+
+<DT><CODE>modifier</CODE>
+<DD>This property specifies a generic procedure; <CODE>make-class</CODE> will add
+a modifier method for this slot to the procedure.  See section <A HREF="sos_4.html#SEC8">3. Slots</A>.
+<P>
+
+<DT><CODE>initpred</CODE>
+<DD>This property specifies a generic procedure; <CODE>make-class</CODE> will add
+an "initialized?" predicate method for this slot to the procedure.
+See section <A HREF="sos_4.html#SEC8">3. Slots</A>.
+</DL>
+<P>
+
+Slot properties are combined in slightly complicated ways.
+</P><P>
+
+<UL>
+<LI>
+It is not allowed to specify both <CODE>initial-value</CODE> and
+<CODE>initializer</CODE> for a slot in a given call to <CODE>make-class</CODE>; at
+most one of these properties may be given.
+<P>
+
+<LI>
+If a slot is specified for a given class, and a slot of the same name is
+inherited from a superclass, then the slot properties for the two slots
+are combined.  Slot properties from the subclass shadow those of the
+superclass.  However, if a superclass has a slot property, and the
+subclass does not, the property is inherited.  The resulting class never
+has more than one slot of a given name.
+<P>
+
+<LI>
+When combining superclass and subclass slots, <CODE>initial-value</CODE> and
+<CODE>initializer</CODE> shadow one another.  In other words, regardless of
+the inherited slot properties, the resulting slot has at most one of
+these two properties.
+</UL>
+<P>
+
+Examples of <CODE>make-class</CODE>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define &#60;cell&#62;
+  (make-class '&#60;cell&#62; '() '()))
+
+(define &#60;contact&#62;
+  (make-class '&#60;contact&#62;
+              (list &#60;cell&#62;)
+              `((name accessor ,cell-name))))
+
+(define &#60;compound-cell&#62;
+  (make-class '&#60;compound-cell&#62;
+              (list &#60;cell&#62;)
+              `((width accessor ,cell-width)
+                (height accessor ,cell-height)
+                (components accessor ,cell-components
+                            modifier ,set-cell-components!
+                            initial-value ()))))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX17"></A>
+<DL>
+<DT><U>Syntax:</U> <B>define-class</B> <I>name direct-superclasses direct-slot <small>...</small></I>
+<DD>Define <VAR>name</VAR> to be a class.  In its basic form, <CODE>define-class</CODE>
+might have been defined by
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-syntax define-class
+  (syntax-rules ()
+    ((define-class name (class ...) slot ...)
+     (define name
+       (make-class (quote name)
+                   (list class ...)
+                   (quote (slot ...)))))))
+</pre></td></tr></table></P><P>
+
+Note that slot properties are handled specially by <CODE>define-class</CODE>.
+If a <VAR>direct-slot</VAR> specifies a slot properties property list, the
+keys of the property list (i.e. the even-numbered elements) are not
+evaluated, while the datums of the property list <EM>are</EM> evaluated.
+The expansion above does not show the proper treatment of slot
+properties.
+</P><P>
+
+In addition to the slot properties recognized by <CODE>make-class</CODE>,
+<CODE>define-class</CODE> recognizes a special slot property, called
+<CODE>define</CODE>.  The <CODE>define</CODE> property specifies that some or all of
+the slot accessors should be defined here; that is, generic procedures
+should be constructed and bound to variables, and then the accessor
+methods added to them.
+</P><P>
+
+The argument to the <CODE>define</CODE> property is a list containing any
+combination of the symbols <CODE>accessor</CODE>, <CODE>modifier</CODE>, and
+<CODE>initpred</CODE>.  As an abbreviation, the argument may be one of these
+symbols by itself, which is equivalent to the list containing that
+symbol.  Also, the argument may be the symbol <CODE>standard</CODE>, which is
+equivalent to <CODE>(accessor modifier)</CODE>.
+</P><P>
+
+The argument to <CODE>define</CODE> specifies the accessors that will be
+defined by this form.  The accessors are defined using default names,
+unless the names are overridden by the corresponding slot property.  The
+default names for a class <CODE>&#60;foo&#62;</CODE> and a slot <CODE>bar</CODE> are
+<CODE>foo-bar</CODE>, <CODE>set-foo-bar!</CODE>, and <CODE>foo-bar-initialized?</CODE>,
+respectively for the accessor, modifier, and initpred.  For example,
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-class foo
+  (bar define accessor))
+</pre></td></tr></table></P><P>
+
+defines an accessor called <CODE>foo-bar</CODE>, but
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-class foo
+  (bar define accessor accessor foo/bar))
+</pre></td></tr></table></P><P>
+
+instead defines an accessor called <CODE>foo/bar</CODE>.  Finally,
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-class foo
+  (bar accessor foo/bar))
+</pre></td></tr></table></P><P>
+
+doesn't define any accessor, but assumes that <CODE>foo/bar</CODE> is a
+previously-defined generic procedure and adds an accessor method to it.
+</P><P>
+
+<A NAME="IDX18"></A>
+<CODE>define-class</CODE> permits the specification of <EM>class options</EM>,
+which are options that pertain to the class as a whole.  Class options
+are specified by overloading <VAR>name</VAR>: instead of a symbol, specify a
+pair whose CAR is a symbol and whose CDR is an alist.  The
+following class options are recognized:
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>(predicate [<VAR>name</VAR>])</CODE>
+<DD><A NAME="IDX19"></A>
+<A NAME="IDX20"></A>
+Specifies that a predicate procedure should be defined for this class.
+<VAR>Name</VAR> must be either a symbol or <CODE>#f</CODE>: a symbol specifies the
+name that will be bound to the predicate procedure, and <CODE>#f</CODE>
+specifies that no predicate procedure should be defined.  If <VAR>name</VAR>
+is omitted, or if no <CODE>predicate</CODE> option is specified, a predicate
+procedure is defined by appending <CODE>?</CODE> to the name of the class.  If
+the class name is surrounded by angle brackets, they are stripped off
+first.  For example, the default predicate name for the class
+<CODE>&#60;foo&#62;</CODE> is <CODE>foo?</CODE>.
+<P>
+
+<DT><CODE>(constructor [<VAR>name</VAR>] <VAR>slot-names</VAR> [<VAR>n-init-args</VAR>])</CODE>
+<DD><A NAME="IDX21"></A>
+<A NAME="IDX22"></A>
+Specifies that a constructor procedure should be defined for this class.
+<VAR>Name</VAR> must be a symbol, which is the name that will be bound to the
+constructor procedure; if omitted, a default name is formed by
+prepending <CODE>make-</CODE> to the name of the class.  If the class name is
+surrounded by angle brackets, they are stripped off first.  For example,
+the default constructor name for the class <CODE>&#60;foo&#62;</CODE> is
+<CODE>make-foo</CODE>.
+<P>
+
+<VAR>Slot-names</VAR> and <VAR>n-init-args</VAR> correspond to the arguments of
+the respective names accepted by <CODE>instance-constructor</CODE>, and can
+take any of the allowed forms for those arguments.
+</P><P>
+
+<DT><CODE>(separator <VAR>string</VAR>)</CODE>
+<DD><A NAME="IDX23"></A>
+<A NAME="IDX24"></A>
+Specifies how names for slot accessors are constructed.  If this option
+isn't given, the name of a slot accessor is formed by concatenating the
+name of the class with the name of the slot, with a hyphen between them.
+When this option is given, <VAR>string</VAR> is used instead of the hyphen.
+For example, normally a slot accessor for the slot <CODE>bar</CODE> in the
+class <CODE>foo</CODE> is called <CODE>foo-bar</CODE>.  A class option
+<CODE>(separator ".")</CODE> will cause the slot accessor to be called
+<CODE>foo.bar</CODE>, the modifier to be called <CODE>set-foo.bar!</CODE>, and the
+initialization predicate to be called <CODE>foo.bar?</CODE>.
+</DL>
+<P>
+
+Examples of <CODE>define-class</CODE> (compare these to the similar examples
+for <CODE>make-class</CODE>):
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-class &#60;cell&#62; ())
+
+(define-class (&#60;contact&#62; (constructor (name) no-init)) (&#60;cell&#62;)
+  (name accessor cell-name))
+
+(define-class (&#60;compound-cell&#62; (constructor ())) (&#60;cell&#62;)
+  (width accessor cell-width)
+  (height accessor cell-height)
+  (components accessor cell-components
+              modifier set-cell-components!
+              initial-value '()))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX25"></A>
+<DL>
+<DT><U>Procedure:</U> <B>make-trivial-subclass</B> <I>superclass1 superclass2 <small>...</small></I>
+<DD>This convenience procedure makes a subclass that defines no new slots,
+and that inherits from the given superclasses.  It is equivalent to the
+following
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(make-class (class-name <VAR>superclass1</VAR>)
+            (list <VAR>superclass1</VAR> <VAR>superclass2</VAR> <small>...</small>)
+            '())
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX26"></A>
+<DL>
+<DT><U>Procedure:</U> <B>class?</B> <I>object</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>object</VAR> is a class, otherwise returns
+<CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX27"></A>
+<DL>
+<DT><U>Procedure:</U> <B>subclass?</B> <I>class specializer</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>class</VAR> is a subclass of <VAR>specializer</VAR>,
+otherwise returns <CODE>#f</CODE>.  If <VAR>specializer</VAR> is a class, the
+result follows from the above definition of subclass, except that a
+class is a subclass of itself.  If <VAR>specializer</VAR> is a record type,
+it is equivalent to having used the <CODE>record-type-class</CODE> of the
+record type.  Finally, if <VAR>specializer</VAR> is a union specializer,
+<CODE>subclass?</CODE> is true if <VAR>class</VAR> is a subclass of one or more of
+the component classes of <VAR>specializer</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX28"></A>
+<DL>
+<DT><U>Procedure:</U> <B>object-class</B> <I>object</I>
+<DD>Returns the class of <VAR>object</VAR>.  <VAR>Object</VAR> may be any Scheme
+object; if <VAR>object</VAR> is known to be an instance,
+<CODE>instance-class</CODE> is faster than <CODE>object-class</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX29"></A>
+<DL>
+<DT><U>Procedure:</U> <B>class-name</B> <I>class</I>
+<DD>Returns the name of <VAR>class</VAR>.  This is the <VAR>name</VAR> argument passed
+to <CODE>make-class</CODE> when <VAR>class</VAR> was created.
+</DL>
+</P><P>
+
+<A NAME="IDX30"></A>
+<DL>
+<DT><U>Procedure:</U> <B>class-direct-superclasses</B> <I>class</I>
+<DD>Returns a list of the direct superclasses of <VAR>class</VAR>.  If a
+non-empty <VAR>direct-superclasses</VAR> argument was passed to
+<CODE>make-class</CODE> when <VAR>class</VAR> was created, this list is
+<CODE>equal?</CODE> to that argument.  The returned value must not be
+modified.
+</DL>
+</P><P>
+
+<A NAME="IDX31"></A>
+<DL>
+<DT><U>Procedure:</U> <B>class-direct-slot-names</B> <I>class</I>
+<DD>Returns a list of symbols that are the names of the direct slots of
+<VAR>class</VAR>.  This list contains only those slots that were defined in
+the call to <CODE>make-class</CODE> that created <VAR>class</VAR>; it does not
+contain slots that were inherited.  The returned value must not be
+modified.
+</DL>
+</P><P>
+
+<A NAME="IDX32"></A>
+<DL>
+<DT><U>Procedure:</U> <B>class-precedence-list</B> <I>class</I>
+<DD>Returns a list of the superclasses of <VAR>class</VAR>.  The order of this
+list is significant: it is the method resolution order.  This list will
+always have <VAR>class</VAR> as its first element, and <CODE>&#60;object&#62;</CODE> as its
+last element.  The returned value must not be modified.
+</DL>
+</P><P>
+
+<A NAME="Predefined Classes"></A>
+<HR SIZE="6">
+<A NAME="SEC4"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC3"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC5"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_3.html#SEC7"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_9.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 1.2 Predefined Classes </H2>
+<!--docid::SEC4::-->
+<P>
+
+<A NAME="IDX33"></A>
+SOS provides a rich set of predefined classes that can be used to
+specialize methods to any of Scheme's built-in datatypes.
+</P><P>
+
+<A NAME="IDX34"></A>
+<DL>
+<DT><U>Class:</U> <B>&#60;object&#62;</B>
+<DD>This is the class of all Scheme objects.  It has no direct superclasses,
+and all other classes are subclasses of this class.
+</DL>
+</P><P>
+
+<A NAME="IDX35"></A>
+<DL>
+<DT><U>Class:</U> <B>&#60;instance&#62;</B>
+<DD>This is the class of instances.  It is a direct subclass of
+<CODE>&#60;object&#62;</CODE>.  The members of this class are the objects that satisfy
+the predicate <CODE>instance?</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX36"></A>
+<DL>
+<DT><U>Class:</U> <B>&#60;boolean&#62;</B>
+<DD><A NAME="IDX37"></A>
+<DT><U>Class:</U> <B>&#60;char&#62;</B>
+<DD><A NAME="IDX38"></A>
+<DT><U>Class:</U> <B>&#60;entity&#62;</B>
+<DD><A NAME="IDX39"></A>
+<DT><U>Class:</U> <B>&#60;pair&#62;</B>
+<DD><A NAME="IDX40"></A>
+<DT><U>Class:</U> <B>&#60;procedure&#62;</B>
+<DD><A NAME="IDX41"></A>
+<DT><U>Class:</U> <B>&#60;record&#62;</B>
+<DD><A NAME="IDX42"></A>
+<DT><U>Class:</U> <B>&#60;string&#62;</B>
+<DD><A NAME="IDX43"></A>
+<DT><U>Class:</U> <B>&#60;symbol&#62;</B>
+<DD><A NAME="IDX44"></A>
+<DT><U>Class:</U> <B>&#60;vector&#62;</B>
+<DD>These are the classes of their respective Scheme objects.  They are all
+direct subclasses of <CODE>&#60;object&#62;</CODE>.  The members of each class are the
+objects that satisfy the corresponding predicate; for example, the
+members of <CODE>&#60;procedure&#62;</CODE> are the objects that satisfy
+<CODE>procedure?</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX45"></A>
+<DL>
+<DT><U>Class:</U> <B>&#60;generic-procedure&#62;</B>
+<DD>This is the class of generic procedure instances.  It is a direct
+subclass of <CODE>&#60;procedure&#62;</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX46"></A>
+<DL>
+<DT><U>Class:</U> <B>&#60;method&#62;</B>
+<DD>This is the class of method objects.  It is a direct subclass of
+<CODE>&#60;instance&#62;</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX47"></A>
+<DL>
+<DT><U>Class:</U> <B>&#60;chained-method&#62;</B>
+<DD><A NAME="IDX48"></A>
+<DT><U>Class:</U> <B>&#60;computed-method&#62;</B>
+<DD><A NAME="IDX49"></A>
+<DT><U>Class:</U> <B>&#60;computed-emp&#62;</B>
+<DD>These classes specify additional method objects with special properties.
+Each class is a subclass of <CODE>&#60;method&#62;</CODE>.
+</DL>
+</P><P>
+
+The following are the classes of Scheme numbers.  Note that
+<CODE>object-class</CODE> will never return one of these classes; instead it
+returns an implementation-specific class that is associated with a
+particular numeric representation.  The implementation-specific class is
+a subclass of one or more of these implementation-independent classes,
+so you should use these classes for specialization.
+</P><P>
+
+<A NAME="IDX50"></A>
+<DL>
+<DT><U>Class:</U> <B>&#60;number&#62;</B>
+<DD><A NAME="IDX51"></A>
+<DT><U>Class:</U> <B>&#60;complex&#62;</B>
+<DD><A NAME="IDX52"></A>
+<DT><U>Class:</U> <B>&#60;real&#62;</B>
+<DD><A NAME="IDX53"></A>
+<DT><U>Class:</U> <B>&#60;rational&#62;</B>
+<DD><A NAME="IDX54"></A>
+<DT><U>Class:</U> <B>&#60;integer&#62;</B>
+<DD>These are the classes of the Scheme numeric tower.  <CODE>&#60;number&#62;</CODE> is a
+direct subclass of <CODE>&#60;math-object&#62;</CODE>, <CODE>&#60;complex&#62;</CODE> is a direct
+subclass of <CODE>&#60;number&#62;</CODE>, <CODE>&#60;real&#62;</CODE> is a direct subclass of
+<CODE>&#60;complex&#62;</CODE>, etc.
+</DL>
+</P><P>
+
+<A NAME="IDX55"></A>
+<DL>
+<DT><U>Class:</U> <B>&#60;exact&#62;</B>
+<DD><A NAME="IDX56"></A>
+<DT><U>Class:</U> <B>&#60;exact-complex&#62;</B>
+<DD><A NAME="IDX57"></A>
+<DT><U>Class:</U> <B>&#60;exact-real&#62;</B>
+<DD><A NAME="IDX58"></A>
+<DT><U>Class:</U> <B>&#60;exact-rational&#62;</B>
+<DD><A NAME="IDX59"></A>
+<DT><U>Class:</U> <B>&#60;exact-integer&#62;</B>
+<DD>These are the classes of exact numbers.  <CODE>&#60;exact&#62;</CODE> is a direct
+subclass of <CODE>&#60;number&#62;</CODE>, <CODE>&#60;exact-complex&#62;</CODE> is a direct
+subclass of <CODE>&#60;exact&#62;</CODE> and <CODE>&#60;complex&#62;</CODE>, and in general, each is
+a direct subclass of preceding class and of the class without the
+<CODE>exact-</CODE> prefix.
+</DL>
+</P><P>
+
+<A NAME="IDX60"></A>
+<DL>
+<DT><U>Class:</U> <B>&#60;inexact&#62;</B>
+<DD><A NAME="IDX61"></A>
+<DT><U>Class:</U> <B>&#60;inexact-complex&#62;</B>
+<DD><A NAME="IDX62"></A>
+<DT><U>Class:</U> <B>&#60;inexact-real&#62;</B>
+<DD><A NAME="IDX63"></A>
+<DT><U>Class:</U> <B>&#60;inexact-rational&#62;</B>
+<DD><A NAME="IDX64"></A>
+<DT><U>Class:</U> <B>&#60;inexact-integer&#62;</B>
+<DD>These are the classes of inexact numbers.  <CODE>&#60;inexact&#62;</CODE> is a direct
+subclass of <CODE>&#60;number&#62;</CODE>, <CODE>&#60;inexact-complex&#62;</CODE> is a direct
+subclass of <CODE>&#60;inexact&#62;</CODE> and <CODE>&#60;complex&#62;</CODE>, and in general, each
+is a direct subclass of preceding class and of the class without the
+<CODE>inexact-</CODE> prefix.
+</DL>
+</P><P>
+
+<A NAME="Record Classes"></A>
+<HR SIZE="6">
+<A NAME="SEC5"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC4"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC6"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_3.html#SEC7"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_9.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 1.3 Record Classes </H2>
+<!--docid::SEC5::-->
+<P>
+
+<A NAME="IDX65"></A>
+SOS allows generic procedures to discriminate on record types.
+This means that a record structure defined by means of
+<CODE>make-record-type</CODE> or <CODE>define-structure</CODE> can be passed as an
+argument to a generic procedure, and the generic procedure can use the
+record's type to determine which method to be invoked.<A NAME="DOCF2" HREF="sos_fot.html#FOOT2">(2)</A>
+</P><P>
+
+In order to support this, SOS accepts record type descriptors in
+all contexts that accept classes.  Additionally, every record type
+descriptor has an associated SOS class; either the class or the
+record type can be used with equivalent results.
+</P><P>
+
+<A NAME="IDX66"></A>
+<DL>
+<DT><U>Procedure:</U> <B>record-type-class</B> <I>record-type</I>
+<DD><VAR>Record-type</VAR> must be a record type descriptor (in other words, it
+must satisfy the predicate <CODE>record-type?</CODE>).  Returns the class
+associated with <VAR>record-type</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX67"></A>
+<DL>
+<DT><U>Procedure:</U> <B>record-class</B> <I>record</I>
+<DD><VAR>Record</VAR> must be a record (in other words, it must satisfy the
+predicate <CODE>record?</CODE>).  Returns the class associated with
+<VAR>record</VAR>.  This is equivalent to
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(record-type-class (record-type-descriptor <VAR>record</VAR>))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Specializers"></A>
+<HR SIZE="6">
+<A NAME="SEC6"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC5"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_3.html#SEC7"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_3.html#SEC7"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_9.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 1.4 Specializers </H2>
+<!--docid::SEC6::-->
+<P>
+
+<A NAME="IDX68"></A>
+A <EM>specializer</EM> is a generalization of a class.  A specializer is
+any one of the following:
+</P><P>
+
+<UL>
+<LI>
+A class.
+<P>
+
+<LI>
+A record type, which is equivalent to its associated class.
+<P>
+
+<LI>
+A union specializer, which is a set of classes.
+</UL>
+<P>
+
+A specializer may be used in many contexts where a class is required,
+specifically, as a method specializer (hence the name), as the second
+argument to <CODE>subclass?</CODE>, and elsewhere.
+</P><P>
+
+<A NAME="IDX69"></A>
+<DL>
+<DT><U>Procedure:</U> <B>specializer?</B> <I>object</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>object</VAR> is a specializer, otherwise returns
+<CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX70"></A>
+<DL>
+<DT><U>Procedure:</U> <B>specializer-classes</B> <I>specializer</I>
+<DD>Returns a list of the classes in <VAR>specializer</VAR>.  If
+<VAR>specializer</VAR> is a class, the result is a list of that class.  If
+<VAR>specializer</VAR> is a record type, the result is a list of the record
+type's class.  If <VAR>specializer</VAR> is a union specializer, the result
+is a list of the component classes of the specializer.
+</DL>
+</P><P>
+
+<A NAME="IDX71"></A>
+<DL>
+<DT><U>Procedure:</U> <B>specializer=?</B> <I>specializer1 specializer2</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>specializer1</VAR> and <VAR>specializer2</VAR> are
+equivalent, otherwise returns <CODE>#f</CODE>.  Two specializers are
+equivalent if the lists returned by <CODE>specializer-classes</CODE> contain
+the same elements.
+</DL>
+</P><P>
+
+<A NAME="IDX72"></A>
+<DL>
+<DT><U>Procedure:</U> <B>union-specializer</B> <I>specializer <small>...</small></I>
+<DD>Returns a union specializer consisting of the union of the classes of
+the arguments.  This is equivalent to converting all of the specializer
+arguments to sets of classes, then taking the union of those sets.
+</DL>
+</P><P>
+
+<A NAME="IDX73"></A>
+<DL>
+<DT><U>Procedure:</U> <B>union-specializer?</B> <I>object</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>object</VAR> is a union specializer, otherwise
+returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX74"></A>
+<DL>
+<DT><U>Procedure:</U> <B>specializers?</B> <I>object</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>object</VAR> is a list of specializers, otherwise
+returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX75"></A>
+<DL>
+<DT><U>Procedure:</U> <B>specializers=?</B> <I>specializers1 specializers2</I>
+<DD><VAR>Specializers1</VAR> and <VAR>specializers2</VAR> must be lists of
+specializers.  Returns <CODE>#t</CODE> if <VAR>specializers1</VAR> and
+<VAR>specializers2</VAR> are equivalent, otherwise returns <CODE>#f</CODE>.
+Two specializers lists are equivalent if each of their corresponding
+elements is equivalent.
+</DL>
+</P><P>
+
+<A NAME="Instances"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_3.html#SEC7"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_9.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

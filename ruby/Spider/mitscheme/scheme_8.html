@@ -1,0 +1,1357 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme Reference: Lists</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme Reference: Lists">
+<META NAME="keywords" CONTENT="MIT Scheme Reference: Lists">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC73"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC72"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC74"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 7. Lists </H1>
+<!--docid::SEC73::-->
+<P>
+
+<A NAME="IDX887"></A>
+<A NAME="IDX888"></A>
+<A NAME="IDX889"></A>
+<A NAME="IDX890"></A>
+A <EM>pair</EM> (sometimes called a <EM>dotted pair</EM>) is a data structure
+with two fields called the <EM>car</EM> and <EM>cdr</EM> fields (for
+historical reasons).  Pairs are created by the procedure <CODE>cons</CODE>.
+The car and cdr fields are accessed by the procedures <CODE>car</CODE> and
+<CODE>cdr</CODE>.  The car and cdr fields are assigned by the procedures
+<CODE>set-car!</CODE> and <CODE>set-cdr!</CODE>.
+</P><P>
+
+<A NAME="IDX891"></A>
+Pairs are used primarily to represent <EM>lists</EM>.  A list can be
+defined recursively as either the empty list or a pair whose cdr is
+a list.  More precisely, the set of lists is defined as the smallest set
+<VAR>X</VAR> such that
+</P><P>
+
+<UL>
+<LI>
+The empty list is in <VAR>X</VAR>.
+<P>
+
+<LI>
+If <VAR>list</VAR> is in <VAR>X</VAR>, then any pair whose cdr field contains
+<VAR>list</VAR> is also in <VAR>X</VAR>.
+</UL>
+<P>
+
+<A NAME="IDX892"></A>
+<A NAME="IDX893"></A>
+<A NAME="IDX894"></A>
+The objects in the car fields of successive pairs of a list are the
+<EM>elements</EM> of the list.  For example, a two-element list is a pair
+whose car is the first element and whose cdr is a pair whose car is the
+second element and whose cdr is the empty list.  The <EM>length</EM> of a
+list is the number of elements, which is the same as the number of
+pairs.  The <EM>empty list</EM> is a special object of its own type (it is
+not a pair); it has no elements and its length is zero.<A NAME="DOCF7" HREF="scheme_fot.html#FOOT7">(7)</A>
+</P><P>
+
+<A NAME="IDX895"></A>
+<A NAME="IDX896"></A>
+<A NAME="IDX897"></A>
+<A NAME="IDX898"></A>
+<A NAME="IDX899"></A>
+<A NAME="IDX900"></A>
+<A NAME="IDX901"></A>
+<A NAME="IDX902"></A>
+<A NAME="IDX903"></A>
+<A NAME="IDX904"></A>
+<A NAME="IDX905"></A>
+<A NAME="IDX906"></A>
+<A NAME="IDX907"></A>
+The most general notation (external representation) for Scheme pairs is
+the "dotted" notation <CODE>(<VAR>c1</VAR> . <VAR>c2</VAR>)</CODE> where <VAR>c1</VAR> is
+the value of the car field and <VAR>c2</VAR> is the value of the cdr field.
+For example, <CODE>(4 . 5)</CODE> is a pair whose car is <CODE>4</CODE> and whose
+cdr is <CODE>5</CODE>.  Note that <CODE>(4 . 5)</CODE> is the external
+representation of a pair, not an expression that evaluates to a pair.
+</P><P>
+
+<A NAME="IDX908"></A>
+<A NAME="IDX909"></A>
+<A NAME="IDX910"></A>
+<A NAME="IDX911"></A>
+<A NAME="IDX912"></A>
+A more streamlined notation can be used for lists: the elements of the
+list are simply enclosed in parentheses and separated by spaces.  The
+empty list is written <CODE>()</CODE>.  For example, the following are
+equivalent notations for a list of symbols:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(a b c d e)
+(a . (b . (c . (d . (e . ())))))
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX913"></A>
+Whether a given pair is a list depends upon what is stored in the cdr
+field.  When the <CODE>set-cdr!</CODE> procedure is used, an object can be a
+list one moment and not the next:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define x (list 'a 'b 'c))
+(define y x)
+y                                       =>  (a b c)
+(list? y)                               =>  #t
+(set-cdr! x 4)                          =>  unspecified
+x                                       =>  (a . 4)
+(eqv? x y)                              =>  #t
+y                                       =>  (a . 4)
+(list? y)                               =>  #f
+(set-cdr! x x)                          =>  unspecified
+(list? y)                               =>  #f
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX914"></A>
+<A NAME="IDX915"></A>
+A chain of pairs that doesn't end in the empty list is called an
+<EM>improper list</EM>.  Note that an improper list is not a list.  The
+list and dotted notations can be combined to represent improper lists,
+as the following equivalent notations show:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(a b c . d)
+(a . (b . (c . d)))
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX916"></A>
+<A NAME="IDX917"></A>
+<A NAME="IDX918"></A>
+<A NAME="IDX919"></A>
+<A NAME="IDX920"></A>
+<A NAME="IDX921"></A>
+<A NAME="IDX922"></A>
+<A NAME="IDX923"></A>
+<A NAME="IDX924"></A>
+Within literal expressions and representations of objects read by the
+<CODE>read</CODE> procedure, the forms <CODE>'<VAR>datum</VAR></CODE>,
+<CODE>`<VAR>datum</VAR></CODE>, <CODE>,<VAR>datum</VAR></CODE>, and <CODE>,@<VAR>datum</VAR></CODE>
+denote two-element lists whose first elements are the symbols
+<CODE>quote</CODE>, <CODE>quasiquote</CODE>, <CODE>unquote</CODE>, and
+<CODE>unquote-splicing</CODE>, respectively.  The second element in each case
+is <VAR>datum</VAR>.  This convention is supported so that arbitrary Scheme
+programs may be represented as lists.  Among other things, this permits
+the use of the <CODE>read</CODE> procedure to parse Scheme programs.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_8.html#SEC74">7.1 Pairs</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_8.html#SEC75">7.2 Construction of Lists</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_8.html#SEC76">7.3 Selecting List Components</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_8.html#SEC77">7.4 Cutting and Pasting Lists</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_8.html#SEC78">7.5 Filtering Lists</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_8.html#SEC79">7.6 Searching Lists</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_8.html#SEC80">7.7 Mapping of Lists</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_8.html#SEC81">7.8 Reduction of Lists</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_8.html#SEC82">7.9 Miscellaneous List Operations</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Pairs"></A>
+<HR SIZE="6">
+<A NAME="SEC74"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC75"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.1 Pairs </H2>
+<!--docid::SEC74::-->
+<P>
+
+This section describes the simple operations that are available for
+constructing and manipulating arbitrary graphs constructed from pairs.
+</P><P>
+
+<A NAME="IDX925"></A>
+<DL>
+<DT><U>procedure:</U> <B>pair?</B> <I>object</I>
+<DD><A NAME="IDX926"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a pair; otherwise returns
+<CODE>#f</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(pair? '(a . b))                        =>  #t
+(pair? '(a b c))                        =>  #t
+(pair? '())                             =>  #f
+(pair? '#(a b))                         =>  #f
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX927"></A>
+<DL>
+<DT><U>procedure:</U> <B>cons</B> <I>obj1 obj2</I>
+<DD><A NAME="IDX928"></A>
+<A NAME="IDX929"></A>
+Returns a newly allocated pair whose car is <VAR>obj1</VAR> and whose cdr is
+<VAR>obj2</VAR>.  The pair is guaranteed to be different (in the sense of
+<CODE>eqv?</CODE>) from every previously existing object.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(cons 'a '())                           =>  (a)
+(cons '(a) '(b c d))                    =>  ((a) b c d)
+(cons "a" '(b c))                       =>  ("a" b c)
+(cons 'a 3)                             =>  (a . 3)
+(cons '(a b) 'c)                        =>  ((a b) . c)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX930"></A>
+<DL>
+<DT><U>procedure:</U> <B>car</B> <I>pair</I>
+<DD><A NAME="IDX931"></A>
+<A NAME="IDX932"></A>
+Returns the contents of the car field of <VAR>pair</VAR>.  Note that it is an
+error to take the <CODE>car</CODE> of the empty list.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(car '(a b c))                          =>  a
+(car '((a) b c d))                      =>  (a)
+(car '(1 . 2))                          =>  1
+(car '())                               error--> Illegal datum
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX933"></A>
+<DL>
+<DT><U>procedure:</U> <B>cdr</B> <I>pair</I>
+<DD>Returns the contents of the cdr field of <VAR>pair</VAR>.  Note that it is an
+error to take the <CODE>cdr</CODE> of the empty list.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(cdr '((a) b c d))                      =>  (b c d)
+(cdr '(1 . 2))                          =>  2
+(cdr '())                               error--> Illegal datum
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX934"></A>
+<DL>
+<DT><U>procedure:</U> <B>set-car!</B> <I>pair object</I>
+<DD>Stores <VAR>object</VAR> in the car field of <VAR>pair</VAR>.  The value returned
+by <CODE>set-car!</CODE> is unspecified.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (f) (list 'not-a-constant-list))
+(define (g) '(constant-list))
+(set-car! (f) 3)                        =>  unspecified
+(set-car! (g) 3)                        error--> Illegal datum
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX935"></A>
+<DL>
+<DT><U>procedure:</U> <B>set-cdr!</B> <I>pair object</I>
+<DD>Stores <VAR>object</VAR> in the cdr field of <VAR>pair</VAR>.  The value returned
+by <CODE>set-cdr!</CODE> is unspecified.
+</DL>
+</P><P>
+
+<A NAME="IDX936"></A>
+<DL>
+<DT><U>procedure:</U> <B>caar</B> <I>pair</I>
+<DD><A NAME="IDX937"></A>
+<DT><U>procedure:</U> <B>cadr</B> <I>pair</I>
+<DD><A NAME="IDX938"></A>
+<DT><U>procedure:</U> <B>cdar</B> <I>pair</I>
+<DD><A NAME="IDX939"></A>
+<DT><U>procedure:</U> <B>cddr</B> <I>pair</I>
+<DD><A NAME="IDX940"></A>
+<DT><U>procedure:</U> <B>caaar</B> <I>pair</I>
+<DD><A NAME="IDX941"></A>
+<DT><U>procedure:</U> <B>caadr</B> <I>pair</I>
+<DD><A NAME="IDX942"></A>
+<DT><U>procedure:</U> <B>cadar</B> <I>pair</I>
+<DD><A NAME="IDX943"></A>
+<DT><U>procedure:</U> <B>caddr</B> <I>pair</I>
+<DD><A NAME="IDX944"></A>
+<DT><U>procedure:</U> <B>cdaar</B> <I>pair</I>
+<DD><A NAME="IDX945"></A>
+<DT><U>procedure:</U> <B>cdadr</B> <I>pair</I>
+<DD><A NAME="IDX946"></A>
+<DT><U>procedure:</U> <B>cddar</B> <I>pair</I>
+<DD><A NAME="IDX947"></A>
+<DT><U>procedure:</U> <B>cdddr</B> <I>pair</I>
+<DD><A NAME="IDX948"></A>
+<DT><U>procedure:</U> <B>caaaar</B> <I>pair</I>
+<DD><A NAME="IDX949"></A>
+<DT><U>procedure:</U> <B>caaadr</B> <I>pair</I>
+<DD><A NAME="IDX950"></A>
+<DT><U>procedure:</U> <B>caadar</B> <I>pair</I>
+<DD><A NAME="IDX951"></A>
+<DT><U>procedure:</U> <B>caaddr</B> <I>pair</I>
+<DD><A NAME="IDX952"></A>
+<DT><U>procedure:</U> <B>cadaar</B> <I>pair</I>
+<DD><A NAME="IDX953"></A>
+<DT><U>procedure:</U> <B>cadadr</B> <I>pair</I>
+<DD><A NAME="IDX954"></A>
+<DT><U>procedure:</U> <B>caddar</B> <I>pair</I>
+<DD><A NAME="IDX955"></A>
+<DT><U>procedure:</U> <B>cadddr</B> <I>pair</I>
+<DD><A NAME="IDX956"></A>
+<DT><U>procedure:</U> <B>cdaaar</B> <I>pair</I>
+<DD><A NAME="IDX957"></A>
+<DT><U>procedure:</U> <B>cdaadr</B> <I>pair</I>
+<DD><A NAME="IDX958"></A>
+<DT><U>procedure:</U> <B>cdadar</B> <I>pair</I>
+<DD><A NAME="IDX959"></A>
+<DT><U>procedure:</U> <B>cdaddr</B> <I>pair</I>
+<DD><A NAME="IDX960"></A>
+<DT><U>procedure:</U> <B>cddaar</B> <I>pair</I>
+<DD><A NAME="IDX961"></A>
+<DT><U>procedure:</U> <B>cddadr</B> <I>pair</I>
+<DD><A NAME="IDX962"></A>
+<DT><U>procedure:</U> <B>cdddar</B> <I>pair</I>
+<DD><A NAME="IDX963"></A>
+<DT><U>procedure:</U> <B>cddddr</B> <I>pair</I>
+<DD>These procedures are compositions of <CODE>car</CODE> and <CODE>cdr</CODE>; for
+example, <CODE>caddr</CODE> could be defined by
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define caddr (lambda (x) (car (cdr (cdr x)))))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX964"></A>
+<DL>
+<DT><U>procedure+:</U> <B>general-car-cdr</B> <I>object path</I>
+<DD>This procedure is a generalization of <CODE>car</CODE> and <CODE>cdr</CODE>.
+<VAR>Path</VAR> encodes a particular sequence of <CODE>car</CODE> and <CODE>cdr</CODE>
+operations, which <CODE>general-car-cdr</CODE> executes on <VAR>object</VAR>.
+<VAR>Path</VAR> is an exact non-negative integer that encodes the operations
+in a bitwise fashion: a zero bit represents a <CODE>cdr</CODE> operation, and
+a one bit represents a <CODE>car</CODE>.  The bits are executed LSB to MSB,
+and the most significant one bit, rather than being interpreted as an
+operation, signals the end of the sequence.<A NAME="DOCF8" HREF="scheme_fot.html#FOOT8">(8)</A>
+</P><P>
+
+For example, the following are equivalent:
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(general-car-cdr <VAR>object</VAR> #b1011)
+(cdr (car (car <VAR>object</VAR>)))
+</pre></td></tr></table></P><P>
+
+Here is a partial table of path/operation equivalents:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#b10    cdr
+#b11    car
+#b100   cddr
+#b101   cdar
+#b110   cadr
+#b111   caar
+#b1000  cdddr
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX965"></A>
+<DL>
+<DT><U>procedure+:</U> <B>tree-copy</B> <I>tree</I>
+<DD><A NAME="IDX966"></A>
+<A NAME="IDX967"></A>
+This copies an arbitrary <VAR>tree</VAR> constructed from pairs, copying both
+the car and cdr elements of every pair.  This could have been defined by
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (tree-copy tree)
+  (let loop ((tree tree))
+    (if (pair? tree)
+        (cons (loop (car tree)) (loop (cdr tree)))
+        tree)))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Construction of Lists"></A>
+<HR SIZE="6">
+<A NAME="SEC75"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC74"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC76"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.2 Construction of Lists </H2>
+<!--docid::SEC75::-->
+<P>
+
+<A NAME="IDX968"></A>
+<DL>
+<DT><U>procedure:</U> <B>list</B> <I>object <small>...</small></I>
+<DD>Returns a list of its arguments.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(list 'a (+ 3 4) 'c)                    =>  (a 7 c)
+(list)                                  =>  ()
+</pre></td></tr></table></P><P>
+
+These expressions are equivalent:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(list <VAR>obj1</VAR> <VAR>obj2</VAR> <small>...</small> <VAR>objN</VAR>)
+(cons <VAR>obj1</VAR> (cons <VAR>obj2</VAR> <small>...</small> (cons <VAR>objN</VAR> '()) <small>...</small>))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX969"></A>
+<DL>
+<DT><U>procedure+:</U> <B>make-list</B> <I>k [element]</I>
+<DD>This procedure returns a newly allocated list of length <VAR>k</VAR>,
+whose elements are all <VAR>element</VAR>.  If <VAR>element</VAR> is not supplied,
+it defaults to the empty list.
+</DL>
+</P><P>
+
+<A NAME="IDX970"></A>
+<DL>
+<DT><U>procedure+:</U> <B>cons*</B> <I>object object <small>...</small></I>
+<DD><A NAME="IDX971"></A>
+<CODE>cons*</CODE> is similar to <CODE>list</CODE>, except that <CODE>cons*</CODE> conses
+together the last two arguments rather than consing the last argument
+with the empty list.  If the last argument is not a list the result is
+an improper list.  If the last argument is a list, the result is a list
+consisting of the initial arguments and all of the items in the final
+argument.  If there is only one argument, the result is the argument.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(cons* 'a 'b 'c)                        =>  (a b . c)
+(cons* 'a 'b '(c d))                    =>  (a b c d)
+(cons* 'a)                              =>  a
+</pre></td></tr></table></P><P>
+
+These expressions are equivalent:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(cons* <VAR>obj1</VAR> <VAR>obj2</VAR> <small>...</small> <VAR>objN-1</VAR> <VAR>objN</VAR>)
+(cons <VAR>obj1</VAR> (cons <VAR>obj2</VAR> <small>...</small> (cons <VAR>objN-1</VAR> <VAR>objN</VAR>) <small>...</small>))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX972"></A>
+<DL>
+<DT><U>procedure+:</U> <B>list-copy</B> <I>list</I>
+<DD>Returns a newly allocated copy of <VAR>list</VAR>.  This copies each of the
+pairs comprising <VAR>list</VAR>.  This could have been defined by
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (list-copy list)
+  (if (null? list)
+      '()
+      (cons (car list)
+            (list-copy (cdr list)))))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX973"></A>
+<DL>
+<DT><U>procedure:</U> <B>vector-&#62;list</B> <I>vector</I>
+<DD><A NAME="IDX974"></A>
+<DT><U>procedure+:</U> <B>subvector-&#62;list</B> <I>vector start end</I>
+<DD><A NAME="IDX975"></A>
+<A NAME="IDX976"></A>
+<CODE>vector-&#62;list</CODE> returns a newly allocated list of the elements of
+<VAR>vector</VAR>.<BR> <CODE>subvector-&#62;list</CODE> returns a newly allocated list of
+the elements of the given subvector.  The inverse of <CODE>vector-&#62;list</CODE>
+is <CODE>list-&#62;vector</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(vector-&#62;list '#(dah dah didah))        =>  (dah dah didah)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX977"></A>
+<DL>
+<DT><U>procedure:</U> <B>string-&#62;list</B> <I>string</I>
+<DD><A NAME="IDX978"></A>
+<DT><U>procedure:</U> <B>substring-&#62;list</B> <I>string start end</I>
+<DD><A NAME="IDX979"></A>
+<A NAME="IDX980"></A>
+<CODE>string-&#62;list</CODE> returns a newly allocated list of the character
+elements of <VAR>string</VAR>.<BR>
+<CODE>substring-&#62;list</CODE> returns a newly allocated list of the character
+elements of the given substring.  The inverse of <CODE>string-&#62;list</CODE> is
+<CODE>list-&#62;string</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-&#62;list "abcd")                   =>  (#\a #\b #\c #\d)
+(substring-&#62;list "abcdef" 1 3)          =>  (#\b #\c)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Selecting List Components"></A>
+<HR SIZE="6">
+<A NAME="SEC76"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC75"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC77"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.3 Selecting List Components </H2>
+<!--docid::SEC76::-->
+<P>
+
+<A NAME="IDX981"></A>
+<DL>
+<DT><U>procedure+:</U> <B>list?</B> <I>object</I>
+<DD><A NAME="IDX982"></A>
+<A NAME="IDX983"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a list, otherwise returns
+<CODE>#f</CODE>.  By definition, all lists have finite length and are
+terminated by the empty list.  This procedure returns an answer even for
+circular structures.
+</P><P>
+
+<A NAME="IDX984"></A>
+<A NAME="IDX985"></A>
+Any <VAR>object</VAR> satisfying this predicate will also satisfy exactly one
+of <CODE>pair?</CODE> or <CODE>null?</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(list? '(a b c))                        =>  #t
+(list? '())                             =>  #t
+(list? '(a . b))                        =>  #f
+(let ((x (list 'a)))
+  (set-cdr! x x)
+  (list? x))                            =>  #f
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX986"></A>
+<DL>
+<DT><U>procedure:</U> <B>length</B> <I>list</I>
+<DD>Returns the length of <VAR>list</VAR>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(length '(a b c))                       =>  3
+(length '(a (b) (c d e)))               =>  3
+(length '())                            =>  0
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX987"></A>
+<DL>
+<DT><U>procedure:</U> <B>null?</B> <I>object</I>
+<DD><A NAME="IDX988"></A>
+<A NAME="IDX989"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is the empty list; otherwise returns
+<CODE>#f</CODE> (but see section <A HREF="scheme_2.html#SEC12">1.2.5 True and False</A>).
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(null? '(a . b))                        =>  #f
+(null? '(a b c))                        =>  #f
+(null? '())                             =>  #t
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX990"></A>
+<DL>
+<DT><U>procedure:</U> <B>list-ref</B> <I>list k</I>
+<DD><A NAME="IDX991"></A>
+<A NAME="IDX992"></A>
+<A NAME="IDX993"></A>
+Returns the <VAR>k</VAR>th element of <VAR>list</VAR>, using zero-origin indexing.
+The <EM>valid indexes</EM> of a list are the exact non-negative integers
+less than the length of the list.  The first element of a list has index
+<CODE>0</CODE>, the second has index <CODE>1</CODE>, and so on.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(list-ref '(a b c d) 2)                 =>  c
+(list-ref '(a b c d)
+          (inexact-&#62;exact (round 1.8)))
+     =>  c
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX994"></A>
+<CODE>(list-ref <VAR>list</VAR> <VAR>k</VAR>)</CODE> is equivalent to <CODE>(car
+(list-tail <VAR>list</VAR> <VAR>k</VAR>))</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX995"></A>
+<DL>
+<DT><U>procedure+:</U> <B>first</B> <I>list</I>
+<DD><A NAME="IDX996"></A>
+<DT><U>procedure+:</U> <B>second</B> <I>list</I>
+<DD><A NAME="IDX997"></A>
+<DT><U>procedure+:</U> <B>third</B> <I>list</I>
+<DD><A NAME="IDX998"></A>
+<DT><U>procedure+:</U> <B>fourth</B> <I>list</I>
+<DD><A NAME="IDX999"></A>
+<DT><U>procedure+:</U> <B>fifth</B> <I>list</I>
+<DD><A NAME="IDX1000"></A>
+<DT><U>procedure+:</U> <B>sixth</B> <I>list</I>
+<DD><A NAME="IDX1001"></A>
+<DT><U>procedure+:</U> <B>seventh</B> <I>list</I>
+<DD><A NAME="IDX1002"></A>
+<DT><U>procedure+:</U> <B>eighth</B> <I>list</I>
+<DD><A NAME="IDX1003"></A>
+<DT><U>procedure+:</U> <B>ninth</B> <I>list</I>
+<DD><A NAME="IDX1004"></A>
+<DT><U>procedure+:</U> <B>tenth</B> <I>list</I>
+<DD>Returns the specified element of <VAR>list</VAR>.  It is an error if
+<VAR>list</VAR> is not long enough to contain the specified element (for
+example, if the argument to <CODE>seventh</CODE> is a list that contains only
+six elements).
+</DL>
+</P><P>
+
+<A NAME="Cutting and Pasting Lists"></A>
+<HR SIZE="6">
+<A NAME="SEC77"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC76"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC78"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.4 Cutting and Pasting Lists </H2>
+<!--docid::SEC77::-->
+<P>
+
+<A NAME="IDX1005"></A>
+<DL>
+<DT><U>procedure+:</U> <B>sublist</B> <I>list start end</I>
+<DD><VAR>Start</VAR> and <VAR>end</VAR> must be exact integers satisfying
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>0 &#60;= <VAR>start</VAR> &#60;= <VAR>end</VAR> &#60;= (length <VAR>list</VAR>)
+</pre></td></tr></table></P><P>
+
+<CODE>sublist</CODE> returns a newly allocated list formed from the elements
+of <VAR>list</VAR> beginning at index <VAR>start</VAR> (inclusive) and ending at
+<VAR>end</VAR> (exclusive).
+</DL>
+</P><P>
+
+<A NAME="IDX1006"></A>
+<DL>
+<DT><U>procedure+:</U> <B>list-head</B> <I>list k</I>
+<DD>Returns a newly allocated list consisting of the first <VAR>k</VAR> elements of
+<VAR>list</VAR>.  <VAR>K</VAR> must not be greater than the length of
+<VAR>list</VAR>.
+</P><P>
+
+We could have defined <CODE>list-head</CODE> this way:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (list-head list k)
+  (sublist list 0 k))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1007"></A>
+<DL>
+<DT><U>procedure:</U> <B>list-tail</B> <I>list k</I>
+<DD>Returns the sublist of <VAR>list</VAR> obtained by omitting the first <VAR>k</VAR>
+elements.  The result, if it is not the empty list, shares structure
+with <VAR>list</VAR>.  <VAR>K</VAR> must not be greater than the length of
+<VAR>list</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1008"></A>
+<DL>
+<DT><U>procedure:</U> <B>append</B> <I>list <small>...</small></I>
+<DD><A NAME="IDX1009"></A>
+Returns a list consisting of the elements of the first <VAR>list</VAR>
+followed by the elements of the other <VAR>list</VAR>s.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(append '(x) '(y))                      =>  (x y)
+(append '(a) '(b c d))                  =>  (a b c d)
+(append '(a (b)) '((c)))                =>  (a (b) (c))
+(append)                                =>  ()
+</pre></td></tr></table></P><P>
+
+The resulting list is always newly allocated, except that it shares
+structure with the last <VAR>list</VAR> argument.  The last argument may
+actually be any object; an improper list results if the last argument is
+not a proper list.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(append '(a b) '(c . d))                =>  (a b c . d)
+(append '() 'a)                         =>  a
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1010"></A>
+<DL>
+<DT><U>procedure+:</U> <B>append!</B> <I>list <small>...</small></I>
+<DD>Returns a list that is the argument <VAR>list</VAR>s concatenated together.
+The arguments are changed rather than copied.  (Compare this with
+<CODE>append</CODE>, which copies arguments rather than destroying them.)  For
+example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define x '(a b c))
+(define y '(d e f))
+(define z '(g h))
+(append! x y z)                         =>  (a b c d e f g h)
+x                                       =>  (a b c d e f g h)
+y                                       =>  (d e f g h)
+z                                       =>  (g h)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1011"></A>
+<DL>
+<DT><U>procedure+:</U> <B>last-pair</B> <I>list</I>
+<DD>Returns the last pair in <VAR>list</VAR>, which may be an improper list.
+<CODE>last-pair</CODE> could have been defined this way:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define last-pair
+  (lambda (x)
+    (if (pair? (cdr x))
+        (last-pair (cdr x))
+        x)))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1012"></A>
+<DL>
+<DT><U>procedure+:</U> <B>except-last-pair</B> <I>list</I>
+<DD><A NAME="IDX1013"></A>
+<DT><U>procedure+:</U> <B>except-last-pair!</B> <I>list</I>
+<DD>These procedures remove the last pair from <VAR>list</VAR>.  <VAR>List</VAR> may
+be an improper list, except that it must consist of at least one pair.
+<CODE>except-last-pair</CODE> returns a newly allocated copy of <VAR>list</VAR>
+that omits the last pair.  <CODE>except-last-pair!</CODE> destructively
+removes the last pair from <VAR>list</VAR> and returns <VAR>list</VAR>.  If the
+cdr of <VAR>list</VAR> is not a pair, the empty list is returned by either
+procedure.
+</DL>
+</P><P>
+
+<A NAME="Filtering Lists"></A>
+<HR SIZE="6">
+<A NAME="SEC78"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC77"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC79"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.5 Filtering Lists </H2>
+<!--docid::SEC78::-->
+<P>
+
+<A NAME="IDX1014"></A>
+<DL>
+<DT><U>procedure+:</U> <B>list-transform-positive</B> <I>list predicate</I>
+<DD><A NAME="IDX1015"></A>
+<DT><U>procedure+:</U> <B>list-transform-negative</B> <I>list predicate</I>
+<DD>These procedures return a newly allocated copy of <VAR>list</VAR> containing
+only the elements for which <VAR>predicate</VAR> is (respectively) true or
+false.  <VAR>Predicate</VAR> must be a procedure of one argument.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(list-transform-positive '(1 2 3 4 5) odd?) => (1 3 5)
+(list-transform-negative '(1 2 3 4 5) odd?) => (2 4)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1016"></A>
+<DL>
+<DT><U>procedure+:</U> <B>delq</B> <I>element list</I>
+<DD><A NAME="IDX1017"></A>
+<DT><U>procedure+:</U> <B>delv</B> <I>element list</I>
+<DD><A NAME="IDX1018"></A>
+<DT><U>procedure+:</U> <B>delete</B> <I>element list</I>
+<DD><A NAME="IDX1019"></A>
+<A NAME="IDX1020"></A>
+<A NAME="IDX1021"></A>
+Returns a newly allocated copy of <VAR>list</VAR> with all entries equal to
+<VAR>element</VAR> removed.  <CODE>delq</CODE> uses <CODE>eq?</CODE> to compare
+<VAR>element</VAR> with the entries in <VAR>list</VAR>, <CODE>delv</CODE> uses
+<CODE>eqv?</CODE>, and <CODE>delete</CODE> uses <CODE>equal?</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1022"></A>
+<DL>
+<DT><U>procedure+:</U> <B>delq!</B> <I>element list</I>
+<DD><A NAME="IDX1023"></A>
+<DT><U>procedure+:</U> <B>delv!</B> <I>element list</I>
+<DD><A NAME="IDX1024"></A>
+<DT><U>procedure+:</U> <B>delete!</B> <I>element list</I>
+<DD><A NAME="IDX1025"></A>
+<A NAME="IDX1026"></A>
+<A NAME="IDX1027"></A>
+Returns a list consisting of the top-level elements of <VAR>list</VAR> with
+all entries equal to <VAR>element</VAR> removed.  These procedures are like
+<CODE>delq</CODE>, <CODE>delv</CODE>, and <CODE>delete</CODE> except that they
+destructively modify <VAR>list</VAR>.  <CODE>delq!</CODE> uses <CODE>eq?</CODE> to
+compare element with the entries in <VAR>list</VAR>, <CODE>delv!</CODE> uses
+<CODE>eqv?</CODE>, and <CODE>delete!</CODE> uses <CODE>equal?</CODE>.  Because the result
+may not be <CODE>eq?</CODE> to <VAR>list</VAR>, it is desirable to do something
+like <CODE>(set! x (delete! x))</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define x '(a b c b))
+(delete 'b x)                           =>  (a c)
+x                                       =>  (a b c b)
+
+(define x '(a b c b))
+(delete! 'b x)                          =>  (a c)
+x                                       =>  (a c)
+;; Returns correct result:
+(delete! 'a x)                          =>  (c)
+
+;; Didn't modify what x points to:
+x                                       =>  (a c)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1028"></A>
+<DL>
+<DT><U>procedure+:</U> <B>delete-member-procedure</B> <I>deletor predicate</I>
+<DD><A NAME="IDX1029"></A>
+<A NAME="IDX1030"></A>
+<A NAME="IDX1031"></A>
+<A NAME="IDX1032"></A>
+Returns a deletion procedure similar to <CODE>delv</CODE> or <CODE>delete!</CODE>.
+<VAR>Deletor</VAR> should be one of the procedures <CODE>list-deletor</CODE> or
+<CODE>list-deletor!</CODE>.  <VAR>Predicate</VAR> must be an equivalence predicate.
+The returned procedure accepts exactly two arguments: first, an object
+to be deleted, and second, a list of objects from which it is to be
+deleted.  If <VAR>deletor</VAR> is <CODE>list-deletor</CODE>, the procedure
+returns a newly allocated copy of the given list in which all entries
+equal to the given object have been removed.  If <VAR>deletor</VAR> is
+<CODE>list-deletor!</CODE>, the procedure returns a list consisting of the
+top-level elements of the given list with all entries equal to the given
+object removed; the given list is destructively modified to produce the
+result.  In either case <VAR>predicate</VAR> is used to compare the given
+object to the elements of the given list.
+</P><P>
+
+Here are some examples that demonstrate how
+<CODE>delete-member-procedure</CODE> could have been used to implement
+<CODE>delv</CODE> and <CODE>delete!</CODE>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define delv
+  (delete-member-procedure list-deletor eqv?))
+(define delete!
+  (delete-member-procedure list-deletor! equal?))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1033"></A>
+<DL>
+<DT><U>procedure+:</U> <B>list-deletor</B> <I>predicate</I>
+<DD><A NAME="IDX1034"></A>
+<DT><U>procedure+:</U> <B>list-deletor!</B> <I>predicate</I>
+<DD>These procedures each return a procedure that deletes elements from
+lists.  <VAR>Predicate</VAR> must be a procedure of one argument.  The
+returned procedure accepts exactly one argument, which must be a proper
+list, and applies <VAR>predicate</VAR> to each of the elements of the
+argument, deleting those for which it is true.
+</P><P>
+
+The procedure returned by <CODE>list-deletor</CODE> deletes elements
+non-destructively, by returning a newly allocated copy of the argument
+with the appropriate elements removed.  The procedure returned by
+<CODE>list-deletor!</CODE> performs a destructive deletion.
+</DL>
+</P><P>
+
+<A NAME="Searching Lists"></A>
+<HR SIZE="6">
+<A NAME="SEC79"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC78"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC80"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.6 Searching Lists </H2>
+<!--docid::SEC79::-->
+<P>
+
+<A NAME="IDX1035"></A>
+<DL>
+<DT><U>procedure+:</U> <B>list-search-positive</B> <I>list predicate</I>
+<DD><A NAME="IDX1036"></A>
+<DT><U>procedure+:</U> <B>list-search-negative</B> <I>list predicate</I>
+<DD>Returns the first element in <VAR>list</VAR> for which <VAR>predicate</VAR> is
+(respectively) true or false; returns <CODE>#f</CODE> if it doesn't find such
+an element.  (This means that if <VAR>predicate</VAR> is true (false) for
+<CODE>#f</CODE>, it may be impossible to distinguish a successful result from
+an unsuccessful one.)  <VAR>Predicate</VAR> must be a procedure of one
+argument.
+</DL>
+</P><P>
+
+<A NAME="IDX1037"></A>
+<DL>
+<DT><U>procedure:</U> <B>memq</B> <I>object list</I>
+<DD><A NAME="IDX1038"></A>
+<DT><U>procedure:</U> <B>memv</B> <I>object list</I>
+<DD><A NAME="IDX1039"></A>
+<DT><U>procedure:</U> <B>member</B> <I>object list</I>
+<DD><A NAME="IDX1040"></A>
+<A NAME="IDX1041"></A>
+<A NAME="IDX1042"></A>
+These procedures return the first pair of <VAR>list</VAR> whose car is
+<VAR>object</VAR>; the returned pair is always one from which <VAR>list</VAR> is
+composed.  If <VAR>object</VAR> does not occur in <VAR>list</VAR>, <CODE>#f</CODE>
+(n.b.: not the empty list) is returned.  <CODE>memq</CODE> uses <CODE>eq?</CODE> to
+compare <VAR>object</VAR> with the elements of <VAR>list</VAR>, while <CODE>memv</CODE>
+uses <CODE>eqv?</CODE> and <CODE>member</CODE> uses <CODE>equal?</CODE>.<A NAME="DOCF9" HREF="scheme_fot.html#FOOT9">(9)</A>
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(memq 'a '(a b c))                      =>  (a b c)
+(memq 'b '(a b c))                      =>  (b c)
+(memq 'a '(b c d))                      =>  #f
+(memq (list 'a) '(b (a) c))             =>  #f
+(member (list 'a) '(b (a) c))           =>  ((a) c)
+(memq 101 '(100 101 102))               =>  unspecified
+(memv 101 '(100 101 102))               =>  (101 102)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1043"></A>
+<DL>
+<DT><U>procedure+:</U> <B>member-procedure</B> <I>predicate</I>
+<DD>Returns a procedure similar to <CODE>memq</CODE>, except that <VAR>predicate</VAR>,
+which must be an equivalence predicate, is used instead of <CODE>eq?</CODE>.
+This could be used to define <CODE>memv</CODE> as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define memv (member-procedure eqv?))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Mapping of Lists"></A>
+<HR SIZE="6">
+<A NAME="SEC80"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC79"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC81"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.7 Mapping of Lists </H2>
+<!--docid::SEC80::-->
+<P>
+
+<A NAME="IDX1044"></A>
+<DL>
+<DT><U>procedure:</U> <B>map</B> <I>procedure list list <small>...</small></I>
+<DD><VAR>Procedure</VAR> must be a procedure taking as many arguments as there
+are <VAR>list</VAR>s.  If more than one <VAR>list</VAR> is given, then they must
+all be the same length.  <CODE>map</CODE> applies <VAR>procedure</VAR> element-wise
+to the elements of the <VAR>list</VAR>s and returns a list of the results, in
+order from left to right.  The dynamic order in which <VAR>procedure</VAR> is
+applied to the elements of the <VAR>list</VAR>s is unspecified; use
+<CODE>for-each</CODE> to sequence side effects.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(map cadr '((a b) (d e) (g h)))           =>  (b e h)
+(map (lambda (n) (expt n n)) '(1 2 3 4))  =>  (1 4 27 256)
+(map + '(1 2 3) '(4 5 6))                 =>  (5 7 9)
+(let ((count 0))
+  (map (lambda (ignored)
+         (set! count (+ count 1))
+         count)
+       '(a b c)))                         =>  unspecified
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1045"></A>
+<DL>
+<DT><U>procedure+:</U> <B>map*</B> <I>initial-value procedure list1 list2 <small>...</small></I>
+<DD>Similar to <CODE>map</CODE>, except that the resulting list is terminated by
+<VAR>initial-value</VAR> rather than the empty list.  The following are
+equivalent:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(map <VAR>procedure</VAR> <VAR>list</VAR> <VAR>list</VAR> <small>...</small>)
+(map* '() <VAR>procedure</VAR> <VAR>list</VAR> <VAR>list</VAR> <small>...</small>)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1046"></A>
+<DL>
+<DT><U>procedure+:</U> <B>append-map</B> <I>procedure list list <small>...</small></I>
+<DD><A NAME="IDX1047"></A>
+<DT><U>procedure+:</U> <B>append-map*</B> <I>initial-value procedure list list <small>...</small></I>
+<DD><A NAME="IDX1048"></A>
+Similar to <CODE>map</CODE> and <CODE>map*</CODE>, respectively, except that the
+results of applying <VAR>procedure</VAR> to the elements of <VAR>list</VAR>s are
+concatenated together by <CODE>append</CODE> rather than by <CODE>cons</CODE>.  The
+following are equivalent, except that the former is more efficient:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(append-map <VAR>procedure</VAR> <VAR>list</VAR> <VAR>list</VAR> <small>...</small>)
+(apply append (map <VAR>procedure</VAR> <VAR>list</VAR> <VAR>list</VAR> <small>...</small>))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1049"></A>
+<DL>
+<DT><U>procedure+:</U> <B>append-map!</B> <I>procedure list list <small>...</small></I>
+<DD><A NAME="IDX1050"></A>
+<DT><U>procedure+:</U> <B>append-map*!</B> <I>initial-value procedure list list <small>...</small></I>
+<DD><A NAME="IDX1051"></A>
+Similar to <CODE>map</CODE> and <CODE>map*</CODE>, respectively, except that the
+results of applying <VAR>procedure</VAR> to the elements of <VAR>list</VAR>s are
+concatenated together by <CODE>append!</CODE> rather than by <CODE>cons</CODE>.  The
+following are equivalent, except that the former is more efficient:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(append-map! <VAR>procedure</VAR> <VAR>list</VAR> <VAR>list</VAR> <small>...</small>)
+(apply append! (map <VAR>procedure</VAR> <VAR>list</VAR> <VAR>list</VAR> <small>...</small>))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1052"></A>
+<DL>
+<DT><U>procedure:</U> <B>for-each</B> <I>procedure list list <small>...</small></I>
+<DD>The arguments to <CODE>for-each</CODE> are like the arguments to <CODE>map</CODE>,
+but <CODE>for-each</CODE> calls <VAR>procedure</VAR> for its side effects rather
+than for its values.  Unlike <CODE>map</CODE>, <CODE>for-each</CODE> is guaranteed
+to call <VAR>procedure</VAR> on the elements of the <VAR>list</VAR>s in order from
+the first element to the last, and the value returned by <CODE>for-each</CODE>
+is unspecified.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(let ((v (make-vector 5)))
+  (for-each (lambda (i)
+              (vector-set! v i (* i i)))
+            '(0 1 2 3 4))
+  v)                            =>  #(0 1 4 9 16)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Reduction of Lists"></A>
+<HR SIZE="6">
+<A NAME="SEC81"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC80"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC82"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.8 Reduction of Lists </H2>
+<!--docid::SEC81::-->
+<P>
+
+<A NAME="IDX1053"></A>
+<DL>
+<DT><U>procedure+:</U> <B>reduce</B> <I>procedure initial list</I>
+<DD>Combines all the elements of <VAR>list</VAR> using the binary operation
+<VAR>procedure</VAR>.  For example, using <CODE>+</CODE> one can add up all the
+elements:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(reduce + 0 list-of-numbers)
+</pre></td></tr></table></P><P>
+
+The argument <VAR>initial</VAR> is used only if <VAR>list</VAR> is empty; in this
+case <VAR>initial</VAR> is the result of the call to <CODE>reduce</CODE>.  If
+<VAR>list</VAR> has a single argument, it is returned.  Otherwise, the arguments
+are reduced in a left-associative fashion.  For example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(reduce + 0 '(1 2 3 4))                 =>  10
+(reduce + 0 '(1 2))                     =>  3
+(reduce + 0 '(1))                       =>  1
+(reduce + 0 '())                        =>  0
+(reduce + 0 '(foo))                     =>  foo
+(reduce list '() '(1 2 3 4))            =>  (((1 2) 3) 4)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1054"></A>
+<DL>
+<DT><U>procedure+:</U> <B>reduce-right</B> <I>procedure initial list</I>
+<DD>Like <CODE>reduce</CODE> except that it is right-associative.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(reduce-right list '() '(1 2 3 4))      =>  (1 (2 (3 4)))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1055"></A>
+<DL>
+<DT><U>procedure+:</U> <B>fold-right</B> <I>procedure initial list</I>
+<DD>Combines all of the elements of <VAR>list</VAR> using the binary operation
+<VAR>procedure</VAR>.  Unlike <CODE>reduce</CODE> and <CODE>reduce-right</CODE>,
+<VAR>initial</VAR> is always used:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(fold-right + 0 '(1 2 3 4))             =>  10
+(fold-right + 0 '(foo))                 error--> Illegal datum
+(fold-right list '() '(1 2 3 4))        =>  (1 (2 (3 (4 ()))))
+</pre></td></tr></table></P><P>
+
+<CODE>Fold-right</CODE> has interesting properties because it establishes a
+homomorphism between (<CODE>cons</CODE>, <CODE>()</CODE>) and (<VAR>procedure</VAR>,
+<VAR>initial</VAR>).  It can be thought of as replacing the pairs in the
+spine of the list with <VAR>procedure</VAR> and replacing the <CODE>()</CODE> at
+the end with <VAR>initial</VAR>.  Many of the classical list-processing
+procedures can be expressed in terms of <CODE>fold-right</CODE>, at least for
+the simple versions that take a fixed number of arguments:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (copy-list list)
+  (fold-right cons '() list))
+
+(define (append list1 list2)
+  (fold-right cons list2 list1))
+
+(define (map p list) 
+  (fold-right (lambda (x r) (cons (p x) r)) '() list))
+
+(define (reverse items)
+  (fold-right (lambda (x r) (append r (list x))) '() items))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1056"></A>
+<DL>
+<DT><U>procedure+:</U> <B>fold-left</B> <I>procedure initial list</I>
+<DD>Combines all the elements of <VAR>list</VAR> using the binary operation
+<VAR>procedure</VAR>.  Elements are combined starting with <VAR>initial</VAR> and
+then the elements of <VAR>list</VAR> from left to right.  Whereas
+<CODE>fold-right</CODE> is recursive in nature, capturing the essence of
+<CODE>cdr</CODE>-ing down a list and then computing a result, <VAR>fold-left</VAR>
+is iterative in nature, combining the elements as the list is traversed.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(fold-left list '() '(1 2 3 4))         =>  ((((() 1) 2) 3) 4)
+
+(define (length list)
+  (fold-left (lambda (sum element) (+ sum 1)) 0 list))
+
+(define (reverse items)
+  (fold-left (lambda (x y) (cons y x)) () items))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1057"></A>
+<DL>
+<DT><U>procedure+:</U> <B>there-exists?</B> <I>list predicate</I>
+<DD><VAR>Predicate</VAR> must be a procedure of one argument.  Applies
+<VAR>predicate</VAR> to each element of <VAR>list</VAR>, in order from left to
+right.  If <VAR>predicate</VAR> is true for any element of <VAR>list</VAR>, the
+value yielded by <VAR>predicate</VAR> is immediately returned as the value of
+<CODE>there-exists?</CODE>; <VAR>predicate</VAR> will not be applied to the
+remaining elements of <VAR>list</VAR>.  If <VAR>predicate</VAR> returns <CODE>#f</CODE>
+for all of the elements of <VAR>list</VAR>, then <CODE>#f</CODE> is returned.
+</DL>
+</P><P>
+
+<A NAME="IDX1058"></A>
+<DL>
+<DT><U>procedure+:</U> <B>for-all?</B> <I>list predicate</I>
+<DD><VAR>Predicate</VAR> must be a procedure of one argument.  Applies
+<VAR>predicate</VAR> to each element of <VAR>list</VAR>, in order from left to
+right.  If <VAR>predicate</VAR> returns <CODE>#f</CODE> for any element of
+<VAR>list</VAR>, <CODE>#f</CODE> is immediately returned as the value of
+<CODE>for-all?</CODE>; <VAR>predicate</VAR> will not be applied to the remaining
+elements of <VAR>list</VAR>.  If <VAR>predicate</VAR> is true for all of the
+elements of <VAR>list</VAR>, then <CODE>#t</CODE> is returned.
+</DL>
+</P><P>
+
+<A NAME="Miscellaneous List Operations"></A>
+<HR SIZE="6">
+<A NAME="SEC82"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC81"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.9 Miscellaneous List Operations </H2>
+<!--docid::SEC82::-->
+<P>
+
+<A NAME="IDX1059"></A>
+<DL>
+<DT><U>procedure+:</U> <B>circular-list</B> <I>object <small>...</small></I>
+<DD><A NAME="IDX1060"></A>
+<DT><U>procedure+:</U> <B>make-circular-list</B> <I>k [element]</I>
+<DD><A NAME="IDX1061"></A>
+<A NAME="IDX1062"></A>
+<A NAME="IDX1063"></A>
+<A NAME="IDX1064"></A>
+These procedures are like <CODE>list</CODE> and <CODE>make-list</CODE>,
+respectively, except that the returned lists are circular.
+<CODE>circular-list</CODE> could have been defined like this:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (circular-list . objects)
+  (append! objects objects))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1065"></A>
+<DL>
+<DT><U>procedure:</U> <B>reverse</B> <I>list</I>
+<DD><A NAME="IDX1066"></A>
+Returns a newly allocated list consisting of the top-level elements of
+<VAR>list</VAR> in reverse order.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(reverse '(a b c))                  =>  (c b a)
+(reverse '(a (b c) d (e (f))))      =>  ((e (f)) d (b c) a)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1067"></A>
+<DL>
+<DT><U>procedure+:</U> <B>reverse!</B> <I>list</I>
+<DD>Returns a list consisting of the top-level elements of <VAR>list</VAR> in
+reverse order.  <CODE>reverse!</CODE> is like <CODE>reverse</CODE>, except that it
+destructively modifies <VAR>list</VAR>.  Because the result may not be
+<CODE>eqv?</CODE> to <VAR>list</VAR>, it is desirable to do something like
+<CODE>(set! x (reverse! x))</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1068"></A>
+<DL>
+<DT><U>procedure+:</U> <B>sort</B> <I>sequence procedure</I>
+<DD><A NAME="IDX1069"></A>
+<DT><U>procedure+:</U> <B>merge-sort</B> <I>sequence procedure</I>
+<DD><A NAME="IDX1070"></A>
+<DT><U>procedure+:</U> <B>quick-sort</B> <I>sequence procedure</I>
+<DD><A NAME="IDX1071"></A>
+<VAR>Sequence</VAR> must be either a list or a vector.  <VAR>Procedure</VAR> must be a
+procedure of two arguments that defines a <EM>total ordering</EM> on the
+elements of <VAR>sequence</VAR>.  In other words, if <VAR>x</VAR> and <VAR>y</VAR> are two
+distinct elements of <VAR>sequence</VAR>, then it must be the case that
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(and (<VAR>procedure</VAR> <VAR>x</VAR> <VAR>y</VAR>)
+     (<VAR>procedure</VAR> <VAR>y</VAR> <VAR>x</VAR>))
+     =>  #f
+</pre></td></tr></table></P><P>
+
+If <VAR>sequence</VAR> is a list (vector), <CODE>sort</CODE> returns a newly
+allocated list (vector) whose elements are those of <VAR>sequence</VAR>,
+except that they are rearranged to be sorted in the order defined by
+<VAR>procedure</VAR>.  So, for example, if the elements of <VAR>sequence</VAR> are
+numbers, and <VAR>procedure</VAR> is <CODE>&#60;</CODE>, then the resulting elements
+are sorted in monotonically nondecreasing order.  Likewise, if
+<VAR>procedure</VAR> is <CODE>&#62;</CODE>, the resulting elements are sorted in
+monotonically nonincreasing order.  To be precise, if <VAR>x</VAR> and
+<VAR>y</VAR> are any two adjacent elements in the result, where <VAR>x</VAR>
+precedes <VAR>y</VAR>, it is the case that
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(<VAR>procedure</VAR> <VAR>y</VAR> <VAR>x</VAR>)
+     =>  #f
+</pre></td></tr></table></P><P>
+
+Two sorting algorithms are implemented: <CODE>merge-sort</CODE> and
+<CODE>quick-sort</CODE>.  The procedure <CODE>sort</CODE> is an alias for
+<CODE>merge-sort</CODE>.
+</P><P>
+
+See also the definition of <CODE>sort!</CODE>.
+</DL>
+</P><P>
+
+<A NAME="Vectors"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

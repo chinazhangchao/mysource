@@ -1,0 +1,474 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme Reference: Vectors</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme Reference: Vectors">
+<META NAME="keywords" CONTENT="MIT Scheme Reference: Vectors">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC83"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC82"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC84"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_8.html#SEC73"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 8. Vectors </H1>
+<!--docid::SEC83::-->
+<P>
+
+<A NAME="IDX1072"></A>
+<EM>Vectors</EM> are heterogenous structures whose elements are indexed by
+exact non-negative integers.  A vector typically occupies less space
+than a list of the same length, and the average time required to access
+a randomly chosen element is typically less for the vector than for the
+list.
+</P><P>
+
+<A NAME="IDX1073"></A>
+<A NAME="IDX1074"></A>
+<A NAME="IDX1075"></A>
+<A NAME="IDX1076"></A>
+<A NAME="IDX1077"></A>
+The <EM>length</EM> of a vector is the number of elements that it contains.
+This number is an exact non-negative integer that is fixed when the
+vector is created.  The <EM>valid indexes</EM> of a vector are the exact
+non-negative integers less than the length of the vector.  The first
+element in a vector is indexed by zero, and the last element is indexed
+by one less than the length of the vector.
+</P><P>
+
+<A NAME="IDX1078"></A>
+<A NAME="IDX1079"></A>
+<A NAME="IDX1080"></A>
+<A NAME="IDX1081"></A>
+Vectors are written using the notation <CODE>#(<VAR>object</VAR> <small>...</small>)</CODE>.
+For example, a vector of length 3 containing the number zero in element
+0, the list <CODE>(2 2 2 2)</CODE> in element 1, and the string <CODE>"Anna"</CODE>
+in element 2 can be written as
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#(0 (2 2 2 2) "Anna")
+</pre></td></tr></table></P><P>
+
+Note that this is the external representation of a vector, not an
+expression evaluating to a vector.  Like list constants, vector
+constants must be quoted:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>'#(0 (2 2 2 2) "Anna")          =>  #(0 (2 2 2 2) "Anna")
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX1082"></A>
+<A NAME="IDX1083"></A>
+<A NAME="IDX1084"></A>
+<A NAME="IDX1085"></A>
+<A NAME="IDX1086"></A>
+A number of the vector procedures operate on subvectors.  A
+<EM>subvector</EM> is a segment of a vector that is specified by two exact
+non-negative integers, <VAR>start</VAR> and <VAR>end</VAR>.  <VAR>Start</VAR> is the
+index of the first element that is included in the subvector, and
+<VAR>end</VAR> is one greater than the index of the last element that is
+included in the subvector.  Thus if <VAR>start</VAR> and <VAR>end</VAR> are the
+same, they refer to a null subvector, and if <VAR>start</VAR> is zero and
+<VAR>end</VAR> is the length of the vector, they refer to the entire vector.
+The <EM>valid indexes</EM> of a subvector are the exact integers between
+<VAR>start</VAR> inclusive and <VAR>end</VAR> exclusive.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_9.html#SEC84">8.1 Construction of Vectors</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_9.html#SEC85">8.2 Selecting Vector Components</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_9.html#SEC86">8.3 Cutting Vectors</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_9.html#SEC87">8.4 Modifying Vectors</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Construction of Vectors"></A>
+<HR SIZE="6">
+<A NAME="SEC84"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC85"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 8.1 Construction of Vectors </H2>
+<!--docid::SEC84::-->
+<P>
+
+<A NAME="IDX1087"></A>
+<DL>
+<DT><U>procedure:</U> <B>make-vector</B> <I>k [object]</I>
+<DD>Returns a newly allocated vector of <VAR>k</VAR> elements.  If <VAR>object</VAR>
+is specified, <CODE>make-vector</CODE> initializes each element of the vector
+to <VAR>object</VAR>.  Otherwise the initial elements of the result are
+unspecified.
+</DL>
+</P><P>
+
+<A NAME="IDX1088"></A>
+<DL>
+<DT><U>procedure:</U> <B>vector</B> <I>object <small>...</small></I>
+<DD><A NAME="IDX1089"></A>
+Returns a newly allocated vector whose elements are the given arguments.
+<CODE>vector</CODE> is analogous to <CODE>list</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(vector 'a 'b 'c)                       =>  #(a b c)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1090"></A>
+<DL>
+<DT><U>procedure+:</U> <B>vector-copy</B> <I>vector</I>
+<DD><A NAME="IDX1091"></A>
+Returns a newly allocated vector that is a copy of <VAR>vector</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1092"></A>
+<DL>
+<DT><U>procedure:</U> <B>list-&#62;vector</B> <I>list</I>
+<DD><A NAME="IDX1093"></A>
+<A NAME="IDX1094"></A>
+Returns a newly allocated vector initialized to the elements of
+<VAR>list</VAR>.  The inverse of <CODE>list-&#62;vector</CODE> is <CODE>vector-&#62;list</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(list-&#62;vector '(dididit dah))           =>  #(dididit dah)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1095"></A>
+<DL>
+<DT><U>procedure+:</U> <B>make-initialized-vector</B> <I>k initialization</I>
+<DD>Similar to <CODE>make-vector</CODE>, except that the elements of the result
+are determined by calling the procedure <VAR>initialization</VAR> on the
+indices.  For example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(make-initialized-vector 5 (lambda (x) (* x x)))
+     =>  #(0 1 4 9 16)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1096"></A>
+<DL>
+<DT><U>procedure+:</U> <B>vector-grow</B> <I>vector k</I>
+<DD><A NAME="IDX1097"></A>
+<VAR>K</VAR> must be greater than or equal to the length of <VAR>vector</VAR>.
+Returns a newly allocated vector of length <VAR>k</VAR>.  The first
+<CODE>(vector-length <VAR>vector</VAR>)</CODE> elements of the result are
+initialized from the corresponding elements of <VAR>vector</VAR>.  The
+remaining elements of the result are unspecified.
+</DL>
+</P><P>
+
+<A NAME="IDX1098"></A>
+<DL>
+<DT><U>procedure+:</U> <B>vector-map</B> <I>procedure vector</I>
+<DD><A NAME="IDX1099"></A>
+<VAR>Procedure</VAR> must be a procedure of one argument.  <CODE>vector-map</CODE>
+applies <VAR>procedure</VAR> element-wise to the elements of <VAR>vector</VAR> and
+returns a newly allocated vector of the results, in order from left to
+right.  The dynamic order in which <VAR>procedure</VAR> is applied to the
+elements of <VAR>vector</VAR> is unspecified.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(vector-map cadr '#((a b) (d e) (g h)))     =>  #(b e h)
+(vector-map (lambda (n) (expt n n)) '#(1 2 3 4))
+                                            =>  #(1 4 27 256)
+(vector-map + '#(5 7 9))                    =>  #(5 7 9)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Selecting Vector Components"></A>
+<HR SIZE="6">
+<A NAME="SEC85"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC84"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC86"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 8.2 Selecting Vector Components </H2>
+<!--docid::SEC85::-->
+<P>
+
+<A NAME="IDX1100"></A>
+<DL>
+<DT><U>procedure:</U> <B>vector?</B> <I>object</I>
+<DD><A NAME="IDX1101"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a vector; otherwise returns
+<CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1102"></A>
+<DL>
+<DT><U>procedure:</U> <B>vector-length</B> <I>vector</I>
+<DD>Returns the number of elements in <VAR>vector</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1103"></A>
+<DL>
+<DT><U>procedure:</U> <B>vector-ref</B> <I>vector k</I>
+<DD>Returns the contents of element <VAR>k</VAR> of <VAR>vector</VAR>.  <VAR>K</VAR> must
+be a valid index of <VAR>vector</VAR>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(vector-ref '#(1 1 2 3 5 8 13 21) 5)    =>  8
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1104"></A>
+<DL>
+<DT><U>procedure:</U> <B>vector-set!</B> <I>vector k object</I>
+<DD>Stores <VAR>object</VAR> in element <VAR>k</VAR> of <VAR>vector</VAR> and returns an
+unspecified value.  <VAR>K</VAR> must be a valid index of
+<VAR>vector</VAR>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(let ((vec (vector 0 '(2 2 2 2) "Anna")))
+  (vector-set! vec 1 '("Sue" "Sue"))
+  vec)
+     =>  #(0 ("Sue" "Sue") "Anna")
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1105"></A>
+<DL>
+<DT><U>procedure+:</U> <B>vector-first</B> <I>vector</I>
+<DD><A NAME="IDX1106"></A>
+<DT><U>procedure+:</U> <B>vector-second</B> <I>vector</I>
+<DD><A NAME="IDX1107"></A>
+<DT><U>procedure+:</U> <B>vector-third</B> <I>vector</I>
+<DD><A NAME="IDX1108"></A>
+<DT><U>procedure+:</U> <B>vector-fourth</B> <I>vector</I>
+<DD><A NAME="IDX1109"></A>
+<DT><U>procedure+:</U> <B>vector-fifth</B> <I>vector</I>
+<DD><A NAME="IDX1110"></A>
+<DT><U>procedure+:</U> <B>vector-sixth</B> <I>vector</I>
+<DD><A NAME="IDX1111"></A>
+<DT><U>procedure+:</U> <B>vector-seventh</B> <I>vector</I>
+<DD><A NAME="IDX1112"></A>
+<DT><U>procedure+:</U> <B>vector-eighth</B> <I>vector</I>
+<DD>These procedures access the first several elements of <VAR>vector</VAR> in
+the obvious way.  It is an error if the implicit index of one of these
+procedurs is not a valid index of <VAR>vector</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1113"></A>
+<DL>
+<DT><U>procedure+:</U> <B>vector-binary-search</B> <I>vector key&#60;? unwrap-key key</I>
+<DD><A NAME="IDX1114"></A>
+Searches <VAR>vector</VAR> for an element with a key matching <VAR>key</VAR>,
+returning the element if one is found or <CODE>#f</CODE> if none.  The
+search operation takes time proportional to the logarithm of the length
+of <VAR>vector</VAR>.  <VAR>Unwrap-key</VAR> must be a procedure that maps each
+element of <VAR>vector</VAR> to a key.  <VAR>Key&#60;?</VAR> must be a procedure that
+implements a total ordering on the keys of the elements.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (translate number)
+  (vector-binary-search '#((1 . i)
+                           (2 . ii)
+                           (3 . iii)
+                           (6 . vi))
+                        &#60; car number))
+(translate 2)  =>  (2 . ii)
+(translate 4)  =>  #F
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Cutting Vectors"></A>
+<HR SIZE="6">
+<A NAME="SEC86"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC85"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC87"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 8.3 Cutting Vectors </H2>
+<!--docid::SEC86::-->
+<P>
+
+<A NAME="IDX1115"></A>
+<DL>
+<DT><U>procedure+:</U> <B>subvector</B> <I>vector start end</I>
+<DD>Returns a newly allocated vector that contains the elements of
+<VAR>vector</VAR> between index <VAR>start</VAR> (inclusive) and <VAR>end</VAR>
+(exclusive).
+</DL>
+</P><P>
+
+<A NAME="IDX1116"></A>
+<DL>
+<DT><U>procedure+:</U> <B>vector-head</B> <I>vector end</I>
+<DD>Equivalent to
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(subvector <VAR>vector</VAR> 0 <VAR>end</VAR>)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1117"></A>
+<DL>
+<DT><U>procedure+:</U> <B>vector-tail</B> <I>vector start</I>
+<DD>Equivalent to
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(subvector <VAR>vector</VAR> <VAR>start</VAR> (vector-length <VAR>vector</VAR>))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Modifying Vectors"></A>
+<HR SIZE="6">
+<A NAME="SEC87"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC86"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 8.4 Modifying Vectors </H2>
+<!--docid::SEC87::-->
+<P>
+
+<A NAME="IDX1118"></A>
+<DL>
+<DT><U>procedure:</U> <B>vector-fill!</B> <I>vector object</I>
+<DD><A NAME="IDX1119"></A>
+<DT><U>procedure+:</U> <B>subvector-fill!</B> <I>vector start end object</I>
+<DD>Stores <VAR>object</VAR> in every element of the vector (subvector) and
+returns an unspecified value.
+</DL>
+</P><P>
+
+<A NAME="IDX1120"></A>
+<DL>
+<DT><U>procedure+:</U> <B>subvector-move-left!</B> <I>vector1 start1 end1 vector2 start2</I>
+<DD><A NAME="IDX1121"></A>
+<DT><U>procedure+:</U> <B>subvector-move-right!</B> <I>vector1 start1 end1 vector2 start2</I>
+<DD>Destructively copies the elements of <VAR>vector1</VAR>, starting with index
+<VAR>start1</VAR> (inclusive) and ending with <VAR>end1</VAR> (exclusive), into
+<VAR>vector2</VAR> starting at index <VAR>start2</VAR> (inclusive).
+<VAR>Vector1</VAR>, <VAR>start1</VAR>, and <VAR>end1</VAR> must specify a valid
+subvector, and <VAR>start2</VAR> must be a valid index for <VAR>vector2</VAR>.
+The length of the source subvector must not exceed the length of
+<VAR>vector2</VAR> minus the index <VAR>start2</VAR>.
+</P><P>
+
+The elements are copied as follows (note that this is only important when
+<VAR>vector1</VAR> and <VAR>vector2</VAR> are <CODE>eqv?</CODE>):
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>subvector-move-left!</CODE>
+<DD>The copy starts at the left end and moves toward the right (from smaller
+indices to larger).  Thus if <VAR>vector1</VAR> and <VAR>vector2</VAR> are the
+same, this procedure moves the elements toward the left inside the
+vector.
+<P>
+
+<DT><CODE>subvector-move-right!</CODE>
+<DD>The copy starts at the right end and moves toward the left (from larger
+indices to smaller).  Thus if <VAR>vector1</VAR> and <VAR>vector2</VAR> are the
+same, this procedure moves the elements toward the right inside the
+vector.
+</DL>
+</DL>
+<P>
+
+<A NAME="IDX1122"></A>
+<DL>
+<DT><U>procedure+:</U> <B>sort!</B> <I>vector procedure</I>
+<DD><A NAME="IDX1123"></A>
+<DT><U>procedure+:</U> <B>merge-sort!</B> <I>vector procedure</I>
+<DD><A NAME="IDX1124"></A>
+<DT><U>procedure+:</U> <B>quick-sort!</B> <I>vector procedure</I>
+<DD><VAR>Procedure</VAR> must be a procedure of two arguments that defines a
+<EM>total ordering</EM> on the elements of <VAR>vector</VAR>.  The elements of
+<VAR>vector</VAR> are rearranged so that they are sorted in the order defined
+by <VAR>procedure</VAR>.  The elements are rearranged in place, that is,
+<VAR>vector</VAR> is destructively modified so that its elements are in the
+new order.
+</P><P>
+
+<CODE>sort!</CODE> returns <VAR>vector</VAR> as its value.
+</P><P>
+
+Two sorting algorithms are implemented: <CODE>merge-sort!</CODE> and
+<CODE>quick-sort!</CODE>.  The procedure <CODE>sort!</CODE> is an alias for
+<CODE>merge-sort!</CODE>.
+</P><P>
+
+See also the definition of <CODE>sort</CODE>.
+</DL>
+</P><P>
+
+<A NAME="Bit Strings"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

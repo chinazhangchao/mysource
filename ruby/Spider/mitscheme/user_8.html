@@ -1,0 +1,605 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme User's Manual: Edwin</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme User's Manual: Edwin">
+<META NAME="keywords" CONTENT="MIT Scheme User's Manual: Edwin">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC59"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_7.html#SEC58"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC60"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_7.html#SEC58"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 7. Edwin </H1>
+<!--docid::SEC59::-->
+<P>
+
+This chapter describes how to start Edwin, the MIT Scheme text editor.
+Edwin is very similar to GNU Emacs -- you should refer to the GNU Emacs
+manual for information about Edwin's commands and key bindings ---
+except that Edwin's extension language is MIT Scheme, while GNU Emacs
+extensions are written in Emacs Lisp.  This manual does not discuss
+customization of Edwin.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_8.html#SEC60">7.1 Starting Edwin</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_8.html#SEC61">7.2 Leaving Edwin</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_8.html#SEC62">7.3 Scheme Mode</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_8.html#SEC63">7.4 Evaluation</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_8.html#SEC64">7.5 REPL Mode</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_8.html#SEC65">7.6 The Edwin Debugger</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_8.html#SEC66">7.7 Last Resorts</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Starting Edwin"></A>
+<HR SIZE="6">
+<A NAME="SEC60"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC59"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC61"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC59"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC59"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.1 Starting Edwin </H2>
+<!--docid::SEC60::-->
+<P>
+
+To use Edwin, start Scheme with the following command-line options:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>scheme -edwin -edit
+</pre></td></tr></table></P><P>
+
+Alternatively, you can load Edwin by giving the <CODE>-edwin</CODE>
+command-line option and then calling the procedure <CODE>edit</CODE>:
+</P><P>
+
+<A NAME="IDX333"></A>
+<DL>
+<DT><U>procedure+:</U> <B>edit</B>
+<DD><A NAME="IDX334"></A>
+<DT><U>procedure+:</U> <B>edwin</B>
+<DD>Enter the Edwin text editor.  If entering for the first time, the editor
+is initialized (by calling <CODE>create-editor</CODE> with no arguments).
+Otherwise, the previously-initialized editor is reentered.
+</P><P>
+
+The procedure <CODE>edwin</CODE> is an alias for <CODE>edit</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX335"></A>
+<DL>
+<DT><U>variable+:</U> <B>inhibit-editor-init-file?</B>
+<DD>When Edwin is first initialized, it loads your init file (called
+<TT>`~/.edwin'</TT> under unix, <TT>`edwin.ini'</TT> on PCs) if you have one.  If
+the Scheme variable <CODE>inhibit-editor-init-file?</CODE> is true, however,
+your init file will not be loaded even if it exists.  By default, this
+variable is false.
+</P><P>
+
+Note that you can set this variable in your Scheme init file
+(see section <A HREF="user_3.html#SEC11">2.2 Customizing Scheme</A>).
+</DL>
+</P><P>
+
+<A NAME="IDX336"></A>
+<DL>
+<DT><U>procedure+:</U> <B>create-editor</B> <I>arg <small>...</small></I>
+<DD>Initializes Edwin, or reinitializes it if already initialized.
+<CODE>create-editor</CODE> is normally invoked automatically by <CODE>edit</CODE>.
+</P><P>
+
+If no <VAR>arg</VAR>s are given, the value of <CODE>create-editor-args</CODE> is
+used instead.  In other words, the following are equivalent:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(create-editor)
+(apply create-editor create-editor-args)
+</pre></td></tr></table></P><P>
+
+On the other hand, if <VAR>arg</VAR>s are given, they are used to update
+<CODE>create-editor-args</CODE>, making the following equivalent:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(apply create-editor <VAR>args</VAR>)
+(begin (set! create-editor-args <VAR>args</VAR>) (create-editor))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX337"></A>
+<DL>
+<DT><U>variable+:</U> <B>create-editor-args</B>
+<DD>This variable controls the initialization of Edwin.  The following
+values are defined:
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>(#f)</CODE>
+<DD>This is the default.  Creates a window of some default size, and uses
+that window as Edwin's main window.  Under unix, if X11 is not available
+or if the <CODE>DISPLAY</CODE> environment variable is undefined, Edwin will
+run on Scheme's console.
+<P>
+
+<DT><CODE>(x)</CODE>
+<DD>Unix only.  Creates an X window and uses it as Edwin's main window.
+This requires the <CODE>DISPLAY</CODE> environment variable to have been set
+to the appropriate value before Scheme was started.
+<P>
+
+<DT><CODE>(x <VAR>geometry</VAR>)</CODE>
+<DD>Unix only.  Like <CODE>(x)</CODE> except that <VAR>geometry</VAR> specifies the
+window's geometry in the usual way.  <VAR>Geometry</VAR> must be a character
+string whose contents is an X geometry specification.
+<P>
+
+<DT><CODE>(console)</CODE>
+<DD>Unix only.  Causes Edwin to run on Scheme's console, or in unix
+terminology, the standard input and output.  If the console is not a
+terminal device, or is not powerful enough to run Edwin, an error will
+be signalled at initialization time.
+<P>
+
+<DT><CODE>(pm)</CODE>
+<DD>OS/2 only.  Creates a Presentation Manager window and uses it as Edwin's
+main window.
+<P>
+
+<DT><CODE>(win32)</CODE>
+<DD>Windows only.  Creates a window and uses it as Edwin's main window.
+</DL>
+</DL>
+<P>
+
+<A NAME="Leaving Edwin"></A>
+<HR SIZE="6">
+<A NAME="SEC61"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC60"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC62"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC59"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC59"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.2 Leaving Edwin </H2>
+<!--docid::SEC61::-->
+<P>
+
+Once Edwin has been entered, it can be exited in the following ways:
+</P><P>
+
+<DL COMPACT>
+<DT><KBD>C-x z</KBD>
+<DD><A NAME="IDX338"></A>
+<A NAME="IDX339"></A>
+Stop Edwin and return to Scheme (<CODE>suspend-edwin</CODE>).  The call to the
+procedure <CODE>edit</CODE> that entered Edwin returns normally.  A subsequent
+call to <CODE>edit</CODE> will resume Edwin where it was stopped.
+<P>
+
+<DT><KBD>C-x c</KBD>
+<DD><A NAME="IDX340"></A>
+<A NAME="IDX341"></A>
+Offer to save any modified buffers, then kill Edwin, returning to Scheme
+(<CODE>save-buffers-kill-edwin</CODE>).  This is like the <CODE>suspend-edwin</CODE>
+command, except that a subsequent call to <CODE>edit</CODE> will reinitialize
+the editor.
+<P>
+
+<DT><KBD>C-x C-z</KBD>
+<DD><A NAME="IDX342"></A>
+<A NAME="IDX343"></A>
+Stop Edwin and suspend Scheme, returning control to the operating
+system's command interpreter (<CODE>suspend-scheme</CODE>).  When Scheme is
+resumed (using the command interpreter's job-control commands), Edwin is
+automatically restarted where it was stopped.  This command is identical
+to the <KBD>C-x C-z</KBD> command of GNU Emacs.
+<P>
+
+<DT><KBD>C-x C-c</KBD>
+<DD><A NAME="IDX344"></A>
+<A NAME="IDX345"></A>
+Offer to save any modified buffers, then kill both Edwin and Scheme
+(<CODE>save-buffers-kill-scheme</CODE>).  Control is returned to the operating
+system's command interpreter, and the Scheme process is terminated.
+This command is identical to the <KBD>C-x C-c</KBD> command of GNU Emacs.
+</DL>
+<P>
+
+<A NAME="Edwin Scheme Mode"></A>
+<HR SIZE="6">
+<A NAME="SEC62"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC61"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC63"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC59"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC59"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.3 Scheme Mode </H2>
+<!--docid::SEC62::-->
+<P>
+
+As you might expect, Edwin has special support for editing and
+evaluating Scheme code.  This section describes <EM>Scheme Mode</EM>, the
+appropriate mode for editing MIT Scheme programs.
+</P><P>
+
+Scheme mode is normally entered automatically by visiting a file whose
+file name ends in <SAMP>`.scm'</SAMP>.  You can also mark a file as Scheme code
+by placing the string <SAMP>`-*-Scheme-*-'</SAMP> on the first line of the
+file.  Finally, you can put any buffer in Scheme mode by executing the
+command <KBD>M-x scheme-mode</KBD>.
+</P><P>
+
+Scheme mode is similar to the Emacs modes that edit Lisp code.  So, for
+example, <KBD>C-i</KBD> indents the current line, and <KBD>C-M-q</KBD> indents the
+expression to the right of point.  The close parenthesis will
+temporarily flash the matching open parenthesis.  Most Scheme constructs
+requiring special indentation are recognized by Scheme mode, for
+example, <CODE>begin</CODE>, <CODE>do</CODE>, and <CODE>let</CODE>.
+</P><P>
+
+Scheme mode also provides support that is specific to Scheme programs,
+much as Emacs-Lisp mode does in Emacs.  Completion of global variable
+names is provided: type the first few characters of a variable, then
+type <KBD>C-M-i</KBD>, and Edwin will attempt to complete the variable name
+using the current set of bound variables.  If <KBD>C-M-i</KBD> is given a
+prefix argument, it will complete the name using the current set of
+interned symbols (which includes the bound variables as a subset).
+</P><P>
+
+The <KBD>M-A</KBD> command (note the <EM>uppercase</EM> <KBD>A</KBD>) will show the
+parameters of a procedure when point is inside a procedure call.  For
+example, type the string <SAMP>`(quotient'</SAMP>, then press <KBD>M-A</KBD>, and the
+command will echo <SAMP>`(n d)'</SAMP> in the echo area.  With a prefix
+argument, <KBD>M-A</KBD> will insert the parameter names in the buffer at
+point, so in this example, the buffer would contain <SAMP>`(quotient n d'</SAMP>
+after running <KBD>C-u M-A</KBD>.
+</P><P>
+
+<A NAME="Edwin Scheme Evaluation"></A>
+<HR SIZE="6">
+<A NAME="SEC63"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC62"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC64"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC59"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC59"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.4 Evaluation </H2>
+<!--docid::SEC63::-->
+<P>
+
+Scheme mode also provides commands for evaluating Scheme expressions.
+The simplest evaluation command is <KBD>C-x C-e</KBD>, which evaluates the
+expression to the left of point.  (This key is bound in all buffers,
+even if they don't contain Scheme code.)  The command <KBD>M-z</KBD>
+evaluates the definition that point is in (a definition is an expression
+starting with a left parenthesis in the leftmost column).  The command
+<KBD>M-:</KBD> prompts for an expression in the minibuffer, evaluates it, and
+prints the value in the echo area.
+</P><P>
+
+Other commands that evaluate larger amounts of code are <KBD>C-M-z</KBD>,
+which evaluates all of the expressions in the region, and <KBD>M-o</KBD>,
+which evaluates the entire buffer.  Both of these commands are
+potentially dangerous in that they will evaluate anything that appears
+to be an expression, even if it isn't intended to be.
+</P><P>
+
+Normally, these commands evaluate expressions by sending them to a
+REPL buffer, which performs the evaluations in a separate thread.
+This has two advantages: it allows you to continue editing while the
+evaluation is happening, and it keeps a record of each evaluation and
+its printed output.  If you wish to stop a running evaluation and to
+erase any pending expressions, use the <KBD>C-c C-c</KBD> command from any
+Scheme buffer.  (Note that by default, Edwin starts up with one
+REPL buffer, called <SAMP>`*scheme*'</SAMP>.)
+</P><P>
+
+If you would prefer to have Scheme mode evaluation commands evaluate
+directly, rather than sending expressions to the REPL buffer, set
+the Edwin variable <CODE>evaluate-in-inferior-repl</CODE> to <CODE>#f</CODE>.  In
+this case, you will not be able to use Edwin while evaluation is
+occurring; any output from the evaluation will be shown in a pop-up
+buffer when the evaluation finishes; and you abort the evaluation using
+<KBD>C-g</KBD>.
+</P><P>
+
+<A NAME="Edwin REPL Mode"></A>
+<HR SIZE="6">
+<A NAME="SEC64"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC63"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC65"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC59"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC59"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.5 REPL Mode </H2>
+<!--docid::SEC64::-->
+<P>
+
+Edwin provides a special mechanism for interacting with Scheme
+read-eval-print loops: REPL buffers.  A REPL buffer is
+associated with a Scheme REPL running in a separate thread of
+execution; because of this, expressions may be evaluated in this buffer
+while you simultaneously do other things with the editor.  A REPL
+buffer captures all printed output from an evaluated expression, as well
+as supporting interactive programs such as <CODE>debug</CODE>.  For these and
+other reasons, REPL buffers are the preferred means for interacting
+with the Scheme interpreter.
+</P><P>
+
+When Edwin starts, it has one buffer: a REPL buffer called
+<SAMP>`*scheme*'</SAMP>.  The command <KBD>M-x repl</KBD> selects this buffer, if it
+exists; otherwise it creates a new REPL buffer.  If you want two
+REPL buffers, just rename the <SAMP>`*scheme*'</SAMP> buffer to something
+else and run <KBD>M-x repl</KBD> again.
+</P><P>
+
+REPL buffers support all the same evaluation commands that Scheme
+mode does; in fact, REPL buffers use a special mode called
+REPL mode that inherits from Scheme mode.  Thus, any key bindings
+defined in Scheme mode are also defined in REPL mode.  One
+exception to this is the <KBD>M-o</KBD> command, which is deliberately
+undefined in REPL mode; otherwise it would be too easy to
+re-evaluate all the previously evaluated expressions in the REPL
+buffer.
+</P><P>
+
+In addition to evaluation commands, REPL mode provides a handful of
+special commands for controlling the REPL itself.  The commands
+<KBD>C-c C-x</KBD> and <KBD>C-c C-u</KBD> abort the current evaluation, returning
+to the current or previous REPL levels, respectively.  The command
+<KBD>C-c C-b</KBD> interrupts the current evaluation, entering a breakpoint.
+</P><P>
+
+Each REPL buffer maintains a history of the expressions that were
+typed into it.  Several commands allow you to access the contents of
+this history.  The command <KBD>M-p</KBD> moves backwards through the
+history, inserting previously evaluated expressions at point.  Likewise,
+<KBD>M-n</KBD> moves forward through the history.  The commands <KBD>C-c C-r</KBD>
+and <KBD>C-c C-s</KBD> search backward and forward through the history for a
+particular string.  The command <KBD>C-c C-o</KBD> deletes any output from
+the previous evaluation; use this command with care since it cannot be
+undone.  The command <KBD>C-c C-l</KBD> finds the most recent expression in
+the buffer and moves point there.
+</P><P>
+
+When an expression that you evaluate signals an error, the REPL
+buffer notices this and offers to run the debugger for you.  Answer this
+question with a <SAMP>`y'</SAMP> or <SAMP>`n'</SAMP> response.  You can start the
+debugger whenever the REPL buffer is listening by executing the
+<KBD>C-c C-d</KBD> command.  In either case, this starts the Edwin debugger,
+which pops up a new window containing the debugger.  Your REPL
+buffer remains in the error state, allowing you to examine it further if
+you wish.
+</P><P>
+
+<A NAME="Edwin Debugger"></A>
+<HR SIZE="6">
+<A NAME="SEC65"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC64"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC66"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC59"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC59"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.6 The Edwin Debugger </H2>
+<!--docid::SEC65::-->
+<P>
+
+The Edwin debugger is similar to the command-line debugger, except that
+it takes advantage of multiple windows and Edwin's command structure to
+provide a more intuitive interface.  The debugger operates as a browser,
+much like Dired, presenting you with an overview of the subproblem
+structure, and allowing you to examine parts of that structure in more
+detail by selecting the parts.  When started, the debugger creates a
+buffer <SAMP>`*debug*'</SAMP> showing the subproblem structure, and selects the
+first line.
+</P><P>
+
+Each line beginning with <SAMP>`S'</SAMP> represents either a subproblem or
+stack frame.  A subproblem line may be followed by one or more indented
+lines (beginning with the letter <SAMP>`R'</SAMP>) which represent reductions
+associated with that subproblem.  The subproblems are indexed with the
+natural numbers.  To obtain a more complete description of a subproblem
+or reduction, click the mouse on the desired line or move the cursor to
+the line using the arrow keys (or <KBD>C-n</KBD> and <KBD>C-p</KBD>).  The
+description buffer will display the additional information.
+</P><P>
+
+The description buffer contains three major regions.  The first region
+contains a pretty-printed version of the current expression.  The
+current subproblem within the expression is highlighted.  The second
+region contains a representation of the frames of the environment of the
+current expression.  The bindings of each frame are listed below the
+frame header.  If there are no bindings in the frame, none will be
+listed.  The frame of the current expression is preceded with
+<SAMP>`==&#62;'</SAMP>.
+</P><P>
+
+The bottom of the description buffer contains a third region for
+evaluating expressions in the environment of the selected subproblem or
+reduction.  This is the only portion of the buffer where editing is
+possible.  This region can be used to find the values of variables in
+different environments, or even to modify variable values or data
+structures (note that variables in compiled code cannot usually be
+modified).
+</P><P>
+
+Typing <KBD>e</KBD> creates a new buffer in which you may browse through the
+current environment.  In this new buffer, you can use the mouse, the
+arrows, or <KBD>C-n</KBD> and <KBD>C-p</KBD> to select lines and view different
+environments.  The environments listed are the same as those in the
+description buffer.  If the selected environment structure is too large
+to display (i.e. if the number of bindings in the environment exceeds
+the value of the editor variable <CODE>environment-package-limit</CODE>) a
+message to that effect is displayed.  To display the environment in this
+case, use <KBD>M-x set-variable</KBD> to set <CODE>environment-package-limit</CODE>
+to <CODE>#f</CODE>.  At the bottom of the new buffer is a region for
+evaluating expressions, similar to that of the description buffer.
+</P><P>
+
+The appearance of environment displays is controlled by the editor
+variables <CODE>debugger-show-inner-frame-topmost?</CODE> and
+<CODE>debugger-compact-display?</CODE>  which affect the ordering of
+environment frames and the line spacing respectively.
+</P><P>
+
+Type <KBD>q</KBD> to quit the debugger, killing its primary buffer, any
+others that it has created, and the window that was popped up to show
+the debugger.
+</P><P>
+
+<STRONG>Note</STRONG>: The description buffers created by the debugger are given
+names beginning with spaces so that they do not appear in the buffer
+list; these buffers are automatically deleted when you quit the
+debugger.  If you wish to keep one of these buffers, simply rename it
+using <KBD>M-x rename-buffer</KBD>: once it has been renamed, it will not be
+automatically deleted.
+</P><P>
+
+<A NAME="Last Resorts"></A>
+<HR SIZE="6">
+<A NAME="SEC66"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC65"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC59"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC59"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.7 Last Resorts </H2>
+<!--docid::SEC66::-->
+<P>
+
+When Scheme exits abnormally it tries to save any unsaved Edwin buffers.
+The buffers are saved in an auto-save file in case the original is more
+valuable than the unsaved version.  You can use the editor command
+<KBD>M-x recover-file</KBD> to recover the auto-saved version.  The name
+used to specify an auto-save file is operating-system dependent: under
+unix, and on PC file systems with long file names, <TT>`foo.scm'</TT> will
+be saved as <TT>`#foo.scm#'</TT>; on PC file systems with short file names,
+it will be saved as <TT>`foo.sav'</TT>.
+</P><P>
+
+The following Scheme procedures are useful for recovering from bugs in
+Edwin's implementation.  All of them are designed for use when Edwin is
+<EM>not</EM> running -- they should not be used when Edwin is running.
+These procedures are designed to help Edwin's implementors deal with
+bugs during the implementation of the editor; they are not intended for
+casual use, but as a means of recovering from bugs that would otherwise
+require reloading the editor's world image from the disk.
+</P><P>
+
+<A NAME="IDX346"></A>
+<DL>
+<DT><U>procedure+:</U> <B>save-editor-files</B>
+<DD>Examines Edwin, offering to save any unsaved buffers.  This is useful if
+some bug caused Edwin to die while there were unsaved buffers, and you
+want to save the information without restarting the editor.
+</DL>
+</P><P>
+
+<A NAME="IDX347"></A>
+<DL>
+<DT><U>procedure+:</U> <B>reset-editor</B>
+<DD>Resets Edwin, causing it to be reinitialized the next time that
+<CODE>edit</CODE> is called.  If you encounter a fatal bug in Edwin, a good
+way to recover is to first call <CODE>save-editor-files</CODE>, and then to
+call <CODE>reset-editor</CODE>.  That should completely reset the editor to
+its initial state.
+</DL>
+</P><P>
+
+<A NAME="IDX348"></A>
+<DL>
+<DT><U>procedure+:</U> <B>reset-editor-windows</B>
+<DD>Resets Edwin's display structures, without affecting any of the buffers
+or their contents.  This is useful if a bug in the display code causes
+Edwin's internal display data structures to get into an inconsistent
+state that prevents Edwin from running.
+</DL>
+</P><P>
+
+<A NAME="Release Notes"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC59"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_9.html#SEC67"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

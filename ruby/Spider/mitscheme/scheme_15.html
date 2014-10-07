@@ -1,0 +1,2571 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme Reference: Input/Output</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme Reference: Input/Output">
+<META NAME="keywords" CONTENT="MIT Scheme Reference: Input/Output">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC130"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC129"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC131"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC125"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 14. Input/Output </H1>
+<!--docid::SEC130::-->
+<P>
+
+<A NAME="IDX1638"></A>
+<A NAME="IDX1639"></A>
+<A NAME="IDX1640"></A>
+This chapter describes the procedures that are used for input and output
+(I/O).  The chapter first describes <EM>ports</EM> and how they are
+manipulated, then describes the I/O operations.  Finally, some
+low-level procedures are described that permit the implementation of
+custom ports and high-performance I/O.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_15.html#SEC131">14.1 Ports</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_15.html#SEC132">14.2 File Ports</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_15.html#SEC133">14.3 String Ports</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_15.html#SEC134">14.4 Input Procedures</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_15.html#SEC135">14.5 Output Procedures</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_15.html#SEC136">14.6 Format</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_15.html#SEC137">14.7 Custom Output</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_15.html#SEC138">14.8 Prompting</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_15.html#SEC139">14.9 Port Primitives</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Ports"></A>
+<HR SIZE="6">
+<A NAME="SEC131"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC132"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 14.1 Ports </H2>
+<!--docid::SEC131::-->
+<P>
+
+<A NAME="IDX1641"></A>
+<A NAME="IDX1642"></A>
+Scheme uses ports for I/O.  A <EM>port</EM>, which can be treated like
+any other Scheme object, serves as a source or sink for data.  A port
+must be open before it can be read from or written to.  The standard
+I/O port, <CODE>console-i/o-port</CODE>, is opened automatically when you
+start Scheme.  When you use a file for input or output, you need to
+explicitly open and close a port to the file (with procedures described
+in this chapter).  Additional procedures let you open ports to strings.
+</P><P>
+
+<A NAME="IDX1643"></A>
+<A NAME="IDX1644"></A>
+<A NAME="IDX1645"></A>
+<A NAME="IDX1646"></A>
+<A NAME="IDX1647"></A>
+Many input procedures, such as <CODE>read-char</CODE> and <CODE>read</CODE>, read
+data from the current input port by default, or from a port that you
+specify.  The current input port is initially <CODE>console-i/o-port</CODE>,
+but Scheme provides procedures that let you change the current input
+port to be a file or string.
+</P><P>
+
+<A NAME="IDX1648"></A>
+<A NAME="IDX1649"></A>
+<A NAME="IDX1650"></A>
+<A NAME="IDX1651"></A>
+Similarly, many output procedures, such as <CODE>write-char</CODE> and
+<CODE>display</CODE>, write data to the current output port by default, or to
+a port that you specify.  The current output port is initially
+<CODE>console-i/o-port</CODE>, but Scheme provides procedures that let you
+change the current output port to be a file or string.
+</P><P>
+
+All ports read or write only <FONT SIZE="-1">ASCII</FONT> characters.
+</P><P>
+
+Every port is either an input port, an output port, or both.  The
+following predicates distinguish all of the possible cases.
+</P><P>
+
+<A NAME="IDX1652"></A>
+<DL>
+<DT><U>procedure+:</U> <B>port?</B> <I>object</I>
+<DD><A NAME="IDX1653"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a port, otherwise returns
+<CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1654"></A>
+<DL>
+<DT><U>procedure:</U> <B>input-port?</B> <I>object</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>object</VAR> is an input port, otherwise returns
+<CODE>#f</CODE>.  Any object satisfying this predicate also satisfies
+<CODE>port?</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1655"></A>
+<DL>
+<DT><U>procedure:</U> <B>output-port?</B> <I>object</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>object</VAR> is an output port, otherwise returns
+<CODE>#f</CODE>.  Any object satisfying this predicate also satisfies
+<CODE>port?</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1656"></A>
+<DL>
+<DT><U>procedure+:</U> <B>i/o-port?</B> <I>object</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>object</VAR> is both an input port and an output
+port, otherwise returns <CODE>#f</CODE>.  Any object satisfying this predicate
+also satisfies <CODE>port?</CODE>, <CODE>input-port?</CODE>, and
+<CODE>output-port?</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1657"></A>
+<DL>
+<DT><U>procedure+:</U> <B>guarantee-port</B> <I>object</I>
+<DD><A NAME="IDX1658"></A>
+<DT><U>procedure+:</U> <B>guarantee-input-port</B> <I>object</I>
+<DD><A NAME="IDX1659"></A>
+<DT><U>procedure+:</U> <B>guarantee-output-port</B> <I>object</I>
+<DD><A NAME="IDX1660"></A>
+<DT><U>procedure+:</U> <B>guarantee-i/o-port</B> <I>object</I>
+<DD>These procedures check the type of <VAR>object</VAR>, signalling an error of
+type<BR> <CODE>condition-type:wrong-type-argument</CODE> if it is not a port,
+input port, output port, or I/O port, respectively.  Otherwise they
+return <VAR>object</VAR>.
+<A NAME="IDX1661"></A>
+</DL>
+</P><P>
+
+<A NAME="IDX1662"></A>
+The next five procedures return the runtime system's <EM>standard
+ports</EM>.  All of the standard ports are dynamically bound by the REP
+loop; this means that when a new REP loop is started, for example
+by an error, each of these ports is dynamically bound to the I/O
+port of the REP loop.  When the REP loop exits, the ports
+revert to their original values.
+</P><P>
+
+<A NAME="IDX1663"></A>
+<DL>
+<DT><U>procedure:</U> <B>current-input-port</B>
+<DD><A NAME="IDX1664"></A>
+Returns the current input port.  This is the default port used by many
+input procedures.  Initially, <CODE>current-input-port</CODE> returns the
+value of <CODE>console-i/o-port</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1665"></A>
+<DL>
+<DT><U>procedure:</U> <B>current-output-port</B>
+<DD><A NAME="IDX1666"></A>
+Returns the current output port.  This is the default port used by many
+output procedures.  Initially, <CODE>current-output-port</CODE> returns the
+value of <CODE>console-i/o-port</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1667"></A>
+<DL>
+<DT><U>procedure+:</U> <B>notification-output-port</B>
+<DD>Returns an output port suitable for generating "notifications", that
+is, messages to the user that supply interesting information about the
+execution of a program.  For example, the <CODE>load</CODE> procedure writes
+messages to this port informing the user that a file is being loaded.
+Initially, <CODE>notification-output-port</CODE> returns the value of
+<CODE>console-i/o-port</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1668"></A>
+<DL>
+<DT><U>procedure+:</U> <B>trace-output-port</B>
+<DD>Returns an output port suitable for generating "tracing" information
+about a program's execution.  The output generated by the <CODE>trace</CODE>
+procedure is sent to this port.  Initially, <CODE>trace-output-port</CODE>
+returns the value of <CODE>console-i/o-port</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1669"></A>
+<DL>
+<DT><U>procedure+:</U> <B>interaction-i/o-port</B>
+<DD>Returns an I/O port suitable for querying or prompting the user.
+The standard prompting procedures use this port by default
+(see section <A HREF="scheme_15.html#SEC138">14.8 Prompting</A>).  Initially, <CODE>interaction-i/o-port</CODE> returns the
+value of <CODE>console-i/o-port</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1670"></A>
+<DL>
+<DT><U>procedure+:</U> <B>with-input-from-port</B> <I>input-port thunk</I>
+<DD><A NAME="IDX1671"></A>
+<DT><U>procedure+:</U> <B>with-output-to-port</B> <I>output-port thunk</I>
+<DD><A NAME="IDX1672"></A>
+<DT><U>procedure+:</U> <B>with-notification-output-port</B> <I>output-port thunk</I>
+<DD><A NAME="IDX1673"></A>
+<DT><U>procedure+:</U> <B>with-trace-output-port</B> <I>output-port thunk</I>
+<DD><A NAME="IDX1674"></A>
+<DT><U>procedure+:</U> <B>with-interaction-i/o-port</B> <I>i/o-port thunk</I>
+<DD><VAR>Thunk</VAR> must be a procedure of no arguments.  Each of these
+procedures binds one of the standard ports to its first argument, calls
+<VAR>thunk</VAR> with no arguments, restores the port to its original value,
+and returns the result that was yielded by <VAR>thunk</VAR>.  This temporary
+binding is performed the same way as dynamic binding of a variable,
+including the behavior in the presence of continuations (see section <A HREF="scheme_3.html#SEC32">2.3 Dynamic Binding</A>).
+</P><P>
+
+<CODE>with-input-from-port</CODE> binds the current input port,
+<CODE>with-output-to-port</CODE> binds the current output port,
+<CODE>with-notification-output-port</CODE> binds the "notification" output
+port, <CODE>with-trace-output-port</CODE> binds the "trace" output port, and
+<CODE>with-interaction-i/o-port</CODE> binds the "interaction" I/O port.
+</DL>
+</P><P>
+
+<A NAME="IDX1675"></A>
+<DL>
+<DT><U>procedure+:</U> <B>set-current-input-port!</B> <I>input-port</I>
+<DD><A NAME="IDX1676"></A>
+<DT><U>procedure+:</U> <B>set-current-output-port!</B> <I>output-port</I>
+<DD><A NAME="IDX1677"></A>
+<DT><U>procedure+:</U> <B>set-notification-output-port!</B> <I>output-port</I>
+<DD><A NAME="IDX1678"></A>
+<DT><U>procedure+:</U> <B>set-trace-output-port!</B> <I>output-port</I>
+<DD><A NAME="IDX1679"></A>
+<DT><U>procedure+:</U> <B>set-interaction-i/o-port!</B> <I>i/o-port</I>
+<DD>Each of these procedures alters the binding of one of the standard ports
+and returns an unspecified value.  The binding that is modified
+corresponds to the name of the procedure.
+</DL>
+</P><P>
+
+<A NAME="IDX1680"></A>
+<DL>
+<DT><U>variable+:</U> <B>console-i/o-port</B>
+<DD><A NAME="IDX1681"></A>
+<A NAME="IDX1682"></A>
+<A NAME="IDX1683"></A>
+<A NAME="IDX1684"></A>
+<CODE>console-i/o-port</CODE> is an I/O port that communicates with the
+"console".  Under unix, the console is the controlling terminal of the
+Scheme process.  Under Windows and OS/2, the console is the window
+that is created when Scheme starts up.
+</P><P>
+
+This variable is rarely used; instead programs should use one of the
+standard ports defined above.  This variable should not be modified.
+</DL>
+</P><P>
+
+<A NAME="IDX1685"></A>
+<DL>
+<DT><U>procedure+:</U> <B>close-port</B> <I>port</I>
+<DD><A NAME="IDX1686"></A>
+Closes <VAR>port</VAR> and returns an unspecified value.  If <VAR>port</VAR> is a
+file port, the file is closed.
+</DL>
+</P><P>
+
+<A NAME="IDX1687"></A>
+<DL>
+<DT><U>procedure:</U> <B>close-input-port</B> <I>port</I>
+<DD>Closes <VAR>port</VAR> and returns an unspecified value.  <VAR>Port</VAR> must be
+an input port or an I/O port; if it is an I/O port, then only
+the input side of the port is closed.
+</DL>
+</P><P>
+
+<A NAME="IDX1688"></A>
+<DL>
+<DT><U>procedure:</U> <B>close-output-port</B> <I>port</I>
+<DD>Closes <VAR>port</VAR> and returns an unspecified value.  <VAR>Port</VAR> must be
+an output port or an I/O port; if it is an I/O port, then only
+the output side of the port is closed.
+</DL>
+</P><P>
+
+<A NAME="File Ports"></A>
+<HR SIZE="6">
+<A NAME="SEC132"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC131"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC133"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 14.2 File Ports </H2>
+<!--docid::SEC132::-->
+<P>
+
+<A NAME="IDX1689"></A>
+<A NAME="IDX1690"></A>
+<A NAME="IDX1691"></A>
+<A NAME="IDX1692"></A>
+<A NAME="IDX1693"></A>
+Before Scheme can access a file for reading or writing, it is necessary
+to open a port to the file.  This section describes procedures used to
+open ports to files.  Such ports are closed (like any other port) by
+<CODE>close-port</CODE>.  File ports are automatically closed if and when they
+are reclaimed by the garbage collector.
+</P><P>
+
+<A NAME="IDX1694"></A>
+Before opening a file for input or output, by whatever method, the
+<VAR>filename</VAR> argument is converted to canonical form by calling the
+procedure <CODE>merge-pathnames</CODE> with <VAR>filename</VAR> as its sole
+argument.  Thus, <VAR>filename</VAR> can be either a string or a pathname,
+and it is merged with the current pathname defaults to produce the
+pathname that is then opened.
+</P><P>
+
+<A NAME="IDX1695"></A>
+<A NAME="IDX1696"></A>
+Any file can be opened in one of two modes, <EM>normal</EM> or
+<EM>binary</EM>.  Normal mode is for accessing text files, and binary mode
+is for accessing other files.  Unix does not distinguish these modes,
+but Windows and OS/2 do: in normal mode, their file ports perform
+<EM>newline translation</EM>, mapping between the carriage-return/linefeed
+sequence that terminates text lines in files, and the <CODE>#\newline</CODE>
+that terminates lines in Scheme.  In binary mode, such ports do not
+perform newline translation.  Unless otherwise mentioned, the procedures
+in this section open files in normal mode.
+</P><P>
+
+<A NAME="IDX1697"></A>
+<DL>
+<DT><U>procedure:</U> <B>open-input-file</B> <I>filename</I>
+<DD><A NAME="IDX1698"></A>
+Takes a filename referring to an existing file and returns an input port
+capable of delivering characters from the file.  If the file cannot be
+opened, an error of type <CODE>condition-type:file-operation-error</CODE> is
+signalled.
+<A NAME="IDX1699"></A>
+</DL>
+</P><P>
+
+<A NAME="IDX1700"></A>
+<DL>
+<DT><U>procedure:</U> <B>open-output-file</B> <I>filename [append?]</I>
+<DD><A NAME="IDX1701"></A>
+Takes a filename referring to an output file to be created and returns
+an output port capable of writing characters to a new file by that name.
+If the file cannot be opened, an error of type
+<CODE>condition-type:file-operation-error</CODE> is signalled.
+<A NAME="IDX1702"></A>
+</P><P>
+
+<A NAME="IDX1703"></A>
+The optional argument <VAR>append?</VAR> is an MIT Scheme extension.  If
+<VAR>append?</VAR> is given and not <CODE>#f</CODE>, the file is opened in
+<EM>append</EM> mode.  In this mode, the contents of the file are not
+overwritten; instead any characters written to the file are appended to
+the end of the existing contents.  If the file does not exist, append
+mode creates the file and writes to it in the normal way.
+</DL>
+</P><P>
+
+<A NAME="IDX1704"></A>
+<DL>
+<DT><U>procedure+:</U> <B>open-i/o-file</B> <I>filename</I>
+<DD><A NAME="IDX1705"></A>
+Takes a filename referring to an existing file and returns an I/O
+port capable of both reading and writing the file.  If the file cannot
+be opened, an error of type <CODE>condition-type:file-operation-error</CODE>
+is signalled.
+<A NAME="IDX1706"></A>
+</P><P>
+
+This procedure is often used to open special files.  For example, under
+unix this procedure can be used to open terminal device files, PTY
+device files, and named pipes.
+</DL>
+</P><P>
+
+<A NAME="IDX1707"></A>
+<DL>
+<DT><U>procedure+:</U> <B>open-binary-input-file</B> <I>filename</I>
+<DD><A NAME="IDX1708"></A>
+<DT><U>procedure+:</U> <B>open-binary-output-file</B> <I>filename [append?]</I>
+<DD><A NAME="IDX1709"></A>
+<DT><U>procedure+:</U> <B>open-binary-i/o-file</B> <I>filename</I>
+<DD>These procedures open files in binary mode.  In all other respects they
+are identical to <CODE>open-input-file</CODE>, <CODE>open-output-file</CODE>, and
+<CODE>open-i/o-file</CODE>, respectively.
+</DL>
+</P><P>
+
+<A NAME="IDX1710"></A>
+<DL>
+<DT><U>procedure+:</U> <B>close-all-open-files</B>
+<DD><A NAME="IDX1711"></A>
+This procedure closes all file ports that are open at the time that it
+is called, and returns an unspecified value.
+</DL>
+</P><P>
+
+<A NAME="IDX1712"></A>
+<DL>
+<DT><U>procedure:</U> <B>call-with-input-file</B> <I>filename procedure</I>
+<DD><A NAME="IDX1713"></A>
+<DT><U>procedure:</U> <B>call-with-output-file</B> <I>filename procedure</I>
+<DD>These procedures call <VAR>procedure</VAR> with one argument: the port
+obtained by opening the named file for input or output, respectively.
+If the file cannot be opened, an error of type
+<CODE>condition-type:file-operation-error</CODE> is signalled.  If
+<VAR>procedure</VAR> returns, then the port is closed automatically and the
+value yielded by <VAR>procedure</VAR> is returned.  If <VAR>procedure</VAR> does
+not return, then the port will not be closed automatically unless it is
+reclaimed by the garbage collector.<A NAME="DOCF15" HREF="scheme_fot.html#FOOT15">(15)</A>
+</DL>
+</P><P>
+
+<A NAME="IDX1714"></A>
+<DL>
+<DT><U>procedure+:</U> <B>call-with-binary-input-file</B> <I>filename procedure</I>
+<DD><A NAME="IDX1715"></A>
+<DT><U>procedure+:</U> <B>call-with-binary-output-file</B> <I>filename procedure</I>
+<DD>These procedures open files in binary mode.  In all other respects they
+are identical to <CODE>call-with-input-file</CODE> and
+<CODE>call-with-output-file</CODE>, respectively.
+</DL>
+</P><P>
+
+<A NAME="IDX1716"></A>
+<DL>
+<DT><U>procedure:</U> <B>with-input-from-file</B> <I>filename thunk</I>
+<DD><A NAME="IDX1717"></A>
+<DT><U>procedure:</U> <B>with-output-to-file</B> <I>filename thunk</I>
+<DD><A NAME="IDX1718"></A>
+<A NAME="IDX1719"></A>
+<A NAME="IDX1720"></A>
+<A NAME="IDX1721"></A>
+<VAR>Thunk</VAR> must be a procedure of no arguments.
+The file is opened for input or output, an input or output port
+connected to it is made the default value returned by
+<CODE>current-input-port</CODE> or <CODE>current-output-port</CODE>, and the
+<VAR>thunk</VAR> is called with no arguments.  When the <VAR>thunk</VAR> returns,
+the port is closed and the previous default is restored.
+<CODE>with-input-from-file</CODE> and <CODE>with-output-to-file</CODE> return the
+value yielded by <VAR>thunk</VAR>.  If an escape procedure is used to escape
+from the continuation of these procedures, their behavior is
+implementation-dependent; in that situation MIT Scheme leaves the files
+open.
+</DL>
+</P><P>
+
+<A NAME="IDX1722"></A>
+<DL>
+<DT><U>procedure+:</U> <B>with-input-from-binary-file</B> <I>filename thunk</I>
+<DD><A NAME="IDX1723"></A>
+<DT><U>procedure+:</U> <B>with-output-to-binary-file</B> <I>filename thunk</I>
+<DD>These procedures open files in binary mode.  In all other respects they
+are identical to <CODE>with-input-from-file</CODE> and
+<CODE>with-output-to-file</CODE>, respectively.
+</DL>
+</P><P>
+
+<A NAME="String Ports"></A>
+<HR SIZE="6">
+<A NAME="SEC133"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC132"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC134"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 14.3 String Ports </H2>
+<!--docid::SEC133::-->
+<P>
+
+<A NAME="IDX1724"></A>
+<A NAME="IDX1725"></A>
+<A NAME="IDX1726"></A>
+<A NAME="IDX1727"></A>
+<A NAME="IDX1728"></A>
+This section describes the simplest kinds of ports: input ports that
+read their input from given strings, and output ports that accumulate
+their output and return it as a string.  It also describes
+"truncating" output ports, which can limit the length of the resulting
+string to a given value.
+</P><P>
+
+<A NAME="IDX1729"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-&#62;input-port</B> <I>string [start [end]]</I>
+<DD><A NAME="IDX1730"></A>
+<A NAME="IDX1731"></A>
+Returns a new string port that delivers characters from <VAR>string</VAR>.
+The optional arguments <VAR>start</VAR> and <VAR>end</VAR> may be used to specify
+that the string port delivers characters from a substring of
+<VAR>string</VAR>; if not given, <VAR>start</VAR> defaults to <CODE>0</CODE> and
+<VAR>end</VAR> defaults to <CODE>(string-length <VAR>string</VAR>)</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1732"></A>
+<DL>
+<DT><U>procedure+:</U> <B>with-input-from-string</B> <I>string thunk</I>
+<DD><A NAME="IDX1733"></A>
+<VAR>Thunk</VAR> must be a procedure of no arguments.
+<CODE>with-input-from-string</CODE> creates a new input port that reads from
+<VAR>string</VAR>, makes that port the current input port, and calls
+<VAR>thunk</VAR>.  When <VAR>thunk</VAR> returns, <CODE>with-input-from-string</CODE>
+restores the previous current input port and returns the result yielded
+by <VAR>thunk</VAR>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(with-input-from-string "(a b c) (d e f)" read)  =>  (a b c)
+</pre></td></tr></table></P><P>
+
+Note: this procedure is equivalent to:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(with-input-from-port (string-&#62;input-port <VAR>string</VAR>) <VAR>thunk</VAR>)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1734"></A>
+<DL>
+<DT><U>procedure+:</U> <B>with-string-output-port</B> <I>procedure</I>
+<DD><VAR>Procedure</VAR> is called with one argument, an output port.  The value
+yielded by <VAR>procedure</VAR> is ignored.  When <VAR>procedure</VAR> returns,
+<CODE>with-string-output-port</CODE> returns the port's accumulated output as
+a newly allocated string.
+</DL>
+</P><P>
+
+<A NAME="IDX1735"></A>
+<DL>
+<DT><U>procedure+:</U> <B>with-output-to-string</B> <I>thunk</I>
+<DD><A NAME="IDX1736"></A>
+<A NAME="IDX1737"></A>
+<A NAME="IDX1738"></A>
+<VAR>Thunk</VAR> must be a procedure of no arguments.
+<CODE>with-output-to-string</CODE> creates a new output port that accumulates
+output, makes that port the default value returned by
+<CODE>current-output-port</CODE>, and calls <VAR>thunk</VAR> with no arguments.
+When <VAR>thunk</VAR> returns, <CODE>with-output-to-string</CODE> restores the
+previous default and returns the accumulated output as a newly allocated
+string.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(with-output-to-string
+  (lambda ()
+    (write 'abc)))                    =>  "abc"
+</pre></td></tr></table></P><P>
+
+Note: this procedure is equivalent to:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(with-string-output-port
+ (lambda (port)
+   (with-output-to-port port <VAR>thunk</VAR>)))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1739"></A>
+<DL>
+<DT><U>procedure+:</U> <B>with-output-to-truncated-string</B> <I>k thunk</I>
+<DD>Similar to <CODE>with-output-to-string</CODE>, except that the output is
+limited to <VAR>k</VAR> characters.  If <VAR>thunk</VAR> attempts to write more
+than <VAR>k</VAR> characters, it will be aborted by invoking an escape
+procedure that returns from <CODE>with-output-to-truncated-string</CODE>.
+</P><P>
+
+The value of this procedure is a pair; the car of the pair is <CODE>#t</CODE>
+if <VAR>thunk</VAR> attempted to write more than <VAR>k</VAR> characters, and
+<CODE>#f</CODE> otherwise.  The cdr of the pair is a newly allocated string
+containing the accumulated output.
+</P><P>
+
+This procedure is helpful for displaying circular lists, as shown in this
+example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define inf (list 'inf))
+(with-output-to-truncated-string 40
+  (lambda ()
+    (write inf)))                       =>  (#f . "(inf)")
+(set-cdr! inf inf)
+(with-output-to-truncated-string 40
+  (lambda ()
+    (write inf)))
+        =>  (#t . "(inf inf inf inf inf inf inf inf inf inf")
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1740"></A>
+<DL>
+<DT><U>procedure+:</U> <B>write-to-string</B> <I>object [k]</I>
+<DD>Writes <VAR>object</VAR> to a string output port, and returns the resulting
+newly allocated string.  If <VAR>k</VAR> is supplied and not <CODE>#f</CODE>, this
+procedure is equivalent to
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(with-output-to-truncated-string <VAR>k</VAR>
+  (lambda ()
+    (write <VAR>object</VAR>)))
+</pre></td></tr></table></P><P>
+
+otherwise it is equivalent to
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(with-output-to-string
+ (lambda ()
+   (write <VAR>object</VAR>)))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Input Procedures"></A>
+<HR SIZE="6">
+<A NAME="SEC134"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC133"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC135"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 14.4 Input Procedures </H2>
+<!--docid::SEC134::-->
+<P>
+
+This section describes the procedures that read input.  Input procedures
+can read either from the current input port or from a given port.
+Remember that to read from a file, you must first open a port to the
+file.
+</P><P>
+
+<A NAME="IDX1741"></A>
+Input ports can be divided into two types, called <EM>interactive</EM> and
+<EM>non-interactive</EM>.  Interactive input ports are ports that read
+input from a source that is time-dependent; for example, a port that
+reads input from a terminal or from another program.  Non-interactive
+input ports read input from a time-independent source, such as an
+ordinary file or a character string.
+</P><P>
+
+All optional arguments called <VAR>input-port</VAR>, if not supplied, default
+to the current input port.
+</P><P>
+
+<A NAME="IDX1742"></A>
+<DL>
+<DT><U>procedure:</U> <B>read-char</B> <I>[input-port]</I>
+<DD><A NAME="IDX1743"></A>
+Returns the next character available from <VAR>input-port</VAR>, updating
+<VAR>input-port</VAR> to point to the following character.  If no more
+characters are available, an end-of-file object is returned.
+</P><P>
+
+In MIT Scheme, if <VAR>input-port</VAR> is an interactive input port and no
+characters are immediately available, <CODE>read-char</CODE> will hang waiting
+for input, even if the port is in non-blocking mode.
+</DL>
+</P><P>
+
+<A NAME="IDX1744"></A>
+<DL>
+<DT><U>procedure:</U> <B>peek-char</B> <I>[input-port]</I>
+<DD>Returns the next character available from <VAR>input-port</VAR>,
+<EM>without</EM> updating <VAR>input-port</VAR> to point to the following
+character.  If no more characters are available, an end-of-file object
+is returned.<A NAME="DOCF16" HREF="scheme_fot.html#FOOT16">(16)</A>
+</P><P>
+
+In MIT Scheme, if <VAR>input-port</VAR> is an interactive input port and no
+characters are immediately available, <CODE>peek-char</CODE> will hang waiting
+for input, even if the port is in non-blocking mode.
+</DL>
+</P><P>
+
+<A NAME="IDX1745"></A>
+<DL>
+<DT><U>procedure:</U> <B>char-ready?</B> <I>[input-port]</I>
+<DD><A NAME="IDX1746"></A>
+Returns <CODE>#t</CODE> if a character is ready on <VAR>input-port</VAR> and
+returns <CODE>#f</CODE> otherwise.  If <CODE>char-ready?</CODE> returns <CODE>#t</CODE>
+then the next <CODE>read-char</CODE> operation on <VAR>input-port</VAR> is
+guaranteed not to hang.  If <VAR>input-port</VAR> is a file port at end of
+file then <CODE>char-ready?</CODE> returns
+<CODE>#t</CODE>.<A NAME="DOCF17" HREF="scheme_fot.html#FOOT17">(17)</A>
+</DL>
+</P><P>
+
+<A NAME="IDX1747"></A>
+<DL>
+<DT><U>procedure:</U> <B>read</B> <I>[input-port]</I>
+<DD><A NAME="IDX1748"></A>
+<A NAME="IDX1749"></A>
+<A NAME="IDX1750"></A>
+Converts external representations of Scheme objects into the objects
+themselves.  <CODE>read</CODE> returns the next object parsable from
+<VAR>input-port</VAR>, updating <VAR>input-port</VAR> to point to the first
+character past the end of the written representation of the object.  If
+an end of file is encountered in the input before any characters are
+found that can begin an object, <CODE>read</CODE> returns an end-of-file
+object.  The <VAR>input-port</VAR> remains open, and further attempts to read
+will also return an end-of-file object.  If an end of file is
+encountered after the beginning of an object's written representation,
+but the written representation is incomplete and therefore not parsable,
+an error is signalled.
+</DL>
+</P><P>
+
+<A NAME="IDX1751"></A>
+<DL>
+<DT><U>procedure:</U> <B>eof-object?</B> <I>object</I>
+<DD><A NAME="IDX1752"></A>
+<A NAME="IDX1753"></A>
+<A NAME="IDX1754"></A>
+<A NAME="IDX1755"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is an end-of-file object; otherwise
+returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1756"></A>
+<DL>
+<DT><U>procedure+:</U> <B>read-char-no-hang</B> <I>[input-port]</I>
+<DD>If <VAR>input-port</VAR> can deliver a character without blocking, this
+procedure acts exactly like <CODE>read-char</CODE>, immediately returning that
+character.  Otherwise, <CODE>#f</CODE> is returned, unless <VAR>input-port</VAR> is
+a file port at end of file, in which case an end-of-file object is
+returned.  In no case will this procedure block waiting for input.
+</DL>
+</P><P>
+
+<A NAME="IDX1757"></A>
+<DL>
+<DT><U>procedure+:</U> <B>read-string</B> <I>char-set [input-port]</I>
+<DD><A NAME="IDX1758"></A>
+Reads characters from <VAR>input-port</VAR> until it finds a terminating
+character that is a member of <VAR>char-set</VAR> (see section <A HREF="scheme_6.html#SEC60">5.6 Character Sets</A>) or
+encounters end of file.  The port is updated to point to the terminating
+character, or to end of file if no terminating character was found.
+<CODE>read-string</CODE> returns the characters, up to but excluding the
+terminating character, as a newly allocated string.
+</P><P>
+
+This procedure ignores the blocking mode of the port, blocking
+unconditionally until it sees either a delimiter or eof of file.  If end
+of file is encountered before any characters are read, an end-of-file
+object is returned.
+</P><P>
+
+<A NAME="IDX1759"></A>
+On many input ports, this operation is significantly faster than the
+following equivalent code using <CODE>peek-char</CODE> and <CODE>read-char</CODE>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (read-string char-set input-port)
+  (let ((char (peek-char input-port)))
+    (if (eof-object? char)
+        char
+        (list-&#62;string
+         (let loop ((char char))
+           (if (or (eof-object? char)
+                   (char-set-member? char-set char))
+               '()
+               (begin
+                 (read-char input-port)
+                 (cons char
+                       (loop (peek-char input-port))))))))))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1760"></A>
+<DL>
+<DT><U>procedure+:</U> <B>read-line</B> <I>[input-port]</I>
+<DD><CODE>read-line</CODE> reads a single line of text from <VAR>input-port</VAR>, and
+returns that line as a newly allocated string.  The <CODE>#\newline</CODE>
+terminating the line, if any, is discarded and does not appear in the
+returned string.
+</P><P>
+
+This procedure ignores the blocking mode of the port, blocking
+unconditionally until it has read an entire line.  If end of file is
+encountered before any characters are read, an end-of-file object is
+returned.
+</DL>
+</P><P>
+
+<A NAME="IDX1761"></A>
+<DL>
+<DT><U>procedure+:</U> <B>read-string!</B> <I>string [input-port]</I>
+<DD><A NAME="IDX1762"></A>
+<DT><U>procedure+:</U> <B>read-substring!</B> <I>string start end [input-port]</I>
+<DD><CODE>read-string!</CODE> and <CODE>read-substring!</CODE> fill the specified region
+of <VAR>string</VAR> with characters read from <VAR>input-port</VAR> until the
+region is full or else there are no more characters available from the
+port.  For <CODE>read-string!</CODE>, the region is all of <VAR>string</VAR>, and
+for <CODE>read-substring!</CODE>, the region is that part of <VAR>string</VAR>
+specified by <VAR>start</VAR> and <VAR>end</VAR>.
+</P><P>
+
+The returned value is the number of characters filled into the region.
+However, there are several interesting cases to consider:
+</P><P>
+
+<UL>
+<LI>
+If <CODE>read-string!</CODE> (<CODE>read-substring!</CODE>) is called when
+<VAR>input-port</VAR> is at "end-of-file", then the returned value is
+<CODE>0</CODE>.  Note that "end-of-file" can mean a file port that is at the
+file's end, a string port that is at the string's end, or any other port
+that will never produce more characters.
+<P>
+
+<LI>
+If <VAR>input-port</VAR> is an interactive port (e.g. a terminal), and one
+or more characters are immediately available, the region is filled using
+the available characters.  The procedure then returns immediately,
+without waiting for further characters, even if the number of available
+characters is less than the size of the region.  The returned value is
+the number of characters actually filled in.
+<P>
+
+<LI>
+If <VAR>input-port</VAR> is an interactive port and no characters are
+immediately available, the result of the operation depends on the
+blocking mode of the port.  If the port is in non-blocking mode,
+<CODE>read-string!</CODE> (<CODE>read-substring!</CODE>) immediately returns the
+value <CODE>#f</CODE>.  Otherwise, the operation blocks until a character is
+available.  As soon as at least one character is available, the region
+is filled using the available characters.  The procedure then returns
+immediately, without waiting for further characters, even if the number
+of available characters is less than the size of the region.  The
+returned value is the number of characters actually filled in.
+</UL>
+<P>
+
+The importance of <CODE>read-string!</CODE> and <CODE>read-substring!</CODE> are
+that they are both flexible and extremely fast, especially for large
+amounts of data.
+</DL>
+</P><P>
+
+The following variables may be dynamically bound to change the behavior
+of the <CODE>read</CODE> procedure.
+</P><P>
+
+<A NAME="IDX1763"></A>
+<DL>
+<DT><U>variable+:</U> <B>*parser-radix*</B>
+<DD>This variable defines the radix used by the reader when it parses
+numbers.  This is similar to passing a radix argument to
+<CODE>string-&#62;number</CODE>.  The value of this variable must be one of
+<CODE>2</CODE>, <CODE>8</CODE>, <CODE>10</CODE>, or <CODE>16</CODE>; any other value is ignored,
+and the reader uses radix <CODE>10</CODE>.
+</P><P>
+
+Note that much of the number syntax is invalid for radixes other than
+<CODE>10</CODE>.  The reader detects cases where such invalid syntax is used
+and signals an error.  However, problems can still occur when
+<CODE>*parser-radix*</CODE> is set to <CODE>16</CODE>, because syntax that normally
+denotes symbols can now denote numbers (e.g. <CODE>abc</CODE>).  Because of
+this, it is usually undesirable to set this variable to anything other
+than the default.
+</P><P>
+
+The default value of this variable is <CODE>10</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1764"></A>
+<DL>
+<DT><U>variable+:</U> <B>*parser-canonicalize-symbols?*</B>
+<DD>This variable controls how the parser handles case-sensitivity of
+symbols.  If it is bound to its default value of <CODE>#t</CODE>, symbols read
+by the parser are converted to lower case before being interned.
+Otherwise, symbols are interned without case conversion.
+</P><P>
+
+In general, it is a bad idea to use this feature, as it doesn't really
+make Scheme case-sensitive, and therefore can break features of the
+Scheme runtime that depend on case-insensitive symbols.
+</DL>
+</P><P>
+
+<A NAME="Output Procedures"></A>
+<HR SIZE="6">
+<A NAME="SEC135"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC134"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC136"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 14.5 Output Procedures </H2>
+<!--docid::SEC135::-->
+<P>
+
+<A NAME="IDX1765"></A>
+<A NAME="IDX1766"></A>
+Output ports may or may not support <EM>buffering</EM> of output, in which
+output characters are collected together in a buffer and then sent to
+the output device all at once.  (Most of the output ports implemented by
+the runtime system support buffering.)  Sending all of the characters in
+the buffer to the output device is called <EM>flushing</EM> the buffer.  In
+general, output procedures do not flush the buffer of an output port
+unless the buffer is full.
+</P><P>
+
+<A NAME="IDX1767"></A>
+<A NAME="IDX1768"></A>
+However, the standard output procedures described in this section
+perform what is called <EM>discretionary</EM> flushing of the buffer.
+Discretionary output flushing works as follows.  After a procedure
+performs its output (writing characters to the output buffer), it checks
+to see if the port implements an operation called
+<CODE>discretionary-flush-output</CODE>.  If so, then that operation is
+invoked to flush the buffer.  At present, only the console port defines
+<CODE>discretionary-flush-output</CODE>; this is used to guarantee that output
+to the console appears immediately after it is written, without
+requiring calls to <CODE>flush-output</CODE>.
+</P><P>
+
+All optional arguments called <VAR>output-port</VAR>, if not supplied,
+default to the current output port.
+</P><P>
+
+<A NAME="IDX1769"></A>
+<DL>
+<DT><U>procedure:</U> <B>write-char</B> <I>char [output-port]</I>
+<DD><A NAME="IDX1770"></A>
+Writes <VAR>char</VAR> (the character itself, not a written representation of
+the character) to <VAR>output-port</VAR>, performs discretionary output
+flushing, and returns an unspecified value.
+</DL>
+</P><P>
+
+<A NAME="IDX1771"></A>
+<DL>
+<DT><U>procedure+:</U> <B>write-string</B> <I>string [output-port]</I>
+<DD><A NAME="IDX1772"></A>
+Writes <VAR>string</VAR> to <VAR>output-port</VAR>, performs discretionary output
+flushing, and returns an unspecified value.  This is equivalent to
+writing the contents of <VAR>string</VAR>, one character at a time using
+<CODE>write-char</CODE>, except that it is usually much faster.
+</DL>
+</P><P>
+
+<A NAME="IDX1773"></A>
+<DL>
+<DT><U>procedure+:</U> <B>write-substring</B> <I>string start end [output-port]</I>
+<DD><A NAME="IDX1774"></A>
+Writes the substring defined by <VAR>string</VAR>, <VAR>start</VAR>, and <VAR>end</VAR>
+to <VAR>output-port</VAR>, performs discretionary output flushing, and
+returns an unspecified value.  This is equivalent to writing the
+contents of the substring, one character at a time using
+<CODE>write-char</CODE>, except that it is usually much faster.
+</DL>
+</P><P>
+
+<A NAME="IDX1775"></A>
+<DL>
+<DT><U>procedure:</U> <B>write</B> <I>object [output-port]</I>
+<DD><A NAME="IDX1776"></A>
+Writes a written representation of <VAR>object</VAR> to <VAR>output-port</VAR>,
+and returns an unspecified value.  If <VAR>object</VAR> has a standard
+external representation, then the written representation generated by
+<CODE>write</CODE> shall be parsable by <CODE>read</CODE> into an equivalent object.
+Thus strings that appear in the written representation are enclosed in
+doublequotes, and within those strings backslash and doublequote are
+escaped by backslashes.  <CODE>write</CODE> performs discretionary output
+flushing and returns an unspecified value.
+</DL>
+</P><P>
+
+<A NAME="IDX1777"></A>
+<DL>
+<DT><U>procedure:</U> <B>display</B> <I>object [output-port]</I>
+<DD><A NAME="IDX1778"></A>
+<A NAME="IDX1779"></A>
+Writes a representation of <VAR>object</VAR> to <VAR>output-port</VAR>.  Strings
+appear in the written representation as if written by
+<CODE>write-string</CODE> instead of by <CODE>write</CODE>.  Character objects
+appear in the representation as if written by <CODE>write-char</CODE> instead
+of by <CODE>write</CODE>.  <CODE>display</CODE> performs discretionary output
+flushing and returns an unspecified value.<A NAME="DOCF18" HREF="scheme_fot.html#FOOT18">(18)</A>
+</DL>
+</P><P>
+
+<A NAME="IDX1780"></A>
+<DL>
+<DT><U>procedure:</U> <B>newline</B> <I>[output-port]</I>
+<DD><A NAME="IDX1781"></A>
+Writes an end-of-line to <VAR>output-port</VAR>, performs discretionary
+output flushing, and returns an unspecified value.  Equivalent to
+<CODE>(write-char #\newline <VAR>output-port</VAR>)</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1782"></A>
+<DL>
+<DT><U>procedure+:</U> <B>fresh-line</B> <I>[output-port]</I>
+<DD>Most output ports are able to tell whether or not they are at the
+beginning of a line of output.  If <VAR>output-port</VAR> is such a port,
+this procedure writes an end-of-line to the port only if the port is not
+already at the beginning of a line.  If <VAR>output-port</VAR> is not such a
+port, this procedure is identical to <CODE>newline</CODE>.  In either case,
+<CODE>fresh-line</CODE> performs discretionary output flushing and returns an
+unspecified value.
+</DL>
+</P><P>
+
+<A NAME="IDX1783"></A>
+<DL>
+<DT><U>procedure+:</U> <B>write-line</B> <I>object [output-port]</I>
+<DD>Like <CODE>write</CODE>, except that it writes an end-of-line to
+<VAR>output-port</VAR> after writing <VAR>object</VAR>'s representation.  This
+procedure performs discretionary output flushing and returns an
+unspecified value.
+</DL>
+</P><P>
+
+<A NAME="IDX1784"></A>
+<DL>
+<DT><U>procedure+:</U> <B>flush-output</B> <I>[output-port]</I>
+<DD>If <VAR>output-port</VAR> is buffered, this causes the contents of its buffer
+to be written to the output device.  Otherwise it has no effect.
+Returns an unspecified value.
+</DL>
+</P><P>
+
+<A NAME="IDX1785"></A>
+<DL>
+<DT><U>procedure+:</U> <B>beep</B> <I>[output-port]</I>
+<DD><A NAME="IDX1786"></A>
+<A NAME="IDX1787"></A>
+<A NAME="IDX1788"></A>
+Performs a "beep" operation on <VAR>output-port</VAR>, performs
+discretionary output flushing, and returns an unspecified value.  On the
+console port, this usually causes the console bell to beep, but more
+sophisticated interactive ports may take other actions, such as flashing
+the screen.  On most output ports, e.g. file and string output ports,
+this does nothing.
+</DL>
+</P><P>
+
+<A NAME="IDX1789"></A>
+<DL>
+<DT><U>procedure+:</U> <B>clear</B> <I>[output-port]</I>
+<DD><A NAME="IDX1790"></A>
+<A NAME="IDX1791"></A>
+<A NAME="IDX1792"></A>
+<A NAME="IDX1793"></A>
+<A NAME="IDX1794"></A>
+"Clears the screen" of <VAR>output-port</VAR>, performs discretionary
+output flushing, and returns an unspecified value.  On a terminal or
+window, this has a well-defined effect.  On other output ports, e.g.
+file and string output ports, this does nothing.
+</DL>
+</P><P>
+
+<A NAME="IDX1795"></A>
+<DL>
+<DT><U>procedure+:</U> <B>pp</B> <I>object [output-port [as-code?]]</I>
+<DD><A NAME="IDX1796"></A>
+<CODE>pp</CODE> prints <VAR>object</VAR> in a visually appealing and structurally
+revealing manner on <VAR>output-port</VAR>.  If object is a procedure,
+<CODE>pp</CODE> attempts to print the source text.  If the optional argument
+<VAR>as-code?</VAR> is true, <CODE>pp</CODE> prints lists as Scheme code, providing
+appropriate indentation; by default this argument is false.  <CODE>pp</CODE>
+performs discretionary output flushing and returns an unspecified value.
+</DL>
+</P><P>
+
+The following variables may be dynamically bound to change the behavior
+of the <CODE>write</CODE> and <CODE>display</CODE> procedures.
+</P><P>
+
+<A NAME="IDX1797"></A>
+<DL>
+<DT><U>variable+:</U> <B>*unparser-radix*</B>
+<DD>This variable specifies the default radix used to print numbers.  Its
+value must be one of the exact integers <CODE>2</CODE>, <CODE>8</CODE>, <CODE>10</CODE>,
+or <CODE>16</CODE>; the default is <CODE>10</CODE>.  If <CODE>*unparser-radix*</CODE> is
+not <CODE>10</CODE>, numbers are prefixed to indicate their radix.
+</DL>
+</P><P>
+
+<A NAME="IDX1798"></A>
+<DL>
+<DT><U>variable+:</U> <B>*unparser-list-breadth-limit*</B>
+<DD>This variable specifies a limit on the length of the printed
+representation of a list or vector; for example, if the limit is
+<CODE>4</CODE>, only the first four elements of any list are printed, followed
+by ellipses to indicate any additional elements.  The value of this
+variable must be an exact non-negative integer, or <CODE>#f</CODE> meaning no
+limit; the default is <CODE>#f</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(fluid-let ((*unparser-list-breadth-limit* 4))
+  (write-to-string '(a b c d)))
+                                => "(a b c d)"
+(fluid-let ((*unparser-list-breadth-limit* 4))
+  (write-to-string '(a b c d e)))
+                                => "(a b c d ...)"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1799"></A>
+<DL>
+<DT><U>variable+:</U> <B>*unparser-list-depth-limit*</B>
+<DD>This variable specifies a limit on the nesting of lists and vectors in
+the printed representation.  If lists (or vectors) are more deeply
+nested than the limit, the part of the representation that exceeds the
+limit is replaced by ellipses.  The value of this variable must be an
+exact non-negative integer, or <CODE>#f</CODE> meaning no limit; the default
+is <CODE>#f</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(fluid-let ((*unparser-list-depth-limit* 4))
+  (write-to-string '((((a))) b c d)))
+                                => "((((a))) b c d)"
+(fluid-let ((*unparser-list-depth-limit* 4))
+  (write-to-string '(((((a)))) b c d)))
+                                => "((((...))) b c d)"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1800"></A>
+<DL>
+<DT><U>variable+:</U> <B>*unparser-string-length-limit*</B>
+<DD>This variable specifies a limit on the length of the printed
+representation of strings.  If a string's length exceeds this limit, the
+part of the printed representation for the characters exceeding the
+limit is replaced by ellipses.  The value of this variable must be an
+exact non-negative integer, or <CODE>#f</CODE> meaning no limit; the default
+is <CODE>#f</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(fluid-let ((*unparser-string-length-limit* 4))
+  (write-to-string "abcd"))
+                                => "\"abcd\""
+(fluid-let ((*unparser-string-length-limit* 4))
+  (write-to-string "abcde"))
+                                => "\"abcd...\""
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1801"></A>
+<DL>
+<DT><U>variable+:</U> <B>*unparse-with-maximum-readability?*</B>
+<DD>This variable, which takes a boolean value, tells the printer to use a
+special printed representation for objects that normally print in a form
+that cannot be recognized by <CODE>read</CODE>.  These objects are printed
+using the representation <CODE>#@<VAR>n</VAR></CODE>, where <VAR>n</VAR> is the result
+of calling <CODE>hash</CODE> on the object to be printed.  The reader
+recognizes this syntax, calling <CODE>unhash</CODE> on <VAR>n</VAR> to get back the
+original object.  Note that this printed representation can only be
+recognized by the Scheme program in which it was generated, because
+these hash numbers are different for each invocation of Scheme.
+</DL>
+</P><P>
+
+<A NAME="Format"></A>
+<HR SIZE="6">
+<A NAME="SEC136"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC135"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC137"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 14.6 Format </H2>
+<!--docid::SEC136::-->
+<P>
+
+The procedure <CODE>format</CODE> is very useful for producing nicely
+formatted text, producing good-looking messages, and so on.  MIT
+Scheme's implementation of <CODE>format</CODE> is similar to that of Common
+Lisp, except that Common Lisp defines many more
+directives.<A NAME="DOCF19" HREF="scheme_fot.html#FOOT19">(19)</A>
+</P><P>
+
+<A NAME="IDX1802"></A>
+<A NAME="IDX1803"></A>
+<CODE>format</CODE> is a run-time-loadable option.  To use it, execute
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(load-option 'format)
+</pre></td></tr></table><A NAME="IDX1804"></A>
+</P><P>
+
+once before calling it.
+</P><P>
+
+<A NAME="IDX1805"></A>
+<DL>
+<DT><U>procedure+:</U> <B>format</B> <I>destination control-string argument <small>...</small></I>
+<DD><A NAME="IDX1806"></A>
+<A NAME="IDX1807"></A>
+<A NAME="IDX1808"></A>
+Writes the characters of <VAR>control-string</VAR> to <VAR>destination</VAR>,
+except that a tilde (<CODE>~</CODE>) introduces a <EM>format directive</EM>.  The
+character after the tilde, possibly preceded by prefix parameters and
+modifiers, specifies what kind of formatting is desired.  Most
+directives use one or more <VAR>argument</VAR>s to create their output; the
+typical directive puts the next <VAR>argument</VAR> into the output,
+formatted in some special way.  It is an error if no argument remains
+for a directive requiring an argument, but it is not an error if one or
+more arguments remain unprocessed by a directive.
+</P><P>
+
+The output is sent to <VAR>destination</VAR>.  If <VAR>destination</VAR> is
+<CODE>#f</CODE>, a string is created that contains the output; this string is
+returned as the value of the call to <CODE>format</CODE>.  In all other cases
+<CODE>format</CODE> returns an unspecified value.  If <VAR>destination</VAR> is
+<CODE>#t</CODE>, the output is sent to the current output port.  Otherwise,
+<VAR>destination</VAR> must be an output port, and the output is sent there.
+</P><P>
+
+This procedure performs discretionary output flushing (see section <A HREF="scheme_15.html#SEC135">14.5 Output Procedures</A>).
+</P><P>
+
+A <CODE>format</CODE> directive consists of a tilde (<CODE>~</CODE>), optional
+prefix parameters separated by commas, optional colon (<CODE>:</CODE>) and
+at-sign (<CODE>@</CODE>) modifiers, and a single character indicating what
+kind of directive this is.  The alphabetic case of the directive
+character is ignored.  The prefix parameters are generally integers,
+notated as optionally signed decimal numbers.  If both the colon and
+at-sign modifiers are given, they may appear in either order.
+</P><P>
+
+<A NAME="IDX1809"></A>
+<A NAME="IDX1810"></A>
+In place of a prefix parameter to a directive, you can put the letter
+<SAMP>`V'</SAMP> (or <SAMP>`v'</SAMP>), which takes an <VAR>argument</VAR> for use as a
+parameter to the directive.  Normally this should be an exact integer.
+This feature allows variable-width fields and the like.  You can also
+use the character <SAMP>`#'</SAMP> in place of a parameter; it represents the
+number of arguments remaining to be processed.
+</P><P>
+
+It is an error to give a format directive more parameters than it is
+described here as accepting.  It is also an error to give colon or
+at-sign modifiers to a directive in a combination not specifically
+described here as being meaningful.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>~A</CODE>
+<DD>The next <VAR>argument</VAR>, which may be any object, is printed as if by
+<CODE>display</CODE>.  <CODE>~<VAR>mincol</VAR>A</CODE> inserts spaces on the right, if
+necessary, to make the width at least <VAR>mincol</VAR> columns.  The
+<CODE>@</CODE> modifier causes the spaces to be inserted on the left rather
+than the right.
+<P>
+
+<DT><CODE>~S</CODE>
+<DD>The next <VAR>argument</VAR>, which may be any object, is printed as if by
+<CODE>write</CODE>.  <CODE>~<VAR>mincol</VAR>S</CODE> inserts spaces on the right, if
+necessary, to make the width at least <VAR>mincol</VAR> columns.  The
+<CODE>@</CODE> modifier causes the spaces to be inserted on the left rather
+than the right.
+<P>
+
+<DT><CODE>~%</CODE>
+<DD>This outputs a <CODE>#\newline</CODE> character.  <CODE>~<VAR>n</VAR>%</CODE> outputs
+<VAR>n</VAR> newlines.  No <VAR>argument</VAR> is used.  Simply putting a newline
+in <VAR>control-string</VAR> would work, but <CODE>~%</CODE> is often used because
+it makes the control string look nicer in the middle of a program.
+<P>
+
+<DT><CODE>~~</CODE>
+<DD>This outputs a tilde.  <CODE>~<VAR>n</VAR>~</CODE> outputs <VAR>n</VAR> tildes.
+<P>
+
+<DT><CODE>~<VAR>newline</VAR></CODE>
+<DD>Tilde immediately followed by a newline ignores the newline and any
+following non-newline whitespace characters.  With an <CODE>@</CODE>, the
+newline is left in place, but any following whitespace is ignored.  This
+directive is typically used when <VAR>control-string</VAR> is too long to fit
+nicely into one line of the program:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (type-clash-error procedure arg spec actual)
+  (format
+   #t
+   "~%Procedure ~S~%requires its %A argument ~
+    to be of type ~S,~%but it was called with ~
+    an argument of type ~S.~%"
+   procedure arg spec actual))
+</pre></td></tr></table></P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(type-clash-error 'vector-ref
+                  "first"
+                  'integer
+                  'vector)
+
+prints
+
+Procedure vector-ref
+requires its first argument to be of type integer,
+but it was called with an argument of type vector.
+</pre></td></tr></table></P><P>
+
+Note that in this example newlines appear in the output only as
+specified by the <CODE>~%</CODE> directives; the actual newline characters in
+the control string are suppressed because each is preceded by a tilde.
+</DL>
+</DL>
+<P>
+
+<A NAME="Custom Output"></A>
+<HR SIZE="6">
+<A NAME="SEC137"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC136"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC138"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 14.7 Custom Output </H2>
+<!--docid::SEC137::-->
+<P>
+
+MIT Scheme provides hooks for specifying that certain kinds of objects
+have special written representations.  There are no restrictions on the
+written representations, but only a few kinds of objects may have custom
+representation specified for them, specifically: records
+(see section <A HREF="scheme_11.html#SEC99">10.4 Records</A>), vectors that have special tags in their zero-th
+elements (see section <A HREF="scheme_9.html#SEC83">8. Vectors</A>), and pairs that have special tags in their
+car fields (see section <A HREF="scheme_8.html#SEC73">7. Lists</A>).  There is a different procedure for
+specifying the written representation of each of these types.
+</P><P>
+
+<A NAME="IDX1811"></A>
+<DL>
+<DT><U>procedure+:</U> <B>set-record-type-unparser-method!</B> <I>record-type unparser-method</I>
+<DD>Changes the unparser method of the type represented by <VAR>record-type</VAR>
+to be <VAR>unparser-method</VAR>, and returns an unspecified value.
+Subsequently, when the unparser encounters a record of this type, it
+will invoke <VAR>unparser-method</VAR> to generate the written
+representation.
+</DL>
+</P><P>
+
+<A NAME="IDX1812"></A>
+<DL>
+<DT><U>procedure+:</U> <B>unparser/set-tagged-vector-method!</B> <I>tag unparser-method</I>
+<DD>Changes the unparser method of the vector type represented by <VAR>tag</VAR>
+to be <VAR>unparser-method</VAR>, and returns an unspecified value.
+Subsequently, when the unparser encounters a vector with <VAR>tag</VAR> as
+its zero-th element, it will invoke <VAR>unparser-method</VAR> to generate
+the written representation.
+</DL>
+</P><P>
+
+<A NAME="IDX1813"></A>
+<DL>
+<DT><U>procedure+:</U> <B>unparser/set-tagged-pair-method!</B> <I>tag unparser-method</I>
+<DD>Changes the unparser method of the pair type represented by <VAR>tag</VAR> to
+be <VAR>unparser-method</VAR>, and returns an unspecified value.
+Subsequently, when the unparser encounters a pair with <VAR>tag</VAR> in its
+car field, it will invoke <VAR>unparser-method</VAR> to generate the written
+representation.
+</DL>
+</P><P>
+
+<A NAME="IDX1814"></A>
+<A NAME="IDX1815"></A>
+An <EM>unparser method</EM> is a procedure that is invoked with two
+arguments: an unparser state and an object.  An unparser method
+generates a written representation for the object, writing it to the
+output port specified by the unparser state.  The value yielded by an
+unparser method is ignored.  Note that an unparser state is not an
+output port, rather it is an object that contains an output port as one
+of its components.  Application programs generally do not construct or
+examine unparser state objects, but just pass them along.
+</P><P>
+
+There are two ways to create an unparser method (which is then
+registered by one of the above procedures).  The first, and easiest, is
+to use <CODE>standard-unparser-method</CODE>.  The second is to define your
+own method using the procedure <CODE>with-current-unparser-state</CODE>.  We
+encourage the use of the first method, as it results in a more uniform
+appearance for objects.  Many predefined datatypes, for example
+procedures and environments, already have this appearance.
+</P><P>
+
+<A NAME="IDX1816"></A>
+<DL>
+<DT><U>procedure+:</U> <B>standard-unparser-method</B> <I>name procedure</I>
+<DD>Returns a standard unparser method.  <VAR>Name</VAR> may be any object, and
+is used as the name of the type with which the unparser method is
+associated; <VAR>name</VAR> is usually a symbol.  <VAR>Procedure</VAR> must be
+<CODE>#f</CODE> or a procedure of two arguments.
+</P><P>
+
+<A NAME="IDX1817"></A>
+If <VAR>procedure</VAR> is <CODE>#f</CODE>, the returned method generates an
+external representation of this form:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#[<VAR>name</VAR> <VAR>hash</VAR>]
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX1818"></A>
+<A NAME="IDX1819"></A>
+<A NAME="IDX1820"></A>
+Here <VAR>name</VAR> is the external representation of the argument
+<VAR>name</VAR>, as generated by <CODE>write</CODE>,<A NAME="DOCF20" HREF="scheme_fot.html#FOOT20">(20)</A> and <VAR>hash</VAR> is the external
+representation of an exact non-negative integer unique to the object
+being printed (specifically, it is the result of calling <CODE>hash</CODE> on
+the object).  Subsequently, the expression
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#@<VAR>hash</VAR>
+</pre></td></tr></table></P><P>
+
+is notation for the object.
+</P><P>
+
+If <VAR>procedure</VAR> is supplied, the returned method generates a slightly
+different external representation:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#[<VAR>name</VAR> <VAR>hash</VAR> <VAR>output</VAR>]
+</pre></td></tr></table></P><P>
+
+Here <VAR>name</VAR> and <VAR>hash</VAR> are as above, and <VAR>output</VAR> is the
+output generated by <VAR>procedure</VAR>.  The representation is constructed
+in three stages:
+</P><P>
+
+<OL>
+<LI>
+The first part of the format (up to <VAR>output</VAR>) is written to the
+output port specified by the unparser state.  This is <CODE>"#["</CODE>,
+<VAR>name</VAR>, <CODE>" "</CODE>, and <VAR>hash</VAR>.
+<P>
+
+<LI>
+<VAR>Procedure</VAR> is invoked on two arguments: the object and an output
+port.
+<P>
+
+<LI>
+The closing bracket is written to the output port.
+</OL>
+</DL>
+<P>
+
+The following procedure is useful for writing more general kinds of
+unparser methods.
+</P><P>
+
+<A NAME="IDX1821"></A>
+<DL>
+<DT><U>procedure+:</U> <B>with-current-unparser-state</B> <I>unparser-state procedure</I>
+<DD>This procedure calls <VAR>procedure</VAR> with one argument, the output port
+from <VAR>unparser-state</VAR>.  Additionally, it arranges for the remaining
+components of <VAR>unparser-state</VAR> to be given to the printer when they
+are needed.  The <VAR>procedure</VAR> generates some output by writing to the
+output port using the usual output operations, and the value yielded by
+<VAR>procedure</VAR> is returned from <CODE>with-current-unparser-state</CODE>.
+</P><P>
+
+The port passed to <VAR>procedure</VAR> should only be used within the
+dynamic extent of <VAR>procedure</VAR>.
+</DL>
+</P><P>
+
+<A NAME="Prompting"></A>
+<HR SIZE="6">
+<A NAME="SEC138"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC137"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC139"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 14.8 Prompting </H2>
+<!--docid::SEC138::-->
+<P>
+
+This section describes procedures that prompt the user for input.  Why
+should the programmer use these procedures when it is possible to do
+prompting using ordinary input and output procedures?  One reason is
+that the prompting procedures are more succinct.  However, a second and
+better reason is that the prompting procedures can be separately
+customized for each user interface, providing more natural interaction.
+The interfaces for Edwin and for GNU Emacs have already been customized
+in this fashion; because Edwin and Emacs are very similar editors, their
+customizations provide very similar behavior.
+</P><P>
+
+<A NAME="IDX1822"></A>
+Each of these procedure accepts an optional argument called <VAR>port</VAR>,
+which if given must be an I/O port.  If not given, this port
+defaults to the value of <CODE>(interaction-i/o-port)</CODE>; this is
+initially the console I/O port.
+</P><P>
+
+<A NAME="IDX1823"></A>
+<DL>
+<DT><U>procedure+:</U> <B>prompt-for-command-expression</B> <I>prompt [port]</I>
+<DD>Prompts the user for an expression that is to be executed as a command.
+This is the procedure called by the REP loop to read the user's
+expressions.
+</P><P>
+
+If <VAR>prompt</VAR> is a string, it is used verbatim as the prompt string.
+Otherwise, it must be a pair whose car is <CODE>standard</CODE> and whose cdr
+is a string; in this case the prompt string is formed by prepending to
+the string the current REP loop "level number" and a space.
+Also, a space is appended to the string, unless it already ends in a
+space or is an empty string.
+</P><P>
+
+The default behavior of this procedure is to print a fresh line, a
+newline, and the prompt string; flush the output buffer; then read an
+object and return it.
+</P><P>
+
+Under Edwin and Emacs, before the object is read, the interaction buffer
+is put into a mode that allows expressions to be edited and submitted
+for input using specific editor commands.  The first expression that is
+submitted is returned as the value of this procedure.
+</DL>
+</P><P>
+
+<A NAME="IDX1824"></A>
+<DL>
+<DT><U>procedure+:</U> <B>prompt-for-command-char</B> <I>prompt [port]</I>
+<DD><A NAME="IDX1825"></A>
+Prompts the user for a single character that is to be executed as a
+command; the returned character is guaranteed to satisfy
+<CODE>char-graphic?</CODE>.  If at all possible, the character is read from
+the user interface using a mode that reads the character as a single
+keystroke; in other words, it should not be necessary for the user to
+follow the character with a carriage return or something similar.
+</P><P>
+
+<A NAME="IDX1826"></A>
+<A NAME="IDX1827"></A>
+This is the procedure called by <CODE>debug</CODE> and <CODE>where</CODE> to read
+the user's commands.
+</P><P>
+
+If <VAR>prompt</VAR> is a string, it is used verbatim as the prompt string.
+Otherwise, it must be a pair whose car is <CODE>standard</CODE> and whose cdr
+is a string; in this case the prompt string is formed by prepending to
+the string the current REP loop "level number" and a space.
+Also, a space is appended to the string, unless it already ends in a
+space or is an empty string.
+</P><P>
+
+The default behavior of this procedure is to print a fresh line, a
+newline, and the prompt string; flush the output buffer; read a
+character in raw mode, echo that character, and return it.
+</P><P>
+
+Under Edwin and Emacs, instead of reading a character, the interaction
+buffer is put into a mode in which graphic characters submit themselves
+as input.  After this mode change, the first such character submitted is
+returned as the value of this procedure.
+</DL>
+</P><P>
+
+<A NAME="IDX1828"></A>
+<DL>
+<DT><U>procedure+:</U> <B>prompt-for-expression</B> <I>prompt [port]</I>
+<DD>Prompts the user for an expression.
+</P><P>
+
+The prompt string is formed by appending a colon and a space to
+<VAR>prompt</VAR>, unless <VAR>prompt</VAR> already ends in a space or is the null
+string.
+</P><P>
+
+The default behavior of this procedure is to print a fresh line, a
+newline, and the prompt string; flush the output buffer; then read an
+object and return it.
+</P><P>
+
+Under Edwin and Emacs, the expression is read in the minibuffer.
+</DL>
+</P><P>
+
+<A NAME="IDX1829"></A>
+<DL>
+<DT><U>procedure+:</U> <B>prompt-for-evaluated-expression</B> <I>prompt [environment [port]]</I>
+<DD>Prompts the user for an evaluated expression.  Calls
+<CODE>prompt-for-expression</CODE> to read an expression, then evaluates the
+expression using <VAR>environment</VAR>; if <VAR>environment</VAR> is not given,
+the REP loop environment is used.
+</DL>
+</P><P>
+
+<A NAME="IDX1830"></A>
+<DL>
+<DT><U>procedure+:</U> <B>prompt-for-confirmation</B> <I>prompt [port]</I>
+<DD>Prompts the user for confirmation.  The result yielded by this procedure
+is a boolean.
+</P><P>
+
+The prompt string is formed by appending the string <CODE>" (y or n)? "</CODE>
+to <VAR>prompt</VAR>, unless <VAR>prompt</VAR> already ends in a space or is the
+null string.
+</P><P>
+
+The default behavior of this procedure is to print a fresh line, a
+newline, and the prompt string; flush the output buffer; then read a
+character in raw mode.  If the character is <CODE>#\y</CODE>, <CODE>#\Y</CODE>, or
+<CODE>#\space</CODE>, the procedure returns <CODE>#t</CODE>; If the character is
+<CODE>#\n</CODE>, <CODE>#\N</CODE>, or <CODE>#\rubout</CODE>, the procedure returns
+<CODE>#f</CODE>.  Otherwise the prompt is repeated.
+</P><P>
+
+Under Edwin or Emacs, the confirmation is read in the minibuffer.
+</DL>
+</P><P>
+
+<A NAME="Port Primitives"></A>
+<HR SIZE="6">
+<A NAME="SEC139"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC138"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC140"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 14.9 Port Primitives </H2>
+<!--docid::SEC139::-->
+<P>
+
+This section describes the low-level operations that can be used to
+build and manipulate I/O ports.
+</P><P>
+
+The purpose of these operations is twofold: to allow programmers to
+construct new kinds of I/O ports, and to provide faster I/O
+operations than those supplied by the standard high level procedures.
+The latter is useful because the standard I/O operations provide
+defaulting and error checking, and sometimes other features, which are
+often unnecessary.  This interface provides the means to bypass such
+features, thus improving performance.
+</P><P>
+
+The abstract model of an I/O port, as implemented here, is a
+combination of a set of named operations and a state.  The state is an
+arbitrary object, the meaning of which is determined by the operations.
+The operations are defined by a mapping from names to procedures.
+</P><P>
+
+<A NAME="IDX1831"></A>
+The set of named operations is represented by an object called a
+<EM>port type</EM>.  A port type is constructed from a set of named
+operations, and is subsequently used to construct a port.  The port type
+completely specifies the behavior of the port.  Port types also support
+a simple form of inheritance, allowing you to create new ports that are
+similar to existing ports.
+</P><P>
+
+The port operations are divided into two classes:
+</P><P>
+
+<DL COMPACT>
+<DT>Standard operations
+<DD>There is a specific set of standard operations for input ports, and a
+different set for output ports.  Applications can assume that the
+standard input operations are implemented for all input ports, and
+likewise the standard output operations are implemented for all output
+ports.
+<A NAME="IDX1832"></A>
+<P>
+
+<DT>Custom operations
+<DD>Some ports support additional operations.  For example, ports that
+implement output to terminals (or windows) may define an operation named
+<CODE>y-size</CODE> that returns the height of the terminal in characters.
+Because only some ports will implement these operations, programs that
+use custom operations must test each port for their existence, and be
+prepared to deal with ports that do not implement them.
+<A NAME="IDX1833"></A>
+<A NAME="IDX1834"></A>
+</DL>
+<P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_15.html#SEC140">14.9.1 Port Types</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_15.html#SEC141">14.9.2 Constructors and Accessors for Ports</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_15.html#SEC142">14.9.3 Input Port Operations</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_15.html#SEC143">14.9.4 Output Port Operations</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_15.html#SEC144">14.9.5 Blocking Mode</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_15.html#SEC145">14.9.6 Terminal Mode</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Port Types"></A>
+<HR SIZE="6">
+<A NAME="SEC140"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC139"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC141"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC138"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC139"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 14.9.1 Port Types </H3>
+<!--docid::SEC140::-->
+<P>
+
+The procedures in this section provide means for constructing port types
+with standard and custom operations, and accessing their operations.
+</P><P>
+
+<A NAME="IDX1835"></A>
+<DL>
+<DT><U>procedure+:</U> <B>make-port-type</B> <I>operations port-type</I>
+<DD><A NAME="IDX1836"></A>
+Creates and returns a new port type.
+<VAR>Operations</VAR> must be a list; each element is a list of two elements,
+the name of the operation (a symbol) and the procedure that implements
+it.  <VAR>Port-type</VAR> is either <CODE>#f</CODE> or a port type; if it is a port
+type, any operations implemented by <VAR>port-type</VAR> but not specified in
+<VAR>operations</VAR> will be implemented by the resulting port type.
+</P><P>
+
+<VAR>Operations</VAR> need not contain definitions for all of the standard
+operations; the procedure will provide defaults for any standard
+operations that are not defined.  At a minimum, the following operations
+must be defined: for input ports, <CODE>read-char</CODE> and <CODE>peek-char</CODE>;
+for output ports, either <CODE>write-char</CODE> or <CODE>write-substring</CODE>.
+I/O ports must supply the minimum operations for both input and
+output.
+</P><P>
+
+If an operation in <VAR>operations</VAR> is defined to be <CODE>#f</CODE>, then the
+corresponding operation in <VAR>port-type</VAR> is <EM>not</EM> inherited.
+</P><P>
+
+If <CODE>read-char</CODE> is defined in <VAR>operations</VAR>, then any standard
+input operations defined in <VAR>port-type</VAR> are ignored.  Likewise, if
+<CODE>write-char</CODE> or <CODE>write-substring</CODE> is defined in
+<VAR>operations</VAR>, then any standard output operations defined in
+<VAR>port-type</VAR> are ignored.  This feature allows overriding the
+standard operations without having to enumerate them.
+</DL>
+</P><P>
+
+<A NAME="IDX1837"></A>
+<DL>
+<DT><U>procedure+:</U> <B>port-type?</B> <I>object</I>
+<DD><A NAME="IDX1838"></A>
+<DT><U>procedure+:</U> <B>input-port-type?</B> <I>object</I>
+<DD><A NAME="IDX1839"></A>
+<DT><U>procedure+:</U> <B>output-port-type?</B> <I>object</I>
+<DD><A NAME="IDX1840"></A>
+<DT><U>procedure+:</U> <B>i/o-port-type?</B> <I>object</I>
+<DD>These predicates return <CODE>#t</CODE> if <VAR>object</VAR> is a port type,
+input-port type, output-port type, or I/O-port type, respectively.
+Otherwise, they return <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1841"></A>
+<DL>
+<DT><U>procedure+:</U> <B>port-type/operations</B> <I>port-type</I>
+<DD>Returns a newly allocated list containing all of the operations
+implemented by <VAR>port-type</VAR>.  Each element of the list is a list of
+two elements -- the name and its associated operation.
+</DL>
+</P><P>
+
+<A NAME="IDX1842"></A>
+<DL>
+<DT><U>procedure+:</U> <B>port-type/operation-names</B> <I>port-type</I>
+<DD>Returns a newly allocated list whose elements are the names of the
+operations implemented by <VAR>port-type</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1843"></A>
+<DL>
+<DT><U>procedure+:</U> <B>port-type/operation</B> <I>port-type symbol</I>
+<DD>Returns the operation named <VAR>symbol</VAR> in <VAR>port-type</VAR>.  If
+<VAR>port-type</VAR> has no such operation, returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="Constructors and Accessors for Ports"></A>
+<HR SIZE="6">
+<A NAME="SEC141"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC140"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC142"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC138"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC139"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 14.9.2 Constructors and Accessors for Ports </H3>
+<!--docid::SEC141::-->
+<P>
+
+The procedures in this section provide means for constructing ports,
+accessing the type of a port, and manipulating the state of a port.
+</P><P>
+
+<A NAME="IDX1844"></A>
+<DL>
+<DT><U>procedure+:</U> <B>make-port</B> <I>port-type state</I>
+<DD>Returns a new port with type <VAR>port-type</VAR> and the given <VAR>state</VAR>.
+The port will be an input, output, or I/O port according to
+<VAR>port-type</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1845"></A>
+<DL>
+<DT><U>procedure+:</U> <B>port/type</B> <I>port</I>
+<DD>Returns the port type of <VAR>port</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1846"></A>
+<DL>
+<DT><U>procedure+:</U> <B>port/state</B> <I>port</I>
+<DD>Returns the state component of <VAR>port</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1847"></A>
+<DL>
+<DT><U>procedure+:</U> <B>set-port/state!</B> <I>port object</I>
+<DD>Changes the state component of <VAR>port</VAR> to be <VAR>object</VAR>.
+Returns an unspecified value.
+</DL>
+</P><P>
+
+<A NAME="IDX1848"></A>
+<DL>
+<DT><U>procedure+:</U> <B>port/operation</B> <I>port symbol</I>
+<DD>Equivalent to
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(port-type/operation (port/type <VAR>port</VAR>) <VAR>symbol</VAR>)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1849"></A>
+<DL>
+<DT><U>procedure+:</U> <B>port/operation-names</B> <I>port</I>
+<DD>Equivalent to
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(port-type/operation-names (port/type <VAR>port</VAR>))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1850"></A>
+<DL>
+<DT><U>procedure+:</U> <B>make-eof-object</B> <I>input-port</I>
+<DD><A NAME="IDX1851"></A>
+<A NAME="IDX1852"></A>
+<A NAME="IDX1853"></A>
+Returns an object that satisfies the predicate <CODE>eof-object?</CODE>.  This
+is sometimes useful when building input ports.
+</DL>
+</P><P>
+
+<A NAME="Input Port Operations"></A>
+<HR SIZE="6">
+<A NAME="SEC142"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC141"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC143"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC138"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC139"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 14.9.3 Input Port Operations </H3>
+<!--docid::SEC142::-->
+<P>
+
+This section describes the standard operations on input ports.
+Following that, some useful custom operations are described.
+</P><P>
+
+<A NAME="IDX1854"></A>
+<DL>
+<DT><U>operation+:</U> input port <B>read-char</B> <I>input-port</I>
+<DD><A NAME="IDX1855"></A>
+Removes the next character available from <VAR>input-port</VAR> and returns
+it.  If <VAR>input-port</VAR> has no more characters and will never have any
+(e.g. at the end of an input file), this operation returns an
+end-of-file object.  If <VAR>input-port</VAR> has no more characters but will
+eventually have some more (e.g. a terminal where nothing has been
+typed recently), and it is in non-blocking mode, <CODE>#f</CODE> is returned;
+otherwise the operation hangs until input is available.
+</DL>
+</P><P>
+
+<A NAME="IDX1856"></A>
+<DL>
+<DT><U>operation+:</U> input port <B>peek-char</B> <I>input-port</I>
+<DD>Reads the next character available from <VAR>input-port</VAR> and returns it.
+The character is <EM>not</EM> removed from <VAR>input-port</VAR>, and a
+subsequent attempt to read from the port will get that character again.
+In other respects this operation behaves like <CODE>read-char</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1857"></A>
+<DL>
+<DT><U>operation+:</U> input port <B>discard-char</B> <I>input-port</I>
+<DD>Discards the next character available from <VAR>input-port</VAR> and returns
+an unspecified value.  In other respects this operation behaves like
+<CODE>read-char</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1858"></A>
+<DL>
+<DT><U>operation+:</U> input port <B>char-ready?</B> <I>input-port k</I>
+<DD><CODE>char-ready?</CODE> returns <CODE>#t</CODE> if at least one character is
+available to be read from <VAR>input-port</VAR>.  If no characters are
+available, the operation waits up to <VAR>k</VAR> milliseconds before
+returning <CODE>#f</CODE>, returning immediately if any characters become
+available while it is waiting.
+</DL>
+</P><P>
+
+<A NAME="IDX1859"></A>
+<DL>
+<DT><U>operation+:</U> input port <B>read-string</B> <I>input-port char-set</I>
+<DD><A NAME="IDX1860"></A>
+<DT><U>operation+:</U> input port <B>discard-chars</B> <I>input-port char-set</I>
+<DD><A NAME="IDX1861"></A>
+These operations are like <CODE>read-char</CODE> and <CODE>discard-char</CODE>,
+except that they read or discard multiple characters at once.  This can
+have a marked performance improvement on buffered input ports.  All
+characters up to, but excluding, the first character in <VAR>char-set</VAR>
+(or end of file) are read from <VAR>input-port</VAR>.  <CODE>read-string</CODE>
+returns these characters as a newly allocated string, while
+<CODE>discard-chars</CODE> discards them and returns an unspecified value.
+These operations hang until sufficient input is available, even if
+<VAR>input-port</VAR> is in non-blocking mode.  If end of file is encountered
+before any input characters, <CODE>read-string</CODE> returns an end-of-file
+object.
+</DL>
+</P><P>
+
+<A NAME="IDX1862"></A>
+<DL>
+<DT><U>operation+:</U> input port <B>read-substring</B> <I>input-port string start end</I>
+<DD>Reads characters from <VAR>input-port</VAR> into the substring defined by
+<VAR>string</VAR>, <VAR>start</VAR>, and <VAR>end</VAR> until either the substring has
+been filled or there are no more characters available.  Returns the
+number of characters written to the substring.
+</P><P>
+
+If <VAR>input-port</VAR> is an interactive port, and at least one character
+is immediately available, the available characters are written to the
+substring and this operation returns immediately.  If no characters are
+available, and <VAR>input-port</VAR> is in blocking mode, the operation
+blocks until at least one character is available.  Otherwise, the
+operation returns <CODE>#f</CODE> immediately.
+</P><P>
+
+This is an extremely fast way to read characters from a port.
+</DL>
+</P><P>
+
+<A NAME="IDX1863"></A>
+<DL>
+<DT><U>procedure+:</U> <B>input-port/read-char</B> <I>input-port</I>
+<DD><A NAME="IDX1864"></A>
+<DT><U>procedure+:</U> <B>input-port/peek-char</B> <I>input-port</I>
+<DD><A NAME="IDX1865"></A>
+<DT><U>procedure+:</U> <B>input-port/discard-char</B> <I>input-port</I>
+<DD><A NAME="IDX1866"></A>
+<DT><U>procedure+:</U> <B>input-port/char-ready?</B> <I>input-port k</I>
+<DD><A NAME="IDX1867"></A>
+<DT><U>procedure+:</U> <B>input-port/read-string</B> <I>input-port char-set</I>
+<DD><A NAME="IDX1868"></A>
+<DT><U>procedure+:</U> <B>input-port/discard-chars</B> <I>input-port char-set</I>
+<DD><A NAME="IDX1869"></A>
+<DT><U>procedure+:</U> <B>input-port/read-substring</B> <I>input-port string start end</I>
+<DD>Each of these procedures invokes the respective operation on
+<VAR>input-port</VAR>.  For example, the following are equivalent:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(input-port/read-char <VAR>input-port</VAR>)
+((input-port/operation <VAR>input-port</VAR> 'read-char) <VAR>input-port</VAR>)
+</pre></td></tr></table></DL>
+</P><P>
+
+The following custom operations are implemented for input ports to
+files, and will also work with some other kinds of input ports:
+</P><P>
+
+<A NAME="IDX1870"></A>
+<DL>
+<DT><U>operation+:</U> input port <B>eof?</B> <I>input-port</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>input-port</VAR> is known to be at end of file,
+otherwise it returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1871"></A>
+<DL>
+<DT><U>operation+:</U> input port <B>chars-remaining</B> <I>input-port</I>
+<DD>Returns an estimate of the number of characters remaining to be read
+from <VAR>input-port</VAR>.  This is useful only when <VAR>input-port</VAR> is a
+file port in binary mode; in other cases, it returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1872"></A>
+<DL>
+<DT><U>operation+:</U> input port <B>buffered-input-chars</B> <I>input-port</I>
+<DD>Returns the number of unread characters that are stored in
+<VAR>input-port</VAR>'s buffer.  This will always be less than or equal to
+the buffer's size.
+</DL>
+</P><P>
+
+<A NAME="IDX1873"></A>
+<DL>
+<DT><U>operation+:</U> input port <B>input-buffer-size</B> <I>input-port</I>
+<DD>Returns the maximum number of characters that <VAR>input-port</VAR>'s buffer
+can hold.
+</DL>
+</P><P>
+
+<A NAME="IDX1874"></A>
+<DL>
+<DT><U>operation+:</U> input port <B>set-input-buffer-size</B> <I>input-port size</I>
+<DD>Resizes <VAR>input-port</VAR>'s buffer so that it can hold at most <VAR>size</VAR>
+characters.  Characters in the buffer are discarded.  <VAR>Size</VAR> must be
+an exact non-negative integer.
+</DL>
+</P><P>
+
+<A NAME="Output Port Operations"></A>
+<HR SIZE="6">
+<A NAME="SEC143"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC142"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC144"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC138"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC139"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 14.9.4 Output Port Operations </H3>
+<!--docid::SEC143::-->
+<P>
+
+This section describes the standard operations on output ports.
+Following that, some useful custom operations are described.
+</P><P>
+
+<A NAME="IDX1875"></A>
+<DL>
+<DT><U>operation+:</U> output port <B>write-char</B> <I>output-port char</I>
+<DD><A NAME="IDX1876"></A>
+Writes <VAR>char</VAR> to <VAR>output-port</VAR> and returns an unspecified value.
+</DL>
+</P><P>
+
+<A NAME="IDX1877"></A>
+<DL>
+<DT><U>operation+:</U> output port <B>write-substring</B> <I>output-port string start end</I>
+<DD><A NAME="IDX1878"></A>
+Writes the substring specified by <VAR>string</VAR>, <VAR>start</VAR>, and
+<VAR>end</VAR> to <VAR>output-port</VAR> and returns an unspecified value.
+Equivalent to writing the characters of the substring, one by one, to
+<VAR>output-port</VAR>, but is implemented very efficiently.
+</DL>
+</P><P>
+
+<A NAME="IDX1879"></A>
+<DL>
+<DT><U>operation+:</U> output port <B>fresh-line</B> <I>output-port</I>
+<DD>Most output ports are able to tell whether or not they are at the
+beginning of a line of output.  If <VAR>output-port</VAR> is such a port,
+end-of-line is written to the port only if the port is not already at
+the beginning of a line.  If <VAR>output-port</VAR> is not such a port, and
+end-of-line is unconditionally written to the port.  Returns an
+unspecified value.
+</DL>
+</P><P>
+
+<A NAME="IDX1880"></A>
+<DL>
+<DT><U>operation+:</U> output port <B>flush-output</B> <I>output-port</I>
+<DD>If <VAR>output-port</VAR> is buffered, this causes its buffer to be written
+out.  Otherwise it has no effect.  Returns an unspecified value.
+</DL>
+</P><P>
+
+<A NAME="IDX1881"></A>
+<DL>
+<DT><U>operation+:</U> output port <B>discretionary-flush-output</B> <I>output-port</I>
+<DD>Normally, this operation does nothing.  However, ports that support
+discretionary output flushing implement this operation identically to <CODE>flush-output</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1882"></A>
+<DL>
+<DT><U>procedure+:</U> <B>output-port/write-char</B> <I>output-port char</I>
+<DD><A NAME="IDX1883"></A>
+<DT><U>procedure+:</U> <B>output-port/write-substring</B> <I>output-port string start end</I>
+<DD><A NAME="IDX1884"></A>
+<DT><U>procedure+:</U> <B>output-port/fresh-line</B> <I>output-port</I>
+<DD><A NAME="IDX1885"></A>
+<DT><U>procedure+:</U> <B>output-port/flush-output</B> <I>output-port</I>
+<DD><A NAME="IDX1886"></A>
+<DT><U>procedure+:</U> <B>output-port/discretionary-flush-output</B> <I>output-port</I>
+<DD>Each of these procedures invokes the respective operation on
+<VAR>output-port</VAR>.  For example, the following are equivalent:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(output-port/write-char <VAR>output-port</VAR> <VAR>char</VAR>)
+((output-port/operation <VAR>output-port</VAR> 'write-char)
+ <VAR>output-port</VAR> <VAR>char</VAR>)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1887"></A>
+<DL>
+<DT><U>procedure+:</U> <B>output-port/write-string</B> <I>output-port string</I>
+<DD>Writes <VAR>string</VAR> to <VAR>output-port</VAR>.  Equivalent to
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(output-port/write-substring <VAR>output-port</VAR>
+                             <VAR>string</VAR>
+                             0
+                             (string-length <VAR>string</VAR>))
+</pre></td></tr></table></DL>
+</P><P>
+
+The following custom operations are generally useful.
+</P><P>
+
+<A NAME="IDX1888"></A>
+<DL>
+<DT><U>operation+:</U> output port <B>buffered-output-chars</B> <I>output-port</I>
+<DD>Returns the number of unwritten characters that are stored in
+<VAR>output-port</VAR>'s buffer.  This will always be less than or equal to
+the buffer's size.
+</DL>
+</P><P>
+
+<A NAME="IDX1889"></A>
+<DL>
+<DT><U>operation+:</U> output port <B>output-buffer-size</B> <I>output-port</I>
+<DD>Returns the maximum number of characters that <VAR>output-port</VAR>'s buffer
+can hold.
+</DL>
+</P><P>
+
+<A NAME="IDX1890"></A>
+<DL>
+<DT><U>operation+:</U> output port <B>set-output-buffer-size</B> <I>output-port size</I>
+<DD>Resizes <VAR>output-port</VAR>'s buffer so that it can hold at most <VAR>size</VAR>
+characters.  Characters in the buffer are discarded.  <VAR>Size</VAR> must be
+an exact non-negative integer.
+</DL>
+</P><P>
+
+<A NAME="IDX1891"></A>
+<DL>
+<DT><U>operation+:</U> output port <B>x-size</B> <I>output-port</I>
+<DD>Returns an exact positive integer that is the width of <VAR>output-port</VAR>
+in characters.  If <VAR>output-port</VAR> has no natural width, e.g. if it is
+a file port, <CODE>#f</CODE> is returned.
+</DL>
+</P><P>
+
+<A NAME="IDX1892"></A>
+<DL>
+<DT><U>operation+:</U> output port <B>y-size</B> <I>output-port</I>
+<DD>Returns an exact positive integer that is the height of
+<VAR>output-port</VAR> in characters.  If <VAR>output-port</VAR> has no natural
+height, e.g. if it is a file port, <CODE>#f</CODE> is returned.
+</DL>
+</P><P>
+
+<A NAME="IDX1893"></A>
+<DL>
+<DT><U>procedure+:</U> <B>output-port/x-size</B> <I>output-port</I>
+<DD>This procedure invokes the custom operation whose name is the symbol
+<CODE>x-size</CODE>, if it exists.  If the <CODE>x-size</CODE> operation is both
+defined and returns a value other than <CODE>#f</CODE>, that value is returned
+as the result of this procedure.  Otherwise, <CODE>output-port/x-size</CODE>
+returns a default value (currently <CODE>80</CODE>).
+</P><P>
+
+<CODE>output-port/x-size</CODE> is useful for programs that tailor their
+output to the width of the display (a fairly common practice).  If the
+output device is not a display, such programs normally want some
+reasonable default width to work with, and this procedure provides
+exactly that.
+</DL>
+</P><P>
+
+<A NAME="IDX1894"></A>
+<DL>
+<DT><U>procedure+:</U> <B>output-port/y-size</B> <I>output-port</I>
+<DD>This procedure invokes the custom operation whose name is the symbol
+<CODE>y-size</CODE>, if it exists.  If the <CODE>y-size</CODE> operation is defined,
+the value it returns is returned as the result of this procedure;
+otherwise, <CODE>#f</CODE> is returned.
+</DL>
+</P><P>
+
+<A NAME="Blocking Mode"></A>
+<HR SIZE="6">
+<A NAME="SEC144"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC143"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC145"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC138"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC139"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 14.9.5 Blocking Mode </H3>
+<!--docid::SEC144::-->
+<P>
+
+<A NAME="IDX1895"></A>
+An interactive port is always in one of two modes: <EM>blocking</EM> or
+<EM>non-blocking</EM>.  This mode is independent of the terminal mode: each
+can be changed independent of the other.  Furthermore, if it is an
+interactive I/O port, there are separate blocking modes for input
+and for output.
+</P><P>
+
+If an input port is in blocking mode, attempting to read from it when no
+input is available will cause Scheme to "block", i.e. suspend
+itself, until input is available.  If an input port is in non-blocking
+mode, attempting to read from it when no input is available will cause
+the reading procedure to return immediately, indicating the lack of
+input in some way (exactly how this situation is indicated is separately
+specified for each procedure or operation).
+</P><P>
+
+An output port in blocking mode will block if the output device is not
+ready to accept output.  In non-blocking mode it will return immediately
+after performing as much output as the device will allow (again, each
+procedure or operation reports this situation in its own way).
+</P><P>
+
+Interactive ports are initially in blocking mode; this can be changed at
+any time with the procedures defined in this section.
+</P><P>
+
+These procedures represent blocking mode by the symbol <CODE>blocking</CODE>,
+and non-blocking mode by the symbol <CODE>nonblocking</CODE>.  An argument
+called <VAR>mode</VAR> must be one of these symbols.  A <VAR>port</VAR> argument
+to any of these procedures may be any port, even if that port does not
+support blocking mode; in that case, the port is not modified in any
+way.
+</P><P>
+
+<A NAME="IDX1896"></A>
+<DL>
+<DT><U>procedure+:</U> <B>port/input-blocking-mode</B> <I>port</I>
+<DD>Returns the input blocking mode of <VAR>port</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1897"></A>
+<DL>
+<DT><U>procedure+:</U> <B>port/set-input-blocking-mode</B> <I>port mode</I>
+<DD>Changes the input blocking mode of <VAR>port</VAR> to be <VAR>mode</VAR>.  Returns
+an unspecified value.
+</DL>
+</P><P>
+
+<A NAME="IDX1898"></A>
+<DL>
+<DT><U>procedure+:</U> <B>port/with-input-blocking-mode</B> <I>port mode thunk</I>
+<DD><VAR>Thunk</VAR> must be a procedure of no arguments.
+<CODE>port/with-input-blocking-mode</CODE>
+binds the input blocking mode of <VAR>port</VAR> to be <VAR>mode</VAR>, executes
+<VAR>thunk</VAR>, restores the input blocking mode of <VAR>port</VAR> to what it
+was when <CODE>port/with-input-blocking-mode</CODE> was called, and returns
+the value that was yielded by <VAR>thunk</VAR>.  This binding is performed
+by <CODE>dynamic-wind</CODE>, which guarantees that the input blocking mode is
+restored if <VAR>thunk</VAR> escapes from its continuation.
+</DL>
+</P><P>
+
+<A NAME="IDX1899"></A>
+<DL>
+<DT><U>procedure+:</U> <B>port/output-blocking-mode</B> <I>port</I>
+<DD>Returns the output blocking mode of <VAR>port</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1900"></A>
+<DL>
+<DT><U>procedure+:</U> <B>port/set-output-blocking-mode</B> <I>port mode</I>
+<DD>Changes the output blocking mode of <VAR>port</VAR> to be <VAR>mode</VAR>.
+Returns an unspecified value.
+</DL>
+</P><P>
+
+<A NAME="IDX1901"></A>
+<DL>
+<DT><U>procedure+:</U> <B>port/with-output-blocking-mode</B> <I>port mode thunk</I>
+<DD><VAR>Thunk</VAR> must be a procedure of no arguments.
+<CODE>port/with-output-blocking-mode</CODE>
+binds the output blocking mode of <VAR>port</VAR> to be <VAR>mode</VAR>, executes
+<VAR>thunk</VAR>, restores the output blocking mode of <VAR>port</VAR> to what it
+was when <CODE>port/with-output-blocking-mode</CODE> was called, and returns
+the value that was yielded by <VAR>thunk</VAR>.  This binding is performed
+by <CODE>dynamic-wind</CODE>, which guarantees that the output blocking mode
+is restored if <VAR>thunk</VAR> escapes from its continuation.
+</DL>
+</P><P>
+
+<A NAME="Terminal Mode"></A>
+<HR SIZE="6">
+<A NAME="SEC145"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC144"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC138"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC139"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 14.9.6 Terminal Mode </H3>
+<!--docid::SEC145::-->
+<P>
+
+<A NAME="IDX1902"></A>
+A port that reads from or writes to a terminal has a <EM>terminal
+mode</EM>; this is either <EM>cooked</EM> or <EM>raw</EM>.  This mode is
+independent of the blocking mode: each can be changed independent of the
+other.  Furthermore, a terminal I/O port has independent terminal
+modes both for input and for output.
+</P><P>
+
+<A NAME="IDX1903"></A>
+A terminal port in cooked mode provides some standard processing to make
+the terminal easy to communicate with.  For example, under unix, cooked
+mode on input reads from the terminal a line at a time and provides
+rubout processing within the line, while cooked mode on output might
+translate linefeeds to carriage-return/linefeed pairs.  In general, the
+precise meaning of cooked mode is operating-system dependent, and
+furthermore might be customizable by means of operating system
+utilities.  The basic idea is that cooked mode does whatever is
+necessary to make the terminal handle all of the usual user-interface
+conventions for the operating system, while keeping the program's
+interaction with the port as normal as possible.
+</P><P>
+
+<A NAME="IDX1904"></A>
+A terminal port in raw mode disables all of that processing.  In raw
+mode, characters are directly read from and written to the device
+without any translation or interpretation by the operating system.  On
+input, characters are available as soon as they are typed, and are not
+echoed on the terminal by the operating system.  In general, programs
+that put ports in raw mode have to know the details of interacting with
+the terminal.  In particular, raw mode is used for writing programs such
+as text editors.
+</P><P>
+
+Terminal ports are initially in cooked mode; this can be changed at any
+time with the procedures defined in this section.
+</P><P>
+
+These procedures represent cooked mode by the symbol <CODE>cooked</CODE>, and
+raw mode by the symbol <CODE>raw</CODE>.  Additionally, the value <CODE>#f</CODE>
+represents "no mode"; it is the terminal mode of a port that is not a
+terminal.  An argument called <VAR>mode</VAR> must be one of these three
+values.  A <VAR>port</VAR> argument to any of these procedures may be any
+port, even if that port does not support terminal mode; in that case,
+the port is not modified in any way.
+</P><P>
+
+<A NAME="IDX1905"></A>
+<DL>
+<DT><U>procedure+:</U> <B>port/input-terminal-mode</B> <I>port</I>
+<DD>Returns the input terminal mode of <VAR>port</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1906"></A>
+<DL>
+<DT><U>procedure+:</U> <B>port/set-input-terminal-mode</B> <I>port mode</I>
+<DD>Changes the input terminal mode of <VAR>port</VAR> to be <VAR>mode</VAR>.
+Returns an unspecified value.
+</DL>
+</P><P>
+
+<A NAME="IDX1907"></A>
+<DL>
+<DT><U>procedure+:</U> <B>port/with-input-terminal-mode</B> <I>port mode thunk</I>
+<DD><VAR>Thunk</VAR> must be a procedure of no arguments.
+<CODE>port/with-input-terminal-mode</CODE>
+binds the input terminal mode of <VAR>port</VAR> to be <VAR>mode</VAR>, executes
+<VAR>thunk</VAR>, restores the input terminal mode of <VAR>port</VAR> to what it
+was when <CODE>port/with-input-terminal-mode</CODE> was called, and returns
+the value that was yielded by <VAR>thunk</VAR>.  This binding is performed
+by <CODE>dynamic-wind</CODE>, which guarantees that the input terminal mode is
+restored if <VAR>thunk</VAR> escapes from its continuation.
+</DL>
+</P><P>
+
+<A NAME="IDX1908"></A>
+<DL>
+<DT><U>procedure+:</U> <B>port/output-terminal-mode</B> <I>port</I>
+<DD>Returns the output terminal mode of <VAR>port</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1909"></A>
+<DL>
+<DT><U>procedure+:</U> <B>port/set-output-terminal-mode</B> <I>port mode</I>
+<DD>Changes the output terminal mode of <VAR>port</VAR> to be <VAR>mode</VAR>.
+Returns an unspecified value.
+</DL>
+</P><P>
+
+<A NAME="IDX1910"></A>
+<DL>
+<DT><U>procedure+:</U> <B>port/with-output-terminal-mode</B> <I>port mode thunk</I>
+<DD><VAR>Thunk</VAR> must be a procedure of no arguments.
+<CODE>port/with-output-terminal-mode</CODE>
+binds the output terminal mode of <VAR>port</VAR> to be <VAR>mode</VAR>, executes
+<VAR>thunk</VAR>, restores the output terminal mode of <VAR>port</VAR> to what it
+was when <CODE>port/with-output-terminal-mode</CODE> was called, and returns
+the value that was yielded by <VAR>thunk</VAR>.  This binding is performed
+by <CODE>dynamic-wind</CODE>, which guarantees that the output terminal mode is
+restored if <VAR>thunk</VAR> escapes from its continuation.
+</DL>
+</P><P>
+
+<A NAME="Operating-System Interface"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC138"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

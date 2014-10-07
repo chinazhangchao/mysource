@@ -1,0 +1,110 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme User's Manual: Introduction</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme User's Manual: Introduction">
+<META NAME="keywords" CONTENT="MIT Scheme User's Manual: Introduction">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC1"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC2"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC2"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<A NAME="Introduction"></A>
+<H1> Introduction </H1>
+<!--docid::SEC1::-->
+<P>
+
+This document describes how to install and use MIT Scheme, the UnCommon
+Lisp.  It gives installation instructions for all of the platforms that
+we support; complete documentation of the command-line options and
+environment variables that control how Scheme works; and rudimentary
+descriptions of how to interact with the evaluator, compile and debug
+programs, and use the editor.  The release notes are included as an
+appendix.
+</P><P>
+
+<A NAME="IDX1"></A>
+<A NAME="IDX2"></A>
+<A NAME="IDX3"></A>
+<A NAME="IDX4"></A>
+This document discusses many operating-system specific features of the
+MIT Scheme implementation.  In order to simplify the discussion, we use
+abbreviations to refer to some operating systems.  When the text uses
+the term <EM>unix</EM>, this means any of the unix systems that we support,
+including GNU/Linux, *BSD, HP-UX, Ultrix, NeXT, and SunOS.  The term
+<EM>OS/2</EM> means the IBM OS/2 operating system, version 2.1 or later.
+We use the term <EM>Windows</EM> to collectively refer to the Microsoft
+Windows operating systems: Windows 95, Windows 98, and Windows NT.  We
+use the term <EM>PC</EM> to refer to any computer running OS/2 or Windows.
+Thus we consider a PC to be a system with a DOS-like file system,
+using backslashes for directory separators, drive letters, CR-LF
+line termination, and (potentially) the hideous 8.3 short filenames.
+</P><P>
+
+<A NAME="IDX5"></A>
+<A NAME="IDX6"></A>
+The primary distribution site for this software is
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre><A HREF="http://www.swiss.ai.mit.edu/ftpdir/scheme-7.5/">http://www.swiss.ai.mit.edu/ftpdir/scheme-7.5/</A>
+<A HREF="ftp://ftp.swiss.ai.mit.edu/pub/scheme-7.5/">ftp://ftp.swiss.ai.mit.edu/pub/scheme-7.5/</A>
+</pre></td></tr></table></P><P>
+
+Although our software is distributed from other sites and in other
+media, the complete distribution and the most recent release is always
+available at our site.
+</P><P>
+
+<A NAME="IDX7"></A>
+<A NAME="IDX8"></A>
+To report bugs, send email to <SAMP>`bug-cscheme@zurich.ai.mit.edu'</SAMP>.
+Please include the output of the <CODE>identify-world</CODE> procedure
+(see section <A HREF="user_3.html#SEC10">2.1 Basics of Starting Scheme</A>), so we know what version of the
+system you are using.
+</P><P>
+
+<A NAME="Installation"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC2"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

@@ -1,0 +1,954 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme User's Manual: Debugging</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme User's Manual: Debugging">
+<META NAME="keywords" CONTENT="MIT Scheme User's Manual: Debugging">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC53"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC48"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC54"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC33"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_7.html#SEC58"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 5. Debugging </H1>
+<!--docid::SEC53::-->
+<P>
+
+Parts of this chapter are adapted from <CITE>Don't Panic: A 6.001 User's
+Guide to the Chipmunk System</CITE>, by Arthur A. Gleckler.
+</P><P>
+
+<A NAME="IDX233"></A>
+<A NAME="IDX234"></A>
+Even computer software that has been carefully planned and well written
+may not always work correctly.  Mysterious creatures called <EM>bugs</EM>
+may creep in and wreak havoc, leaving the programmer to clean up the
+mess.  Some have theorized that a program fails only because its author
+made a mistake, but experienced computer programmers know that bugs are
+always to blame.  This is why the task of fixing broken computer
+software is called <EM>debugging</EM>.
+</P><P>
+
+It is impossible to prove the correctness of any non-trivial program;
+hence the Cynic's First Law of Debugging:
+</P><P>
+
+<BLOCKQUOTE>
+Programs don't become more reliable as they are debugged; the bugs just
+get harder to find.
+</BLOCKQUOTE>
+<P>
+
+<A NAME="IDX235"></A>
+Scheme is equipped with a variety of special software for finding and
+removing bugs.  The debugging tools include facilities for tracing a
+program's use of specified procedures, for examining Scheme
+environments, and for setting <EM>breakpoints</EM>, places where the
+program will pause for inspection.
+</P><P>
+
+<A NAME="IDX236"></A>
+Many bugs are detected when programs try to do something that is
+impossible, like adding a number to a symbol, or using a variable that
+does not exist; this type of mistake is called an <EM>error</EM>.
+Whenever an error occurs, Scheme prints an error message and starts a
+new REPL.  For example, using a nonexistent variable <CODE>foo</CODE> will
+cause Scheme to respond
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>1 ]=&#62; foo
+
+;Unbound variable: foo
+;To continue, call RESTART with an option number:
+; (RESTART 3) =&#62; Specify a value to use instead of foo.
+; (RESTART 2) =&#62; Define foo to a given value.
+; (RESTART 1) =&#62; Return to read-eval-print level 1.
+
+2 error&#62; 
+</pre></td></tr></table></P><P>
+
+Sometimes, a bug will never cause an error, but will still cause the
+program to operate incorrectly.  For instance,
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(prime? 7)   =>   #f
+</pre></td></tr></table></P><P>
+
+In this situation, Scheme does not know that the program is misbehaving.
+The programmer must notice the problem and, if necessary, start the
+debugging tools manually.
+</P><P>
+
+There are several approaches to finding bugs in a Scheme program:
+</P><P>
+
+<UL>
+<LI>
+Inspect the original Scheme program.
+<P>
+
+<LI>
+Use the debugging tools to follow your program's progress.
+<P>
+
+<LI>
+Edit the program to insert checks and breakpoints.
+</UL>
+<P>
+
+Only experience can teach how to debug programs, so be sure to
+experiment with all these approaches while doing your own debugging.
+Planning ahead is the best way to ward off bugs, but when bugs do
+appear, be prepared to attack them with all the tools available.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_6.html#SEC54">5.1 Subproblems and Reductions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_6.html#SEC55">5.2 The Command-Line Debugger</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_6.html#SEC56">5.3 Debugging Aids</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_6.html#SEC57">5.4 Advising Procedures</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Subproblems and Reductions"></A>
+<HR SIZE="6">
+<A NAME="SEC54"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC53"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC55"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC53"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC53"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_7.html#SEC58"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.1 Subproblems and Reductions </H2>
+<!--docid::SEC54::-->
+<P>
+
+<A NAME="IDX237"></A>
+<A NAME="IDX238"></A>
+<A NAME="IDX239"></A>
+Understanding the concepts of <EM>reduction</EM> and <EM>subproblem</EM> is
+essential to good use of the debugging tools.  The Scheme interpreter
+evaluates an expression by <EM>reducing</EM> it to a simpler expression.
+In general, Scheme's evaluation rules designate that evaluation proceeds
+from one expression to the next by either starting to work on a
+<EM>subexpression</EM> of the given expression, or by reducing the entire
+expression to a new (simpler, or reduced) form.  Thus, a history of the
+successive forms processed during the evaluation of an expression will
+show a sequence of subproblems, where each subproblem may consist of a
+sequence of reductions.
+</P><P>
+
+For example, both <CODE>(+ 5 6)</CODE> and <CODE>(+ 7 9)</CODE> are subproblems of
+the following combination:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(* (+ 5 6) (+ 7 9))
+</pre></td></tr></table></P><P>
+
+If <CODE>(prime? n)</CODE> is true, then <CODE>(cons 'prime n)</CODE> is a reduction
+for the following expression:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(if (prime? n)
+    (cons 'prime n)
+    (cons 'not-prime n))
+</pre></td></tr></table></P><P>
+
+This is because the entire subproblem of the <CODE>if</CODE> expression can
+be reduced to the problem <CODE>(cons 'prime n)</CODE>, once we know that
+<CODE>(prime?  n)</CODE> is true; the <CODE>(cons 'not-prime n)</CODE> can be
+ignored, because it will never be needed.  On the other hand, if
+<CODE>(prime? n)</CODE> were false, then <CODE>(cons 'not-prime n)</CODE> would be
+the reduction for the <CODE>if</CODE> expression.
+</P><P>
+
+The <EM>subproblem level</EM> is a number representing how far back in the
+history of the current computation a particular evaluation is.  Consider
+<CODE>factorial</CODE>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (factorial n)
+  (if (&#60; n 2)
+      1
+      (* n (factorial (- n 1)))))
+</pre></td></tr></table></P><P>
+
+If we stop <CODE>factorial</CODE> in the middle of evaluating <CODE>(- n 1)</CODE>,
+the <CODE>(- n 1)</CODE> is at subproblem level 0.  Following the history of
+the computation "upwards," <CODE>(factorial (- n 1))</CODE> is at subproblem
+level 1, and <CODE>(* n (factorial (- n 1)))</CODE> is at subproblem level 2.
+These expressions all have <EM>reduction number</EM> 0.  Continuing
+upwards, the <CODE>if</CODE> expression has reduction number 1.
+</P><P>
+
+Moving backwards in the history of a computation, subproblem levels and
+reduction numbers increase, starting from zero at the expression
+currently being evaluated.  Reduction numbers increase until the next
+subproblem, where they start over at zero.  The best way to get a feel
+for subproblem levels and reduction numbers is to experiment with the
+debugging tools, especially <CODE>debug</CODE>.
+</P><P>
+
+<A NAME="Command-Line Debugger"></A>
+<HR SIZE="6">
+<A NAME="SEC55"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC54"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC56"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC53"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC53"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_7.html#SEC58"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.2 The Command-Line Debugger </H2>
+<!--docid::SEC55::-->
+<P>
+
+<A NAME="IDX240"></A>
+<A NAME="IDX241"></A>
+<A NAME="IDX242"></A>
+<A NAME="IDX243"></A>
+There are two debuggers available with MIT Scheme.  One of them runs
+under Edwin, and is described in that section of this document
+(see section <A HREF="user_8.html#SEC65">7.6 The Edwin Debugger</A>).  The other is command-line oriented, does not
+require Edwin, and is described here.
+</P><P>
+
+<A NAME="IDX244"></A>
+The <EM>command-line debugger</EM>, called <CODE>debug</CODE>, is the tool you
+should use when Scheme signals an error and you want to find out what
+caused the error.  When Scheme signals an error, it records all the
+information necessary to continue running the Scheme program that caused
+the error; the debugger provides you with the means to inspect this
+information.  For this reason, the debugger is sometimes called a
+<EM>continuation browser</EM>.
+ 
+Here is the transcript of a typical Scheme session, showing a user
+evaluating the expression <CODE>(fib 10)</CODE>, Scheme responding with an
+unbound variable error for the variable <CODE>fob</CODE>, and the user
+starting the debugger:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>1 ]=&#62; (fib 10)
+
+;Unbound variable: fob
+;To continue, call RESTART with an option number:
+; (RESTART 3) =&#62; Specify a value to use instead of fob.
+; (RESTART 2) =&#62; Define fob to a given value.
+; (RESTART 1) =&#62; Return to read-eval-print level 1.
+
+2 error&#62; (debug)
+
+There are 6 subproblems on the stack.
+
+Subproblem level: 0 (this is the lowest subproblem level)
+Expression (from stack):
+    fob
+Environment created by the procedure: FIB
+ applied to: (10)
+The execution history for this subproblem contains 1 reduction.
+You are now in the debugger.  Type q to quit, ? for commands.
+
+3 debug&#62; 
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX245"></A>
+This tells us that the error occurred while trying to evaluate the
+expression <SAMP>`fob'</SAMP> while running <SAMP>`(fib 10)'</SAMP>.  It also tells us
+this is subproblem level 0, the first of 6 subproblems that are
+available for us to examine.  The expression shown is marked <SAMP>`(from
+stack)'</SAMP>, which tells us that this expression was reconstructed from the
+interpreter's internal data structures.  Another source of information
+is the <EM>execution history</EM>, which keeps a record of expressions
+evaluated by the interpreter.  The debugger informs us that the
+execution history has recorded some information for this subproblem,
+specifically a description of one reduction.
+</P><P>
+
+What follows is a description of the commands available in the debugger.
+To understand how the debugger works, you need to understand that the
+debugger has an implicit state that is examined and modified by
+commands.  The state consists of three pieces of information: a
+<EM>subproblem</EM>, a <EM>reduction</EM>, and an <EM>environment frame</EM>.
+Each of these parts of the implicit state is said to be <EM>selected</EM>;
+thus one refers to the <EM>selected subproblem</EM>, and so forth.  The
+debugger provides commands that examine the selected state, and allow
+you to select different states.
+</P><P>
+
+Here are the debugger commands.  Each of these commands consists of a
+single letter, which is to be typed by itself at the debugger prompt.
+It is not necessary to type <KBD>RET</KBD> after these commands.
+</P><P>
+
+<DL COMPACT>
+<DT>Traversing subproblems
+<DD><A NAME="IDX246"></A>
+<A NAME="IDX247"></A>
+<A NAME="IDX248"></A>
+<A NAME="IDX249"></A>
+The debugger has several commands for traversing the structure of the
+continuation.  It is useful to think of the continuation as a
+two-dimensional structure: a backbone consisting of subproblems, and
+associated ribs consisting of reductions.  The bottom of the backbone is
+the most recent point in time; that is where the debugger is positioned
+when it starts.  Each subproblem is numbered, with <CODE>0</CODE> representing
+the most recent time point, and ascending integers numbering older time
+points.  The <KBD>u</KBD> command moves up to older points in time, and the
+<KBD>d</KBD> command moves down to newer points in time.  The <KBD>g</KBD>
+command allows you to select a subproblem by number, and the <KBD>h</KBD>
+command will show you a brief summary of all of the subproblems.
+<P>
+
+<DT>Traversing reductions
+<DD><A NAME="IDX250"></A>
+<A NAME="IDX251"></A>
+<A NAME="IDX252"></A>
+If the subproblem description says that <SAMP>`The execution history for
+this subproblem contains <VAR>N</VAR> reductions'</SAMP>, then there is a "rib" of
+reductions for this subproblem.  You can see a summary of the reductions
+for this subproblem using the <KBD>r</KBD> command.  You can move to the next
+reduction using the <KBD>b</KBD> command; this moves you to the next older
+reduction.  The <KBD>f</KBD> command moves in the opposite direction, to
+newer reductions.  If you are at the oldest reduction for a given
+subproblem and use the <KBD>b</KBD> command, you will move to the next older
+subproblem.  Likewise, if you are at the newest reduction and use
+<KBD>f</KBD>, you'll move to the next newer subproblem.
+<P>
+
+<DT>Examining subproblems and reductions
+<DD><A NAME="IDX253"></A>
+<A NAME="IDX254"></A>
+The following commands will show you additional information about the
+currently selected subproblem or reduction.  The <KBD>t</KBD> command will
+reprint the standard description (in case it has scrolled off the
+screen).  The <KBD>l</KBD> command will pretty-print (using <CODE>pp</CODE>) the
+subproblem's expression.
+<P>
+
+<DT>Traversing environments
+<DD>Nearly all subproblems and all reductions have associated environments.
+Selecting a subproblem or reduction also selects the associated
+environment.  However, environments are structured as a sequence of
+frames, where each frame corresponds to a block of environment
+variables, as bound by <CODE>lambda</CODE> or <CODE>let</CODE>.  These frames
+collectively represent the block structure of a given environment.
+<P>
+
+<A NAME="IDX255"></A>
+<A NAME="IDX256"></A>
+Once an environment frame is selected by the debugger, it is possible to
+select the parent frame of that frame (in other words, the enclosing
+block) using the <KBD>p</KBD> command.  You can subsequently return to the
+original child frame using the <KBD>s</KBD> command.  The <KBD>s</KBD> command
+works because the <KBD>p</KBD> command keeps track of the frames that you
+step through as you move up the environment hierarchy; the <KBD>s</KBD>
+command just retraces the path of saved frames.  Note that selecting a
+frame using <KBD>p</KBD> or <KBD>s</KBD> will print the bindings of the newly
+selected frame.
+</P><P>
+
+<DT>Examining environments
+<DD><A NAME="IDX257"></A>
+<A NAME="IDX258"></A>
+<A NAME="IDX259"></A>
+<A NAME="IDX260"></A>
+<A NAME="IDX261"></A>
+<A NAME="IDX262"></A>
+The following commands allow you to examine the contents of the selected
+frame.  The <KBD>c</KBD> command prints the bindings of the current frame.
+The <KBD>a</KBD> command prints the bindings of the current frame and each
+of its ancestor frames.  The <KBD>e</KBD> command enters a read-eval-print
+loop in the selected environment frame; expressions typed at that
+REPL will be evaluated in the selected environment.  To exit the
+REPL and return to the debugger, evaluate <CODE>(abort-&#62;previous)</CODE>
+or use <CODE>restart</CODE>.  The <KBD>v</KBD> command prompts for a single
+expression and evaluates it in the selected environment.  The <KBD>w</KBD>
+command invokes the environment inspector (<CODE>where</CODE>); quitting the
+environment inspector returns to the debugger.  Finally, the <KBD>o</KBD>
+command pretty-prints the procedure that was called to create the
+selected environment frame.
+<P>
+
+<DT>Continuing the computation
+<DD><A NAME="IDX263"></A>
+There are three commands that can be used to restart the computation
+that you are examining.  The first is the <KBD>k</KBD> command, which shows
+the currently active restarts, prompts you to select one, and passes
+control to the it.  It is very similar to evaluating <SAMP>`(restart)'</SAMP>.
+<P>
+
+The other two commands allow you to invoke internal continuations.  This
+should not be done lightly; invoking an internal continuation can
+violate assumptions that the programmer made and cause unexpected
+results.  Each of these commands works in the same way: it prompts you
+for an expression, which is evaluated in the selected environment to
+produce a value.  The appropriate internal continuation is then invoked
+with that value as its sole argument.  The two commands differ only in
+which internal continuation is to be invoked.
+</P><P>
+
+<A NAME="IDX264"></A>
+The <KBD>j</KBD> command invokes the continuation associated with
+the selected subproblem.  What this means is as follows: when the
+description of a subproblem is printed, it consists of two parts, and
+"expression" and a "subproblem being executed".  The latter is
+usually marked in the former by the specific character sequence
+<SAMP>`###'</SAMP>.  The internal continuation of the subproblem is the code
+that is waiting for the "subproblem being executed" to return a
+value.  So, in effect, you are telling the program what the "subproblem
+being executed" will evaluate to, and bypassing further execution of
+that code.
+</P><P>
+
+<A NAME="IDX265"></A>
+The <KBD>z</KBD> command is slightly different.  It instead invokes the
+continuation that is waiting for the outer "expression" to finish.  In
+other words, it is the same as invoking the <KBD>j</KBD> command in the next
+frame up.  So you can think of this as an abbreviation for the <KBD>u</KBD>
+command followed by the <KBD>j</KBD> command.
+</P><P>
+
+<DT>Wizard commands
+<DD><A NAME="IDX266"></A>
+<A NAME="IDX267"></A>
+<A NAME="IDX268"></A>
+The <KBD>m</KBD>, <KBD>x</KBD>, and <KBD>y</KBD> commands are for Scheme wizards.  They
+are used to debug the MIT Scheme implementation.  If you want to find
+out what they do, read the source code.
+<P>
+
+<DT>Miscellaneous commands
+<DD><A NAME="IDX269"></A>
+<A NAME="IDX270"></A>
+<A NAME="IDX271"></A>
+The <KBD>i</KBD> command will reprint the error message for the error that
+was in effect immediately before the debugger started.  The <KBD>q</KBD>
+command quits the debugger, returning to the caller.  And the <KBD>?</KBD>
+command prints a brief summary of the debugger's commands.
+</DL>
+<P>
+
+<A NAME="Debugging Aids"></A>
+<HR SIZE="6">
+<A NAME="SEC56"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC55"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC57"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC53"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC53"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_7.html#SEC58"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.3 Debugging Aids </H2>
+<!--docid::SEC56::-->
+<P>
+
+This section describes additional commands that are useful for debugging.
+</P><P>
+
+<A NAME="IDX272"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bkpt</B> <I>datum argument <small>...</small></I>
+<DD>Sets a breakpoint.  When the breakpoint is encountered, <VAR>datum</VAR> and
+the <VAR>argument</VAR>s are typed (just as for <CODE>error</CODE>) and a
+read-eval-print loop is entered.  The environment of the read-eval-print
+loop is derived by examining the continuation of the call to
+<CODE>bkpt</CODE>; if the call appears in a non-tail-recursive position, the
+environment will be that of the call site.  To exit from the breakpoint
+and proceed with the interrupted process, call the procedure
+<CODE>continue</CODE>.  Sample usage:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>1 ]=&#62; (begin (write-line 'foo)
+             (bkpt 'test-2 'test-3)
+             (write-line 'bar)
+             'done)
+
+foo
+ test-2 test-3
+;To continue, call RESTART with an option number:
+; (RESTART 2) =&#62; Return from BKPT.
+; (RESTART 1) =&#62; Return to read-eval-print level 1.
+
+2 bkpt&#62; (+ 3 3)
+
+;Value: 6
+
+2 bkpt&#62; (continue)
+
+bar
+;Value: done
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX273"></A>
+<DL>
+<DT><U>procedure+:</U> <B>pp</B> <I>object [output-port [as-code?]]</I>
+<DD>The <CODE>pp</CODE> procedure is described in section `Output Procedures' in <CITE>MIT Scheme Reference Manual</CITE>.  However, since this is a very
+useful debugging tool, we also mention it here.  <CODE>pp</CODE> provides two
+very useful functions:
+</P><P>
+
+<OL>
+<LI>
+<CODE>pp</CODE> will print the source code of a given procedure.  Often, when
+debugging, you will have a procedure object but will not know exactly
+what procedure it is.  Printing the procedure using <CODE>pp</CODE> will show
+you the source code, which greatly aids identification.
+<P>
+
+<LI>
+<CODE>pp</CODE> will print the fields of a record structure.  If you have a
+compound object pointer, print it using <CODE>pp</CODE> to see the component
+fields, like this:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(pp (-&#62;pathname "~"))
+-| #[pathname 14 "/usr/home/cph"]
+-| (host #[host 15])
+-| (device unspecific)
+-| (directory (absolute "usr" "home"))
+-| (name "cph")
+-| (type ())
+-| (version unspecific)
+</pre></td></tr></table></P><P>
+
+When combined with use of the <CODE>#@</CODE> syntax, <CODE>pp</CODE> provides the
+functionality of a simple object inspector.  For example, let's look at
+the fields of the host object from the above example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(pp #@15)
+-| #[host 15]
+-| (type-index 0)
+-| (name ())
+</pre></td></tr></table></OL>
+</DL>
+<P>
+
+<A NAME="IDX274"></A>
+<DL>
+<DT><U>procedure+:</U> <B>pa</B> <I>procedure</I>
+<DD><CODE>pa</CODE> prints the arguments of <VAR>procedure</VAR>.  This can be used to
+remind yourself, for example, of the correct order of the arguments to a
+procedure.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>for-all?
+ => #[compiled-procedure 40 ("boole" #x6) #xC #x20ECB0]
+
+(pa for-all?)
+-| (items predicate)
+
+(pp for-all?)
+-|(named-lambda (for-all? items predicate)
+-|  (let loop ((items items))
+-|    (or (null? items)
+-|        (and (predicate (car items))
+-|             (loop (cdr items))))))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX275"></A>
+<DL>
+<DT><U>procedure+:</U> <B>where</B> <I>[obj]</I>
+<DD><A NAME="IDX276"></A>
+<A NAME="IDX277"></A>
+<A NAME="IDX278"></A>
+The procedure <CODE>where</CODE> enters the environment examination system.
+This allows environments and variable bindings to be examined and
+modified.  <CODE>where</CODE> accepts one-letter commands.  The commands can
+be found by typing <KBD>?</KBD> to the <SAMP>`where&#62;'</SAMP> prompt.  The optional
+argument, <VAR>obj</VAR>, is an object with an associated environment: an
+environment, a procedure, or a promise.  If <VAR>obj</VAR> is omitted, the
+environment examined is the read-eval-print environment from which
+<CODE>where</CODE> was called (or an error or breakpoint environment if called
+from the debugger).  If a procedure is supplied, <CODE>where</CODE> lets the
+user examine the closing environment of the procedure.  This is useful
+for debugging procedure arguments and values.
+</DL>
+</P><P>
+
+<A NAME="IDX279"></A>
+<DL>
+<DT><U>procedure+:</U> <B>apropos</B> <I>string [environment [search-parents?]]</I>
+<DD><A NAME="IDX280"></A>
+<A NAME="IDX281"></A>
+<A NAME="IDX282"></A>
+Search an environment for bound names containing <VAR>string</VAR> and print
+out the matching bound names.  If <VAR>environment</VAR> is specified, it
+must be an environment or package name, and it defaults to the current
+REPL environment.  The flag <VAR>search-parents?</VAR> specifies whether
+the environment's parents should be included in the search.  The default
+is <CODE>#f</CODE> if <VAR>environment</VAR> is specified, and <CODE>#t</CODE> if
+<VAR>environment</VAR> is not specified.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(apropos "search")
+-| #[package 47 (user)]
+-| #[package 48 ()]
+-| list-search-negative
+-| list-search-positive
+-| nt-fs-flag/case-sensitive-search
+-| re-string-search-backward
+-| re-string-search-forward
+-| re-substring-search-backward
+-| re-substring-search-forward
+-| search-ordered-subvector
+-| search-ordered-vector
+-| search-protection-list
+-| string-search-all
+-| string-search-backward
+-| string-search-forward
+-| substring-search-all
+-| substring-search-backward
+-| substring-search-forward
+-| vector-binary-search
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Advising Procedures"></A>
+<HR SIZE="6">
+<A NAME="SEC57"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC56"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_7.html#SEC58"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC53"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC53"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_7.html#SEC58"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.4 Advising Procedures </H2>
+<!--docid::SEC57::-->
+<P>
+
+Giving advice to procedures is a powerful debugging technique.
+<CODE>trace</CODE> and <CODE>break</CODE> are useful examples of advice-giving
+procedures.
+Note that the advice system only works for interpreted procedures.
+</P><P>
+
+<A NAME="IDX283"></A>
+<DL>
+<DT><U>procedure+:</U> <B>trace-entry</B> <I>procedure</I>
+<DD>Causes an informative message to be printed whenever
+<VAR>procedure</VAR> is entered.  The message is of the form
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>[Entering #[compound-procedure 1 foo]
+    Args: <VAR>val1</VAR>
+          <VAR>val2</VAR>
+          ...]
+</pre></td></tr></table></P><P>
+
+where <VAR>val1</VAR>, <VAR>val2</VAR> etc. are the evaluated arguments supplied
+to the procedure.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(trace-entry fib)
+(fib 3)
+-| [Entering #[compound-procedure 19 fib]
+-|     Args: 3]
+-| [Entering #[compound-procedure 19 fib]
+-|     Args: 1]
+-| [Entering #[compound-procedure 19 fib]
+-|     Args: 2]
+=> 3
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX284"></A>
+<DL>
+<DT><U>procedure+:</U> <B>trace-exit</B> <I>procedure</I>
+<DD>Causes an informative message to be printed when <VAR>procedure</VAR>
+terminates.  The message contains the procedure, its argument values,
+and the value returned by the procedure.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(trace-exit fib)
+(fib 3)
+-| [1
+-|       &#60;== #[compound-procedure 19 fib]
+-|     Args: 1]
+-| [2
+-|       &#60;== #[compound-procedure 19 fib]
+-|     Args: 2]
+-| [3
+-|       &#60;== #[compound-procedure 19 fib]
+-|     Args: 3]
+=> 3
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX285"></A>
+<DL>
+<DT><U>procedure+:</U> <B>trace-both</B> <I>procedure</I>
+<DD><A NAME="IDX286"></A>
+<DT><U>procedure+:</U> <B>trace</B> <I>procedure</I>
+<DD>Equivalent to calling both <CODE>trace-entry</CODE> and <CODE>trace-exit</CODE> on
+<VAR>procedure</VAR>.  <CODE>trace</CODE> is the same as <CODE>trace-both</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(trace-both fib)
+(fib 3)
+-| [Entering #[compound-procedure 19 fib]
+-|     Args: 3]
+-| [Entering #[compound-procedure 19 fib]
+-|     Args: 1]
+-| [1
+-|       &#60;== #[compound-procedure 19 fib]
+-|     Args: 1]
+-| [Entering #[compound-procedure 19 fib]
+-|     Args: 2]
+-| [2
+-|       &#60;== #[compound-procedure 19 fib]
+-|     Args: 2]
+-| [3
+-|       &#60;== #[compound-procedure 19 fib]
+-|     Args: 3]
+=> 3
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX287"></A>
+<DL>
+<DT><U>procedure+:</U> <B>untrace-entry</B> <I>[procedure]</I>
+<DD>Stops tracing the entry of <VAR>procedure</VAR>.  If <VAR>procedure</VAR> is not
+given, the default is to stop tracing the entry of all entry-traced
+procedures.
+</DL>
+</P><P>
+
+<A NAME="IDX288"></A>
+<DL>
+<DT><U>procedure+:</U> <B>untrace-exit</B> <I>[procedure]</I>
+<DD>Stops tracing the exit of <VAR>procedure</VAR>.  If <VAR>procedure</VAR> is not
+given, the default is all exit-traced procedures.
+</DL>
+</P><P>
+
+<A NAME="IDX289"></A>
+<DL>
+<DT><U>procedure+:</U> <B>untrace</B> <I>[procedure]</I>
+<DD>Stops tracing both the entry to and the exit from <VAR>procedure</VAR>.  If
+<VAR>procedure</VAR> is not given, the default is all traced procedures.
+</DL>
+</P><P>
+
+<A NAME="IDX290"></A>
+<DL>
+<DT><U>procedure+:</U> <B>break-entry</B> <I>procedure</I>
+<DD>Like <CODE>trace-entry</CODE> with the additional effect that a breakpoint is
+entered when <VAR>procedure</VAR> is invoked.  Both <VAR>procedure</VAR>
+and its arguments can be accessed by calling the procedures
+<CODE>*proc*</CODE> and <CODE>*args*</CODE>, respectively.  Use <CODE>restart</CODE> or
+<CODE>continue</CODE> to continue from a breakpoint.
+</DL>
+</P><P>
+
+<A NAME="IDX291"></A>
+<DL>
+<DT><U>procedure+:</U> <B>break-exit</B> <I>procedure</I>
+<DD>Like <CODE>trace-exit</CODE>, except that a breakpoint is entered just prior
+to leaving <VAR>procedure</VAR>.  <VAR>Procedure</VAR>, its
+arguments, and the result can be accessed by calling the procedures
+<CODE>*proc*</CODE>, <CODE>*args*</CODE>, and <CODE>*result*</CODE>, respectively.  Use
+<CODE>restart</CODE> or <CODE>continue</CODE> to continue from a breakpoint.
+</DL>
+</P><P>
+
+<A NAME="IDX292"></A>
+<DL>
+<DT><U>procedure+:</U> <B>break-both</B> <I>procedure</I>
+<DD><A NAME="IDX293"></A>
+<DT><U>procedure+:</U> <B>break</B> <I>procedure</I>
+<DD>Sets a breakpoint at the beginning and end of <VAR>procedure</VAR>.  This is
+<CODE>break-entry</CODE> and <CODE>break-exit</CODE> combined.
+</DL>
+</P><P>
+
+<A NAME="IDX294"></A>
+<DL>
+<DT><U>procedure+:</U> <B>unbreak</B> <I>[procedure]</I>
+<DD>Discontinues the entering of a breakpoint on the entry to and exit from
+<VAR>procedure</VAR>.  If <VAR>procedure</VAR> is not given, the default is
+all breakpointed procedures.
+</DL>
+</P><P>
+
+<A NAME="IDX295"></A>
+<DL>
+<DT><U>procedure+:</U> <B>unbreak-entry</B> <I>[procedure]</I>
+<DD>Discontinues the entering of a breakpoint on the entry to
+<VAR>procedure</VAR>.  If <VAR>procedure</VAR> is not given, the default is all
+entry-breakpointed procedures.
+</DL>
+</P><P>
+
+<A NAME="IDX296"></A>
+<DL>
+<DT><U>procedure+:</U> <B>unbreak-exit</B> <I>[procedure]</I>
+<DD>Discontinues the entering of a breakpoint on the exit from
+<VAR>procedure</VAR>.  If <VAR>procedure</VAR> is not given, the default is all
+exit-breakpointed procedures.
+</DL>
+</P><P>
+
+The following three procedures are valid only within the dynamic extent
+of a breakpoint.  In other words, don't call them unless you are stopped
+inside a breakpoint.
+</P><P>
+
+<A NAME="IDX297"></A>
+<DL>
+<DT><U>procedure+:</U> <B>*proc*</B>
+<DD>Returns the procedure in which the breakpoint has stopped.
+</DL>
+</P><P>
+
+<A NAME="IDX298"></A>
+<DL>
+<DT><U>procedure+:</U> <B>*args*</B>
+<DD>Returns the arguments to the procedure in which the breakpoint has
+stopped.  The arguments are returned as a newly allocated list.
+</DL>
+</P><P>
+
+<A NAME="IDX299"></A>
+<DL>
+<DT><U>procedure+:</U> <B>*result*</B>
+<DD>Returns the result yielded by the procedure in which the breakpoint has
+stopped.  This is valid only when in an exit breakpoint.
+</DL>
+</P><P>
+
+The following procedures install <EM>advice</EM> procedures that are called
+when the advised procedure is entered or exited.  An entry-advice
+procedure must accept three arguments: the advised procedure, a list of
+the advised procedure's arguments, and the advised procedure's
+application environment (that is, the environment in which the
+procedure's formal parameters are bound).  An exit-advice procedure must
+accept four arguments: the advised procedure, a list of the advised
+procedure's arguments, the result yielded by the advised procedure, and
+the advised procedure's application environment.
+</P><P>
+
+Note that the trace and breakpoint procedures described above are all
+implemented by means of the more general advice procedures, so removing
+advice from an advised procedure will also remove traces and
+breakpoints.
+</P><P>
+
+<A NAME="IDX300"></A>
+<DL>
+<DT><U>procedure+:</U> <B>advise-entry</B> <I>procedure advice</I>
+<DD><VAR>Advice</VAR> must be an entry-advice procedure.  <VAR>Advice</VAR> is
+attached to <VAR>procedure</VAR>, so that whenever <VAR>procedure</VAR> is
+entered, <VAR>advice</VAR> is called.
+</DL>
+</P><P>
+
+<A NAME="IDX301"></A>
+<DL>
+<DT><U>procedure+:</U> <B>advise-exit</B> <I>procedure advice</I>
+<DD><VAR>Advice</VAR> must be an exit-advice procedure.  <VAR>Advice</VAR> is attached
+to <VAR>procedure</VAR>, so that whenever <VAR>procedure</VAR> returns,
+<VAR>advice</VAR> is called.
+</DL>
+</P><P>
+
+<A NAME="IDX302"></A>
+<DL>
+<DT><U>procedure+:</U> <B>advice</B> <I>procedure</I>
+<DD>Returns the advice procedures, if any, that are attached to
+<VAR>procedure</VAR>.  This is returned as a list of two lists: the first
+list is all of the entry-advice procedures attached to <VAR>procedure</VAR>,
+and the second is all of the exit-advice procedures.
+</DL>
+</P><P>
+
+<A NAME="IDX303"></A>
+<DL>
+<DT><U>procedure+:</U> <B>unadvise-entry</B> <I>[procedure]</I>
+<DD>Removes all entry-advice procedures from <VAR>procedure</VAR>.  If
+<VAR>procedure</VAR> is not given, the default is all entry-advised
+procedures.
+</DL>
+</P><P>
+
+<A NAME="IDX304"></A>
+<DL>
+<DT><U>procedure+:</U> <B>unadvise-exit</B> <I>[procedure]</I>
+<DD>Removes exit-advice procedures from <VAR>procedure</VAR>.  If <VAR>procedure</VAR>
+is not given, the default is all exit-advised procedures.
+</DL>
+</P><P>
+
+<A NAME="IDX305"></A>
+<DL>
+<DT><U>procedure+:</U> <B>unadvise</B> <I>[procedure]</I>
+<DD>Removes all advice procedures from <VAR>procedure</VAR>. This is a
+combination of <CODE>unadvise-entry</CODE> and <CODE>unadvise-exit</CODE>.  If
+<VAR>procedure</VAR> is not given, the default is all advised procedures.
+</DL>
+</P><P>
+
+<A NAME="GNU Emacs Interface"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC53"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_7.html#SEC58"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

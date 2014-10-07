@@ -1,0 +1,553 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme User's Manual: Installation</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme User's Manual: Installation">
+<META NAME="keywords" CONTENT="MIT Scheme User's Manual: Installation">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC2"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_1.html#SEC1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 1. Installation </H1>
+<!--docid::SEC2::-->
+<P>
+
+This chapter describes how to install MIT Scheme release 7.5.  The
+release is supported under several different operating systems: unix,
+OS/2, and Windows.  Read the section detailing the installation for the
+operating system that you are using.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_2.html#SEC3">1.1 Unix Installation</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_2.html#SEC4">1.2 Windows Installation</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_2.html#SEC5">1.3 OS/2 Installation</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_2.html#SEC8">1.4 Optional Configuration</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Unix Installation"></A>
+<HR SIZE="6">
+<A NAME="SEC3"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC2"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC4"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 1.1 Unix Installation </H2>
+<!--docid::SEC3::-->
+<P>
+
+We will use as an example the installation for GNU/Linux.  The
+installation for other unix systems is similar.
+</P><P>
+
+MIT Scheme is distributed as a compressed `tar' file.  The tar file
+contains two directories, called <TT>`bin'</TT> and <TT>`lib'</TT>.  The
+<TT>`bin'</TT> directory contains two executable files, <TT>`scheme'</TT> and
+<TT>`bchscheme'</TT>.  The <TT>`lib'</TT> directory contains one subdirectory,
+<TT>`lib/mit-scheme'</TT>, that Scheme uses while it is executing.
+</P><P>
+
+The goal of the installation is to put the executable files in a
+directory where they will be executed as commands, and to put the
+library files in some convenient place where Scheme can find them.
+</P><P>
+
+There are two ways to install this software: the conventional way in
+<TT>`/usr/local'</TT>, and the alternative way, in locations of your
+choice.  We encourage you to install this software in <TT>`/usr/local'</TT>
+if possible.
+</P><P>
+
+To install the software in <TT>`/usr/local'</TT>, do the following
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>cd /usr/local
+rm -f bin/scheme bin/bchscheme
+rm -rf lib/mit-scheme
+gzip -cd scheme-7.5.17-ix86-gnu-linux.tar.gz | tar xvf -
+</pre></td></tr></table></P><P>
+
+After executing these commands, the executable files will be in
+<TT>`/usr/local/bin'</TT>, and the library files will be in
+<TT>`/usr/local/lib/mit-scheme'</TT>.  No further configuration is required.
+</P><P>
+
+To install the files in directories of your choice:
+</P><P>
+
+<UL>
+<LI>
+First unpack the distribution:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>mkdir temp
+cd temp
+gzip -cd scheme-7.5.17-ix86-gnu-linux.tar.gz | tar xvf -
+</pre></td></tr></table></P><P>
+
+<LI>
+Next, move the contents of the <TT>`bin'</TT> directory to somewhere
+convenient that is on your execution path.  For example, if you had a
+directory <TT>`~/bin'</TT> on your path, you would do this:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>mv bin/* ~/bin/.
+</pre></td></tr></table></P><P>
+
+<LI>
+Next, move or copy the <TT>`mit-scheme'</TT> directory somewhere
+convenient.  For example, you could move it to your home directory:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>mv lib/mit-scheme ~/.
+</pre></td></tr></table></P><P>
+
+Note that if you have unpacked the distribution on a different drive
+than the one you plan to store the <TT>`mit-scheme'</TT> directory on, you
+must use the command <SAMP>`cp -pr'</SAMP> rather than <SAMP>`mv'</SAMP>.
+</P><P>
+
+<LI>
+Next, you must tell Scheme where to find the <TT>`mit-scheme'</TT>
+directory.  This can be done in one of two ways.  The first way is to
+bind the environment variable <CODE>MITSCHEME_LIBRARY_PATH</CODE> to the full
+path to the directory, e.g. in <CODE>bash</CODE> you would do
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>export MITSCHEME_LIBRARY_PATH=~/mit-scheme
+</pre></td></tr></table></P><P>
+
+You should put this environment-variable binding in one of your shell
+init files, e.g. for <CODE>bash</CODE> it might go in the <TT>`.bashrc'</TT> file.
+</P><P>
+
+The second way is to use a command-line argument when invoking Scheme,
+e.g.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>scheme -library ~/mit-scheme
+</pre></td></tr></table></P><P>
+
+<LI>
+You should now be able to run MIT Scheme.  See section <A HREF="user_3.html#SEC9">2. Running Scheme</A>, for
+more information.
+</UL>
+<P>
+
+<A NAME="Windows Installation"></A>
+<HR SIZE="6">
+<A NAME="SEC4"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC3"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC5"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 1.2 Windows Installation </H2>
+<!--docid::SEC4::-->
+<P>
+
+This section describes how to install MIT Scheme on Windows 95, Windows
+98, or Windows NT 4.0.  The software should also work on older versions
+of Windows NT, but we haven't tested it there.
+</P><P>
+
+MIT Scheme is distributed as a self-installing executable.  Installation
+of the software is straightforward.  Simply execute the downloaded file
+and answer the installer's questions.  The installer will allow you to
+choose the directory in which MIT Scheme is to be installed, and the
+name of the folder in which the shortcuts are to be placed.
+</P><P>
+
+To uninstall the software, open up the <SAMP>`Control Panel'</SAMP>, run
+<SAMP>`Add/Remove Programs'</SAMP>, and double-click on <SAMP>`MIT Scheme 7.5'</SAMP>.
+</P><P>
+
+<A NAME="OS/2 Installation"></A>
+<HR SIZE="6">
+<A NAME="SEC5"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC4"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC6"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC8"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 1.3 OS/2 Installation </H2>
+<!--docid::SEC5::-->
+<P>
+
+This section describes how to install MIT Scheme on a machine running
+OS/2 2.1 or later.  This release of MIT Scheme has been tested only on
+OS/2 Warp 4.0.  It was compiled using IBM Visual Age C++ version 3.0 and
+the OS/2 Toolkit version 4.0.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_2.html#SEC6">1.3.1 OS/2 Installation Procedure</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_2.html#SEC7">1.3.2 Environment Variables</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="OS/2 Installation Procedure"></A>
+<HR SIZE="6">
+<A NAME="SEC6"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC5"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC7"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC5"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC8"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.3.1 OS/2 Installation Procedure </H3>
+<!--docid::SEC6::-->
+<P>
+
+After unpacking the ZIP file, <TT>`os2.zip'</TT>, you will have these
+directories containing the following files:
+</P><P>
+
+<DL COMPACT>
+<DT><TT>`exe'</TT>
+<DD>The executable programs <TT>`scheme.exe'</TT> and <TT>`bchschem.exe'</TT>.
+<P>
+
+<DT><TT>`dll'</TT>
+<DD>The dynamic link libraries <TT>`blowfish.dll'</TT>, <TT>`gdbm.dll'</TT>, and
+<TT>`md5.dll'</TT>.
+<P>
+
+<DT><TT>`doc'</TT>
+<DD>Documentation files in HTML.
+<P>
+
+<DT><TT>`lib'</TT>
+<DD>A directory containing the data files needed by Scheme when it is
+running.
+</DL>
+<P>
+
+Perform the following steps to install Scheme:
+</P><P>
+
+<OL>
+<LI>
+Move the executable files <TT>`scheme.exe'</TT> and <TT>`bchschem.exe'</TT> from
+<TT>`exe'</TT> to any directory that appears in your <CODE>PATH</CODE>
+environment variable.  You may either add the <TT>`exe'</TT> directory to
+your path by editing <TT>`config.sys'</TT> and rebooting, or you may move
+the files in <TT>`exe'</TT> to an existing directory that is already on your
+<CODE>PATH</CODE>.
+<P>
+
+Depending on your needs, you may want to keep only one of these files;
+chances are you'll only be using one of them.  Of course, you may also
+keep both programs around if you think you might use them both.
+See section <A HREF="user_3.html#SEC12">2.3 Memory Usage</A>, for more information about the tradeoffs between
+these two programs.
+</P><P>
+
+<LI>
+Move the dynamic link libraries from <TT>`dll'</TT> to any directory that
+appears in your <CODE>LIBPATH</CODE> environment variable.  As above, you may
+either add <TT>`dll'</TT> to your <CODE>LIBPATH</CODE>, or move the files in
+<TT>`dll'</TT> to a directory that is already on your <CODE>LIBPATH</CODE>.
+<P>
+
+<LI>
+You may move the <TT>`lib'</TT> directory anywhere you like.  You may
+rename it to anything you like.  (Here at MIT, we use
+<TT>`c:\scheme\lib'</TT>.)  After you have chosen where it will be located,
+set the <CODE>MITSCHEME_LIBRARY_PATH</CODE> environment variable in
+<TT>`config.sys'</TT> to be that location.
+<P>
+
+For example, if you decide to store the directory as <TT>`c:\schdata'</TT>,
+you would add the following to <TT>`config.sys'</TT>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>SET MITSCHEME_LIBRARY_PATH=C:\SCHDATA
+</pre></td></tr></table></P><P>
+
+(Remember that you must reboot OS/2 after editing <TT>`config.sys'</TT> in
+order for the changes to take effect.)
+</P><P>
+
+You can override the setting of this environment variable with the
+<CODE>-library</CODE> command-line option to Scheme, for example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>scheme -library d:\myscm\mylib
+</pre></td></tr></table></P><P>
+
+If you supply a <CODE>-library</CODE> option, it is not necessary to have the
+environment variable defined.  For example, instead of editing
+<TT>`config.sys'</TT>, you might create a <TT>`.cmd'</TT> file to invoke Scheme
+and pass it the <CODE>-library</CODE> option automatically.
+</P><P>
+
+<LI>
+<EM>Optional:</EM> Move the <TT>`doc'</TT> directory anywhere you like, or
+delete it if you do not want to keep the documentation.
+<P>
+
+<LI>
+<EM>Optional:</EM> Consider setting some of the environment variables
+described below.
+</OL>
+<P>
+
+<A NAME="Environment Variables for OS/2 Installation"></A>
+<HR SIZE="6">
+<A NAME="SEC7"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC6"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC8"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC5"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC8"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.3.2 Environment Variables </H3>
+<!--docid::SEC7::-->
+<P>
+
+This section documents several of the environment variables that Scheme
+uses, and gives an example for each one.  These are the environment
+variables that must usually be defined when installing Scheme under
+OS/2.  For complete documentation of all of the environment variables
+used by Scheme, see <A HREF="user_3.html#SEC15">2.6 Environment Variables</A>.
+</P><P>
+
+Note that environment variables are usually defined in the OS/2
+<TT>`config.sys'</TT> file.  After editing the <TT>`config.sys'</TT> file, it is
+necessary to reboot OS/2 before the changes will take effect.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>MITSCHEME_LIBRARY_PATH</CODE>
+<DD><A NAME="IDX9"></A>
+says where to find Scheme's data files.  This is the only required
+environment variable (but is not required when Scheme is invoked with
+the <CODE>-library</CODE> command-line option).
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>SET MITSCHEME_LIBRARY_PATH=C:\SCHEME\LIB
+</pre></td></tr></table></P><P>
+
+<DT><CODE>MITSCHEME_INF_DIRECTORY</CODE>
+<DD><A NAME="IDX10"></A>
+tells Scheme where to find debugging information for the runtime system.
+The default value for this environment variable is a subdirectory
+<TT>`src'</TT> located in the directory specified by
+<CODE>MITSCHEME_LIBRARY_PATH</CODE>.
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>SET MITSCHEME_INF_DIRECTORY=C:\SCHEME\LIB\SRC
+</pre></td></tr></table></P><P>
+
+<DT><CODE>TMPDIR</CODE>
+<DD><A NAME="IDX11"></A>
+tells Scheme the name of a directory where it can store temporary files.
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>SET TMPDIR=C:\TMP
+</pre></td></tr></table></P><P>
+
+<DT><CODE>HOME</CODE>
+<DD><A NAME="IDX12"></A>
+tells Scheme where your "home" directory is located.  This is where
+Scheme looks for init files, and it is also what the <TT>`~/'</TT> (or
+<TT>`~\\'</TT>) filename prefix expands to.  If not specified, Scheme uses
+the root directory of the current drive.
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>SET HOME=C:\CPH
+</pre></td></tr></table></P><P>
+
+<DT><CODE>USER</CODE>
+<DD><A NAME="IDX13"></A>
+tells Scheme your user name.  This is used for several purposes,
+including the name that will be used as your email address.
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>SET USER=cph
+</pre></td></tr></table></P><P>
+
+<DT><CODE>SHELL</CODE>
+<DD><A NAME="IDX14"></A>
+tells Edwin what shell program to use in shell buffers and for running
+shell commands.  If not specified, this defaults to the standard OS/2
+shell, <TT>`cmd.exe'</TT>.
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>SET SHELL=C:\4OS2251\4OS2.EXE
+</pre></td></tr></table></DL>
+<P>
+
+<A NAME="Optional Configuration"></A>
+<HR SIZE="6">
+<A NAME="SEC8"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC7"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC5"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 1.4 Optional Configuration </H2>
+<!--docid::SEC8::-->
+<P>
+
+As distributed, Scheme contains several large files.  You might not need
+all of them, so this section will tell you what each is for so that you
+can decide if you want to delete some of them.  Also, we will discuss
+the two different Scheme executables, which are each useful in different
+situations; you should read this to decide which is right for you.
+</P><P>
+
+The Scheme runtime environment and associated tools are normally stored
+in <EM>bands</EM>, which are large memory images stored in files
+(see section <A HREF="user_4.html#SEC31">3.3 World Images</A>).  Scheme requires at least one band to work
+properly.  The Scheme distribution contains several bands.  These bands
+are stored in the <TT>`lib/mit-scheme'</TT> directory on unix systems, and
+the <TT>`lib'</TT> directory on PC systems.
+</P><P>
+
+<DL COMPACT>
+<DT><TT>`runtime.com'</TT>
+<DD>The is the basic world image, and the smallest.  It contains just the
+runtime files.  This is the band that is chosen when Scheme is invoked
+with no special command-line options.
+<P>
+
+<DT><TT>`compiler.com'</TT>
+<DD>This contains the runtime files and the native-code Scheme compiler.
+This band is chosen when the <CODE>-compiler</CODE> command-line option is
+supplied.
+<P>
+
+<DT><TT>`edwin.com'</TT>
+<DD>This contains the runtime files and the Edwin text editor.  This band is
+chosen when the <CODE>-edwin</CODE> command-line option is supplied.
+<P>
+
+<DT><TT>`all.com'</TT>
+<DD>This contains the runtime files, the native-code compiler, and Edwin.
+This band is chosen when both the <CODE>-compiler</CODE> and <CODE>-edwin</CODE>
+command-line options are supplied.
+</DL>
+<P>
+
+Depending on your needs, you may not need all of these files.  For
+example, if you always want the full development environment, you might
+keep <TT>`all.com'</TT> and delete the others.  Or if you will never use the
+compiler, you could delete <TT>`compiler.com'</TT> and <TT>`all.com'</TT>.
+Remember that you must keep at least one of these files to use Scheme.
+</P><P>
+
+In addition to bands, Scheme is distributed with two executable
+programs: <TT>`scheme'</TT> (called <TT>`scheme.exe'</TT> on PC systems), and
+<TT>`bchscheme'</TT> (called <TT>`bchschem.exe'</TT> on PC systems).  Normally
+you will need only one of these files.
+</P><P>
+
+The only difference between these two programs is in how they handle
+garbage collection.  <TT>`scheme'</TT> allocates two memory heaps, and
+copies objects between the heaps to preserve them.  This means that most
+of the time the other heap is occupying valuable memory but doesn't hold
+any interesting data.  <TT>`bchscheme'</TT> allocates only one memory heap,
+creates a disk file during garbage collection, copies objects into the
+file, then copies them back into memory.
+</P><P>
+
+These programs provide you with some important performance trade-offs.
+If you have plenty of memory and want the best performance, use
+<TT>`scheme'</TT>.  If you don't have enough memory, or if you want to use
+less memory and will accept slower performance, use <TT>`bchscheme'</TT>.
+One way to tell that you don't have enough memory is to run
+<TT>`scheme'</TT> for a while and see if your machine is paging during
+garbage collection.
+</P><P>
+
+You might consider trying to use <TT>`scheme'</TT> and letting the operating
+system's paging handle the lack of RAM.  But usually you will find
+that using <TT>`bchscheme'</TT> without paging is much faster than using
+<TT>`scheme'</TT> with paging.  Of course, if you are using <TT>`bchscheme'</TT>
+and you're still paging, the best solution is to install more RAM.
+</P><P>
+
+<A NAME="Running Scheme"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC5"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

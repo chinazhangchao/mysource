@@ -1,0 +1,2126 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme Reference: Graphics</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme Reference: Graphics">
+<META NAME="keywords" CONTENT="MIT Scheme Reference: Graphics">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC183"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC182"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC184"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 17. Graphics </H1>
+<!--docid::SEC183::-->
+<P>
+
+MIT Scheme has a simple two-dimensional line-graphics interface
+that is suitable for many graphics applications.  In particular it is
+often used for plotting data points from experiments.  The interface is
+generic in that it can support different types of graphics devices in a
+uniform manner.  At the present time only one type of graphics device
+is implemented on each operating system.
+</P><P>
+
+Procedures are available for drawing points, lines, and text; defining
+the coordinate system; clipping graphics output; controlling some of the
+drawing characteristics; and controlling the output buffer (for devices
+that perform buffering).  Additionally, devices may support custom
+operations, such as control of colors.
+</P><P>
+
+There are some constraints on the arguments to the procedures described
+in this chapter.  Any argument named <VAR>graphics-device</VAR> must be a
+graphics device object that was returned from a call to
+<CODE>make-graphics-device</CODE>.  Any argument that is a coordinate must be
+either an exact integer or an inexact real.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_18.html#SEC184">17.1 Opening and Closing of Graphics Devices</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_18.html#SEC185">17.2 Coordinates for Graphics</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_18.html#SEC186">17.3 Drawing Graphics</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_18.html#SEC187">17.4 Characteristics of Graphics Output</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_18.html#SEC188">17.5 Buffering of Graphics Output</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_18.html#SEC189">17.6 Clipping of Graphics Output</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_18.html#SEC190">17.7 Custom Graphics Operations</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_18.html#SEC191">17.8 Images</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_18.html#SEC192">17.9 X Graphics</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Graphics on the X Window System</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_18.html#SEC196">17.10 Win32 Graphics</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Graphics on Microsoft Windows and Windows NT</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_18.html#SEC199">17.11 OS/2 Graphics</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Graphics on IBM OS/2</TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Opening and Closing of Graphics Devices"></A>
+<HR SIZE="6">
+<A NAME="SEC184"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC185"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 17.1 Opening and Closing of Graphics Devices </H2>
+<!--docid::SEC184::-->
+<P>
+
+<A NAME="IDX2412"></A>
+<DL>
+<DT><U>procedure+:</U> <B>graphics-type-available?</B> <I>graphics-device-type</I>
+<DD>This predicate returns <CODE>#t</CODE> if the graphics system named by the
+symbol <VAR>graphics-device-type</VAR> is implemented by the Scheme system.
+Otherwise it returns <CODE>#f</CODE>, in which case it is an error to attempt
+to make a graphics device using <VAR>graphics-device-type</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX2413"></A>
+<DL>
+<DT><U>procedure+:</U> <B>enumerate-graphics-types</B>
+<DD>This procedure returns a list of symbols which are the names of all the
+graphics device types that are supported by the Scheme system.  The
+result is useful in deciding what additional arguments to supply to
+<CODE>make-graphics-device</CODE>, as each device type typically has a unique
+way of specifying the initial size, shape and other attributes.
+</DL>
+</P><P>
+
+<A NAME="IDX2414"></A>
+<DL>
+<DT><U>procedure+:</U> <B>make-graphics-device</B> <I>graphics-device-type object <small>...</small></I>
+<DD>This operation creates and returns a graphics device object.
+<VAR>Graphics-device-type</VAR> is a symbol naming a graphics device type,
+and both the number and the meaning of the remaining arguments is
+determined by that type (see the description of each device type for
+details); <VAR>graphics-device-type</VAR> must satisfy
+<CODE>graphics-type-available?</CODE>.  <VAR>Graphics-device-type</VAR> may also be
+<CODE>#f</CODE>, in which case the graphics device type is chosen by the
+system from what is available.  This allows completely portable graphics
+programs to be written provided no custom graphics operations are used.
+When <VAR>graphics-device-type</VAR> is <CODE>#f</CODE> no further arguments may be
+given; each graphics device type will use some "sensible" defaults.
+If more control is required then the program should use one of the two
+procedures above to dispatch on the available types.
+</P><P>
+
+This procedure opens and initializes the device, which remains valid
+until explicitly closed by the procedure <CODE>graphics-close</CODE>.
+Depending on the implementation of the graphics device, if this object
+is reclaimed by the garbage collector, the graphics device may remain
+open or it may be automatically closed.  While a graphics device remains
+open the resources associated with it are not released.
+</DL>
+</P><P>
+
+<A NAME="IDX2415"></A>
+<DL>
+<DT><U>procedure+:</U> <B>graphics-close</B> <I>graphics-device</I>
+<DD>Closes <VAR>graphics-device</VAR>, releasing its resources.  Subsequently it
+is an error to use <VAR>graphics-device</VAR>.
+</DL>
+</P><P>
+
+<A NAME="Coordinates for Graphics"></A>
+<HR SIZE="6">
+<A NAME="SEC185"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC184"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC186"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 17.2 Coordinates for Graphics </H2>
+<!--docid::SEC185::-->
+<P>
+
+<A NAME="IDX2416"></A>
+<A NAME="IDX2417"></A>
+<A NAME="IDX2418"></A>
+<A NAME="IDX2419"></A>
+<A NAME="IDX2420"></A>
+Each graphics device has two different coordinate systems associated
+with it: <EM>device coordinates</EM> and <EM>virtual coordinates</EM>.  Device
+coordinates are generally defined by low-level characteristics of the
+device itself, and often cannot be changed.  Most device coordinate
+systems are defined in terms of pixels, and usually the upper-left-hand
+corner is the origin of the coordinate system, with <VAR>x</VAR> coordinates
+increasing to the right and <VAR>y</VAR> coordinates increasing downwards.
+</P><P>
+
+In contrast, virtual coordinates are more flexible in the units
+employed, the position of the origin, and even the direction in which
+the coordinates increase.  A virtual coordinate system is defined by
+assigning coordinates to the edges of a device.  Because these edge
+coordinates are arbitrary real numbers, any Cartesian coordinate system
+can be defined.
+</P><P>
+
+All graphics procedures that use coordinates are defined on virtual
+coordinates.  For example, to draw a line at a particular place on a
+device, the virtual coordinates for the endpoints of that line are
+given.
+</P><P>
+
+When a graphics device is initialized, its virtual coordinate system is
+reset so that the left edge corresponds to an x-coordinate of <CODE>-1</CODE>,
+the right edge to x-coordinate <CODE>1</CODE>, the bottom edge to y-coordinate
+<CODE>-1</CODE>, and the top edge to y-coordinate <CODE>1</CODE>.
+</P><P>
+
+<A NAME="IDX2421"></A>
+<DL>
+<DT><U>procedure+:</U> <B>graphics-device-coordinate-limits</B> <I>graphics-device</I>
+<DD>Returns (as multiple values) the device coordinate limits for
+<VAR>graphics-device</VAR>.  The values, which are exact non-negative
+integers, are: <VAR>x-left</VAR>, <VAR>y-bottom</VAR>, <VAR>x-right</VAR>, and
+<VAR>y-top</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX2422"></A>
+<DL>
+<DT><U>procedure+:</U> <B>graphics-coordinate-limits</B> <I>graphics-device</I>
+<DD>Returns (as multiple values) the virtual coordinate limits for
+<VAR>graphics-device</VAR>.  The values, which are real numbers, are:
+<VAR>x-left</VAR>, <VAR>y-bottom</VAR>, <VAR>x-right</VAR>, and <VAR>y-top</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX2423"></A>
+<DL>
+<DT><U>procedure+:</U> <B>graphics-set-coordinate-limits</B> <I>graphics-device x-left y-bottom x-right y-top</I>
+<DD>Changes the virtual coordinate limits of <VAR>graphics-device</VAR> to the
+given arguments.  <VAR>X-left</VAR>, <VAR>y-bottom</VAR>, <VAR>x-right</VAR>, and
+<VAR>y-top</VAR> must be real numbers.  Subsequent calls to
+<CODE>graphics-coordinate-limits</CODE> will return the new limits.  This
+operation has no effect on the device's displayed contents.
+</P><P>
+
+Note: This operation usually resets the clip rectangle, although it is
+not guaranteed to do so.  If a clip rectangle is in effect when this
+procedure is called, it is necessary to redefine the clip rectangle
+afterwards.
+</DL>
+</P><P>
+
+<A NAME="Drawing Graphics"></A>
+<HR SIZE="6">
+<A NAME="SEC186"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC185"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC187"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 17.3 Drawing Graphics </H2>
+<!--docid::SEC186::-->
+<P>
+
+The procedures in this section provide the basic drawing capabilities of
+Scheme's graphics system.
+</P><P>
+
+<A NAME="IDX2424"></A>
+<DL>
+<DT><U>procedure+:</U> <B>graphics-clear</B> <I>graphics-device</I>
+<DD>Clears the display of <VAR>graphics-device</VAR>.  Unaffected by the current
+drawing mode.
+</DL>
+</P><P>
+
+<A NAME="IDX2425"></A>
+<DL>
+<DT><U>procedure+:</U> <B>graphics-draw-point</B> <I>graphics-device x y</I>
+<DD>Draws a single point on <VAR>graphics-device</VAR> at the virtual coordinates
+given by <VAR>x</VAR> and <VAR>y</VAR>, using the current drawing mode.
+</DL>
+</P><P>
+
+<A NAME="IDX2426"></A>
+<DL>
+<DT><U>procedure+:</U> <B>graphics-erase-point</B> <I>graphics-device x y</I>
+<DD>Erases a single point on <VAR>graphics-device</VAR> at the virtual
+coordinates given by <VAR>x</VAR> and <VAR>y</VAR>.  This procedure is unaffected
+by the current drawing mode.
+</DL>
+</P><P>
+
+This is equivalent to
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(lambda (device x y)
+  (graphics-bind-drawing-mode device 0
+    (lambda ()
+      (graphics-draw-point device x y))))
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX2427"></A>
+<DL>
+<DT><U>procedure+:</U> <B>graphics-draw-line</B> <I>graphics-device x-start y-start x-end y-end</I>
+<DD><VAR>X-start</VAR>, <VAR>y-start</VAR>, <VAR>x-end</VAR>, and <VAR>y-end</VAR> must be real
+numbers.  Draws a line on <VAR>graphics-device</VAR> that connects the points
+(<VAR>x-start</VAR>, <VAR>y-start</VAR>) and (<VAR>x-end</VAR>, <VAR>y-end</VAR>).  The line
+is drawn using the current drawing mode and line style.
+</DL>
+</P><P>
+
+<A NAME="IDX2428"></A>
+<DL>
+<DT><U>procedure+:</U> <B>graphics-draw-text</B> <I>graphics-device x y string</I>
+<DD>Draws the characters of <VAR>string</VAR> at the point (<VAR>x</VAR>, <VAR>y</VAR>) on
+<VAR>graphics-device</VAR>, using the current drawing mode.  The
+characteristics of the characters drawn are device-dependent, but all
+devices are initialized so that the characters are drawn upright, from
+left to right, with the leftmost edge of the leftmost character at
+<VAR>x</VAR>, and the baseline of the characters at <VAR>y</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX2429"></A>
+<A NAME="IDX2430"></A>
+The following two procedures provide an alternate mechanism for drawing
+lines, which is more akin to using a plotter.  They maintain a
+<EM>cursor</EM>, which can be positioned to a particular point and then
+dragged to another point, producing a line.  Sequences of connected line
+segments can be drawn by dragging the cursor from point to point.
+</P><P>
+
+Many graphics operations have an unspecified effect on the cursor.  The
+following exceptions are guaranteed to leave the cursor unaffected:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>graphics-device-coordinate-limits
+graphics-coordinate-limits
+graphics-enable-buffering
+graphics-disable-buffering
+graphics-flush
+graphics-bind-drawing-mode
+graphics-set-drawing-mode
+graphics-bind-line-style
+graphics-set-line-style
+</pre></td></tr></table></P><P>
+
+The initial state of the cursor is unspecified.
+</P><P>
+
+<A NAME="IDX2431"></A>
+<DL>
+<DT><U>procedure+:</U> <B>graphics-move-cursor</B> <I>graphics-device x y</I>
+<DD>Moves the cursor for <VAR>graphics-device</VAR> to the point (<VAR>x</VAR>,
+<VAR>y</VAR>).  The contents of the device's display are unchanged.
+</DL>
+</P><P>
+
+<A NAME="IDX2432"></A>
+<DL>
+<DT><U>procedure+:</U> <B>graphics-drag-cursor</B> <I>graphics-device x y</I>
+<DD>Draws a line from <VAR>graphics-device</VAR>'s cursor to the point (<VAR>x</VAR>,
+<VAR>y</VAR>), simultaneously moving the cursor to that point.  The line is
+drawn using the current drawing mode and line style.
+</DL>
+</P><P>
+
+<A NAME="Characteristics of Graphics Output"></A>
+<HR SIZE="6">
+<A NAME="SEC187"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC186"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC188"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 17.4 Characteristics of Graphics Output </H2>
+<!--docid::SEC187::-->
+<P>
+
+<A NAME="IDX2433"></A>
+Two characteristics of graphics output are so useful that they are
+supported uniformly by all graphics devices: <EM>drawing mode</EM> and
+<EM>line style</EM>.  A third characteristic, <EM>color</EM>, is equally
+useful (if not more so), but implementation restrictions prohibit a
+uniform interface.
+</P><P>
+
+<A NAME="IDX2434"></A>
+<A NAME="IDX2435"></A>
+The <EM>drawing mode</EM>, an exact integer in the range <CODE>0</CODE> to
+<CODE>15</CODE> inclusive, determines how the figure being drawn is combined
+with the background over which it is drawn to generate the final result.
+Initially the drawing mode is set to "source", so that the new output
+overwrites whatever appears in that place.  Useful alternative drawing
+modes can, for example, erase what was already there, or invert it.
+</P><P>
+
+Altogether 16 boolean operations are available for combining the source
+(what is being drawn) and the destination (what is being drawn over).
+The source and destination are combined by the device on a
+pixel-by-pixel basis as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>Mode    Meaning
+----    -------
+0       ZERO [erase; use background color]
+1       source AND destination
+2       source AND (NOT destination)
+3       source
+4       (NOT source) AND destination
+5       destination
+6       source XOR destination
+7       source OR destination
+8       NOT (source OR destination)
+9       NOT (source XOR destination)
+10      NOT destination
+11      source OR (NOT destination)
+12      NOT source
+13      (NOT source) OR destination
+14      (NOT source) OR (NOT destination)
+15      ONE [use foreground color]
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX2436"></A>
+<A NAME="IDX2437"></A>
+The <EM>line style</EM>, an exact integer in the range <CODE>0</CODE> to <CODE>7</CODE>
+inclusive, determines which parts of a line are drawn in the foreground
+color, and which in the background color.  The default line style,
+"solid", draws the entire line in the foreground color.
+Alternatively, the "dash" style alternates between foreground and
+background colors to generate a dashed line.  This capability is useful
+for plotting several things on the same graph.
+</P><P>
+
+Here is a table showing the name and approximate pattern of the
+different styles.  A <SAMP>`1'</SAMP> in the pattern represents a foreground
+pixel, while a <SAMP>`-'</SAMP> represents a background pixel.  Note that the
+precise output for each style will vary from device to device.  The only
+style that is guaranteed to be the same for every device is "solid".
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>Style   Name                    Pattern
+-----   -------                 -------
+0       solid                   1111111111111111
+1       dash                    11111111--------
+2       dot                     1-1-1-1-1-1-1-1-
+3       dash dot                1111111111111-1-
+4       dash dot dot            11111111111-1-1-
+5       long dash               11111111111-----
+6       center dash             111111111111-11-
+7       center dash dash        111111111-11-11-
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX2438"></A>
+<DL>
+<DT><U>procedure+:</U> <B>graphics-bind-drawing-mode</B> <I>graphics-device drawing-mode thunk</I>
+<DD><A NAME="IDX2439"></A>
+<DT><U>procedure+:</U> <B>graphics-bind-line-style</B> <I>graphics-device line-style thunk</I>
+<DD>These procedures bind the drawing mode or line style, respectively, of
+<VAR>graphics-device</VAR>, invoke the procedure <VAR>thunk</VAR> with no
+arguments, then undo the binding when <VAR>thunk</VAR> returns.  The value of
+each procedure is the value returned by <VAR>thunk</VAR>.  Graphics
+operations performed during <VAR>thunk</VAR>'s dynamic extent will see the
+newly bound mode or style as current.
+</DL>
+</P><P>
+
+<A NAME="IDX2440"></A>
+<DL>
+<DT><U>procedure+:</U> <B>graphics-set-drawing-mode</B> <I>graphics-device drawing-mode</I>
+<DD><A NAME="IDX2441"></A>
+<DT><U>procedure+:</U> <B>graphics-set-line-style</B> <I>graphics-device line-style</I>
+<DD>These procedures change the drawing mode or line style, respectively, of
+<VAR>graphics-device</VAR>.  The mode or style will remain in effect until
+subsequent changes or bindings.
+</DL>
+</P><P>
+
+<A NAME="Buffering of Graphics Output"></A>
+<HR SIZE="6">
+<A NAME="SEC188"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC187"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC189"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 17.5 Buffering of Graphics Output </H2>
+<!--docid::SEC188::-->
+<P>
+
+To improve performance of graphics output, most graphics devices provide
+some form of buffering.  By default, Scheme's graphics procedures flush
+this buffer after every drawing operation.  The procedures in this
+section allow the user to control the flushing of the output
+buffer.
+</P><P>
+
+<A NAME="IDX2442"></A>
+<DL>
+<DT><U>procedure+:</U> <B>graphics-enable-buffering</B> <I>graphics-device</I>
+<DD>Enables buffering for <VAR>graphics-device</VAR>.  In other words, after this
+procedure is called, graphics operations are permitted to buffer their
+drawing requests.  This usually means that the drawing is delayed until
+the buffer is flushed explicitly by the user, or until it fills up and
+is flushed by the system.
+</DL>
+</P><P>
+
+<A NAME="IDX2443"></A>
+<DL>
+<DT><U>procedure+:</U> <B>graphics-disable-buffering</B> <I>graphics-device</I>
+<DD>Disables buffering for <VAR>graphics-device</VAR>.  By default, all graphics
+devices are initialized with buffering disabled.  After this procedure
+is called, all drawing operations perform their output immediately,
+before returning.
+</P><P>
+
+Note: <CODE>graphics-disable-buffering</CODE> flushes the output buffer if
+necessary.
+</DL>
+</P><P>
+
+<A NAME="IDX2444"></A>
+<DL>
+<DT><U>procedure+:</U> <B>graphics-flush</B> <I>graphics-device</I>
+<DD>Flushes the graphics output buffer for <VAR>graphics-device</VAR>.  This
+operation has no effect for devices that do not support buffering, or if
+buffering is disabled for the device.
+</DL>
+</P><P>
+
+<A NAME="Clipping of Graphics Output"></A>
+<HR SIZE="6">
+<A NAME="SEC189"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC188"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC190"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 17.6 Clipping of Graphics Output </H2>
+<!--docid::SEC189::-->
+<P>
+
+<A NAME="IDX2445"></A>
+Scheme provides a rudimentary mechanism for restricting graphics output
+to a given rectangular subsection of a graphics device.  By default,
+graphics output that is drawn anywhere within the device's virtual
+coordinate limits will appear on the device.  When a <EM>clip
+rectangle</EM> is specified, however, output that would have appeared
+outside the clip rectangle is not drawn.
+</P><P>
+
+Note that changing the virtual coordinate limits for a device will
+usually reset the clip rectangle for that device, as will any operation
+that affects the size of the device (such as a window resizing
+operation).  However, programs should not depend on this.
+</P><P>
+
+<A NAME="IDX2446"></A>
+<DL>
+<DT><U>procedure+:</U> <B>graphics-set-clip-rectangle</B> <I>graphics-device x-left y-bottom x-right y-top</I>
+<DD>Specifies the clip rectangle for <VAR>graphics-device</VAR> in virtual
+coordinates.  <VAR>X-left</VAR>, <VAR>y-bottom</VAR>, <VAR>x-right</VAR>, and
+<VAR>y-top</VAR> must be real numbers.  Subsequent graphics output is clipped
+to the intersection of this rectangle and the device's virtual
+coordinate limits.
+</DL>
+</P><P>
+
+<A NAME="IDX2447"></A>
+<DL>
+<DT><U>procedure+:</U> <B>graphics-reset-clip-rectangle</B> <I>graphics-device</I>
+<DD>Eliminates the clip rectangle for <VAR>graphics-device</VAR>.  Subsequent
+graphics output is clipped to the virtual coordinate limits of the
+device.
+</DL>
+</P><P>
+
+<A NAME="Custom Graphics Operations"></A>
+<HR SIZE="6">
+<A NAME="SEC190"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC189"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC191"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 17.7 Custom Graphics Operations </H2>
+<!--docid::SEC190::-->
+<P>
+
+In addition to the standard operations, a graphics device may support
+<EM>custom operations</EM>.  For example, most devices have custom
+operations to control color.  <CODE>graphics-operation</CODE> is used to
+invoke custom operations.
+</P><P>
+
+<A NAME="IDX2448"></A>
+<DL>
+<DT><U>procedure+:</U> <B>graphics-operation</B> <I>graphics-device name object <small>...</small></I>
+<DD>Invokes the graphics operation on <VAR>graphics-device</VAR> whose name is
+the symbol <VAR>name</VAR>, passing it the remaining arguments.  This
+procedure can be used to invoke the standard operations, as well as
+custom operations that are specific to a particular graphics device
+type.  The names of the standard graphics operations are formed by
+removing the <CODE>graphics-</CODE> prefix from the corresponding procedure.
+For example, the following are equivalent:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(graphics-draw-point device x y)
+(graphics-operation device 'draw-point x y)
+</pre></td></tr></table></P><P>
+
+For information on the custom operations for a particular device, see
+the documentation for its type.
+</DL>
+</P><P>
+
+<A NAME="Images"></A>
+<HR SIZE="6">
+<A NAME="SEC191"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC190"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC192"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 17.8 Images </H2>
+<!--docid::SEC191::-->
+<P>
+
+Some graphics device types support images, which are rectangular pieces
+of picture that may be drawn into a graphics device.  Images are often
+called something else in the host graphics system, such as bitmaps or
+pixmaps.  The operations supported vary between devices, so look under
+the different device types to see what operations are available.  All
+devices that support images support the following operations.
+</P><P>
+
+<A NAME="IDX2449"></A>
+<DL>
+<DT><U>operation+:</U> graphics-device <B>create-image</B> <I>width height</I>
+<DD>Images are created using the <CODE>create-image</CODE> graphics operation,
+specifying the <VAR>width</VAR> and <VAR>height</VAR> of the image in device
+coordinates (pixels).
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(graphics-operation device 'create-image 200 100)
+</pre></td></tr></table></P><P>
+
+The initial contents of an image are unspecified.
+</P><P>
+
+<CODE>create-image</CODE> is a graphics operation rather than a procedure
+because the kind of image returned depends on the kind of graphics
+device used and the options specified in its creation.  The image may be
+used freely with other graphics devices created with the same
+attributes, but the effects of using an image with a graphics device
+with different attributes (for example, different colors) is undefined.
+Under X, the image is display dependent.
+</DL>
+</P><P>
+
+<A NAME="IDX2450"></A>
+<DL>
+<DT><U>operation+:</U> graphics-device <B>draw-image</B> <I>x y image</I>
+<DD>The image is copied into the graphics device at the specified position.
+</DL>
+</P><P>
+
+<A NAME="IDX2451"></A>
+<DL>
+<DT><U>operation+:</U> graphics-device <B>draw-subimage</B> <I>x y image im-x im-y w h</I>
+<DD>Part of the image is copied into the graphics device at the specified
+(<VAR>x</VAR>, <VAR>y</VAR>) position.  The part of the image that is copied is the
+rectangular region at <VAR>im-x</VAR> and <VAR>im-y</VAR> and of width <VAR>w</VAR> and
+height <VAR>h</VAR>.  These four numbers are given in device coordinates
+(pixels).
+</DL>
+</P><P>
+
+<A NAME="IDX2452"></A>
+<DL>
+<DT><U>procedure+:</U> <B>image?</B> <I>object</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>object</VAR> is an image, otherwise returns
+<CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2453"></A>
+<DL>
+<DT><U>procedure+:</U> <B>image/destroy</B> <I>image</I>
+<DD>This procedure destroys <VAR>image</VAR>, returning storage to the system.
+Programs should destroy images after they have been used because even
+modest images may use large amounts of memory.  Images are reclaimed by
+the garbage collector, but they may be implemented using memory outside
+of Scheme's heap.  If an image is reclaimed before being destroyed, the
+implementation might not deallocate that non-heap memory, which can
+cause a subsequent call to <CODE>create-image</CODE> to fail because it is
+unable to allocate enough memory.
+</DL>
+</P><P>
+
+<A NAME="IDX2454"></A>
+<DL>
+<DT><U>procedure+:</U> <B>image/height</B> <I>image</I>
+<DD>Returns the height of the image in device coordinates.
+</DL>
+</P><P>
+
+<A NAME="IDX2455"></A>
+<DL>
+<DT><U>procedure+:</U> <B>image/width</B> <I>image</I>
+<DD>Returns the width of the image in device coordinates.
+</DL>
+</P><P>
+
+<A NAME="IDX2456"></A>
+<DL>
+<DT><U>procedure+:</U> <B>image/fill-from-byte-vector</B> <I>image bytes</I>
+<DD>The contents of <VAR>image</VAR> are set in a device-dependent way, using one
+byte per pixel from <VAR>bytes</VAR> (a string).  Pixels are filled row by
+row from the top of the image to the bottom, with each row being filled
+from left to right.  There must be at least <CODE>(* (image/height
+<VAR>image</VAR>) (image/width <VAR>image</VAR>))</CODE> bytes in <VAR>bytes</VAR>.
+</DL>
+</P><P>
+
+<A NAME="X Graphics"></A>
+<HR SIZE="6">
+<A NAME="SEC192"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC191"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC193"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC196"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 17.9 X Graphics </H2>
+<!--docid::SEC192::-->
+<P>
+
+<A NAME="IDX2457"></A>
+MIT Scheme supports graphics in the X window system (version 11).
+Arbitrary numbers of displays may be opened, and arbitrary numbers of
+graphics windows may be created for each display.  A variety of
+operations is available to manipulate various aspects of the windows, to
+control their size, position, colors, and mapping.  The X graphics
+device type supports images, which are implemented as Xlib <CODE>XImage</CODE>
+objects.  X display, window, and image objects are automatically closed
+if they are reclaimed by the garbage collector.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_18.html#SEC193">17.9.1 X Graphics Type</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_18.html#SEC194">17.9.2 Utilities for X Graphics</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_18.html#SEC195">17.9.3 Custom Operations on X Graphics Devices</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="X Graphics Type"></A>
+<HR SIZE="6">
+<A NAME="SEC193"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC192"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC194"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC191"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC192"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC196"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 17.9.1 X Graphics Type </H3>
+<!--docid::SEC193::-->
+<P>
+
+A graphics device for X windows is created by passing the symbol
+<CODE>x</CODE> as the graphics device type name to
+<CODE>make-graphics-device</CODE>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(make-graphics-device 'x #!optional <VAR>display</VAR> <VAR>geometry</VAR> <VAR>suppress-map?</VAR>)
+</pre></td></tr></table></P><P>
+
+where <VAR>display</VAR> is either a display object, <CODE>#f</CODE>, or a string;
+<VAR>geometry</VAR> is either <CODE>#f</CODE> or a string; and <VAR>suppress-map?</VAR>
+is a boolean or a vector (see below).  A new window is created on the
+appropriate display, and a graphics device representing that window is
+returned.
+</P><P>
+
+<A NAME="IDX2458"></A>
+<VAR>Display</VAR> specifies which X display the window is to be opened on;
+if it is <CODE>#f</CODE> or a string, it is passed as an argument to
+<CODE>x-open-display</CODE>, and the value returned by that procedure is used
+in place of the original argument.  <VAR>Geometry</VAR> is an X geometry
+string, or <CODE>#f</CODE> which means to use the default geometry (which is
+specified as a resource).
+</P><P>
+
+<VAR>Suppress-map?</VAR>, if given, may take two forms.  First, it may be a
+boolean: if <CODE>#f</CODE> (the default), the window is automatically mapped
+after it is created; otherwise, <CODE>#t</CODE> means to suppress this
+automatic mapping.  The second form is a vector of three elements.  The
+first element is a boolean with the same meaning as the boolean form of
+<VAR>suppress-map?</VAR>.  The second element is a string, which specifies an
+alternative resource name to be used for looking up the window's
+resources.  The third element is also a string, which specifies a class
+name for looking up the window's resources.  The default value for
+<VAR>suppress-map?</VAR> is <CODE>#f</CODE>.
+</P><P>
+
+The default resource and class names are <CODE>"schemeGraphics"</CODE> and
+<CODE>"SchemeGraphics"</CODE> respectively.
+</P><P>
+
+<A NAME="IDX2459"></A>
+<A NAME="IDX2460"></A>
+The window is initialized using the resource and class names specified
+by <VAR>suppress-map?</VAR>, and is sensitive to the following resource
+properties:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>Property        Class           Default
+--------        -----           -------
+geometry        Geometry        512x384+0+0
+font            Font            fixed
+borderWidth     BorderWidth     2
+internalBorder  BorderWidth     [border width]
+background      Background      white
+foreground      Foreground      black
+borderColor     BorderColor     [foreground color]
+cursorColor     Foreground      [foreground color]
+pointerColor    Foreground      [foreground color]
+</pre></td></tr></table></P><P>
+
+The window is created with a <CODE>backing_store</CODE> attribute of
+<CODE>Always</CODE>.  The window's name and icon name are initialized to
+<CODE>"scheme-graphics"</CODE>.
+</P><P>
+
+<A NAME="Utilities for X Graphics"></A>
+<HR SIZE="6">
+<A NAME="SEC194"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC193"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC195"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC191"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC192"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC196"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 17.9.2 Utilities for X Graphics </H3>
+<!--docid::SEC194::-->
+<P>
+
+<A NAME="IDX2461"></A>
+<DL>
+<DT><U>procedure+:</U> <B>x-graphics/open-display</B> <I>display-name</I>
+<DD><A NAME="IDX2462"></A>
+<A NAME="IDX2463"></A>
+Opens a connection to the display whose name is <VAR>display-name</VAR>,
+returning a display object.  If unable to open a connection, <CODE>#f</CODE>
+is returned.  <VAR>Display-name</VAR> is normally a string, which is an X
+display name in the usual form; however, <CODE>#f</CODE> is also allowed,
+meaning to use the value of the unix environment variable
+<CODE>DISPLAY</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2464"></A>
+<DL>
+<DT><U>procedure+:</U> <B>x-graphics/close-display</B> <I>display</I>
+<DD>Closes <VAR>display</VAR>; after calling this procedure, it is an error to
+use <VAR>display</VAR> for any purpose.  Any windows that were previously
+opened on <VAR>display</VAR> are destroyed and their resources returned to
+the operating system.
+</DL>
+</P><P>
+
+<A NAME="IDX2465"></A>
+<DL>
+<DT><U>procedure+:</U> <B>x-close-all-displays</B>
+<DD>Closes all open connections to X displays.  Equivalent to calling
+<CODE>x-close-display</CODE> on all open displays.
+</DL>
+</P><P>
+
+<A NAME="IDX2466"></A>
+<DL>
+<DT><U>procedure+:</U> <B>x-geometry-string</B> <I>x y width height</I>
+<DD><A NAME="IDX2467"></A>
+<A NAME="IDX2468"></A>
+This procedure creates and returns a standard X geometry string from the
+given arguments.  <VAR>X</VAR> and <VAR>y</VAR> must be either exact integers or
+<CODE>#f</CODE>, while <VAR>width</VAR> and <VAR>height</VAR> must be either exact
+non-negative integers or <CODE>#f</CODE>.  Usually either <VAR>x</VAR> and <VAR>y</VAR>
+are both specified or both <CODE>#f</CODE>; similarly for <VAR>width</VAR> and
+<VAR>height</VAR>.  If only one of the elements of such a pair is specified,
+it is ignored.
+</P><P>
+
+Examples:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(x-geometry-string #f #f 100 200) => "100x200"
+(x-geometry-string 2 -3 100 200) => "100x200+2-3"
+(x-geometry-string 2 -3 #f #f) => "+2-3"
+</pre></td></tr></table></P><P>
+
+Note that the <VAR>x</VAR> and <VAR>y</VAR> arguments cannot distinguish between
+<CODE>+0</CODE> and <CODE>-0</CODE>, even though these have different meanings in X.
+If either of those arguments is <CODE>0</CODE>, it means <CODE>+0</CODE> in X
+terminology.  If you need to distinguish these two cases you must create
+your own geometry string using Scheme's string and number primitives.
+</DL>
+</P><P>
+
+<A NAME="Custom Operations on X Graphics Devices"></A>
+<HR SIZE="6">
+<A NAME="SEC195"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC194"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC196"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC191"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC192"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC196"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 17.9.3 Custom Operations on X Graphics Devices </H3>
+<!--docid::SEC195::-->
+<P>
+
+Custom operations are invoked using the procedure
+<CODE>graphics-operation</CODE>.  For example,
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(graphics-operation device 'set-foreground-color "blue")
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX2469"></A>
+<DL>
+<DT><U>operation+:</U> x-graphics-device <B>set-background-color</B> <I>color-name</I>
+<DD><A NAME="IDX2470"></A>
+<DT><U>operation+:</U> x-graphics-device <B>set-foreground-color</B> <I>color-name</I>
+<DD><A NAME="IDX2471"></A>
+<DT><U>operation+:</U> x-graphics-device <B>set-border-color</B> <I>color-name</I>
+<DD><A NAME="IDX2472"></A>
+<DT><U>operation+:</U> x-graphics-device <B>set-mouse-color</B> <I>color-name</I>
+<DD><A NAME="IDX2473"></A>
+These operations change the colors associated with a window.
+<VAR>Color-name</VAR> must be a string, which is the X server's name for the
+desired color.  <CODE>set-border-color</CODE> and <CODE>set-mouse-color</CODE>
+immediately change the border and mouse-cursor colors.
+<CODE>set-background-color</CODE> and <CODE>set-foreground-color</CODE> change the
+colors to be used when drawing, but have no effect on anything drawn
+prior to their invocation.  Because changing the background color
+affects the entire window, we recommend calling <CODE>graphics-clear</CODE> on
+the window's device afterwards.  Color names include both mnemonic
+names, like <CODE>"red"</CODE>, and intensity names specified in the
+<CODE>"#<VAR>rrggbb</VAR>"</CODE> notation.
+</DL>
+</P><P>
+
+<A NAME="IDX2474"></A>
+<DL>
+<DT><U>operation+:</U> x-graphics-device <B>draw-arc</B> <I>x y radius-x radius-y angle-start angle-sweep fill?</I>
+<DD><A NAME="IDX2475"></A>
+<A NAME="IDX2476"></A>
+<A NAME="IDX2477"></A>
+<A NAME="IDX2478"></A>
+</P><P>
+
+Operation <CODE>draw-arc</CODE> draws or fills an arc.  An arc is a segment of
+a circle, which may have been stretched along the x- or y- axis to form
+an ellipse.
+</P><P>
+
+The parameters <VAR>x</VAR>, <VAR>y</VAR>, <VAR>radius-x</VAR> and <VAR>radius-y</VAR>
+describe the circle and <VAR>angle-start</VAR> and <VAR>angle-sweep</VAR> choose
+which part of the circle is drawn.  The arc is drawn on the graphics
+device with the center of the circle at the virtual coordinates given by
+<VAR>x</VAR> and <VAR>y</VAR>.  <VAR>radius-x</VAR> and <VAR>radius-y</VAR> determine the
+size of the circle in virtual coordinate units.
+</P><P>
+
+The parameter <VAR>angle-start</VAR> determines where the arc starts.  It is
+measured in degrees in an anti-clockwise direction, starting at 3
+o'clock.  <VAR>angle-sweep</VAR> determines how much of the circle is drawn.
+It too is measured anti-clockwise in degrees.  A negative value means
+the measurement is in a clockwise direction.
+</P><P>
+
+Note that the angles are determined on a unit circle before it is
+stretched into an ellipse, so the actual angles that you will see on the
+computer screen depends on all of: <VAR>radius-x</VAR> and <VAR>radius-y</VAR>,
+the window size, and the virtual coordinates.
+</P><P>
+
+If <VAR>fill?</VAR> is <CODE>#f</CODE> then just the segment of the circle is
+drawn, otherwise the arc is filled in a pie-slice fashion.
+</P><P>
+
+This draws a quarter circle pie slice, standing on its point, with point
+at virtual coordinates (3,5):
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(graphics-opereration g 'draw-arc 3 5 .5 .5 45 90 #t)
+</pre></td></tr></table></P><P>
+
+</DL>
+</P><P>
+
+<A NAME="IDX2479"></A>
+<DL>
+<DT><U>operation+:</U> x-graphics-device <B>draw-circle</B> <I>x y radius</I>
+<DD><A NAME="IDX2480"></A>
+<DT><U>operation+:</U> x-graphics-device <B>fill-circle</B> <I>x y radius</I>
+<DD><A NAME="IDX2481"></A>
+<A NAME="IDX2482"></A>
+<A NAME="IDX2483"></A>
+<A NAME="IDX2484"></A>
+<A NAME="IDX2485"></A>
+These operations draw a circle (outline) or a filled circle (solid) at
+on the graphics device at the virtual coordinates given by <VAR>x</VAR> and
+<VAR>y</VAR>.  These operations could be implemented trivially interms of the
+<CODE>draw-arc</CODE> operation.
+</DL>
+</P><P>
+
+<A NAME="IDX2486"></A>
+<DL>
+<DT><U>operation+:</U> x-graphics-device <B>set-border-width</B> <I>width</I>
+<DD><A NAME="IDX2487"></A>
+<DT><U>operation+:</U> x-graphics-device <B>set-internal-border-width</B> <I>width</I>
+<DD><A NAME="IDX2488"></A>
+These operations change the external and internal border widths of a
+window.  <VAR>Width</VAR> must be an exact non-negative integer, specified in
+pixels.  The change takes place immediately.  Note that changing the
+internal border width can cause displayed graphics to be garbled; we
+recommend calling <CODE>graphics-clear</CODE> on the window's device after
+doing so.
+</DL>
+</P><P>
+
+<A NAME="IDX2489"></A>
+<DL>
+<DT><U>operation+:</U> x-graphics-device <B>set-font</B> <I>font-name</I>
+<DD>Changes the font used when drawing text in a window.  <VAR>Font-name</VAR>
+must be a string that is a font name known to the X server.  This
+operation does not affect text drawn prior to its invocation.
+</DL>
+</P><P>
+
+<A NAME="IDX2490"></A>
+<DL>
+<DT><U>operation+:</U> x-graphics-device <B>set-mouse-shape</B> <I>shape-number</I>
+<DD>Changes the shape of the mouse cursor.  <VAR>Shape-number</VAR> is an exact
+non-negative integer that is used as an index into the mouse-shape font;
+when multiplied by 2 this number corresponds to an index in the file<BR>
+<TT>`/usr/include/X11/cursorfont.h'</TT>.
+</DL>
+</P><P>
+
+<A NAME="IDX2491"></A>
+<DL>
+<DT><U>operation+:</U> x-graphics-device <B>map-window</B>
+<DD><A NAME="IDX2492"></A>
+<DT><U>operation+:</U> x-graphics-device <B>withdraw-window</B>
+<DD>These operations control the mapping of windows.  They correspond
+directly to Xlib's <CODE>XMapWindow</CODE> and <CODE>XWithdrawWindow</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2493"></A>
+<DL>
+<DT><U>operation+:</U> x-graphics-device <B>resize-window</B> <I>width height</I>
+<DD>Changes the size of a window.  <VAR>Width</VAR> and <VAR>height</VAR> must be
+exact non-negative integers.  The operation corresponds directly to
+Xlib's <CODE>XResizeWindow</CODE>.
+</P><P>
+
+This operation resets the virtual coordinate system and the clip
+rectangle.
+</DL>
+</P><P>
+
+<A NAME="IDX2494"></A>
+<DL>
+<DT><U>operation+:</U> x-graphics-device <B>move-window</B> <I>x y</I>
+<DD>Changes the position of a window on the display.  <VAR>X</VAR> and <VAR>y</VAR>
+must be exact integers.  The operation corresponds directly to Xlib's
+<CODE>XMoveWindow</CODE>.  Note that the coordinates <VAR>x</VAR> and <VAR>y</VAR> do
+not take the external border into account, and therefore will not
+position the window as you might like.  The only reliable way to
+position a window is to ask a window manager to do it for you.
+</DL>
+</P><P>
+
+<A NAME="IDX2495"></A>
+<DL>
+<DT><U>operation+:</U> x-graphics-device <B>get-default</B> <I>resource property</I>
+<DD>This operation corresponds directly to Xlib's <CODE>XGetDefault</CODE>.
+<VAR>Resource</VAR> and <VAR>property</VAR> must be strings.  The operation
+returns the character string corresponding to the association of
+<VAR>resource</VAR> and <VAR>property</VAR>; if no such association exists,
+<CODE>#f</CODE> is returned.
+</DL>
+</P><P>
+
+<A NAME="IDX2496"></A>
+<DL>
+<DT><U>operation+:</U> x-graphics-device <B>copy-area</B> <I>source-x-left source-y-top width height destination-x-left destination-y-top</I>
+<DD>This operation copies the contents of the rectangle specified by
+<VAR>source-x-left</VAR>, <VAR>source-y-top</VAR>, <VAR>width</VAR>, and <VAR>height</VAR> to
+the rectangle of the same dimensions at <VAR>destination-x-left</VAR> and
+<VAR>destination-y-top</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX2497"></A>
+<DL>
+<DT><U>operation+:</U> x-graphics-device <B>font-structure</B> <I>font-name</I>
+<DD>Returns a Scheme equivalent of the X font structure for the font named
+<VAR>font-name</VAR>.  If the string <VAR>font-name</VAR> does not name a font
+known to the X server, or names a 16-bit font, <CODE>#f</CODE> is returned.
+</DL>
+</P><P>
+
+<A NAME="IDX2498"></A>
+<DL>
+<DT><U>procedure+:</U> <B>x-font-structure/name</B> <I>font-structure</I>
+<DD><A NAME="IDX2499"></A>
+<DT><U>procedure+:</U> <B>x-font-structure/direction</B> <I>font-structure</I>
+<DD><A NAME="IDX2500"></A>
+<DT><U>procedure+:</U> <B>x-font-structure/all-chars-exist</B> <I>font-structure</I>
+<DD><A NAME="IDX2501"></A>
+<DT><U>procedure+:</U> <B>x-font-structure/default-char</B> <I>font-structure</I>
+<DD><A NAME="IDX2502"></A>
+<DT><U>procedure+:</U> <B>x-font-structure/min-bounds</B> <I>font-structure</I>
+<DD><A NAME="IDX2503"></A>
+<DT><U>procedure+:</U> <B>x-font-structure/max-bounds</B> <I>font-structure</I>
+<DD><A NAME="IDX2504"></A>
+<DT><U>procedure+:</U> <B>x-font-structure/start-index</B> <I>font-structure</I>
+<DD><A NAME="IDX2505"></A>
+<DT><U>procedure+:</U> <B>x-font-structure/character-bounds</B> <I>font-structure</I>
+<DD><A NAME="IDX2506"></A>
+<DT><U>procedure+:</U> <B>x-font-structure/max-ascent</B> <I>font-structure</I>
+<DD><A NAME="IDX2507"></A>
+<DT><U>procedure+:</U> <B>x-font-structure/max-descent</B> <I>font-structure</I>
+<DD>These procedures extract the components of the font description
+structure returned by the X graphics operation <CODE>font-structure</CODE>.  A
+more complete description of these components appears in documentation
+of the <CODE>XLoadQueryFont</CODE> Xlib call.  <CODE>start-index</CODE> is the index
+of the first character available in the font.  The <CODE>min-bounds</CODE> and
+<CODE>max-bounds</CODE> components are structures of type
+<CODE>x-character-bounds</CODE>, and the <CODE>character-bounds</CODE> component is
+a vector of the same type.
+</DL>
+</P><P>
+
+<A NAME="IDX2508"></A>
+<DL>
+<DT><U>procedure+:</U> <B>x-character-bounds/lbearing</B> <I>character-bounds</I>
+<DD><A NAME="IDX2509"></A>
+<DT><U>procedure+:</U> <B>x-character-bounds/rbearing</B> <I>character-bounds</I>
+<DD><A NAME="IDX2510"></A>
+<DT><U>procedure+:</U> <B>x-character-bounds/width</B> <I>character-bounds</I>
+<DD><A NAME="IDX2511"></A>
+<DT><U>procedure+:</U> <B>x-character-bounds/ascent</B> <I>character-bounds</I>
+<DD><A NAME="IDX2512"></A>
+<DT><U>procedure+:</U> <B>x-character-bounds/descent</B> <I>character-bounds</I>
+<DD>These procedures extract components of objects of type
+<CODE>x-character-bounds</CODE>.  A more complete description of them appears
+in documentation of the<BR> <CODE>XLoadQueryFont</CODE> Xlib call.
+</DL>
+</P><P>
+
+<A NAME="Win32 Graphics"></A>
+<HR SIZE="6">
+<A NAME="SEC196"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC195"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC197"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC192"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC199"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 17.10 Win32 Graphics </H2>
+<!--docid::SEC196::-->
+<P>
+
+MIT Scheme supports graphics on Microsoft Windows 95, Windows 98, and
+Windows NT.  In addition to the usual operations, there are operations
+to control the size, position and colors of a graphics window.  Win32
+devices support images, which are implemented as device independent
+bitmaps (DIBs).
+</P><P>
+
+The Win32 graphics device type is implemented as a top level window.
+<CODE>graphics-enable-buffering</CODE> is implemented and gives a 2x to 4x
+speedup on many graphics operations.  As a convenience, when buffering
+is enabled clicking on the graphics window's title bar effects a
+<CODE>graphics-flush</CODE> operation.  The user has the benefit of the
+increased performance and the ability to view the progress in drawing at
+the click of a mouse button.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_18.html#SEC197">17.10.1 Win32 Graphics Type</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_18.html#SEC198">17.10.2 Custom Operations for Win32 Graphics</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">Custom Operations for Win32 Graphics Devices</TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Win32 Graphics Type"></A>
+<HR SIZE="6">
+<A NAME="SEC197"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC196"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC198"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC192"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC196"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC199"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 17.10.1 Win32 Graphics Type </H3>
+<!--docid::SEC197::-->
+<P>
+
+Win32 graphics devices are created by specifying the symbol <CODE>win32</CODE>
+as the <VAR>graphics-device-type</VAR> argument to
+<CODE>make-graphics-device</CODE>.  The Win32 graphics device type is
+implemented as a top-level window and supports color drawing in addition
+to the standard Scheme graphics operations.
+</P><P>
+
+Graphics devices are opened as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(make-graphics-device 'win32 #!optional <VAR>width</VAR> <VAR>height</VAR> <VAR>palette</VAR>)
+</pre></td></tr></table></P><P>
+
+where <VAR>width</VAR> and <VAR>height</VAR> specify the size, in pixels, of the
+drawing area in the graphics window (i.e. excluding the frame).
+<VAR>Palette</VAR> determines the colors available for drawing in the window.
+</P><P>
+
+When a color is specified for drawing, the nearest color available in
+the palette is used.  Permitted values for <VAR>palette</VAR> are
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>'grayscale</CODE>
+<DD>The window allocates colors from a grayscale palette
+of approximately 236 shades of gray.
+<P>
+
+<DT><CODE>'grayscale-128</CODE>
+<DD>The window allocates colors from a grayscale palette of 128 shades of
+gray.
+<P>
+
+<DT><CODE>'standard</CODE>
+<DD>The standard palette has good selection of colors and grays.
+<P>
+
+<DT><CODE>#f</CODE> or <CODE>'system</CODE>
+<DD>The colors available are those in the system palette.  There are usually
+16 to 20 colors in the system palette and these are usually sufficent
+for simple applications like line drawings and x-vs-y graphs of
+mathematical functions.  Drawing with the system palette can be more
+efficient.
+<P>
+
+</DL>
+If <VAR>palette</VAR> is not specified then the <CODE>standard</CODE> palette is
+used.
+<P>
+
+<A NAME="Custom Operations for Win32 Graphics"></A>
+<HR SIZE="6">
+<A NAME="SEC198"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC197"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC199"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC192"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC196"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC199"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 17.10.2 Custom Operations for Win32 Graphics </H3>
+<!--docid::SEC198::-->
+<P>
+
+Custom operations are invoked using the procedure
+<CODE>graphics-operation</CODE>.  For example,
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(graphics-operation device 'set-foreground-color "blue")
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX2513"></A>
+<DL>
+<DT><U>operation+:</U> win32-graphics-device <B>set-background-color</B> <I>color-name</I>
+<DD><A NAME="IDX2514"></A>
+<DT><U>operation+:</U> win32-graphics-device <B>set-foreground-color</B> <I>color-name</I>
+<DD><A NAME="IDX2515"></A>
+<A NAME="IDX2516"></A>
+<A NAME="IDX2517"></A>
+These operations change the colors associated with a window.
+<VAR>Color-name</VAR> must be of one of the valid color specification forms
+listed below.  <CODE>set-background-color</CODE> and
+<CODE>set-foreground-color</CODE> change the colors to be used when drawing,
+but have no effect on anything drawn prior to their invocation.  Because
+changing the background color affects the entire window, we recommend
+calling <CODE>graphics-clear</CODE> on the window's device afterwards.
+</P><P>
+
+The foreground color affects the drawing of text, points, lines,
+ellipses and filled polygons.
+</P><P>
+
+Colors are specified in one of three ways:
+</P><P>
+
+<DL COMPACT>
+<DT>An integer
+<DD>This is the Win32 internal RGB value.
+<P>
+
+<DT>By name
+<DD>A limited number of names are understood by the system.
+Names are strings, e.g. <CODE>"red"</CODE>, <CODE>"blue"</CODE>, <CODE>"black"</CODE>.
+More names can be registered with the <CODE>define-color</CODE> operation.
+<P>
+
+<DT>RGB (Red-Green-Blue) triples
+<DD>A triple is either a vector or list of three integers in the range
+0--255 inclusive which specify the intensity of the red, green and blue
+components of the color.  Thus <CODE>#(0 0 0)</CODE> is black, <CODE>(0 0
+128)</CODE> is dark blue and <CODE>#(255 255 255)</CODE> is white.
+</DL>
+<P>
+
+If the color is not available in the graphics device then the nearest
+available color is used instead.
+</DL>
+</P><P>
+
+<A NAME="IDX2518"></A>
+<DL>
+<DT><U>operation+:</U> win32-graphics-device <B>define-color</B> <I>name spec</I>
+<DD>Define the string <VAR>name</VAR> to be the color specified by <VAR>spec</VAR>.
+<VAR>Spec</VAR> may be any acceptable color specification.  Note that the
+color names defined this way are available to any Win32 graphics device,
+and the names do <EM>not</EM> have to be defined for each device.
+</P><P>
+
+Color names defined by this interface may also be used when setting the
+colors of the Scheme console window, or the colors of Edwin editor
+windows.
+</DL>
+</P><P>
+
+<A NAME="IDX2519"></A>
+<DL>
+<DT><U>operation+:</U> win32-graphics-device <B>find-color</B> <I>name</I>
+<DD>Looks up a color previously defined by <CODE>define-color</CODE>.  This returns
+the color in its most efficient form for operations
+<CODE>set-foreground-color</CODE> or <CODE>set-background-color</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2520"></A>
+<DL>
+<DT><U>operation+:</U> win32-graphics-device <B>draw-ellipse</B> <I>left top right bottom</I>
+<DD><A NAME="IDX2521"></A>
+<A NAME="IDX2522"></A>
+<A NAME="IDX2523"></A>
+<A NAME="IDX2524"></A>
+Draw an ellipse.  <VAR>Left</VAR>, <VAR>top</VAR>, <VAR>right</VAR> and <VAR>bottom</VAR>
+indicate the coordinates of the bounding rectangle of the ellipse.
+Circles are merely ellipses with equal width and height.  Note that the
+bounding rectangle has horizontal and vertical sides.  Ellipses with
+rotated axes cannot be drawn.  The rectangle applies to the center of the
+line used to draw the ellipse; if the line width has been set to greater
+than 1 then the ellipse will spill outside the bounding rectange by half
+of the line width.
+</DL>
+</P><P>
+
+<A NAME="IDX2525"></A>
+<DL>
+<DT><U>operation+:</U> win32-graphics-device <B>fill-polygon</B> <I>points</I>
+<DD><A NAME="IDX2526"></A>
+Draws a filled polygon using the current foreground color.
+<VAR>Points</VAR> is a vector of real numbers.
+The numbers are in the order x1 y1 x2 y2 ... xn yn.
+For example,
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(graphics-operation device 'fill-polygon #(0 0 0 1 1 0))
+</pre></td></tr></table></P><P>
+
+draws a solid triangular region between the points (0, 0), (0, 1) and
+(1, 0).
+</DL>
+</P><P>
+
+<A NAME="IDX2527"></A>
+<DL>
+<DT><U>operation+:</U> win32-graphics-device <B>load-bitmap</B> <I>pathname</I>
+<DD><A NAME="IDX2528"></A>
+The graphics device contents and size are initialized from the windows
+bitmap file specified by <VAR>pathname</VAR>.  If no file type is supplied
+then a <CODE>".BMP"</CODE> extension is added.  If a clip rectangle is in
+effect when this procedure is called, it is necessary to redefine the
+clip rectangle afterwards.
+</DL>
+</P><P>
+
+<A NAME="IDX2529"></A>
+<DL>
+<DT><U>operation+:</U> win32-graphics-device <B>save-bitmap</B> <I>pathname</I>
+<DD><A NAME="IDX2530"></A>
+The graphics device contents are saved as a bitmap to the file specified
+by <VAR>pathname</VAR>.  If no file type is supplied then a <CODE>".BMP"</CODE>
+extension is added.  The saved bitmap may be incorporated into documents
+or printed.
+</DL>
+</P><P>
+
+<A NAME="IDX2531"></A>
+<DL>
+<DT><U>operation+:</U> win32-graphics-device <B>move-window</B> <I>x y</I>
+<DD>The graphics device window is moved to the screen position specified by
+<VAR>x</VAR> and <VAR>y</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX2532"></A>
+<DL>
+<DT><U>operation+:</U> win32-graphics-device <B>resize-window</B> <I>width height</I>
+<DD>The graphics device window is resized to the specified <VAR>width</VAR> and
+<VAR>height</VAR> in device coordinates (pixels).  If a clip rectangle is in effect
+when this procedure is called, it is necessary to redefine the clip
+rectangle afterwards.
+</DL>
+</P><P>
+
+<A NAME="IDX2533"></A>
+<DL>
+<DT><U>operation+:</U> win32-graphics-device <B>set-line-width</B> <I>width</I>
+<DD>This operation sets the line width for future drawing of lines, points
+and ellipses.  It does not affect existing lines and has no effect on
+filled polygons.  The line width is specified in device units.  The
+default and initial value of this parameter is 1 pixel.
+</DL>
+</P><P>
+
+<A NAME="IDX2534"></A>
+<DL>
+<DT><U>operation+:</U> win32-graphics-device <B>set-window-name</B> <I>name</I>
+<DD>This sets the window title to the string <VAR>name</VAR>.  The window is
+given the name <CODE>"Scheme Graphics"</CODE> at creation.
+</DL>
+</P><P>
+
+<A NAME="IDX2535"></A>
+<DL>
+<DT><U>operation+:</U> win32-graphics-device <B>set-font</B> <I>handle</I>
+<DD>Sets the font for drawing text.  Currently not well supported.  If you
+can get a Win32 font handle it can be used here.
+</DL>
+</P><P>
+
+<A NAME="IDX2536"></A>
+<DL>
+<DT><U>operation+:</U> win32-graphics-device <B>copy-area</B> <I>source-x-left source-y-top width height destination-x-left destination-y-top</I>
+<DD>This operation copies the contents of the rectangle specified by
+<VAR>source-x-left</VAR>, <VAR>source-y-top</VAR>, <VAR>width</VAR>, and <VAR>height</VAR>
+to the rectangle of the same dimensions at <VAR>destination-x-left</VAR> and
+<VAR>destination-y-top</VAR>.
+</DL>
+</P><P>
+
+<A NAME="OS/2 Graphics"></A>
+<HR SIZE="6">
+<A NAME="SEC199"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC198"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC200"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC196"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 17.11 OS/2 Graphics </H2>
+<!--docid::SEC199::-->
+<P>
+
+MIT Scheme supports graphics under the OS/2 Presentation Manager in
+OS/2 version 2.1 and later.  The OS/2 graphics device type is
+implemented as a top level window.  In addition to the usual operations,
+there are operations to control the size, position, and colors of a
+graphics window.  OS/2 graphics devices support images, which are
+implemented as memory presentation spaces.
+</P><P>
+
+The custom graphics operations defined in this section are invoked using
+the procedure <CODE>graphics-operation</CODE>.  For example,
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(graphics-operation device 'set-foreground-color "blue")
+</pre></td></tr></table></P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_18.html#SEC200">17.11.1 OS/2 Graphics Type</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_18.html#SEC201">17.11.2 Color Operations for OS/2 Graphics</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_18.html#SEC202">17.11.3 Window Operations for OS/2 Graphics</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_18.html#SEC203">17.11.4 Event Operations for OS/2 Graphics</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_18.html#SEC204">17.11.5 Miscellaneous Operations for OS/2 Graphics</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="OS/2 Graphics Type"></A>
+<HR SIZE="6">
+<A NAME="SEC200"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC199"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC201"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC196"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC199"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 17.11.1 OS/2 Graphics Type </H3>
+<!--docid::SEC200::-->
+<P>
+
+OS/2 graphics devices are created by specifying the symbol
+<CODE>os/2</CODE> as the <VAR>graphics-device-type</VAR> argument to
+<CODE>make-graphics-device</CODE>.  The OS/2 graphics device type is
+implemented as a top-level window and supports color drawing in addition
+to the standard Scheme graphics operations.
+</P><P>
+
+Graphics devices are opened as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(make-graphics-device 'os/2 #!optional <VAR>width</VAR> <VAR>height</VAR>)
+</pre></td></tr></table></P><P>
+
+where <VAR>width</VAR> and <VAR>height</VAR> specify the size, in pixels, of the
+drawing area in the graphics window (i.e. excluding the frame).
+</P><P>
+
+<A NAME="Color Operations for OS/2 Graphics"></A>
+<HR SIZE="6">
+<A NAME="SEC201"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC200"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC202"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC196"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC199"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 17.11.2 Color Operations for OS/2 Graphics </H3>
+<!--docid::SEC201::-->
+<P>
+
+These operations control the colors used when drawing on an OS/2
+graphics device.
+</P><P>
+
+<A NAME="IDX2537"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>color?</B>
+<DD><A NAME="IDX2538"></A>
+This operation returns <CODE>#t</CODE> if the display supports color.
+</DL>
+</P><P>
+
+<A NAME="IDX2539"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>set-background-color</B> <I>color-name</I>
+<DD><A NAME="IDX2540"></A>
+<DT><U>operation+:</U> os2-graphics-device <B>set-foreground-color</B> <I>color-name</I>
+<DD><A NAME="IDX2541"></A>
+<A NAME="IDX2542"></A>
+<A NAME="IDX2543"></A>
+These operations change the colors associated with a window.
+<VAR>Color-name</VAR> must be one of the valid color specification forms
+listed below.  <CODE>set-background-color</CODE> and
+<CODE>set-foreground-color</CODE> change the colors to be used when drawing,
+but have no effect on anything drawn prior to their invocation.  Because
+changing the background color affects the entire window, we recommend
+calling <CODE>graphics-clear</CODE> on the window's device afterwards.
+</P><P>
+
+The foreground color affects the drawing of text, points, and lines.
+Colors are specified in one of these ways:
+</P><P>
+
+<DL COMPACT>
+<DT>An integer between <CODE>0</CODE> and <CODE>#xffffff</CODE> inclusive
+<DD>This is the OS/2 internal RGB value.
+<P>
+
+<DT>By name
+<DD>A limited number of names are understood by the system.  Names are
+strings, e.g. <CODE>"red"</CODE>, <CODE>"blue"</CODE>, <CODE>"black"</CODE>.  More names
+can be registered with the <CODE>define-color</CODE> operation.
+<P>
+
+<DT>RGB (Red-Green-Blue) triples
+<DD>A triple is a list of three integers between <CODE>0</CODE> and <CODE>#xff</CODE>
+inclusive which specify the intensity of the red, green and blue
+components of the color.  Thus <CODE>(0 0 0)</CODE> is black, <CODE>(0 0 128)</CODE>
+is dark blue and <CODE>(255 255 255)</CODE> is white.
+</DL>
+<P>
+
+If the color is not available in the graphics device then the nearest
+available color is used instead.
+</DL>
+</P><P>
+
+<A NAME="IDX2544"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>define-color</B> <I>name spec</I>
+<DD>Define the string <VAR>name</VAR> to be the color specified by <VAR>spec</VAR>.
+<VAR>Spec</VAR> may be any acceptable color specification.  Note that the
+color names defined this way are available to any OS/2 graphics
+device, and the names do <EM>not</EM> have to be defined for each device.
+</P><P>
+
+Color names defined by this interface may also be used when setting the
+colors of the Scheme console window, or the colors of Edwin editor
+windows.
+</DL>
+</P><P>
+
+<A NAME="IDX2545"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>find-color</B> <I>name</I>
+<DD>Looks up a color previously defined by <CODE>define-color</CODE>.  This
+returns the color in its most efficient form for operations
+<CODE>set-foreground-color</CODE> or <CODE>set-background-color</CODE>.
+</DL>
+</P><P>
+
+<A NAME="Window Operations for OS/2 Graphics"></A>
+<HR SIZE="6">
+<A NAME="SEC202"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC201"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC203"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC196"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC199"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 17.11.3 Window Operations for OS/2 Graphics </H3>
+<!--docid::SEC202::-->
+<P>
+
+These operations control the window that contains the OS/2 graphics
+device.  They provide facilities to change the window's size and
+position; to raise and lower the window relative to other windows on the
+desktop; to hide or minimize the window, and to restore it from the
+hidden or minimized state; to activate or deactivate the window (that
+is, control the keyboard focus); and to control the text that appears in
+the window's title bar.
+</P><P>
+
+<A NAME="IDX2546"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>window-position</B>
+<DD>This operation returns the position of the graphics-device window on the
+desktop.  The position is returned as two values
+(see section <A HREF="scheme_13.html#SEC123">12.3 Continuations</A>), which are the x and y coordinates of the
+position.  These coordinates are in units of pels (pixels), and measure
+the distance between the lower left hand corner of the desktop and the
+lower left hand corner of the graphics device window's frame.
+</DL>
+</P><P>
+
+<A NAME="IDX2547"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>set-window-position</B> <I>x y</I>
+<DD>The graphics-device window is moved to the screen position specified by
+<VAR>x</VAR> and <VAR>y</VAR>.  The coordinates <VAR>x</VAR> and <VAR>y</VAR> are in units
+of pels (pixels), and measure the distance between the lower left hand
+corner of the desktop and the lower left hand corner of the graphics
+device window's frame.
+</DL>
+</P><P>
+
+<A NAME="IDX2548"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>window-size</B>
+<DD>This operation returns the size of the client area of the
+graphics-device window.  The client area is the part of the window that
+you draw on; it does not include the window frame, title bar, etc.  The
+size is returned as two values (see section <A HREF="scheme_13.html#SEC123">12.3 Continuations</A>), which are the
+width and height of the client area in units of pels (pixels).
+</DL>
+</P><P>
+
+<A NAME="IDX2549"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>set-window-size</B> <I>width height</I>
+<DD>This operation sets the size of the client area of the graphics-device
+window to the specified <VAR>width</VAR> and <VAR>height</VAR>, which are in units
+of pels (pixels).  The client area is the part of the window that you
+draw on; it does not include the window frame, title bar, etc.
+</DL>
+</P><P>
+
+<A NAME="IDX2550"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>window-frame-size</B>
+<DD>This operation returns the size of the graphics-device window's frame.
+This includes the client area, as well as the border, title bar, etc.
+The size is returned as two values (see section <A HREF="scheme_13.html#SEC123">12.3 Continuations</A>), which are
+the width and height of the frame in units of pels (pixels).
+</P><P>
+
+The frame size is useful in conjunction with the window position and the
+desktop size to determine relative placement of the window or to
+guarantee that the entire window is visible on the desktop.
+</DL>
+</P><P>
+
+<A NAME="IDX2551"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>desktop-size</B>
+<DD>This operation returns the size of the OS/2 desktop.  The size is
+returned as two values (see section <A HREF="scheme_13.html#SEC123">12.3 Continuations</A>), which are the width and
+height of the frame in units of pels (pixels).
+</DL>
+</P><P>
+
+<A NAME="IDX2552"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>raise-window</B>
+<DD>This operation raises the graphics-device window so that it is on top of
+any other windows on the desktop.
+</DL>
+</P><P>
+
+<A NAME="IDX2553"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>lower-window</B>
+<DD>This operation lowers the graphics-device window so that it is below all
+other windows on the desktop.
+</DL>
+</P><P>
+
+<A NAME="IDX2554"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>hide-window</B>
+<DD>This operation hides the graphics-device window.  The window disappears
+from the desktop, but still appears in the window list.
+</DL>
+</P><P>
+
+<A NAME="IDX2555"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>minimize-window</B>
+<DD>This operation minimizes the graphics-device window.  The window
+disappears from the desktop, but still appears in the window list.
+Depending on how you have configured your desktop, the window may appear
+as an icon, either on the desktop or in the minimized window viewer.
+</DL>
+</P><P>
+
+<A NAME="IDX2556"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>maximize-window</B>
+<DD>This operation maximizes the graphics-device window.  This causes the
+window to fill the entire desktop.
+</DL>
+</P><P>
+
+<A NAME="IDX2557"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>restore-window</B>
+<DD>This operation restores the graphics-device window to its normal state.
+If the window is hidden or minimized, it is shown again, at its former
+position on the desktop.  If the window is maximized, it is returned to
+its normal size.
+</DL>
+</P><P>
+
+<A NAME="IDX2558"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>activate-window</B>
+<DD>This operation makes the graphics-device window be the active window.
+This causes the window to be put in front of all other windows on the
+desktop, highlights its frame, and gives it the keyboard focus.
+</DL>
+</P><P>
+
+<A NAME="IDX2559"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>deactivate-window</B>
+<DD>This operation deactivates the graphics-device window if it was active
+(otherwise it has no effect).  This causes some other window to be
+chosen to be active in its place.
+</DL>
+</P><P>
+
+<A NAME="IDX2560"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>set-window-title</B> <I>title</I>
+<DD>This operation changes the text that appears in the graphics device
+window's title bar.  The new text is given by <VAR>title</VAR>, which must be
+a string.
+</DL>
+</P><P>
+
+<A NAME="Event Operations for OS/2 Graphics"></A>
+<HR SIZE="6">
+<A NAME="SEC203"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC202"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC204"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC196"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC199"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 17.11.4 Event Operations for OS/2 Graphics </H3>
+<!--docid::SEC203::-->
+<P>
+
+These operations allow you to read some of the events that are generated
+by the Presentation Manager and put in the message queue of a
+graphics-device window.
+</P><P>
+
+<A NAME="IDX2561"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>read-button</B>
+<DD>This operation waits for the user to push a mouse button inside the
+client area of the graphics-device window.  It then returns four values
+(see section <A HREF="scheme_13.html#SEC123">12.3 Continuations</A>) which are: the button number; the x and y
+coordinates of the mouse pointer at the time the button was pressed, in
+pels (pixels) relative to the lower left hand corner of the client area;
+and the graphics device that the mouse pointer was over at the time the
+button was pressed.
+</P><P>
+
+Note that this operation only works when button events are selected
+(which is the default).
+</DL>
+</P><P>
+
+<A NAME="IDX2562"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>select-user-events</B> <I>mask</I>
+<DD>This operation sets the event-selection mask for the graphics device to
+<VAR>mask</VAR>.  The event-selection mask is an exact non-negative integer
+that specifies which types of incoming events are to be saved in the
+user-event queue for later retrieval by the <CODE>read-user-event</CODE>
+operation.  The mask is specified by setting the bits corresponding to
+the event types that you are interested in, as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>Number  Mask    Description
+------  -----   -----------
+0       #x001   Button press/release
+1       #x002   Close (close the window) [WM_CLOSE]
+2       #x004   Focus change [WM_SETFOCUS]
+3       #x008   Key press/release [WM_CHAR]
+4       #x010   Paint [WM_PAINT]
+5       #x020   Size change [WM_SIZE]
+6       #x040   Visibility change [WM_SHOW]
+7       #x080   Command [WM_COMMAND]
+8       #x100   Help [WM_HELP]
+9       #x200   Mouse-move [WM_MOUSEMOVE]
+</pre></td></tr></table></P><P>
+
+Note that this operation does not affect any events that are already in
+the user-event queue.  Changing the mask only affects what events will
+be added to the queue in the future.
+</DL>
+</P><P>
+
+<A NAME="IDX2563"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>read-user-event</B>
+<DD>This operation returns the next user event available from the user-event
+queue.  If there are no events in the queue, the operation waits for an
+event to arrive before returning.
+</DL>
+</P><P>
+
+An event is a vector whose first element is the event-type number, whose
+second element is the graphics device that the event refers to, and
+whose remaining elements provide information about the event.  Here is a
+table of the possible event types and their vector layout:
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>#(0 <VAR>device</VAR> <VAR>number</VAR> <VAR>type</VAR> <VAR>x</VAR> <VAR>y</VAR> <VAR>flags</VAR>)</CODE>
+<DD>A button event.  <VAR>Number</VAR> is the button number, for example button
+number <CODE>0</CODE> is usually the left mouse button, <CODE>1</CODE> is usually
+the right button, etc.  <VAR>Type</VAR> specifies what occurred: <CODE>0</CODE>
+means the button was pressed, <CODE>1</CODE> means the button was released,
+<CODE>2</CODE> means the button was clicked, and <CODE>3</CODE> means the button was
+double clicked.  <VAR>X</VAR> and <VAR>y</VAR> are the position of the mouse
+pointer at the time of the event, in units of pels (pixels) measured
+from the lower left corner of the client area of the associated window.
+Finally, <VAR>flags</VAR> specifies what shift keys were pressed at the time
+of the button event; it is a mask word created by combining zero or more
+of the following flags: <CODE>#x08</CODE> means the shift key was pressed,
+<CODE>#x10</CODE> means the control key was pressed, and <CODE>#x20</CODE> means the
+alt key was pressed.
+<P>
+
+<DT><CODE>#(1 <VAR>device</VAR>)</CODE>
+<DD>A close event.  The user has selected the close button from the system
+menu, or typed <KBD>Alt-f4</KBD>.
+<P>
+
+<DT><CODE>#(2 <VAR>device</VAR> <VAR>gained?</VAR>)</CODE>
+<DD>A focus event.  If <VAR>gained?</VAR> is <CODE>#t</CODE>, the keyboard focus is
+being gained, and if <VAR>gained?</VAR> is <CODE>#f</CODE>, it is being lost.
+<P>
+
+<DT><CODE>#(3 <VAR>device</VAR> <VAR>code</VAR> <VAR>flags</VAR> <VAR>repeat</VAR>)</CODE>
+<DD>A keyboard event.  This is much too complicated to describe here.  See
+the OS/2 toolkit documentation for details.
+<P>
+
+<DT><CODE>#(4 <VAR>device</VAR> <VAR>xl</VAR> <VAR>xh</VAR> <VAR>yl</VAR> <VAR>yh</VAR>)</CODE>
+<DD>A paint event.  Part of the graphics-device window that was obscured has
+been revealed and the Presentation Manager is informing the window that
+it must repaint that area.  Scheme will take care of the painting for
+you, so this event isn't very useful.
+<P>
+
+<DT><CODE>#(5 <VAR>device</VAR> <VAR>width</VAR> <VAR>height</VAR>)</CODE>
+<DD>A size-change event.  The size of the graphics-device window has
+changed, and <VAR>width</VAR> and <VAR>height</VAR> specify the new size in pels
+(pixels).
+<P>
+
+<DT><CODE>#(6 <VAR>device</VAR> <VAR>shown?</VAR>)</CODE>
+<DD>A visibility event.  Indicates that the graphics-device window has been
+hidden or revealed.  If <VAR>shown?</VAR> is <CODE>#f</CODE>, the window is hidden,
+and if it is <CODE>#t</CODE>, the window is shown.
+<P>
+
+<DT><CODE>#(7 <VAR>device</VAR> <VAR>source</VAR> <VAR>mouse?</VAR>)</CODE>
+<DD><DT><CODE>#(8 <VAR>device</VAR> <VAR>source</VAR> <VAR>mouse?</VAR>)</CODE>
+<DD>A menu command.  <VAR>Source</VAR> specifies which menu item was selected to
+cause this event, and <VAR>mouse?</VAR> is a boolean indicating whether the
+item was selected with the mouse or the keyboard.  The event-type number
+<CODE>7</CODE> indicates a command from a <SAMP>`WM_COMMAND'</SAMP> message, while
+<CODE>8</CODE> is a command from a <SAMP>`WM_HELP'</SAMP> message.
+<P>
+
+<DT><CODE>#(9 <VAR>device</VAR> <VAR>x</VAR> <VAR>y</VAR> <VAR>hit-test</VAR> <VAR>flags</VAR>)</CODE>
+<DD>The mouse was moved.  <VAR>X</VAR> and <VAR>y</VAR> specify the position of the
+mouse, <VAR>hit-test</VAR> contains the hit-test information, and <VAR>flags</VAR>
+specifies the modifier keys that were pressed at the time.
+</DL>
+<P>
+
+<A NAME="IDX2564"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>discard-events</B>
+<DD>This operation discards any events that are in the user-event queue.
+This is sometimes useful when you want to prompt the user for some input
+and don't want to consider any previous input.
+</DL>
+</P><P>
+
+<A NAME="Miscellaneous Operations for OS/2 Graphics"></A>
+<HR SIZE="6">
+<A NAME="SEC204"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC203"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC196"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC199"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 17.11.5 Miscellaneous Operations for OS/2 Graphics </H3>
+<!--docid::SEC204::-->
+<P>
+
+These operations allow you to: change the font used for drawing text in
+a graphics-device window; take a snapshot of a graphics-device window
+and return it as an image object; and draw multiple lines efficiently.
+</P><P>
+
+<A NAME="IDX2565"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>set-font</B> <I>font-name</I>
+<DD>This operation sets the font used for drawing text in the
+graphics-device window.  <VAR>Font-name</VAR> is a string describing the
+font; this string is in the form "&#60;point-size&#62;.&#60;family-name&#62;", for
+example, <CODE>"10.Courier"</CODE>.  You may specify any fixed-pitch font
+family, in any point size that is supported for that font family.  This
+includes both image fonts and outline fonts.
+</DL>
+</P><P>
+
+<A NAME="IDX2566"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>capture-image</B> <I>x-left y-bottom x-right y-top</I>
+<DD>This operation creates and returns an image that contains part of the
+client area of the graphics-device window.  The portion of the client
+area that is selected is specified by the four coordinate arguments,
+which are given in the current virtual coordinates for the device.
+See section <A HREF="scheme_18.html#SEC191">17.8 Images</A>, for more information about manipulating images.
+</DL>
+</P><P>
+
+<A NAME="IDX2567"></A>
+<DL>
+<DT><U>operation+:</U> os2-graphics-device <B>draw-lines</B> <I>xv yv</I>
+<DD>This operation draws multiple disjoint lines; it is like multiple calls
+to <CODE>graphics-draw-line</CODE> but much faster.  The arguments <VAR>xv</VAR>
+and <VAR>yv</VAR> are vectors of coordinates; these vectors must be the same
+length, and the length must be a multiple of two.  The contents of the
+vectors are alternating start/end pairs.  For example, the following are
+equivalent:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(graphics-draw-line device xs ys xe ye)
+(graphics-operation device 'draw-lines
+                    (vector xs xe)
+                    (vector ys ye))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Win32 Package Reference"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC196"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

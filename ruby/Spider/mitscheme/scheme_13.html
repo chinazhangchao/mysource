@@ -1,0 +1,686 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme Reference: Procedures</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme Reference: Procedures">
+<META NAME="keywords" CONTENT="MIT Scheme Reference: Procedures">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC120"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_12.html#SEC119"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_13.html#SEC121"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_12.html#SEC103"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC125"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 12. Procedures </H1>
+<!--docid::SEC120::-->
+<P>
+
+<A NAME="IDX1544"></A>
+<A NAME="IDX1545"></A>
+<A NAME="IDX1546"></A>
+<A NAME="IDX1547"></A>
+<A NAME="IDX1548"></A>
+<A NAME="IDX1549"></A>
+Procedures are created by evaluating <CODE>lambda</CODE> expressions
+(see section <A HREF="scheme_3.html#SEC30">2.1 Lambda Expressions</A>); the <CODE>lambda</CODE> may either be explicit
+or may be implicit as in a "procedure <CODE>define</CODE>"
+(see section <A HREF="scheme_3.html#SEC33">2.4 Definitions</A>).  Also there are special built-in procedures,
+called <EM>primitive procedures</EM>, such as <CODE>car</CODE>; these procedures
+are not written in Scheme but in the language used to implement the
+Scheme system.  MIT Scheme also provides <EM>application hooks</EM>, which
+support the construction of data structures that act like procedures.
+</P><P>
+
+<A NAME="IDX1550"></A>
+<A NAME="IDX1551"></A>
+<A NAME="IDX1552"></A>
+<A NAME="IDX1553"></A>
+<A NAME="IDX1554"></A>
+<A NAME="IDX1555"></A>
+<A NAME="IDX1556"></A>
+<A NAME="IDX1557"></A>
+<A NAME="IDX1558"></A>
+In MIT Scheme, the written representation of a procedure tells you
+the type of the procedure (compiled, interpreted, or primitive):
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>pp
+     =>  #[compiled-procedure 56 ("pp" #x2) #x10 #x307578]
+(lambda (x) x)
+     =>  #[compound-procedure 57]
+(define (foo x) x)
+foo
+     =>  #[compound-procedure 58 foo]
+car
+     =>  #[primitive-procedure car]
+(call-with-current-continuation (lambda (x) x))
+     =>  #[continuation 59]
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX1559"></A>
+<A NAME="IDX1560"></A>
+Note that interpreted procedures are called "compound" procedures
+(strictly speaking, compiled procedures are also compound procedures).
+The written representation makes this distinction for historical
+reasons, and may eventually change.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_13.html#SEC121">12.1 Procedure Operations</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_13.html#SEC122">12.2 Primitive Procedures</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_13.html#SEC123">12.3 Continuations</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_13.html#SEC124">12.4 Application Hooks</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Procedure Operations"></A>
+<HR SIZE="6">
+<A NAME="SEC121"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_13.html#SEC120"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_13.html#SEC122"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_13.html#SEC120"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_13.html#SEC120"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC125"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 12.1 Procedure Operations </H2>
+<!--docid::SEC121::-->
+<P>
+
+<A NAME="IDX1561"></A>
+<DL>
+<DT><U>procedure:</U> <B>apply</B> <I>procedure object object <small>...</small></I>
+<DD><A NAME="IDX1562"></A>
+Calls <VAR>procedure</VAR> with the elements of the following list as
+arguments:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(cons* <VAR>object</VAR> <VAR>object</VAR> <small>...</small>)
+</pre></td></tr></table></P><P>
+
+The initial <VAR>object</VAR>s may be any objects, but the last <VAR>object</VAR>
+(there must be at least one <VAR>object</VAR>) must be a list.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(apply + (list 3 4 5 6))                =>  18
+(apply + 3 4 '(5 6))                    =>  18
+
+(define compose
+  (lambda (f g)
+    (lambda args
+      (f (apply g args)))))
+((compose sqrt *) 12 75)                =>  30
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1563"></A>
+<DL>
+<DT><U>procedure+:</U> <B>procedure?</B> <I>object</I>
+<DD><A NAME="IDX1564"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a procedure; otherwise returns
+<CODE>#f</CODE>.  If <CODE>#t</CODE> is returned, exactly one of the following
+predicates is satisfied by <VAR>object</VAR>: <CODE>compiled-procedure?</CODE>,
+<CODE>compound-procedure?</CODE>, or <CODE>primitive-procedure?</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1565"></A>
+<DL>
+<DT><U>procedure+:</U> <B>compiled-procedure?</B> <I>object</I>
+<DD><A NAME="IDX1566"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a compiled procedure; otherwise
+returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1567"></A>
+<DL>
+<DT><U>procedure+:</U> <B>compound-procedure?</B> <I>object</I>
+<DD><A NAME="IDX1568"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a compound (i.e. interpreted)
+procedure; otherwise returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1569"></A>
+<DL>
+<DT><U>procedure+:</U> <B>primitive-procedure?</B> <I>object</I>
+<DD><A NAME="IDX1570"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a primitive procedure; otherwise
+returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+The following two procedures test the <EM>arity</EM> of a procedure, that
+is, the number of arguments that the procedure accepts.  The results of
+the test may be less restrictive than the effect of calling the
+procedure.  In other words, these procedures may indicate that the
+procedure will accept a given number of arguments, but if you call the
+procedure it may signal a
+<CODE>condition-type:wrong-number-of-arguments</CODE> error.  This is because
+these procedures examine the apparent arity of a procedure.  For
+example, here is a procedure that appears to accept any number of
+arguments, but when called will signal an error if the number of
+arguments is not one:
+<A NAME="IDX1571"></A>
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(lambda arguments (apply car arguments))
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX1572"></A>
+<DL>
+<DT><U>procedure+:</U> <B>procedure-arity-valid?</B> <I>procedure k</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>procedure</VAR> accepts <VAR>k</VAR> arguments;
+otherwise returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1573"></A>
+<DL>
+<DT><U>procedure+:</U> <B>procedure-arity</B> <I>procedure</I>
+<DD>Returns a description of the number of arguments that <VAR>procedure</VAR>
+accepts.  The result is a newly allocated pair whose car field is the
+minimum number of arguments, and whose cdr field is the maximum
+number of arguments.  The minimum is an exact non-negative integer.  The
+maximum is either an exact non-negative integer, or <CODE>#f</CODE> meaning
+that the procedure has no maximum number of arguments.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(procedure-arity (lambda () 3))         =>  (0 . 0)
+(procedure-arity (lambda (x) x))        =>  (1 . 1)
+(procedure-arity car)                   =>  (1 . 1)
+(procedure-arity (lambda x x))          =>  (0 . #f)
+(procedure-arity (lambda (x . y) x))    =>  (1 . #f)
+(procedure-arity (lambda (x #!optional y) x))
+                                        =>  (1 . 2)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1574"></A>
+<DL>
+<DT><U>procedure+:</U> <B>procedure-environment</B> <I>procedure</I>
+<DD>Returns the closing environment of <VAR>procedure</VAR>.  Signals an error if
+<VAR>procedure</VAR> is a primitive procedure, or if <VAR>procedure</VAR> is a
+compiled procedure for which the debugging information is unavailable.
+</DL>
+</P><P>
+
+<A NAME="Primitive Procedures"></A>
+<HR SIZE="6">
+<A NAME="SEC122"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_13.html#SEC121"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_13.html#SEC123"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_13.html#SEC120"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_13.html#SEC120"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC125"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 12.2 Primitive Procedures </H2>
+<!--docid::SEC122::-->
+<P>
+
+<A NAME="IDX1575"></A>
+<DL>
+<DT><U>procedure+:</U> <B>make-primitive-procedure</B> <I>name [arity]</I>
+<DD><VAR>Name</VAR> must be a symbol.  <VAR>Arity</VAR> must be an exact non-negative
+integer, <CODE>-1</CODE>, <CODE>#f</CODE>, or <CODE>#t</CODE>; if not supplied it defaults
+to <CODE>#f</CODE>.  Returns the primitive procedure called <VAR>name</VAR>.  May
+perform further actions depending on <VAR>arity</VAR>:
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>#f</CODE>
+<DD>If the primitive procedure is not implemented, signals an error.
+<P>
+
+<DT><CODE>#t</CODE>
+<DD>If the primitive procedure is not implemented, returns <CODE>#f</CODE>.
+<P>
+
+<DT>integer
+<DD>If the primitive procedure is implemented, signals an error if its arity
+is not equal to <VAR>arity</VAR>.  If the primitive procedure is not
+implemented, returns an unimplemented primitive procedure object that
+accepts <VAR>arity</VAR> arguments.  An <VAR>arity</VAR> of <CODE>-1</CODE> means it
+accepts any number of arguments.
+</DL>
+</DL>
+<P>
+
+<A NAME="IDX1576"></A>
+<DL>
+<DT><U>procedure+:</U> <B>primitive-procedure-name</B> <I>primitive-procedure</I>
+<DD>Returns the name of <VAR>primitive-procedure</VAR>, a symbol.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(primitive-procedure-name car)          =>  car
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1577"></A>
+<DL>
+<DT><U>procedure+:</U> <B>implemented-primitive-procedure?</B> <I>primitive-procedure</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>primitive-procedure</VAR> is implemented; otherwise
+returns <CODE>#f</CODE>.  Useful because the code that implements a particular
+primitive procedure is not necessarily linked into the executable Scheme
+program.
+</DL>
+</P><P>
+
+<A NAME="Continuations"></A>
+<HR SIZE="6">
+<A NAME="SEC123"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_13.html#SEC122"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_13.html#SEC124"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_13.html#SEC120"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_13.html#SEC120"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC125"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 12.3 Continuations </H2>
+<!--docid::SEC123::-->
+<P>
+
+<A NAME="IDX1578"></A>
+<DL>
+<DT><U>procedure:</U> <B>call-with-current-continuation</B> <I>procedure</I>
+<DD><A NAME="IDX1579"></A>
+<A NAME="IDX1580"></A>
+<A NAME="IDX1581"></A>
+<A NAME="IDX1582"></A>
+<VAR>Procedure</VAR> must be a procedure of one argument.  Packages up the
+current continuation (see below) as an <EM>escape procedure</EM> and passes
+it as an argument to <VAR>procedure</VAR>.  The escape procedure is a Scheme
+procedure of one argument that, if it is later passed a value, will
+ignore whatever continuation is in effect at that later time and will
+give the value instead to the continuation that was in effect when the
+escape procedure was created.  The escape procedure created by
+<CODE>call-with-current-continuation</CODE> has unlimited extent just like any
+other procedure in Scheme.  It may be stored in variables or data
+structures and may be called as many times as desired.
+</P><P>
+
+The following examples show only the most common uses of this procedure.
+If all real programs were as simple as these examples, there would be no
+need for a procedure with the power of
+<CODE>call-with-current-continuation</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(call-with-current-continuation
+  (lambda (exit)
+    (for-each (lambda (x)
+                (if (negative? x)
+                    (exit x)))
+              '(54 0 37 -3 245 19))
+    #t))                                =>  -3
+
+(define list-length
+  (lambda (obj)
+    (call-with-current-continuation
+      (lambda (return)
+        (letrec ((r
+                  (lambda (obj)
+                    (cond ((null? obj) 0)
+                          ((pair? obj) (+ (r (cdr obj)) 1))
+                          (else (return #f))))))
+          (r obj))))))
+(list-length '(1 2 3 4))                =>  4
+(list-length '(a b . c))                =>  #f
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX1583"></A>
+<A NAME="IDX1584"></A>
+A common use of <CODE>call-with-current-continuation</CODE> is for structured,
+non-local exits from loops or procedure bodies, but in fact
+<CODE>call-with-current-continuation</CODE> is quite useful for implementing a
+wide variety of advanced control structures.
+</P><P>
+
+Whenever a Scheme expression is evaluated a continuation exists that
+wants the result of the expression.  The continuation represents an
+entire (default) future for the computation.  If the expression is
+evaluated at top level, for example, the continuation will take the
+result, print it on the screen, prompt for the next input, evaluate it,
+and so on forever.  Most of the time the continuation includes actions
+specified by user code, as in a continuation that will take the result,
+multiply it by the value stored in a local variable, add seven, and give
+the answer to the top-level continuation to be printed.  Normally these
+ubiquitous continuations are hidden behind the scenes and programmers
+don't think much about them.  On the rare occasions that you may need to
+deal explicitly with continuations,
+<CODE>call-with-current-continuation</CODE> lets you do so by creating a
+procedure that acts just like the current continuation.
+</DL>
+</P><P>
+
+<A NAME="IDX1585"></A>
+<DL>
+<DT><U>procedure+:</U> <B>continuation?</B> <I>object</I>
+<DD><A NAME="IDX1586"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a continuation; otherwise returns
+<CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1587"></A>
+<DL>
+<DT><U>procedure+:</U> <B>within-continuation</B> <I>continuation thunk</I>
+<DD><A NAME="IDX1588"></A>
+<A NAME="IDX1589"></A>
+<VAR>Thunk</VAR> must be a procedure of no arguments.  Conceptually,<BR>
+<CODE>within-continuation</CODE> invokes <VAR>continuation</VAR> on the result of
+invoking <VAR>thunk</VAR>, but <VAR>thunk</VAR> is executed in the dynamic context
+of <VAR>continuation</VAR>.  In other words, the "current" continuation is
+abandoned before <VAR>thunk</VAR> is invoked.
+</DL>
+</P><P>
+
+<A NAME="IDX1590"></A>
+<DL>
+<DT><U>procedure+:</U> <B>dynamic-wind</B> <I>before thunk after</I>
+<DD>Calls <VAR>thunk</VAR> without arguments, returning the result(s) of this
+call.  <VAR>Before</VAR> and <VAR>after</VAR> are called, also without arguments,
+as required by the following rules (note that in the absence of calls to
+continuations captured using <CODE>call-with-current-continuation</CODE> the
+three arguments are called once each, in order).  <VAR>Before</VAR> is called
+whenever execution enters the dynamic extent of the call to <VAR>thunk</VAR>
+and <VAR>after</VAR> is called whenever it exits that dynamic extent.  The
+dynamic extent of a procedure call is the period between when the call
+is initiated and when it returns.  In Scheme, because of
+<CODE>call-with-current-continuation</CODE>, the dynamic extent of a call may
+not be a single, connected time period.  It is defined as follows:
+</P><P>
+
+<UL>
+<LI>
+The dynamic extent is entered when execution of the body of the called
+procedure begins.
+<P>
+
+<LI>
+The dynamic extent is also entered when execution is not within the
+dynamic extent and a continuation is invoked that was captured (using
+<CODE>call-with-current-continuation</CODE>) during the dynamic extent.
+<P>
+
+<LI>
+It is exited when the called procedure returns.
+<P>
+
+<LI>
+It is also exited when execution is within the dynamic extent and a
+continuation is invoked that was captured while not within the dynamic
+extent.
+</UL>
+<P>
+
+If a second call to <CODE>dynamic-wind</CODE> occurs within the dynamic extent
+of the call to <VAR>thunk</VAR> and then a continuation is invoked in such a
+way that the <VAR>after</VAR>s from these two invocations of
+<CODE>dynamic-wind</CODE> are both to be called, then the <VAR>after</VAR>
+associated with the second (inner) call to <CODE>dynamic-wind</CODE> is called
+first.
+</P><P>
+
+If a second call to <CODE>dynamic-wind</CODE> occurs within the dynamic extent
+of the call to <VAR>thunk</VAR> and then a continuation is invoked in such a
+way that the <VAR>before</VAR>s from these two invocations of
+<CODE>dynamic-wind</CODE> are both to be called, then the <VAR>before</VAR>
+associated with the first (outer) call to <CODE>dynamic-wind</CODE> is called
+first.
+</P><P>
+
+If invoking a continuation requires calling the <VAR>before</VAR> from one
+call to <CODE>dynamic-wind</CODE> and the <VAR>after</VAR> from another, then the
+<VAR>after</VAR> is called first.
+</P><P>
+
+The effect of using a captured continuation to enter or exit the dynamic
+extent of a call to <VAR>before</VAR> or <VAR>after</VAR> is undefined.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(let ((path '())
+      (c #f))
+  (let ((add (lambda (s)
+               (set! path (cons s path)))))
+    (dynamic-wind
+      (lambda () (add 'connect))
+      (lambda ()
+        (add (call-with-current-continuation
+               (lambda (c0)
+                 (set! c c0)
+                 'talk1))))
+      (lambda () (add 'disconnect)))
+    (if (&#60; (length path) 4)
+        (c 'talk2)
+        (reverse path))))
+
+=> (connect talk1 disconnect connect talk2 disconnect)
+</pre></td></tr></table></DL>
+</P><P>
+
+The following two procedures support multiple values.
+</P><P>
+
+<A NAME="IDX1591"></A>
+<DL>
+<DT><U>procedure+:</U> <B>call-with-values</B> <I>thunk procedure</I>
+<DD><A NAME="IDX1592"></A>
+<A NAME="IDX1593"></A>
+<VAR>Thunk</VAR> must be a procedure of no arguments, and <VAR>procedure</VAR>
+must be a procedure.  <VAR>Thunk</VAR> is invoked with a continuation that
+expects to receive multiple values; specifically, the continuation
+expects to receive the same number of values that <VAR>procedure</VAR>
+accepts as arguments.  <VAR>Thunk</VAR> must return multiple values using the
+<CODE>values</CODE> procedure.  Then <VAR>procedure</VAR> is called with the
+multiple values as its arguments.  The result yielded by <VAR>procedure</VAR>
+is returned as the result of <CODE>call-with-values</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1594"></A>
+<DL>
+<DT><U>procedure+:</U> <B>values</B> <I>object <small>...</small></I>
+<DD>Returns multiple values.  The continuation in effect when this procedure
+is called must be a multiple-value continuation that was created by
+<CODE>call-with-values</CODE>.  Furthermore it must accept as many values as
+there are <VAR>object</VAR>s.
+</DL>
+</P><P>
+
+<A NAME="Application Hooks"></A>
+<HR SIZE="6">
+<A NAME="SEC124"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_13.html#SEC123"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC125"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_13.html#SEC120"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_13.html#SEC120"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC125"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 12.4 Application Hooks </H2>
+<!--docid::SEC124::-->
+<P>
+
+<A NAME="IDX1595"></A>
+<A NAME="IDX1596"></A>
+<A NAME="IDX1597"></A>
+<EM>Application hooks</EM> are objects that can be applied like procedures.
+Each application hook has two parts: a <EM>procedure</EM> that specifies
+what to do when the application hook is applied, and an arbitrary
+object, called <EM>extra</EM>.  Often the procedure uses the extra object
+to determine what to do.
+</P><P>
+
+<A NAME="IDX1598"></A>
+<A NAME="IDX1599"></A>
+There are two kinds of application hooks, which differ in what arguments
+are passed to the procedure.  When an <EM>apply hook</EM> is applied, the
+procedure is passed exactly the same arguments that were passed to the
+apply hook.  When an <EM>entity</EM> is applied, the entity itself is
+passed as the first argument, followed by the other arguments that were
+passed to the entity.
+</P><P>
+
+Both apply hooks and entities satisfy the predicate <CODE>procedure?</CODE>.
+Each satisfies either <CODE>compiled-procedure?</CODE>,
+<CODE>compound-procedure?</CODE>, or <CODE>primitive-procedure?</CODE>, depending on
+its procedure component.  An apply hook is considered to accept the same
+number of arguments as its procedure, while an entity is considered to
+accept one less argument than its procedure.
+</P><P>
+
+<A NAME="IDX1600"></A>
+<DL>
+<DT><U>procedure+:</U> <B>make-apply-hook</B> <I>procedure object</I>
+<DD>Returns a newly allocated apply hook with a procedure component of
+<VAR>procedure</VAR> and an extra component of <VAR>object</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1601"></A>
+<DL>
+<DT><U>procedure+:</U> <B>apply-hook?</B> <I>object</I>
+<DD><A NAME="IDX1602"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is an apply hook; otherwise returns
+<CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1603"></A>
+<DL>
+<DT><U>procedure+:</U> <B>apply-hook-procedure</B> <I>apply-hook</I>
+<DD>Returns the procedure component of <VAR>apply-hook</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1604"></A>
+<DL>
+<DT><U>procedure+:</U> <B>set-apply-hook-procedure!</B> <I>apply-hook procedure</I>
+<DD>Changes the procedure component of <VAR>apply-hook</VAR> to be
+<VAR>procedure</VAR>.  Returns an unspecified value.
+</DL>
+</P><P>
+
+<A NAME="IDX1605"></A>
+<DL>
+<DT><U>procedure+:</U> <B>apply-hook-extra</B> <I>apply-hook</I>
+<DD>Returns the extra component of <VAR>apply-hook</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1606"></A>
+<DL>
+<DT><U>procedure+:</U> <B>set-apply-hook-extra!</B> <I>apply-hook object</I>
+<DD>Changes the extra component of <VAR>apply-hook</VAR> to be <VAR>object</VAR>.
+Returns an unspecified value.
+</DL>
+</P><P>
+
+<A NAME="IDX1607"></A>
+<DL>
+<DT><U>procedure+:</U> <B>make-entity</B> <I>procedure object</I>
+<DD>Returns a newly allocated entity with a procedure component of
+<VAR>procedure</VAR> and an extra component of <VAR>object</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1608"></A>
+<DL>
+<DT><U>procedure+:</U> <B>entity?</B> <I>object</I>
+<DD><A NAME="IDX1609"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is an entity; otherwise returns
+<CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1610"></A>
+<DL>
+<DT><U>procedure+:</U> <B>entity-procedure</B> <I>entity</I>
+<DD>Returns the procedure component of <VAR>entity</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1611"></A>
+<DL>
+<DT><U>procedure+:</U> <B>set-entity-procedure!</B> <I>entity procedure</I>
+<DD>Changes the procedure component of <VAR>entity</VAR> to be <VAR>procedure</VAR>.
+Returns an unspecified value.
+</DL>
+</P><P>
+
+<A NAME="IDX1612"></A>
+<DL>
+<DT><U>procedure+:</U> <B>entity-extra</B> <I>entity</I>
+<DD>Returns the extra component of <VAR>entity</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1613"></A>
+<DL>
+<DT><U>procedure+:</U> <B>set-entity-extra!</B> <I>entity object</I>
+<DD>Changes the extra component of <VAR>entity</VAR> to be <VAR>object</VAR>.  Returns
+an unspecified value.
+</DL>
+</P><P>
+
+<A NAME="Environments"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_13.html#SEC120"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC125"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

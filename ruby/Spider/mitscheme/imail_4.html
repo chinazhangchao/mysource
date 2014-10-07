@@ -1,0 +1,1821 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>IMAIL User's Manual: Commands</TITLE>
+
+<META NAME="description" CONTENT="IMAIL User's Manual: Commands">
+<META NAME="keywords" CONTENT="IMAIL User's Manual: Commands">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC12"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC11"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC13"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_5.html#SEC26"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 4. Commands </H1>
+<!--docid::SEC12::-->
+<P>
+
+<FONT SIZE="-1">IMAIL</FONT> provides a rich set of commands for manipulating
+messages.  Like Rmail, most of these commands are bound to letter keys.
+</P><P>
+
+<A NAME="IDX49"></A>
+The most important command is <KBD>M-x imail</KBD>, which is used to start
+<FONT SIZE="-1">IMAIL</FONT>.  With no arguments, <KBD>M-x imail</KBD> reads the primary
+folder, selects the first unseen message in the folder, then selects the
+folder's buffer.  If the primary folder is an <FONT SIZE="-1">IMAP</FONT> folder,
+<KBD>M-x imail</KBD> will connect to the server and check for new mail.  If
+<KBD>M-x imail</KBD> is given a prefix argument, it will prompt for the
+<FONT SIZE="-1">URL</FONT> of a folder rather than reading the primary folder.
+</P><P>
+
+The <FONT SIZE="-1">IMAIL</FONT> message buffer is put in <CODE>IMAIL</CODE> mode, a
+special mode in which most letter commands are defined to have special
+meanings.  Where possible, the letters chosen for these commands are the
+same as those for the corresponding Rmail commands.  The command keys
+specified in this chapter are for <CODE>IMAIL</CODE> mode, unless otherwise
+specified.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="imail_4.html#SEC13">4.1 Navigation</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="imail_4.html#SEC14">4.2 Deleting Messages</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="imail_4.html#SEC15">4.3 Multiple Folders</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="imail_4.html#SEC18">4.4 MIME Support</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="imail_4.html#SEC19">4.5 Flags</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="imail_4.html#SEC20">4.6 Sending Replies</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="imail_4.html#SEC21">4.7 Message Display</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="imail_4.html#SEC22">4.8 Summaries</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="imail_4.html#SEC25">4.9 Other Commands</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Navigation"></A>
+<HR SIZE="6">
+<A NAME="SEC13"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC14"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_5.html#SEC26"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.1 Navigation </H2>
+<!--docid::SEC13::-->
+<P>
+
+The most basic thing to do with a message is to read it.  The way to do
+this in <FONT SIZE="-1">IMAIL</FONT> is to <EM>select</EM> the message.  The usual
+practice is to move sequentially through the folder, since this is the
+order of receipt of messages.  When you enter <FONT SIZE="-1">IMAIL</FONT>, you are
+positioned at the first message that you have not yet seen (that is, the
+first one that has the <SAMP>`unseen'</SAMP> flag; see section <A HREF="imail_4.html#SEC19">4.5 Flags</A>).  Move forward
+to see the other new messages; move backward to reexamine old messages.
+</P><P>
+
+<DL COMPACT>
+<DT><KBD>n</KBD>
+<DD>Move to the next nondeleted message, skipping any intervening deleted
+messages (<CODE>imail-next-undeleted-message</CODE>).
+<DT><KBD>p</KBD>
+<DD>Move to the previous nondeleted message
+(<CODE>imail-previous-undeleted-message</CODE>).
+<DT><KBD>M-n</KBD>
+<DD>Move to the next message, including deleted messages
+(<CODE>imail-next-message</CODE>).
+<DT><KBD>M-p</KBD>
+<DD>Move to the previous message, including deleted messages
+(<CODE>imail-previous-message</CODE>).
+<DT><KBD>j</KBD>
+<DD>Move to the first message.  With argument <VAR>n</VAR>, move to
+message number <VAR>n</VAR> (<CODE>imail-select-message</CODE>).
+<DT><KBD>&#62;</KBD>
+<DD>Move to the last message (<CODE>imail-last-message</CODE>).
+<DT><KBD>&#60;</KBD>
+<DD>Move to the first message (<CODE>imail-first-message</CODE>).
+<DT><KBD>M-u</KBD>
+<DD>Move to the first unseen message (<CODE>imail-first-unseen-message</CODE>).
+<DT><KBD>M-s <VAR>string</VAR> <KBD>RET</KBD></KBD>
+<DD>Move to the next message containing a match for <VAR>string</VAR>
+(<CODE>imail-search</CODE>).
+<DT><KBD>M-- M-s <VAR>string</VAR> <KBD>RET</KBD></KBD>
+<DD>Move to the previous message containing a match for <VAR>string</VAR>.
+<DT><KBD>C-c C-n</KBD>
+<DD>Move to the next message with the same subject
+(<CODE>imail-next-same-subject</CODE>).
+<DT><KBD>C-c C-p</KBD>
+<DD>Move to the previous message with the same subject
+(<CODE>imail-previous-same-subject</CODE>).
+</DL>
+<P>
+
+<A NAME="IDX50"></A>
+<A NAME="IDX51"></A>
+<A NAME="IDX52"></A>
+<A NAME="IDX53"></A>
+<A NAME="IDX54"></A>
+<A NAME="IDX55"></A>
+<A NAME="IDX56"></A>
+<A NAME="IDX57"></A>
+<KBD>n</KBD> and <KBD>p</KBD> are the usual way of moving among messages in
+<FONT SIZE="-1">IMAIL</FONT>.  They move through the messages sequentially, but skip
+over deleted messages, which is usually what you want to do.  Their
+command definitions are named <CODE>imail-next-undeleted-message</CODE> and
+<CODE>imail-previous-undeleted-message</CODE>.  If you do not want to skip
+deleted messages--for example, if you want to move to a message to
+undelete it--use the variants <KBD>M-n</KBD> and <KBD>M-p</KBD>
+(<CODE>imail-next-message</CODE> and <CODE>imail-previous-message</CODE>).  A
+numeric argument to any of these commands serves as a repeat count.
+</P><P>
+
+In <FONT SIZE="-1">IMAIL</FONT>, you can specify a numeric argument by typing just
+the digits.  You don't need to type <KBD>C-u</KBD> first.
+</P><P>
+
+<A NAME="IDX58"></A>
+<A NAME="IDX59"></A>
+<A NAME="IDX60"></A>
+The <KBD>M-s</KBD> (<CODE>imail-search</CODE>) command is <FONT SIZE="-1">IMAIL</FONT>'s version
+of search.  The usual incremental search command <KBD>C-s</KBD> works in
+<FONT SIZE="-1">IMAIL</FONT>, but it searches only within the current message.  The
+purpose of <KBD>M-s</KBD> is to search for another message.  It reads a
+string nonincrementally, then searches starting at the beginning of the
+following message for a match.  It then selects that message.  If
+<VAR>string</VAR> is empty, <KBD>M-s</KBD> reuses the string used the previous
+time.
+</P><P>
+
+To search backward in the folder for another message, give <KBD>M-s</KBD> a
+negative argument.  In <FONT SIZE="-1">IMAIL</FONT> you can do this with <KBD>- M-s</KBD>.
+</P><P>
+
+It is also possible to search for a message based on flags.
+See section <A HREF="imail_4.html#SEC19">4.5 Flags</A>.
+</P><P>
+
+<A NAME="IDX61"></A>
+<A NAME="IDX62"></A>
+<A NAME="IDX63"></A>
+<A NAME="IDX64"></A>
+To find the next message with the same subject as the current message,
+use <KBD>C-c C-n</KBD> (<CODE>imail-next-same-subject</CODE>).  This is useful for
+following the thread of an email conversation.  <KBD>C-c C-p</KBD>
+(<CODE>imail-previous-same-subject</CODE>) finds the previous message with the
+same subject.
+</P><P>
+
+<A NAME="IDX65"></A>
+<A NAME="IDX66"></A>
+<A NAME="IDX67"></A>
+<A NAME="IDX68"></A>
+<A NAME="IDX69"></A>
+<A NAME="IDX70"></A>
+<A NAME="IDX71"></A>
+<A NAME="IDX72"></A>
+To move to a message specified by absolute message number, use <KBD>j</KBD>
+(<CODE>imail-select-message</CODE>) with the message number as argument.  With
+no argument, <KBD>j</KBD> selects the first message.  <KBD>&#60;</KBD>
+(<CODE>imail-first-message</CODE>) also selects the first message.  <KBD>&#62;</KBD>
+(<CODE>imail-last-message</CODE>) selects the last message.  <KBD>M-u</KBD> selects
+the first unseen message (<CODE>imail-first-unseen-message</CODE>).
+</P><P>
+
+<A NAME="Deleting Messages"></A>
+<HR SIZE="6">
+<A NAME="SEC14"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC13"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC15"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_5.html#SEC26"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.2 Deleting Messages </H2>
+<!--docid::SEC14::-->
+<P>
+
+<A NAME="IDX73"></A>
+When you no longer need to keep a message, you can <EM>delete</EM> it.
+This flags it as ignorable, and some <FONT SIZE="-1">IMAIL</FONT> commands pretend it
+is no longer present; but it still has its place in the <FONT SIZE="-1">IMAIL</FONT>
+folder, and still has its message number.
+</P><P>
+
+<A NAME="IDX74"></A>
+<EM>Expunging</EM> the <FONT SIZE="-1">IMAIL</FONT> folder actually removes the deleted
+messages.  The remaining messages are renumbered consecutively.
+Expunging is the only action that changes the message number of any
+message.
+</P><P>
+
+<DL COMPACT>
+<DT><KBD>d</KBD>
+<DD>Delete the current message, and move to the next nondeleted message
+(<CODE>imail-delete-forward</CODE>).
+<DT><KBD>C-d</KBD>
+<DD>Delete the current message, and move to the previous nondeleted
+message (<CODE>imail-delete-backward</CODE>).
+<DT><KBD>u</KBD>
+<DD>Undelete the current message, or move back to a deleted message and
+undelete it (<CODE>imail-undelete-previous-message</CODE>).
+<DT><KBD>x</KBD>
+<DD>Expunge the <FONT SIZE="-1">IMAIL</FONT> folder (<CODE>imail-expunge</CODE>).
+</DL>
+<P>
+
+<A NAME="IDX75"></A>
+<A NAME="IDX76"></A>
+<A NAME="IDX77"></A>
+<A NAME="IDX78"></A>
+There are two <FONT SIZE="-1">IMAIL</FONT> commands for deleting messages.  Both
+delete the current message and select another message.  <KBD>d</KBD>
+(<CODE>imail-delete-forward</CODE>) moves to the following message, skipping
+messages already deleted, while <KBD>C-d</KBD> (<CODE>imail-delete-backward</CODE>)
+moves to the previous nondeleted message.  If there is no nondeleted
+message to move to in the specified direction, the message that was just
+deleted remains current.  A numeric argument to either command reverses
+the direction of motion after deletion.
+</P><P>
+
+<A NAME="IDX79"></A>
+<A NAME="IDX80"></A>
+<A NAME="IDX81"></A>
+<A NAME="IDX82"></A>
+<A NAME="IDX83"></A>
+To make all the deleted messages finally vanish from the <FONT SIZE="-1">IMAIL</FONT>
+folder, type <KBD>x</KBD> (<CODE>imail-expunge</CODE>).  Until you do this, you can
+still <EM>undelete</EM> the deleted messages.  The undeletion command,
+<KBD>u</KBD> (<CODE>imail-undelete-previous-message</CODE>), is designed to cancel
+the effect of a <KBD>d</KBD> command in most cases.  It undeletes the current
+message if the current message is deleted.  Otherwise it moves backward
+to previous messages until a deleted message is found, and undeletes
+that message.
+</P><P>
+
+<A NAME="IDX84"></A>
+Because <CODE>imail-expunge</CODE> irreversibly deletes mail, <FONT SIZE="-1">IMAIL</FONT>
+normally requires confirmation before it performs the expunge.  This
+confirmation is controlled by the value of the variable
+<CODE>imail-expunge-confirmation</CODE>, which is a list of symbols.  There
+are two independent behaviors controlled by this: whether to prompt, and
+whether to show the messages being expunged.  If the list contains the
+symbol <CODE>verbose</CODE> (the default), the user is prompted for a
+yes-or-no style confirmation; if the list contains the symbol
+<CODE>brief</CODE>, the user is prompted for a y-or-n style confirmation; if
+neither of these symbols is present, no confirmation is done.  If the
+list contains the symbol <CODE>show-messages</CODE>, a window is popped up
+showing the messages to be expunged; otherwise the list is not shown.
+</P><P>
+
+You can usually undo a <KBD>d</KBD> with a <KBD>u</KBD> because the <KBD>u</KBD> moves
+back to and undeletes the message that the <KBD>d</KBD> deleted.  But this
+does not work when the <KBD>d</KBD> skips a few already-deleted messages that
+follow the message being deleted; then the <KBD>u</KBD> command undeletes the
+last of the messages that were skipped.  There is no clean way to avoid
+this problem.  However, by repeating the <KBD>u</KBD> command, you can
+eventually get back to the message that you intend to undelete.  You can
+also select a particular deleted message with the <KBD>M-p</KBD> command,
+then type <KBD>u</KBD> to undelete it.
+</P><P>
+
+A deleted message has the <SAMP>`deleted'</SAMP> flag, and as a result
+<SAMP>`deleted'</SAMP> appears in the mode line when the current message is
+deleted.  In fact, deleting or undeleting a message is nothing more than
+adding or removing this flag.  See section <A HREF="imail_4.html#SEC19">4.5 Flags</A>.
+</P><P>
+
+<A NAME="Multiple Folders"></A>
+<HR SIZE="6">
+<A NAME="SEC15"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC14"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC16"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC18"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.3 Multiple Folders </H2>
+<!--docid::SEC15::-->
+<P>
+
+<A NAME="IDX85"></A>
+<A NAME="IDX86"></A>
+<FONT SIZE="-1">IMAIL</FONT> operates by default on your <EM>primary folder</EM>, which
+is the folder named <SAMP>`inbox'</SAMP> on your <FONT SIZE="-1">IMAP</FONT> server.  Your
+incoming mail is placed in that folder by your system's mail-delivery
+software.  Whenever it has an open connection to the server,
+<FONT SIZE="-1">IMAIL</FONT> notices new mail and brings it to your attention by
+modifying the Edwin mode line.
+</P><P>
+
+<A NAME="IDX87"></A>
+<A NAME="IDX88"></A>
+<A NAME="IDX89"></A>
+<A NAME="IDX90"></A>
+You can specify a different folder to be your primary folder by
+modifying one or more of <FONT SIZE="-1">IMAIL</FONT>'s variables.  The simplest way
+to do this is to change the variable <CODE>imail-primary-folder</CODE> to
+contain the <FONT SIZE="-1">URL</FONT> of the folder that you wish to be your primary
+folder.  Normally <CODE>imail-primary-folder</CODE> is <CODE>#f</CODE>, in which
+case the primary folder has the form
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>imap://<VAR>user-id</VAR>@<VAR>server</VAR>/<VAR>mailbox</VAR>
+</pre></td></tr></table></P><P>
+
+where <VAR>user-id</VAR> is the value of the variable
+<CODE>imail-default-user-id</CODE>, <VAR>server</VAR> is the value of
+<CODE>imail-default-imap-server</CODE>, and <VAR>mailbox</VAR> is the value of
+<CODE>imail-default-imap-mailbox</CODE>.  <CODE>imail-default-user-id</CODE> may be
+<CODE>#f</CODE> meaning to use the value of <SAMP>`(current-user-name)'</SAMP>.
+</P><P>
+
+In addition to the primary folder, you can also have other folders and
+edit them with <FONT SIZE="-1">IMAIL</FONT>.  You can move messages into them with
+explicit <FONT SIZE="-1">IMAIL</FONT> commands.<A NAME="DOCF8" HREF="imail_fot.html#FOOT8">(8)</A>
+</P><P>
+
+One major difference between a file-based mail reader like Rmail and an
+<FONT SIZE="-1">IMAP</FONT> mail reader like <FONT SIZE="-1">IMAIL</FONT> is that file-based mail
+readers do not need to provide commands to manipulate mail files (as
+opposed to mail messages).  This is because ordinary file-system
+commands already provide the ability to copy, delete, and rename such
+files.  This isn't the case for <FONT SIZE="-1">IMAP</FONT> mail readers.
+Consequently <FONT SIZE="-1">IMAIL</FONT> provides a basic set of commands for
+manipulating folders, as well as a Dired-like folder browser.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="imail_4.html#SEC16">4.3.1 Simple Folder Commands</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="imail_4.html#SEC17">4.3.2 The Folder Browser</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Simple Folder Commands"></A>
+<HR SIZE="6">
+<A NAME="SEC16"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC15"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC17"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC14"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC15"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC18"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 4.3.1 Simple Folder Commands </H3>
+<!--docid::SEC16::-->
+<P>
+
+Within a folder's buffer, <FONT SIZE="-1">IMAIL</FONT> provides a number of simple
+commands that can be used to interact with other folders.
+</P><P>
+
+<DL COMPACT>
+<DT><KBD>i <VAR>URL</VAR> <KBD>RET</KBD></KBD>
+<DD>Read the folder named <VAR>URL</VAR> and run <FONT SIZE="-1">IMAIL</FONT> on it
+(<CODE>imail-input</CODE>).
+<P>
+
+<DT><KBD>g</KBD>
+<DD>Get new mail for the current folder (<CODE>imail-get-new-mail</CODE>).
+<P>
+
+<DT><KBD>C-u g <VAR>URL</VAR> <KBD>RET</KBD></KBD>
+<DD>Read the folder named <VAR>URL</VAR> and append all of its messages to the
+current folder (<CODE>imail-input-from-folder</CODE>).
+<P>
+
+<DT><KBD>o <VAR>URL</VAR> <KBD>RET</KBD></KBD>
+<DD>Copy the current message into the folder named <VAR>URL</VAR>
+(<CODE>imail-output</CODE>).
+<P>
+
+<DT><KBD>C <VAR>URL1</VAR> <KBD>RET</KBD> <VAR>URL2</VAR> <KBD>RET</KBD></KBD>
+<DD>Copy the folder named <VAR>URL1</VAR> to <VAR>URL2</VAR>
+(<CODE>imail-copy-folder</CODE>).
+<P>
+
+<DT><KBD>D <VAR>URL</VAR> <KBD>RET</KBD></KBD>
+<DD>Delete the folder named <VAR>URL</VAR> (<CODE>imail-delete-folder</CODE>).
+<P>
+
+<DT><KBD>R <VAR>URL1</VAR> <KBD>RET</KBD> <VAR>URL2</VAR> <KBD>RET</KBD></KBD>
+<DD>Rename the folder named <VAR>URL1</VAR> to be <VAR>URL2</VAR>
+(<CODE>imail-rename-folder</CODE>).
+<P>
+
+<DT><KBD>+ <VAR>URL</VAR> <KBD>RET</KBD></KBD>
+<DD>Create a folder named <VAR>URL</VAR> (<CODE>imail-create-folder</CODE>).
+</DL>
+<P>
+
+<A NAME="IDX91"></A>
+<A NAME="IDX92"></A>
+To run <FONT SIZE="-1">IMAIL</FONT> on a folder other than your primary folder, you
+may use the <KBD>i</KBD> (<CODE>imail-input</CODE>) command in <FONT SIZE="-1">IMAIL</FONT>.
+This visits the folder in <FONT SIZE="-1">IMAIL</FONT> mode.  You can use <KBD>M-x
+imail-input</KBD> even when not in <FONT SIZE="-1">IMAIL</FONT>.
+</P><P>
+
+<A NAME="IDX93"></A>
+<A NAME="IDX94"></A>
+The <KBD>g</KBD> (<CODE>imail-get-new-mail</CODE>) command gets new mail for the
+current <FONT SIZE="-1">IMAIL</FONT> folder, and if there is new mail, moves to the
+first unseen message.  This command works only on <FONT SIZE="-1">IMAP</FONT>
+folders; it does nothing on file-based folders.  Normally this command
+isn't needed since <FONT SIZE="-1">IMAIL</FONT> periodically checks for new mail in
+all <FONT SIZE="-1">IMAP</FONT> folders, but it is occasionally useful to force
+<FONT SIZE="-1">IMAIL</FONT> to get new mail immediately rather than waiting for the
+next periodic mail check.  The command <KBD>M-x imail</KBD> has the same
+effect as <CODE>imail-get-new-mail</CODE> if the primary folder is already
+open in a buffer.
+</P><P>
+
+<A NAME="IDX95"></A>
+<A NAME="IDX96"></A>
+<FONT SIZE="-1">IMAIL</FONT> normally checks for new mail in <FONT SIZE="-1">IMAP</FONT> folders
+according to the value of the variable <CODE>imail-update-interval</CODE>.
+This variable specifies the time between checks in seconds.  It may also
+be set to <CODE>#f</CODE>, which disables automatic mail checking.  When
+<FONT SIZE="-1">IMAIL</FONT> detects new mail in the primary folder, it normally
+modifies the mode line of all buffers to contain the string <SAMP>`[New
+Mail]'</SAMP>.  This can be disabled by setting the variable
+<CODE>imail-global-mail-notification</CODE> to <CODE>#f</CODE>.
+</P><P>
+
+<A NAME="IDX97"></A>
+<A NAME="IDX98"></A>
+To copy messages from another folder into the current folder, give the
+<KBD>g</KBD> key a numeric argument, as in <KBD>C-u g</KBD>.  This runs the
+command <CODE>imail-input-from-folder</CODE>, which reads a <FONT SIZE="-1">URL</FONT> and
+copies all the messages from the specified folder into the current one.
+The messages are appended to the current folder, in the same order that
+they appear in the specified folder.
+</P><P>
+
+<A NAME="IDX99"></A>
+<A NAME="IDX100"></A>
+<A NAME="IDX101"></A>
+<A NAME="IDX102"></A>
+The <KBD>o</KBD> (<CODE>imail-output</CODE>) command copies the current message
+into a folder that you specify as a <FONT SIZE="-1">URL</FONT>.  The folder initially
+defaults to the current folder, unless you have set the variable
+<CODE>imail-output-default</CODE> to a different default; after the first
+message is output, the default folder becomes the one to which you last
+output a message.  If the target folder doesn't exist, it is created
+first; in any case, the copied message is appended to the end of the
+folder.  The current message is flagged as <SAMP>`filed'</SAMP>.  If the
+variable <CODE>imail-delete-after-output</CODE> is true, the message is also
+marked as deleted.
+</P><P>
+
+<A NAME="IDX103"></A>
+<A NAME="IDX104"></A>
+The <KBD>C</KBD> (<CODE>imail-copy-folder</CODE>) command copies an entire folder
+from one place to another.  You specify two <FONT SIZE="-1">URL</FONT>s, the source
+and the target, and all of the messages from the source folder are
+copied verbatim to the target folder.  The source folder is not changed.
+The target folder is created if it doesn't exist.  If the target folder
+does exist, the source folder's messages are appended to it.
+</P><P>
+
+Note that all of the commands that copy messages between folders will
+work whether the folders are the same type or not.  In particular,
+messages in <FONT SIZE="-1">IMAP</FONT> folders can be copied to file folders, and
+vice versa.  You can copy messages between two file folders in different
+formats, or between two different <FONT SIZE="-1">IMAP</FONT> servers.
+<FONT SIZE="-1">IMAIL</FONT> doesn't care; it translates as needed.
+</P><P>
+
+<A NAME="IDX105"></A>
+<A NAME="IDX106"></A>
+The <KBD>D</KBD> (<CODE>imail-delete-folder</CODE>) command deletes a specified
+folder.  All of the messages in the folder, and the folder itself, are
+deleted.  You will be prompted to confirm before any deletion is done.
+</P><P>
+
+<A NAME="IDX107"></A>
+<A NAME="IDX108"></A>
+The <KBD>R</KBD> (<CODE>imail-rename-folder</CODE>) command renames a specified
+folder.  You are prompted for two <FONT SIZE="-1">URL</FONT>s, the old name and the
+new one.  At present, this command only works in limited circumstances,
+specifically, when moving a folder from one place to another on a single
+<FONT SIZE="-1">IMAP</FONT> server, or when moving a file folder from one place to
+another within the same file system.  The rename operation fails if the
+new name is already in use.
+</P><P>
+
+<A NAME="IDX109"></A>
+<A NAME="IDX110"></A>
+The <KBD>+</KBD> (<CODE>imail-create-folder</CODE>) command creates a new, empty
+folder.  It prompts for a <FONT SIZE="-1">URL</FONT>, and signals an error if the
+name is already in use.  This command is rarely used since the
+message-copying commands automatically create folders as needed.
+</P><P>
+
+<A NAME="Folder Browser"></A>
+<HR SIZE="6">
+<A NAME="SEC17"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC16"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC18"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC14"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC15"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC18"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 4.3.2 The Folder Browser </H3>
+<!--docid::SEC17::-->
+<P>
+
+In addition to the simple commands just described, <FONT SIZE="-1">IMAIL</FONT> also
+provides a Dired-like browser for viewing and manipulating folders.  The
+browser is generic, meaning that it will view collections of both
+<FONT SIZE="-1">IMAP</FONT> folders and file folders, although it works better and is
+more useful in conjunction with <FONT SIZE="-1">IMAP</FONT> folders.
+</P><P>
+
+<A NAME="IDX111"></A>
+<A NAME="IDX112"></A>
+The <CODE>imail-browser-view-container</CODE> command is used to enter the
+folder browser.  In an <FONT SIZE="-1">IMAIL</FONT> folder buffer, this command is
+bound to the <KBD>^</KBD> key, and will bring up a folder browser that is
+viewing the container of the current folder.  With a prefix argument,
+you will be asked for the URL of a container to browse.
+</P><P>
+
+An <FONT SIZE="-1">IMAIL</FONT> browser buffer is arranged so that each line in the
+browser represents a folder or a container (or both, in the case of
+<FONT SIZE="-1">IMAP</FONT> containers).  Here is an example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>imap://localhost/inbox/
+-----------------------
+  + debian/
+  + family
+  + gnu/
+  + ham/
+  + hp-laptops/
+  + linux/
+  + misc/
+  + mit/
+  + music/
+  + purchases
+  + scheme/
+  + software/
+  + sysadmin
+  + vendors/
+  + vlsi
+</pre></td></tr></table></P><P>
+
+There are several interesting features of this buffer.  The first two
+lines of the buffer are a title, telling you the URL of the container
+that this buffer is browsing.  Each of the remaining lines shows the
+name of a folder (or container) that is inside the container.  You can
+perform various operations on one of these folders by moving point
+to the folder's line and invoking commands.
+</P><P>
+
+Each line uses special characters to give you cues about the object
+being described.  If the object is a container, there is a <SAMP>`+'</SAMP>
+character at the beginning of the line.  Because our example is showing
+an <FONT SIZE="-1">IMAP</FONT> container, and virtually all <FONT SIZE="-1">IMAP</FONT> folders
+are also containers, every line in the example starts with <SAMP>`+'</SAMP>.
+Additionally, if the object is <EM>only</EM> a container, then the
+object's name ends in the character <SAMP>`/'</SAMP>; if the object is only a
+folder, or if it is both a folder and a container, then there is no
+trailing <SAMP>`/'</SAMP>.
+</P><P>
+
+The following commands are available in an <FONT SIZE="-1">IMAIL</FONT> browser
+buffer.
+</P><P>
+
+<DL COMPACT>
+<DT><KBD>f</KBD>
+<DD>View the folder on the current line in an <FONT SIZE="-1">IMAIL</FONT> buffer
+(<CODE>imail-browser-view-selected-folder</CODE>).
+<P>
+
+<DT><KBD>t</KBD>
+<DD>If the object on the current line is a container, toggle whether its
+contents are shown (<CODE>imail-browser-toggle-container</CODE>).
+<P>
+
+<DT><KBD>c</KBD>
+<DD>Browse the container on the current line
+(<CODE>imail-browser-view-selected-container</CODE>).
+<P>
+
+<DT><KBD>^</KBD>
+<DD>Browse the container of the this buffer's container
+(<CODE>imail-browser-view-container</CODE>).
+<P>
+
+<DT><KBD>d</KBD>
+<DD>Mark the object on the current line for subsequent deletion
+(<CODE>imail-browser-flag-folder-deletion</CODE>).
+<P>
+
+<DT><KBD>m</KBD>
+<DD>Mark the object on the current line for subsequent operations
+(<CODE>imail-browser-mark</CODE>).
+<P>
+
+<DT><KBD>u</KBD>
+<DD>Remove any mark from the current line and move to the next line
+(<CODE>imail-browser-unmark</CODE>).
+<P>
+
+<DT><KBD><KBD>DEL</KBD></KBD>
+<DD>Move to the previous line and remove any mark there
+(<CODE>imail-browser-unmark-backward</CODE>).
+<P>
+
+<DT><KBD>M-<KBD>DEL</KBD> <VAR>char</VAR></KBD>
+<DD>Remove marks from all folders (<CODE>imail-browser-unmark-all-folders</CODE>).
+<P>
+
+<DT><KBD>C <VAR>URL</VAR> <KBD>RET</KBD></KBD>
+<DD>Copy the folder on the current line to the folder named <VAR>URL</VAR>,
+creating it if needed (<CODE>imail-browser-do-copy</CODE>).
+<P>
+
+<DT><KBD>R <VAR>URL</VAR> <KBD>RET</KBD></KBD>
+<DD>Rename the object on the current line to be <VAR>URL</VAR>
+(<CODE>imail-browser-do-rename</CODE>).
+<P>
+
+<DT><KBD>D</KBD>
+<DD>Delete the object on the current line (<CODE>imail-browser-do-delete</CODE>).
+Prompts for confirmation before performing the deletion.
+<P>
+
+<DT><KBD>x</KBD>
+<DD>Delete all objects that have been marked for deletion
+(<CODE>imail-browser-do-flagged-delete</CODE>).  Prompts for confirmation
+before any deletion is performed.
+<P>
+
+<DT><KBD>+ <VAR>URL</VAR> <KBD>RET</KBD></KBD>
+<DD>Create a folder named <VAR>URL</VAR> (<CODE>imail-create-folder</CODE>).
+<P>
+
+<DT><KBD>g</KBD>
+<DD>Recompute the buffer's contents by querying the server or file system
+(<CODE>imail-browser-revert</CODE>).
+<P>
+
+<DT><KBD>q</KBD>
+<DD>Kill the current buffer (<CODE>imail-browser-quit</CODE>).
+</DL>
+<P>
+
+<A NAME="IDX113"></A>
+<A NAME="IDX114"></A>
+If point is on a line describing a folder, use the <KBD>f</KBD>
+(<CODE>imail-browser-view-selected-folder</CODE>) command to view the contents
+of that folder.  This selects an <FONT SIZE="-1">IMAIL</FONT> folder buffer for that
+folder.
+</P><P>
+
+<A NAME="IDX115"></A>
+<A NAME="IDX116"></A>
+If point is on a line describing a container, use the <KBD>t</KBD>
+(<CODE>imail-browser-toggle-container</CODE>) command to show the contents of
+the container in the current buffer.  This causes the <SAMP>`+'</SAMP> on this
+line to change to a <SAMP>`-'</SAMP>, and new lines describing the contents are
+inserted into the buffer following the current line.  The new lines are
+slightly indented to indicate the container relationship.  For example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>imap://localhost/inbox/
+-----------------------
+  - debian/
+      + bugs
+      + maintainer
+      + misc
+  + family
+  + gnu/
+  + ham/
+  + hp-laptops/
+  + linux/
+  + misc/
+  + mit/
+  + music/
+  + purchases
+  + scheme/
+  + software/
+  + sysadmin
+  + vendors/
+  + vlsi
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX117"></A>
+To hide the container's content lines, use the <KBD>t</KBD> command again.
+Another way to open and close containers is to click the left mouse
+button on the <SAMP>`+'</SAMP> or <SAMP>`-'</SAMP> character for the container
+(<CODE>imail-browser-mouse-toggle-container</CODE>).
+</P><P>
+
+<A NAME="IDX118"></A>
+<A NAME="IDX119"></A>
+<A NAME="IDX120"></A>
+<A NAME="IDX121"></A>
+If you would rather browse a container in a separate buffer, use the
+<KBD>c</KBD> (<CODE>imail-browser-view-selected-container</CODE>) command.  To
+browse the container of this buffer's container, use the <KBD>^</KBD>
+(<CODE>imail-browser-view-container</CODE>) command.
+</P><P>
+
+Besides simple browsing capabilities, the <FONT SIZE="-1">IMAIL</FONT> folder browser
+also provides the ability to modify folders and containers, by copying,
+renaming, and deleting them.  The commands to do this normally operate
+on the object on the current line.  However, you can <EM>mark</EM> one or
+more lines, and subsequently perform an operation on all of them at
+once.
+</P><P>
+
+<A NAME="IDX122"></A>
+<A NAME="IDX123"></A>
+<A NAME="IDX124"></A>
+<A NAME="IDX125"></A>
+There are several marking and unmarking commands.  The <KBD>m</KBD>
+(<CODE>imail-browser-mark</CODE>) command marks the current line and moves
+down to the next line.  The mark is visible as an asterisk at the
+beginning of the line.  A numeric argument serves as a repeat count.
+The <KBD>d</KBD> (<CODE>imail-browser-flag-folder-deletion</CODE>) is just like
+<KBD>m</KBD>, except that it marks lines with <SAMP>`D'</SAMP>.  <SAMP>`D'</SAMP> marks are
+used to flag objects for deletion, while <SAMP>`*'</SAMP> marks are used for
+everything else.
+</P><P>
+
+<A NAME="IDX126"></A>
+<A NAME="IDX127"></A>
+<A NAME="IDX128"></A>
+<A NAME="IDX129"></A>
+<A NAME="IDX130"></A>
+<A NAME="IDX131"></A>
+To unmark a line, use the <KBD>u</KBD> (<CODE>imail-browser-unmark</CODE>) command.
+This removes any mark from the current line and moves to the next line.
+Like <KBD>m</KBD>, a numeric argument serves as a repeat count.  The
+<KBD>DEL</KBD> (<CODE>imail-browser-unmark-backward</CODE>) command moves upward,
+removing flags; it is like <KBD>u</KBD> with argument <CODE>-1</CODE>.  Finally,
+the <KBD>M-<KBD>DEL</KBD></KBD> (<CODE>imail-browser-unmark-all-folders</CODE>) prompts
+for a character and unmarks <EM>all</EM> lines marked with that character;
+specifying <KBD>RET</KBD> as the character removes all marks.
+</P><P>
+
+The next three commands perform the copy, rename, and delete operations.
+These commands all operate on one or more folders, which you specify
+either by marking them, or by moving point to the corresponding lines.
+The folders to be operated on are specified as follows.  If the command
+is given a numeric argument <VAR>N</VAR>, then the next <VAR>N</VAR> folders are
+specified.  Otherwise, any folders marked with an asterisk are
+specified.  If there is no argument and no marked folders, then the
+folder on the current line is specified.
+</P><P>
+
+<A NAME="IDX132"></A>
+<A NAME="IDX133"></A>
+The <KBD>C</KBD> (<CODE>imail-browser-do-copy</CODE>) command copies one or more
+folders.  If one folder is specified, the command prompts for the
+<FONT SIZE="-1">URL</FONT> of another folder, and appends the messages of the first
+folder to the end of the second folder.  The second folder is created if
+necessary.  If more than one folder is specified, the command prompts
+for the <FONT SIZE="-1">URL</FONT> of an existing container, and copies the source
+folders into the target container with the same names.
+</P><P>
+
+<A NAME="IDX134"></A>
+<A NAME="IDX135"></A>
+The <KBD>R</KBD> (<CODE>imail-browser-do-rename</CODE>) command renames one or more
+folders.  If one folder is specified, the command prompts for a
+<FONT SIZE="-1">URL</FONT>, and changes the name of the folder to the <FONT SIZE="-1">URL</FONT>.
+If more than one folder is specified, the command prompts for the
+<FONT SIZE="-1">URL</FONT> of an existing container, and moves the folders into the
+container.  Note that in both cases, it is an error if there is already
+a folder with the new name.  Furthermore, this command only works in
+limited circumstances, specifically, when moving a folder from one place
+to another on a single <FONT SIZE="-1">IMAP</FONT> server, or when moving a file
+folder from one place to another within the same file system.
+</P><P>
+
+<A NAME="IDX136"></A>
+<A NAME="IDX137"></A>
+<A NAME="IDX138"></A>
+<A NAME="IDX139"></A>
+The <KBD>D</KBD> (<CODE>imail-browser-do-delete</CODE>) command deletes one or more
+folders.  The command prompts for confirmation before any folders are
+deleted.  The <KBD>x</KBD> (<CODE>imail-browser-do-flagged-delete</CODE>) command
+is similar, except that the folders it deletes are those that have been
+marked with <SAMP>`D'</SAMP>.  (The <KBD>x</KBD> command is mostly provided for
+compatibility with Dired.)
+</P><P>
+
+<A NAME="IDX140"></A>
+<A NAME="IDX141"></A>
+The <KBD>+</KBD> (<CODE>imail-create-folder</CODE>) command creates a new, empty
+folder.  It prompts for a <FONT SIZE="-1">URL</FONT>, and signals an error if the
+name is already in use.  This command is rarely used since the
+message-copying commands automatically create folders as needed.
+</P><P>
+
+<A NAME="IDX142"></A>
+<A NAME="IDX143"></A>
+The <KBD>g</KBD> (<CODE>imail-browser-revert</CODE>) command re-reads the contents
+of the browser buffer's container and uses that information to
+regenerate the buffer's contents.  Any marks that you have placed in the
+buffer are preserved.
+</P><P>
+
+<A NAME="IDX144"></A>
+<A NAME="IDX145"></A>
+The <KBD>q</KBD> (<CODE>imail-browser-quit</CODE>) command kills the current
+buffer.  If you have marked some folders for later operation, the marks
+are discarded and the operations are not performed.
+</P><P>
+
+<A NAME="MIME Support"></A>
+<HR SIZE="6">
+<A NAME="SEC18"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC17"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC19"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC15"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_5.html#SEC26"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.4 MIME Support </H2>
+<!--docid::SEC18::-->
+<P>
+
+<A NAME="IDX146"></A>
+<A NAME="IDX147"></A>
+<A NAME="IDX148"></A>
+<A NAME="IDX149"></A>
+<A NAME="IDX150"></A>
+<A NAME="IDX151"></A>
+<A NAME="IDX152"></A>
+<A NAME="IDX153"></A>
+The <EM>Multipurpose Internet Mail Extensions</EM> (<FONT SIZE="-1">MIME</FONT>) define
+a standard means for structuring mail messages.  <FONT SIZE="-1">MIME</FONT> permits
+a message to have multiple parts, each of which is called an
+<EM>entity</EM>.  It also provides a way to associate type information with
+each entity.  For example, an ordinary text message has type
+<SAMP>`text/plain'</SAMP>, <FONT SIZE="-1">HTML</FONT> has type <SAMP>`text/html'</SAMP>, and a
+<FONT SIZE="-1">JPEG</FONT> image has type <SAMP>`image/jpeg'</SAMP>.  Additionally,
+<FONT SIZE="-1">MIME</FONT> entities may be annotated to indicate whether they should
+be shown <EM>in-line</EM>, or whether they are <EM>attachments</EM> that
+should be shown only upon further user action.
+</P><P>
+
+<FONT SIZE="-1">IMAIL</FONT> provides simple support for <FONT SIZE="-1">MIME</FONT> messages.
+<FONT SIZE="-1">MIME</FONT> attachments are shown in the <FONT SIZE="-1">IMAIL</FONT> buffer by
+special abbreviations.  You can write an attachment to a file.
+Multipart <FONT SIZE="-1">MIME</FONT> structures are recognized and displayed in a
+clean format that suppresses unnecessary clutter.  And <FONT SIZE="-1">MIME</FONT>
+encodings such as <EM>quoted-printable</EM> and <EM>base64</EM> are
+automatically decoded prior to displaying the message or saving the
+attachment.
+</P><P>
+
+End-user formatting of <FONT SIZE="-1">MIME</FONT> messages is a complex process,
+partly because these messages can be arbitrarily complex in their
+internal structure.  <FONT SIZE="-1">IMAIL</FONT> provides several variables that
+give you some control over the formatting prcess.
+</P><P>
+
+<A NAME="IDX154"></A>
+Many <FONT SIZE="-1">MIME</FONT> messages have multiple parts; for example, a message
+with an attachment normally contains at least two parts: the message
+text and the attachment.  <FONT SIZE="-1">IMAIL</FONT> separates the different parts
+of a <FONT SIZE="-1">MIME</FONT> message with specially-formatted lines.  There are
+several styles of separator lines available, selected by changing the
+value of the variable <CODE>imail-mime-boundary-style</CODE>.  The default
+value of <CODE>simple</CODE> means to use long lines of hyphen characters as
+the separator lines.  A value of <CODE>sgml</CODE> means use long lines of
+hyphens that are wrapped with <SAMP>`&#60;!--'</SAMP> and <SAMP>`--&#62;'</SAMP>, which makes
+them valid <FONT SIZE="-1">SGML</FONT> comments.  A value of <CODE>original</CODE> means to
+use the original <FONT SIZE="-1">MIME</FONT> <EM>boundaries</EM>, which have certain
+useful syntactic properties but are not as visually distinctive.
+</P><P>
+
+<A NAME="IDX155"></A>
+<FONT SIZE="-1">MIME</FONT> also specifies a particular kind of multipart message, of
+type <SAMP>`multipart/alternative'</SAMP>, in which the parts are different
+representations of the same message.  A typical example of this is a
+mailer that sends both plain text and <FONT SIZE="-1">HTML</FONT> versions of the
+message text.  Normally <FONT SIZE="-1">IMAIL</FONT> shows only the simplest of these
+parts (which is almost always plain text) and suppresses the
+alternatives.  However, if you set the variable
+<CODE>imail-mime-show-alternatives</CODE> to <CODE>#t</CODE>, <FONT SIZE="-1">IMAIL</FONT> will
+show these alternative forms as attachments.
+</P><P>
+
+<A NAME="IDX156"></A>
+Another kind of multipart <FONT SIZE="-1">MIME</FONT> message is the digest message,
+which has type <SAMP>`multipart/digest'</SAMP>.  Digest messages are normally
+used by high-volume mailing lists to reduce the number of messages sent
+to the end user; instead the user receives one message containing all of
+the messages from that list in a particular time period, usually a day.
+<FONT SIZE="-1">IMAIL</FONT> can present <FONT SIZE="-1">MIME</FONT> digest messages in one of two
+formats.  The default format is to show all of the component messages of
+the digest as attachments.  This is particularly useful for large
+digests that you will only read a few messages from, since you can scan
+the digest contents for interesting messages without downloading all of
+the messages in the digest.  In the alternative format, selected by
+setting <CODE>imail-mime-collapse-digest</CODE> to <CODE>#f</CODE>, the component
+messages of a digest are all shown inline.
+</P><P>
+
+As a general rule, any <FONT SIZE="-1">MIME</FONT> entity that contains non-textual
+information is displayed as an attachment.  Attachments are normally
+shown as specially-formatted abbreviations.  Here is an example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;imail-part
+    name="foo.doc"
+    type="application/msword"
+    length="55499"
+    /&#62;
+</pre></td></tr></table></P><P>
+
+This shows various things about the attachment, including its (optional)
+name, its <FONT SIZE="-1">MIME</FONT> type, and the length of the attachment in
+bytes.  (The length is computed on the encoded form of the attachment,
+and is generally slightly larger than the decoded length.)
+</P><P>
+
+<FONT SIZE="-1">IMAIL</FONT> uses somewhat more complicated rules for deciding when a
+<FONT SIZE="-1">MIME</FONT> entity is displayed in this abbreviated format, and when
+it is expanded in line.  In general, all non-text entities are
+abbreviated.  Additionally, if a text entity is given a
+<EM><FONT SIZE="-1">MIME</FONT> disposition</EM> of <SAMP>`attachment'</SAMP>, if the character
+set of the entity is unknown, if the encoding type is unknown, or if the
+subtype is unknown, it is abbreviated.
+</P><P>
+
+<A NAME="IDX157"></A>
+<A NAME="IDX158"></A>
+Two variables control the abbreviation of text entities.
+<CODE>imail-known-mime-charsets</CODE> is a list of regular expressions that
+specify the known character sets; by default it specifies
+<FONT SIZE="-1">US-ASCII</FONT>, the <FONT SIZE="-1">ISO</FONT> 8859 character sets, and some
+random but commonly-seen Microsoft Windows character sets.  The variable
+<CODE>imail-inline-mime-text-subtypes</CODE> contains a list of symbols, each
+of which is the name of a text subtype that should be shown in line.
+For example, if the symbol <CODE>html</CODE> is in this list, then
+<FONT SIZE="-1">MIME</FONT> parts of type <CODE>text/html</CODE> are shown in-line.  Text
+subtypes not appearing in this list are abbreviated as attachments.
+</P><P>
+
+Here are <FONT SIZE="-1">IMAIL</FONT>'s <FONT SIZE="-1">MIME</FONT>-specific commands:
+</P><P>
+
+<DL COMPACT>
+<DT><KBD>C-o</KBD>
+<DD>Save a <FONT SIZE="-1">MIME</FONT> attachment to a file
+(<CODE>imail-save-attachment</CODE>).
+<P>
+
+<DT><KBD>w</KBD>
+<DD>Save an arbitrary <FONT SIZE="-1">MIME</FONT> entity (message part) to a file
+(<CODE>imail-save-mime-entity</CODE>).
+<P>
+
+<DT><KBD>C-c C-t C-e</KBD>
+<DD>Toggle a <FONT SIZE="-1">MIME</FONT> entity between its formatted and raw forms
+(<CODE>imail-toggle-mime-entity</CODE>).
+</DL>
+<P>
+
+<A NAME="IDX159"></A>
+<A NAME="IDX160"></A>
+The primary <FONT SIZE="-1">MIME</FONT> command is <KBD>C-o</KBD>
+(<CODE>imail-save-attachment</CODE>), which saves a single attachment to a
+file.  If point is on an attachment, that is the attachment to be saved,
+otherwise <FONT SIZE="-1">IMAIL</FONT> prompts for an attachment by name.  If a
+prefix argument is specified, prompting is performed even if point is on
+an attachment.  Once the attachment is determined, <FONT SIZE="-1">IMAIL</FONT>
+prompts for the name of a file to save the attachment to.  The filename
+is initialized from the name specified by the attachment, if any.  The
+directory of the filename is initialized to the directory in which the
+last attachment was saved, or the user's home directory if no
+attachments have previously been saved.
+</P><P>
+
+<A NAME="IDX161"></A>
+If you want to save attachments to a specific directory, change the
+variable <CODE>imail-mime-attachment-directory</CODE> to contain the name of
+that directory.
+</P><P>
+
+<A NAME="IDX162"></A>
+<A NAME="IDX163"></A>
+The command <KBD>w</KBD> (<CODE>imail-save-mime-entity</CODE>) is similar to
+<CODE>imail-save-attachment</CODE> except that it will save any <FONT SIZE="-1">MIME</FONT>
+entity, not just an attachment.  For example, this allows you to save
+the message text.  This command saves the entity that point is on; if
+point is not on any entity, an error is signalled.  If the entity is
+encoded, e.g. with quoted-printable or base64 encoding, it is decoded
+before it is saved.  If the entity is text, it is written to the file in
+text mode (relevant only under Windows and OS/2); otherwise it is
+written in binary mode.
+</P><P>
+
+<A NAME="IDX164"></A>
+A simpler way to save a <FONT SIZE="-1">MIME</FONT> entity is to point at the entity
+with the mouse and click the right button
+(<CODE>imail-mouse-save-mime-entity</CODE>).  This works the same way as
+<CODE>imail-save-mime-entity</CODE> except that the entity is selected by the
+mouse instead of point.
+</P><P>
+
+<A NAME="IDX165"></A>
+<A NAME="IDX166"></A>
+The command <KBD>C-c C-t C-e</KBD> (<CODE>imail-toggle-mime-entity</CODE>) is
+similar to <CODE>imail-save-mime-entity</CODE>, except that instead of saving
+the entity to a file, it toggles whether the entity is shown in-line or
+in abbreviated form.  A common situation in which this is useful is when
+the text of a message is in an unknown character set.  In this case,
+<FONT SIZE="-1">IMAIL</FONT> by default shows the text in abbreviated form; use
+<KBD>C-t</KBD> to expand it in place.
+</P><P>
+
+<A NAME="Flags"></A>
+<HR SIZE="6">
+<A NAME="SEC19"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC18"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC20"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_5.html#SEC26"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.5 Flags </H2>
+<!--docid::SEC19::-->
+<P>
+
+<A NAME="IDX167"></A>
+Each message can have various <EM>flags</EM> assigned to it as a means of
+classification.  Each flag has a name; different names are different
+flags.  Any given flag is either present or absent on a particular
+message.  A few flag names have standard meanings and are given to
+messages automatically by <FONT SIZE="-1">IMAIL</FONT> when appropriate.  All other
+flags are assigned only by users.
+</P><P>
+
+<DL COMPACT>
+<DT><KBD>a <VAR>flag</VAR> <KBD>RET</KBD></KBD>
+<DD>Assign the flag <VAR>flag</VAR> to the current message (<CODE>imail-add-flag</CODE>).
+<DT><KBD>k <VAR>flag</VAR> <KBD>RET</KBD></KBD>
+<DD>Remove the flag <VAR>flag</VAR> from the current message (<CODE>imail-kill-flag</CODE>).
+<DT><KBD>C-M-n <VAR>flags</VAR> <KBD>RET</KBD></KBD>
+<DD>Move to the next message that has one of the flags <VAR>flags</VAR>
+(<CODE>imail-next-flagged-message</CODE>).
+<DT><KBD>C-M-p <VAR>flags</VAR> <KBD>RET</KBD></KBD>
+<DD>Move to the previous message that has one of the flags <VAR>flags</VAR>
+(<CODE>imail-previous-flagged-message</CODE>).
+<DT><KBD>C-M-l <VAR>flags</VAR> <KBD>RET</KBD></KBD>
+<DD>Make a summary of all messages containing any of the flags <VAR>flags</VAR>
+(<CODE>imail-summary-by-flags</CODE>).
+</DL>
+<P>
+
+<A NAME="IDX168"></A>
+<A NAME="IDX169"></A>
+<A NAME="IDX170"></A>
+<A NAME="IDX171"></A>
+The <KBD>a</KBD> (<CODE>imail-add-flag</CODE>) and <KBD>k</KBD> (<CODE>imail-kill-flag</CODE>)
+commands allow you to assign or remove any flag on the current message.
+</P><P>
+
+Once you have given messages flags to classify them as you wish, there
+are two ways to use the flags: in moving and in summaries.
+</P><P>
+
+<A NAME="IDX172"></A>
+<A NAME="IDX173"></A>
+<A NAME="IDX174"></A>
+<A NAME="IDX175"></A>
+The command <KBD>C-M-n <VAR>flags</VAR> <KBD>RET</KBD></KBD>
+(<CODE>imail-next-flagged-message</CODE>) moves to the next message that has
+one of the flags <VAR>flags</VAR>.  The argument <VAR>flags</VAR> specifies one or
+more flag names, separated by commas.  <KBD>C-M-p</KBD>
+(<CODE>imail-previous-flagged-message</CODE>) is similar, but moves backwards
+to previous messages.  A numeric argument to either command serves as a
+repeat count.
+</P><P>
+
+The command <KBD>C-M-l <VAR>flags</VAR> <KBD>RET</KBD></KBD>
+(<CODE>imail-summary-by-flags</CODE>) displays a summary containing only the
+messages that have at least one of a specified set of flags.  The
+argument <VAR>flags</VAR> is one or more flag names, separated by commas.
+See section <A HREF="imail_4.html#SEC22">4.8 Summaries</A>, for information on summaries.
+</P><P>
+
+If the <VAR>flags</VAR> argument to <KBD>C-M-n</KBD>, <KBD>C-M-p</KBD> or <KBD>C-M-l</KBD>
+is empty, it means to use the last set of flags specified for any of
+these commands.
+</P><P>
+
+Some flags such as <SAMP>`deleted'</SAMP> and <SAMP>`filed'</SAMP> have built-in
+meanings and are assigned to or removed from messages automatically at
+appropriate times.  Here is a list of built-in flags:
+</P><P>
+
+<DL COMPACT>
+<DT><SAMP>`seen'</SAMP>
+<DD>Means the message has been selected, implying that the user has seen it.
+Assigned to a message when it is selected by the user.  When you start
+<FONT SIZE="-1">IMAIL</FONT>, it initially shows the first message that lacks this
+flag.
+<P>
+
+<DT><SAMP>`deleted'</SAMP>
+<DD>Means the message is deleted.  Assigned by deletion commands and removed
+by undeletion commands (see section <A HREF="imail_4.html#SEC14">4.2 Deleting Messages</A>).
+<P>
+
+<DT><SAMP>`filed'</SAMP>
+<DD>Means the message has been copied to another folder.  Assigned by the
+message-copying commands (see section <A HREF="imail_4.html#SEC15">4.3 Multiple Folders</A>).
+<P>
+
+<DT><SAMP>`answered'</SAMP>
+<DD>Means you have mailed an answer to the message.  Assigned by the <KBD>r</KBD>
+command (<CODE>imail-reply</CODE>).  See section <A HREF="imail_4.html#SEC20">4.6 Sending Replies</A>.
+<P>
+
+<DT><SAMP>`forwarded'</SAMP>
+<DD>Means you have forwarded the message.  Assigned by the <KBD>f</KBD> command
+(<CODE>imail-forward</CODE>).  See section <A HREF="imail_4.html#SEC20">4.6 Sending Replies</A>.
+<P>
+
+<DT><SAMP>`resent'</SAMP>
+<DD>Means you have resent the message.  Assigned by the command <KBD>C-u f</KBD>
+(<CODE>imail-resend</CODE>).  See section <A HREF="imail_4.html#SEC20">4.6 Sending Replies</A>.
+</DL>
+<P>
+
+All other flags are assigned or removed only by the user, and have no
+standard meaning.
+</P><P>
+
+<A NAME="Sending Replies"></A>
+<HR SIZE="6">
+<A NAME="SEC20"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC19"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC21"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_5.html#SEC26"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.6 Sending Replies </H2>
+<!--docid::SEC20::-->
+<P>
+
+<FONT SIZE="-1">IMAIL</FONT> has several commands that use Mail mode to send outgoing
+mail.  What this section documents are the special commands of
+<FONT SIZE="-1">IMAIL</FONT> for entering Mail mode.  Note that the usual keys for
+sending mail---<KBD>C-x m</KBD>, <KBD>C-x 4 m</KBD>, and <KBD>C-x 5 m</KBD>---are
+available in <FONT SIZE="-1">IMAIL</FONT> mode and work just as they usually do.
+</P><P>
+
+<DL COMPACT>
+<DT><KBD>m</KBD>
+<DD>Send a message (<CODE>imail-mail</CODE>).
+<DT><KBD>c</KBD>
+<DD>Continue editing the already started outgoing message (<CODE>imail-continue</CODE>).
+<DT><KBD>r</KBD>
+<DD>Send a reply to the current <FONT SIZE="-1">IMAIL</FONT> message (<CODE>imail-reply</CODE>).
+<DT><KBD>f</KBD>
+<DD>Forward the current message to other users (<CODE>imail-forward</CODE>).
+<DT><KBD>C-u f</KBD>
+<DD>Resend the current message to other users (<CODE>imail-resend</CODE>).
+</DL>
+<P>
+
+<A NAME="IDX176"></A>
+<A NAME="IDX177"></A>
+<A NAME="IDX178"></A>
+The most common reason to send a message while in <FONT SIZE="-1">IMAIL</FONT> is to
+reply to the message you are reading.  To do this, type <KBD>r</KBD>
+(<CODE>imail-reply</CODE>).  This displays the <SAMP>`*mail*'</SAMP> buffer in another
+window, much like <KBD>C-x 4 m</KBD>, but preinitializes the <SAMP>`Subject'</SAMP>,
+<SAMP>`To'</SAMP>, <SAMP>`CC'</SAMP> and <SAMP>`In-reply-to'</SAMP> header fields based on the
+message you are replying to.  The <SAMP>`To'</SAMP> field starts out as the
+address of the person who sent the message you received, and the
+<SAMP>`CC'</SAMP> field starts out with all the other recipients of that
+message.
+</P><P>
+
+<A NAME="IDX179"></A>
+<A NAME="IDX180"></A>
+You can exclude certain recipients from being placed automatically in
+the <SAMP>`CC'</SAMP>, using the variable <CODE>imail-dont-reply-to-names</CODE>.  Its
+value should be a regular expression (as a string); any recipient that
+the regular expression matches is excluded from the <SAMP>`CC'</SAMP> field.
+The default value matches your own name, and any name starting with
+<SAMP>`info-'</SAMP> (the value of the variable
+<CODE>imail-default-dont-reply-to-names</CODE>).  (Those names are excluded
+because there is a convention of using them for large mailing lists to
+broadcast announcements.)
+</P><P>
+
+To omit the <SAMP>`CC'</SAMP> field completely for a particular reply, enter
+the reply command with a numeric argument: <KBD>C-u r</KBD> or <KBD>1 r</KBD>.
+</P><P>
+
+<A NAME="IDX181"></A>
+By default, the <SAMP>`Subject'</SAMP> field of a reply is initialized to the
+contents of the <SAMP>`Subject'</SAMP> field of the message being replied to.
+However, if the variable <CODE>imail-reply-with-re</CODE> is set to <CODE>#t</CODE>,
+then the reply subject will be prefixed with <SAMP>`Re:'</SAMP>.
+</P><P>
+
+Once the <SAMP>`*mail*'</SAMP> buffer has been initialized, editing and sending
+the mail goes as usual.  You can edit the presupplied header fields if
+they are not right for you.  You can also use the commands of Mail mode,
+including <KBD>C-c C-y</KBD> which yanks in the message that you are replying
+to.  You can switch to the <FONT SIZE="-1">IMAIL</FONT> buffer, select a different
+message there, switch back, and yank the new current message.
+</P><P>
+
+<A NAME="IDX182"></A>
+<A NAME="IDX183"></A>
+<A NAME="IDX184"></A>
+Another frequent reason to send mail in <FONT SIZE="-1">IMAIL</FONT> is to
+<EM>forward</EM> the current message to other users.  <KBD>f</KBD>
+(<CODE>imail-forward</CODE>) makes this easy by preinitializing the
+<SAMP>`*mail*'</SAMP> buffer with the current message as a <FONT SIZE="-1">MIME</FONT>
+attachment, and a subject designating a forwarded message.  All you have
+to do is fill in the recipients and send.  When you forward a message,
+recipients get a message which is "from" you, and which has the
+original message in its contents.
+</P><P>
+
+<A NAME="IDX185"></A>
+By default, forwarded messages are sent as <FONT SIZE="-1">MIME</FONT> attachments,
+which allows <FONT SIZE="-1">MIME</FONT>-aware mail readers to recognize that the
+attachment is a mail message and to specially present it.  However, this
+means that such forwarded messages appear more complex when viewed in
+mail readers that do not understand <FONT SIZE="-1">MIME</FONT>.  <FONT SIZE="-1">IMAIL</FONT>
+deliberately minimizes the amount of encoding overhead used for
+<FONT SIZE="-1">MIME</FONT>-forwarded messages, but some people prefer not to use
+<FONT SIZE="-1">MIME</FONT> at all.  For that reason, <FONT SIZE="-1">IMAIL</FONT> allows you to
+turn off this feature, so that forwarded messages are included in the
+main body of the message (as Rmail does).  To do this, set the variable
+<CODE>imail-forward-using-mime</CODE> to <CODE>#f</CODE>.
+</P><P>
+
+<A NAME="IDX186"></A>
+Normally, when <FONT SIZE="-1">IMAIL</FONT> forwards a message, it sends only a few
+of the message's header fields.  In particular, it sends only those
+header fields that you see when viewing the message in <FONT SIZE="-1">IMAIL</FONT>.
+Sometimes it is desirable to send <EM>all</EM> of the message's header
+fields; <FONT SIZE="-1">IMAIL</FONT> provides two ways to do this.  First, if you
+want to send all of the header fields for a particular message, use
+<CODE>imail-forward</CODE> with a negative argument, like this: <KBD>- f</KBD>.
+Alternatively, you can set the variable <CODE>imail-forward-all-headers</CODE>
+to <CODE>#t</CODE>, which will cause <EM>all</EM> forwarded messages to retain
+all of their header fields.
+</P><P>
+
+<A NAME="IDX187"></A>
+<A NAME="IDX188"></A>
+<EM>Resending</EM> is an alternative similar to forwarding; the difference
+is that resending sends a message that is "from" the original sender,
+just as it reached you--with a few added header fields
+<SAMP>`Resent-from'</SAMP> and <SAMP>`Resent-to'</SAMP> to indicate that it came via
+you.  To resend a message in <FONT SIZE="-1">IMAIL</FONT>, use <KBD>C-u f</KBD>.  (<KBD>f</KBD>
+runs <CODE>imail-forward</CODE>, which is programmed to invoke
+<CODE>imail-resend</CODE> if you provide a numeric argument.)
+</P><P>
+
+<A NAME="IDX189"></A>
+<A NAME="IDX190"></A>
+The <KBD>m</KBD> (<CODE>imail-mail</CODE>) command is used to start editing an
+outgoing message that is not a reply.  It leaves the header fields
+empty.  Its only difference from <KBD>C-x 4 m</KBD> is that it makes the
+<FONT SIZE="-1">IMAIL</FONT> buffer accessible for <KBD>C-c C-y</KBD>, just as <KBD>r</KBD>
+does.  Thus, <KBD>m</KBD> can be used to reply to or forward a message.
+</P><P>
+
+<A NAME="IDX191"></A>
+<A NAME="IDX192"></A>
+The <KBD>c</KBD> (<CODE>imail-continue</CODE>) command resumes editing the
+<SAMP>`*mail*'</SAMP> buffer, to finish editing an outgoing message you were
+already composing, or to alter a message you have sent.
+</P><P>
+
+<A NAME="Message Display"></A>
+<HR SIZE="6">
+<A NAME="SEC21"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC20"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC22"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_5.html#SEC26"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.7 Message Display </H2>
+<!--docid::SEC21::-->
+<P>
+
+<FONT SIZE="-1">IMAIL</FONT> provides several variables and commands to give you
+control over how messages are formatted in the message buffer.
+</P><P>
+
+<A NAME="IDX193"></A>
+By default, <FONT SIZE="-1">IMAIL</FONT> automatically wraps long lines at the right
+margin.  It uses <EM>adaptive fill</EM><A NAME="DOCF9" HREF="imail_fot.html#FOOT9">(9)</A> to do the wrapping, which means that common prefixes
+such as <SAMP>`&#62;'</SAMP> and <SAMP>`Chris&#62;'</SAMP> will be automatically copied down
+with the wrapped line.  Generally, this wrapping makes messages easier
+to read.  Specifically, it is important for messages sent by clients
+that use "soft" line breaks, because such clients expect the mail
+reader to wrap lines.  However, if you'd rather not have <FONT SIZE="-1">IMAIL</FONT>
+do this for you, you can disable wrapping by setting the variable
+<CODE>imail-auto-wrap</CODE> to <CODE>#f</CODE>.
+</P><P>
+
+<A NAME="IDX194"></A>
+Another feature of <FONT SIZE="-1">IMAIL</FONT> is that it filters message headers,
+showing you only the most relevant ones.  There are two variables that
+control how this is done, and a command that can override the filtering.
+The variable <CODE>imail-kept-headers</CODE> contains a list of regular
+expressions that are matched against message-header names (the name is
+everything to the left of the colon, e.g. <SAMP>`From'</SAMP> in <SAMP>`From:
+cph'</SAMP>).  If <CODE>imail-kept-headers</CODE> is a non-empty list, then only the
+headers matching those regular expressions are shown.  Furthermore, the
+shown headers will be in the same order as the regular expressions.
+</P><P>
+
+<A NAME="IDX195"></A>
+If <CODE>imail-kept-headers</CODE> is an empty list, then all of the message
+headers are shown, except those matching the regular expression that is
+the value of the variable <CODE>imail-ignored-headers</CODE>.  By default, the
+value of <CODE>imail-ignored-headers</CODE> contains some common uninteresting
+header names; this expression is identical to the default used by Rmail.
+Note that <CODE>imail-ignored-headers</CODE> is a single regular expression,
+while <CODE>imail-kept-headers</CODE> is a list of regular expressions.  This
+is because <CODE>imail-ignored-headers</CODE> is meant to be an exact analog
+of the Rmail variable <CODE>rmail-ignored-headers</CODE>.
+</P><P>
+
+<A NAME="IDX196"></A>
+<A NAME="IDX197"></A>
+Regardless of how the message-header filtering is done, you can toggle
+between viewing the filtered headers and the unfiltered headers using
+the <KBD>t</KBD> command (<CODE>imail-toggle-header</CODE>).  If filtered headers
+are shown, this command replaces them with unfiltered headers, and vice
+versa.
+</P><P>
+
+<A NAME="IDX198"></A>
+<A NAME="IDX199"></A>
+As you can see, <FONT SIZE="-1">IMAIL</FONT> performs extensive transformation of a
+mail message before presenting it to you: <FONT SIZE="-1">MIME</FONT> formatting,
+line wrapping, and header filtering.  Sometimes, it's desirable to see
+the original message, exactly as it was received, without any formatting
+at all.  The command <KBD>C-c C-t C-m</KBD> toggles the entire message between
+a formatted view and a raw view.  This should be used with care, as a
+message with a large attachment might not fit in memory in its raw form.
+</P><P>
+
+<A NAME="Summaries"></A>
+<HR SIZE="6">
+<A NAME="SEC22"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC21"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC23"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC25"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.8 Summaries </H2>
+<!--docid::SEC22::-->
+<P>
+
+A <EM>summary</EM> is a buffer containing one line per message to give you
+an overview of the mail in an <FONT SIZE="-1">IMAIL</FONT> folder.  Each line shows
+the message number, the sender, the flags, and the subject.  Almost all
+<FONT SIZE="-1">IMAIL</FONT> commands are valid in the summary buffer also; these
+apply to the message described by the current line of the summary.
+Moving point in the summary buffer selects messages as you move to their
+summary lines.
+</P><P>
+
+A summary buffer applies to a single <FONT SIZE="-1">IMAIL</FONT> folder only; if you
+are editing multiple <FONT SIZE="-1">IMAIL</FONT> folders, each one can have its own
+summary buffer.  The summary buffer name is made by appending
+<SAMP>`-summary'</SAMP> to the <FONT SIZE="-1">IMAIL</FONT> buffer's name.  Normally only one
+summary buffer is displayed at a time.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="imail_4.html#SEC23">4.8.1 Making Summaries</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="imail_4.html#SEC24">4.8.2 Editing in Summaries</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Making Summaries"></A>
+<HR SIZE="6">
+<A NAME="SEC23"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC22"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC24"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC21"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC22"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC25"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 4.8.1 Making Summaries </H3>
+<!--docid::SEC23::-->
+<P>
+
+Here are the commands to create a summary for the current
+<FONT SIZE="-1">IMAIL</FONT> folder.  Once the <FONT SIZE="-1">IMAIL</FONT> folder has a summary
+buffer, changes in the <FONT SIZE="-1">IMAIL</FONT> folder (such as deleting or
+expunging messages, and getting new mail) automatically update the
+summary.
+</P><P>
+
+<DL COMPACT>
+<DT><KBD>h</KBD>
+<DD><DT><KBD>C-M-h</KBD>
+<DD>Summarize all messages (<CODE>imail-summary</CODE>).
+<DT><KBD>l <VAR>flags</VAR> <KBD>RET</KBD></KBD>
+<DD><DT><KBD>C-M-l <VAR>flags</VAR> <KBD>RET</KBD></KBD>
+<DD>Summarize messages that have one or more of the specified flags
+(<CODE>imail-summary-by-flags</CODE>).
+<DT><KBD>C-M-r <VAR>rcpts</VAR> <KBD>RET</KBD></KBD>
+<DD>Summarize messages that have one or more of the specified recipients
+(<CODE>imail-summary-by-recipients</CODE>).
+<DT><KBD>C-M-t <VAR>topic</VAR> <KBD>RET</KBD></KBD>
+<DD>Summarize messages that have a match for the specified regexp
+<VAR>topic</VAR> in their subjects (<CODE>imail-summary-by-topic</CODE>).
+<DT><KBD>C-M-s <VAR>regexp</VAR> <KBD>RET</KBD></KBD>
+<DD>Summarize messages that have a match for the specified regexp
+anywhere in their header (<CODE>imail-summary-by-regexp</CODE>).
+</DL>
+<P>
+
+<A NAME="IDX200"></A>
+<A NAME="IDX201"></A>
+The <KBD>h</KBD> or <KBD>C-M-h</KBD> (<CODE>imail-summary</CODE>) command fills the
+summary buffer for the current <FONT SIZE="-1">IMAIL</FONT> folder with a summary of
+all the messages in the folder.  It then displays and selects the
+summary buffer in another window.
+</P><P>
+
+<A NAME="IDX202"></A>
+<A NAME="IDX203"></A>
+<A NAME="IDX204"></A>
+<KBD>C-M-l <VAR>flags</VAR> <KBD>RET</KBD></KBD> (<CODE>imail-summary-by-flags</CODE>) makes
+a partial summary mentioning only the messages that have one or more of
+the flags <VAR>flags</VAR>.  <VAR>flags</VAR> should contain flag names separated
+by commas.
+</P><P>
+
+<A NAME="IDX205"></A>
+<A NAME="IDX206"></A>
+<KBD>C-M-r <VAR>rcpts</VAR> <KBD>RET</KBD></KBD> (<CODE>imail-summary-by-recipients</CODE>)
+makes a partial summary mentioning only the messages that have one or
+more of the recipients <VAR>rcpts</VAR>.  <VAR>rcpts</VAR> should contain mailing
+addresses separated by commas.
+</P><P>
+
+<A NAME="IDX207"></A>
+<A NAME="IDX208"></A>
+<KBD>C-M-t <VAR>topic</VAR> <KBD>RET</KBD></KBD> (<CODE>imail-summary-by-topic</CODE>) makes
+a partial summary mentioning only the messages whose subjects have a
+match for the regular expression <VAR>topic</VAR>.
+</P><P>
+
+<A NAME="IDX209"></A>
+<A NAME="IDX210"></A>
+<KBD>C-M-s <VAR>regexp</VAR> <KBD>RET</KBD></KBD> (<CODE>imail-summary-by-regexp</CODE>)
+makes a partial summary mentioning only the messages whose headers
+contain a match for the regular expression <VAR>regexp</VAR>.  This match
+includes all lines in the header, including for example the date and
+from lines.
+</P><P>
+
+Note that there is only one summary buffer for any <FONT SIZE="-1">IMAIL</FONT>
+folder; making one kind of summary discards any previously made summary.
+</P><P>
+
+<A NAME="IDX211"></A>
+There are several variables that affect how summaries are displayed.
+<CODE>imail-summary-height</CODE> controls the height of the summary window.
+If it is an exact positive integer, the summary window is that many
+lines high.  Alternatively, if it is a real number between 0 and 1
+exclusive, the height of the summary window is computed by multiplying
+the number of lines in the message window by <CODE>imail-summary-height</CODE>
+and rounding to the nearest integer.
+</P><P>
+
+<A NAME="IDX212"></A>
+If the variable <CODE>imail-summary-fixed-layout</CODE> is set to <CODE>#t</CODE>,
+then an <FONT SIZE="-1">IMAIL</FONT> message buffer and its associated summary buffer
+are always shown in a fixed window layout (provided the summary buffer
+exists).  Selecting either buffer causes all other windows in the
+current editor frame to be deleted, then splits the frame into two
+windows showing the summary buffer and message buffer.  Selecting any
+other buffer when this layout is displayed causes both windows to be
+deleted, and the other buffer displayed in a single window filling the
+editor frame.  Basically, this causes the message and summary buffers to
+be treated as a unit most of the time.  Currently, the default for
+<CODE>imail-summary-fixed-layout</CODE> is <CODE>#f</CODE>, but the feature has been
+very popular and the default may be changed to <CODE>#t</CODE> in a future
+release.
+</P><P>
+
+<A NAME="IDX213"></A>
+When fixed layout is not used, the variable
+<CODE>imail-summary-pop-up-message</CODE> provides a different kind of window
+splitting for message and summary buffers.  If this is set to <CODE>#t</CODE>
+(the default), then selecting a new message in the summary buffer causes
+the message buffer to be popped up in a new window if it isn't already
+visible.
+</P><P>
+
+<A NAME="IDX214"></A>
+If the variable <CODE>imail-summary-highlight-message</CODE> is <CODE>#t</CODE>, the
+message currently selected in the message buffer is highlighted in the
+summary buffer.  This aids navigation in the summary buffer and is thus
+the default.  Set it to <CODE>#f</CODE> if you don't like the highlighting.
+</P><P>
+
+<A NAME="IDX215"></A>
+By default, the summary buffer has five columns: flags, message number,
+message length, subject, and author.  If <CODE>imail-summary-show-date</CODE>
+is set to <CODE>#t</CODE>, a sixth column containing an abbreviated date
+appears between the message number and the subject.
+</P><P>
+
+<A NAME="IDX216"></A>
+The width of the subject column is specified by the value of
+<CODE>imail-summary-subject-width</CODE>; subject fields longer than this
+number of characters are truncated.
+</P><P>
+
+<A NAME="Editing in Summaries"></A>
+<HR SIZE="6">
+<A NAME="SEC24"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC23"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC25"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC21"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC22"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC25"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 4.8.2 Editing in Summaries </H3>
+<!--docid::SEC24::-->
+<P>
+
+You can use the <FONT SIZE="-1">IMAIL</FONT> summary buffer to do almost anything you
+can do in the <FONT SIZE="-1">IMAIL</FONT> buffer itself.  In fact, once you have a
+summary buffer, there's no need to switch back to the <FONT SIZE="-1">IMAIL</FONT>
+buffer.
+</P><P>
+
+You can select and display various messages in the <FONT SIZE="-1">IMAIL</FONT>
+buffer, from the summary buffer, just by moving point in the summary
+buffer to different lines.  It doesn't matter what Emacs command you use
+to move point; whichever line point is on at the end of the command,
+that message is selected in the <FONT SIZE="-1">IMAIL</FONT> buffer.
+</P><P>
+
+Almost all <FONT SIZE="-1">IMAIL</FONT> commands work in the summary buffer as well
+as in the <FONT SIZE="-1">IMAIL</FONT> buffer.  Thus, <KBD>d</KBD> in the summary buffer
+deletes the current message, <KBD>u</KBD> undeletes, and <KBD>x</KBD> expunges.
+<KBD>o</KBD> outputs the current message to a folder; <KBD>C-o</KBD> saves an
+attachment from the current message; <KBD>r</KBD> starts a reply to it.  You
+can scroll the current message while remaining in the summary buffer
+using <KBD>SPC</KBD> and <KBD>DEL</KBD>.
+</P><P>
+
+<A NAME="IDX217"></A>
+<A NAME="IDX218"></A>
+The <FONT SIZE="-1">IMAIL</FONT> commands to move between messages also work in the
+summary buffer, but with a twist: they move through the set of messages
+included in the summary.  They also ensure the <FONT SIZE="-1">IMAIL</FONT> buffer
+appears on the screen (unlike cursor motion commands, which update the
+contents of the <FONT SIZE="-1">IMAIL</FONT> buffer but don't display it in a window
+unless it already appears).  You can always display the message indicated
+by point using the <KBD>e</KBD> command (<CODE>imail-summary-select-message</CODE>).
+</P><P>
+
+When you are finished using the summary, type <KBD>C-x k <KBD>RET</KBD></KBD> to
+delete the summary buffer's window.
+</P><P>
+
+<A NAME="Other Commands"></A>
+<HR SIZE="6">
+<A NAME="SEC25"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC24"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_5.html#SEC26"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC22"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_5.html#SEC26"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.9 Other Commands </H2>
+<!--docid::SEC25::-->
+<P>
+
+This section documents a handful of commands and variables that don't
+fit into any of the other documentation categories.
+</P><P>
+
+<DL COMPACT>
+<DT><KBD>q</KBD>
+<DD>Quit out of <FONT SIZE="-1">IMAIL</FONT> (<CODE>imail-quit</CODE>).  This closes all open
+<FONT SIZE="-1">IMAP</FONT> connections and buries all <FONT SIZE="-1">IMAIL</FONT> buffers.  With
+prefix argument, only affects the current <FONT SIZE="-1">IMAIL</FONT> buffer,
+leaving any other <FONT SIZE="-1">IMAIL</FONT> buffers alone.
+<P>
+
+<DT><KBD>M-d</KBD>
+<DD>Disconnect from the <FONT SIZE="-1">IMAP</FONT> server (<CODE>imail-disconnect</CODE>).
+<P>
+
+<DT><KBD>b</KBD>
+<DD>Bury the <FONT SIZE="-1">IMAIL</FONT> buffer (<CODE>imail-bury</CODE>).
+<P>
+
+<DT><KBD>s</KBD>
+<DD>Save changes in the current folder to disk (<CODE>imail-save-folder</CODE>).
+</DL>
+<P>
+
+<A NAME="IDX219"></A>
+<A NAME="IDX220"></A>
+<A NAME="IDX221"></A>
+<A NAME="IDX222"></A>
+When you are finished reading mail in a folder, use the <KBD>q</KBD> command
+(<CODE>imail-quit</CODE>).  This command <EM>closes</EM> the folder, then buries
+the buffer.  Closing a folder has different effects, depending on the
+type of folder.  Closing an <FONT SIZE="-1">IMAP</FONT> folder causes <FONT SIZE="-1">IMAIL</FONT>
+to disconnect from the <FONT SIZE="-1">IMAP</FONT> server (go offline).  Closing a
+file folder saves any changes out to the corresponding file.  In both
+cases, internal data structures may be dropped, requiring them to be
+rebuilt, should the folder later be re-opened.  In no case are any
+changes made to the folder's contents; in particular, deleted messages
+are <EM>not</EM> expunged.
+</P><P>
+
+On <FONT SIZE="-1">IMAP</FONT> folders, the <KBD>q</KBD> command is equivalent to <KBD>M-d
+b</KBD>.  On file folders, the <KBD>q</KBD> command is equivalent to <KBD>s b</KBD>.
+</P><P>
+
+<A NAME="IDX223"></A>
+<A NAME="IDX224"></A>
+The <KBD>M-d</KBD> command (<CODE>imail-disconnect</CODE>) disconnects
+<FONT SIZE="-1">IMAIL</FONT> from the <FONT SIZE="-1">IMAP</FONT> server (goes offline).  This has
+no effect on file folders.
+</P><P>
+
+<A NAME="IDX225"></A>
+<A NAME="IDX226"></A>
+The <KBD>b</KBD> command (<CODE>imail-bury</CODE>) buries the selected
+<FONT SIZE="-1">IMAIL</FONT> buffer.  <EM>Burying</EM> a buffer means moving it to the
+bottom of the buffer list and selecting another buffer from the top of
+the list.  This is similar to the command <CODE>bury-buffer</CODE>, except
+that any summary buffer associated with this buffer is also buried, and
+if a window was created to hold the summary buffer, it is deleted.
+</P><P>
+
+<A NAME="IDX227"></A>
+<A NAME="IDX228"></A>
+The <KBD>s</KBD> command (<CODE>imail-save-folder</CODE>) saves out any changes to
+the selected <FONT SIZE="-1">IMAIL</FONT> folder.  For file folders, this means
+writing the folder back out to its file.  For <FONT SIZE="-1">IMAP</FONT> folders,
+this no effect.  In no case are any changes made to the folder's
+contents; in particular, deleted messages are <EM>not</EM> expunged.
+</P><P>
+
+<A NAME="IDX229"></A>
+<FONT SIZE="-1">IMAIL</FONT> normally caches <FONT SIZE="-1">IMAP</FONT> message bodies in memory
+in order to increase performance.  The variable
+<CODE>imail-body-cache-limit</CODE> gives you some control over how this
+caching is done.  <CODE>imail-body-cache-limit</CODE> is normally set to a
+positive integer, meaning that any message body or in-line
+<FONT SIZE="-1">MIME</FONT> entity whose size in bytes is less than this number is
+cached.  However, caching can be entirely disabled by setting
+<CODE>imail-body-cache-limit</CODE> to <CODE>#f</CODE>, or made unconditional by
+setting it to <CODE>#t</CODE>.
+</P><P>
+
+<A NAME="IDX230"></A>
+Another thing that <FONT SIZE="-1">IMAIL</FONT> caches is <FONT SIZE="-1">IMAP</FONT> passwords.
+This is done so that you don't have to keep typing your password
+whenever you connect to a new <FONT SIZE="-1">IMAP</FONT> folder.  However, this is
+also a security risk, because the password is kept in Scheme's memory.
+The variable <CODE>imail-pass-phrase-retention-time</CODE> says how long
+passwords are cached, in minutes.  Normally this is set to 30 minutes,
+but if you are paranoid you can set it to zero to disable password
+caching altogether.  Scheme keeps track of the use of each password,
+and deletes its copy of the password when it has expired.  Additionally,
+Scheme stores passwords in an obscured form, to prevent them being seen
+during casual browsing through memory structures, but this does
+<EM>not</EM> provide any protection against a deliberate attempt to find
+the password.
+</P><P>
+
+<A NAME="GNU Free Documentation License"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC22"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_5.html#SEC26"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

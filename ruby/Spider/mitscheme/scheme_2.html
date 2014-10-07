@@ -1,0 +1,1600 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme Reference: Overview</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme Reference: Overview">
+<META NAME="keywords" CONTENT="MIT Scheme Reference: Overview">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC2"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_1.html#SEC1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 1. Overview </H1>
+<!--docid::SEC2::-->
+<P>
+
+<A NAME="IDX1"></A>
+This manual is a detailed description of the MIT Scheme runtime system.
+It is intended to be a reference document for programmers.  It does not
+describe how to run Scheme or how to interact with it -- that is the
+subject of the <CITE>MIT Scheme User's Manual</CITE>.
+</P><P>
+
+This chapter summarizes the semantics of Scheme, briefly describes the
+MIT Scheme programming environment, and explains the syntactic and
+lexical conventions of the language.  Subsequent chapters describe
+special forms, numerous data abstractions, and facilities for input and
+output.
+</P><P>
+
+<A NAME="IDX2"></A>
+<A NAME="IDX3"></A>
+<A NAME="IDX4"></A>
+Throughout this manual, we will make frequent references to
+<EM>standard Scheme</EM>, which is the language defined by the document
+<CITE>Revised^4 Report on the Algorithmic Language Scheme</CITE>, by William
+Clinger, Jonathan Rees, et al., or by IEEE Std. 1178-1990,
+<CITE>IEEE Standard for the Scheme Programming Language</CITE> (in fact,
+several parts of this document are copied from the <CITE>Revised
+Report</CITE>).  MIT Scheme is an extension of standard Scheme.
+</P><P>
+
+These are the significant semantic characteristics of the Scheme
+language:
+</P><P>
+
+<DL COMPACT>
+<DT>Variables are statically scoped
+<DD><A NAME="IDX5"></A>
+<A NAME="IDX6"></A>
+Scheme is a <EM>statically scoped</EM> programming language, which means that
+each use of a variable is associated with a lexically apparent binding
+of that variable.  Algol is another statically scoped language.
+<P>
+
+<DT>Types are latent
+<DD><A NAME="IDX7"></A>
+<A NAME="IDX8"></A>
+<A NAME="IDX9"></A>
+<A NAME="IDX10"></A>
+<A NAME="IDX11"></A>
+<A NAME="IDX12"></A>
+<A NAME="IDX13"></A>
+<A NAME="IDX14"></A>
+Scheme has <EM>latent</EM> types as opposed to <EM>manifest</EM> types, which
+means that Scheme associates types with values (or objects) rather than
+with variables.  Other languages with latent types (also referred to as
+<EM>weakly</EM> typed or <EM>dynamically</EM> typed languages) include APL,
+Snobol, and other dialects of Lisp.  Languages with manifest types
+(sometimes referred to as <EM>strongly</EM> typed or <EM>statically</EM> typed
+languages) include Algol 60, Pascal, and C.
+<P>
+
+<DT>Objects have unlimited extent
+<DD><A NAME="IDX15"></A>
+All objects created during a Scheme computation, including procedures
+and continuations, have unlimited extent; no Scheme object is ever
+destroyed.  The system doesn't run out of memory because the garbage
+collector reclaims the storage occupied by an object when the object
+cannot possibly be needed by a future computation.  Other languages in
+which most objects have unlimited extent include APL and other Lisp
+dialects.
+<P>
+
+<DT>Proper tail recursion
+<DD><A NAME="IDX16"></A>
+<A NAME="IDX17"></A>
+<A NAME="IDX18"></A>
+Scheme is <EM>properly tail-recursive</EM>, which means that iterative
+computation can occur in constant space, even if the iterative
+computation is described by a syntactically recursive procedure.  With a
+tail-recursive implementation, you can express iteration using the
+ordinary procedure-call mechanics; special iteration expressions are
+provided only for syntactic convenience.
+<P>
+
+<DT>Procedures are objects
+<DD>Scheme procedures are objects, which means that you can create them
+dynamically, store them in data structures, return them as the results
+of other procedures, and so on.  Other languages with such procedure
+objects include Common Lisp and ML.
+<P>
+
+<DT>Continuations are explicit
+<DD>In most other languages, continuations operate behind the scenes.  In
+Scheme, continuations are objects; you can use continuations for
+implementing a variety of advanced control constructs, including
+non-local exits, backtracking, and coroutines.
+<P>
+
+<DT>Arguments are passed by value
+<DD>Arguments to Scheme procedures are passed by value, which means that
+Scheme evaluates the argument expressions before the procedure gains
+control, whether or not the procedure needs the result of the
+evaluations.  ML, C, and APL are three other languages that pass
+arguments by value.  In languages such as SASL and Algol 60, argument
+expressions are not evaluated unless the values are needed by the
+procedure.
+</DL>
+<P>
+
+<A NAME="IDX19"></A>
+Scheme uses a parenthesized-list Polish notation to describe programs
+and (other) data.  The syntax of Scheme, like that of most Lisp
+dialects, provides for great expressive power, largely due to its
+simplicity.  An important consequence of this simplicity is the
+susceptibility of Scheme programs and data to uniform treatment by other
+Scheme programs.  As with other Lisp dialects, the <CODE>read</CODE> primitive
+parses its input; that is, it performs syntactic as well as lexical
+decomposition of what it reads.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC3">1.1 Notational Conventions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC7">1.2 Scheme Concepts</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC16">1.3 Lexical Conventions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC24">1.4 Expressions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Notational Conventions"></A>
+<HR SIZE="6">
+<A NAME="SEC3"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC2"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC4"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 1.1 Notational Conventions </H2>
+<!--docid::SEC3::-->
+<P>
+
+This section details the notational conventions used throughout the rest
+of this document.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC4">1.1.1 Errors</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC5">1.1.2 Examples</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC6">1.1.3 Entry Format</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Errors"></A>
+<HR SIZE="6">
+<A NAME="SEC4"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC3"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC5"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC3"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.1.1 Errors </H3>
+<!--docid::SEC4::-->
+<P>
+
+<A NAME="IDX20"></A>
+<A NAME="IDX21"></A>
+<A NAME="IDX22"></A>
+When this manual uses the phrase "an error will be signalled," it
+means that Scheme will call <CODE>error</CODE>, which normally halts execution
+of the program and prints an error message.
+</P><P>
+
+When this manual uses the phrase "it is an error," it means that the
+specified action is not valid in Scheme, but the system may or may not
+signal the error.  When this manual says that something "must be," it
+means that violating the requirement is an error.
+</P><P>
+
+<A NAME="Examples"></A>
+<HR SIZE="6">
+<A NAME="SEC5"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC4"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC6"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC3"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.1.2 Examples </H3>
+<!--docid::SEC5::-->
+<P>
+
+<A NAME="IDX23"></A>
+<A NAME="IDX24"></A>
+<A NAME="IDX25"></A>
+<A NAME="IDX26"></A>
+This manual gives many examples showing the evaluation of expressions.
+The examples have a common format that shows the expression being
+evaluated on the left hand side, an "arrow" in the middle, and the
+value of the expression written on the right.  For example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(+ 1 2)          =>  3
+</pre></td></tr></table></P><P>
+
+Sometimes the arrow and value will be moved under the expression, due to
+lack of space.  Occasionally we will not care what the value is, in
+which case both the arrow and the value are omitted.
+</P><P>
+
+<A NAME="IDX27"></A>
+<A NAME="IDX28"></A>
+If an example shows an evaluation that results in an error, an error
+message is shown, prefaced by <SAMP>`error-->'</SAMP>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(+ 1 'foo)                      error--> Illegal datum
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX29"></A>
+<A NAME="IDX30"></A>
+An example that shows printed output marks it with <SAMP>`-|'</SAMP>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(begin (write 'foo) 'bar)
+     -| foo
+     => bar
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX31"></A>
+<A NAME="IDX32"></A>
+When this manual indicates that the value returned by some expression is
+<EM>unspecified</EM>, it means that the expression will evaluate to some
+object without signalling an error, but that programs should not depend
+on the value in any way.
+</P><P>
+
+<A NAME="Entry Format"></A>
+<HR SIZE="6">
+<A NAME="SEC6"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC5"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC3"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.1.3 Entry Format </H3>
+<!--docid::SEC6::-->
+<P>
+
+Each description of an MIT Scheme variable, special form, or
+procedure begins with one or more header lines in this format:
+</P><P>
+
+<A NAME="IDX33"></A>
+<DL>
+<DT><U><VAR>category</VAR>:</U> <B><VAR>template</VAR></B>
+<DD></DL>
+</P><P>
+
+where <VAR>category</VAR> specifies the kind of item ("variable", "special
+form", or "procedure"), and how the item conforms to standard Scheme, as
+follows:
+</P><P>
+
+<DL COMPACT>
+<DT><VAR>category</VAR>
+<DD><VAR>Category</VAR>, with no extra marking, indicates that the item is described
+in the <CITE>Revised^4 Report on the Algorithmic Language Scheme</CITE>.
+<P>
+
+<DT><VAR>category</VAR>+
+<DD>A plus sign after <VAR>category</VAR> indicates that the item is an MIT
+Scheme extension.
+<A NAME="IDX34"></A>
+<A NAME="IDX35"></A>
+</DL>
+<P>
+
+The form of <VAR>template</VAR> is interpreted depending on <VAR>category</VAR>.
+</P><P>
+
+<DL COMPACT>
+<DT>Variable
+<DD><VAR>Template</VAR> consists of the variable's name.
+<A NAME="IDX36"></A>
+<P>
+
+<DT>Special Form
+<DD><VAR>Template</VAR> starts with the syntactic keyword of the special form,
+followed by a description of the special form's syntax.  The description
+is written using the following conventions.
+<A NAME="IDX37"></A>
+<P>
+
+<A NAME="IDX38"></A>
+<A NAME="IDX39"></A>
+Named components are italicized in the printed manual, and uppercase in
+the Info file.  "Noise" keywords, such as the <CODE>else</CODE> keyword in
+the <CODE>cond</CODE> special form, are set in a fixed width font in the
+printed manual; in the Info file they are not distinguished.
+Parentheses indicate themselves.
+</P><P>
+
+<A NAME="IDX40"></A>
+<A NAME="IDX41"></A>
+A horizontal ellipsis (<small>...</small>) is describes repeated components.
+Specifically,
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif"><VAR>thing</VAR> <small>...</small>
+</pre></td></tr></table></P><P>
+
+indicates <EM>zero</EM> or more occurrences of <VAR>thing</VAR>, while
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif"><VAR>thing</VAR> <VAR>thing</VAR> <small>...</small>
+</pre></td></tr></table></P><P>
+
+indicates <EM>one</EM> or more occurrences of <VAR>thing</VAR>.
+</P><P>
+
+<A NAME="IDX42"></A>
+<A NAME="IDX43"></A>
+<A NAME="IDX44"></A>
+<A NAME="IDX45"></A>
+Brackets, <CODE>[ ]</CODE>, enclose optional components.
+</P><P>
+
+<A NAME="IDX46"></A>
+<A NAME="IDX47"></A>
+Several special forms (e.g. <CODE>lambda</CODE>) have an internal component
+consisting of a series of expressions; usually these expressions are
+evaluated sequentially under conditions that are specified in the
+description of the special form.  This sequence of expressions is commonly
+referred to as the <EM>body</EM> of the special form.
+</P><P>
+
+<DT>Procedure
+<DD><VAR>Template</VAR> starts with the name of the variable to which the
+procedure is bound, followed by a description of the procedure's
+arguments.  The arguments are described using "lambda list" notation
+(see section <A HREF="scheme_3.html#SEC30">2.1 Lambda Expressions</A>), except that brackets are used to denote
+optional arguments, and ellipses are used to denote "rest" arguments.
+<A NAME="IDX48"></A>
+<P>
+
+The names of the procedure's arguments are italicized in the printed
+manual, and uppercase in the Info file.
+</P><P>
+
+When an argument names a Scheme data type, it indicates that the
+argument must be that type of data object.  For example,
+</P><P>
+
+<A NAME="IDX49"></A>
+<DL>
+<DT><U>procedure:</U> <B>cdr</B> <I>pair</I>
+<DD></DL>
+</P><P>
+
+indicates that the standard Scheme procedure <CODE>cdr</CODE> takes one argument,
+which must be a pair.
+</P><P>
+
+Many procedures signal an error when an argument is of the wrong type;
+usually this error is a condition of type
+<CODE>condition-type:wrong-type-argument</CODE>.
+<A NAME="IDX50"></A>
+</P><P>
+
+In addition to the standard data-type names (<VAR>pair</VAR>, <VAR>list</VAR>,
+<VAR>boolean</VAR>, <VAR>string</VAR>, etc.), the following names as arguments
+also imply type restrictions:
+</P><P>
+
+<UL>
+<LI>
+<VAR>object</VAR>: any object
+<LI>
+<VAR>thunk</VAR>: a procedure of no arguments
+<LI>
+<VAR>x</VAR>, <VAR>y</VAR>: real numbers
+<LI>
+<VAR>q</VAR>, <VAR>n</VAR>: integers
+<LI>
+<VAR>k</VAR>: an exact non-negative integer
+</UL>
+</DL>
+<P>
+
+Some examples:
+</P><P>
+
+<A NAME="IDX51"></A>
+<DL>
+<DT><U>procedure:</U> <B>list</B> <I>object <small>...</small></I>
+<DD></DL>
+</P><P>
+
+indicates that the standard Scheme procedure <CODE>list</CODE> takes zero or
+more arguments, each of which may be any Scheme object.
+</P><P>
+
+<A NAME="IDX52"></A>
+<DL>
+<DT><U>procedure:</U> <B>write-char</B> <I>char [output-port]</I>
+<DD></DL>
+</P><P>
+
+indicates that the standard Scheme procedure <CODE>write-char</CODE> must be
+called with a character, <VAR>char</VAR>, and may also be called with a
+character and an output port.
+</P><P>
+
+<A NAME="Scheme Concepts"></A>
+<HR SIZE="6">
+<A NAME="SEC7"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC6"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC8"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 1.2 Scheme Concepts </H2>
+<!--docid::SEC7::-->
+<P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC8">1.2.1 Variable Bindings</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC9">1.2.2 Environment Concepts</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC10">1.2.3 Initial and Current Environments</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC11">1.2.4 Static Scoping</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC12">1.2.5 True and False</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC13">1.2.6 External Representations</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC14">1.2.7 Disjointness of Types</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC15">1.2.8 Storage Model</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Variable Bindings"></A>
+<HR SIZE="6">
+<A NAME="SEC8"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC9"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.2.1 Variable Bindings </H3>
+<!--docid::SEC8::-->
+<P>
+
+<A NAME="IDX53"></A>
+<A NAME="IDX54"></A>
+<A NAME="IDX55"></A>
+<A NAME="IDX56"></A>
+Any identifier that is not a syntactic keyword may be used as a variable
+(see section <A HREF="scheme_2.html#SEC19">1.3.3 Identifiers</A>).  A variable may name a location where a value can
+be stored.  A variable that does so is said to be <EM>bound</EM> to the
+location.  The value stored in the location to which a variable is bound
+is called the variable's <EM>value</EM>.  (The variable is sometimes said
+to <EM>name</EM> the value or to be <EM>bound to</EM> the value.)
+</P><P>
+
+<A NAME="IDX57"></A>
+<A NAME="IDX58"></A>
+A variable may be bound but still not have a value; such a variable is
+said to be <EM>unassigned</EM>.  Referencing an unassigned variable is an
+error.  When this error is signalled, it is a condition of type
+<CODE>condition-type:unassigned-variable</CODE>; sometimes the compiler does
+not generate code to signal the error.  Unassigned variables are useful
+only in combination with side effects (see section <A HREF="scheme_3.html#SEC36">2.5 Assignments</A>).
+<A NAME="IDX59"></A>
+</P><P>
+
+<A NAME="Environment Concepts"></A>
+<HR SIZE="6">
+<A NAME="SEC9"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC8"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC10"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.2.2 Environment Concepts </H3>
+<!--docid::SEC9::-->
+<P>
+
+<A NAME="IDX60"></A>
+<A NAME="IDX61"></A>
+<A NAME="IDX62"></A>
+An <EM>environment</EM> is a set of variable bindings.  If an environment
+has no binding for a variable, that variable is said to be <EM>unbound</EM>
+in that environment.  Referencing an unbound variable signals a
+condition of type <CODE>condition-type:unbound-variable</CODE>.
+<A NAME="IDX63"></A>
+</P><P>
+
+<A NAME="IDX64"></A>
+<A NAME="IDX65"></A>
+<A NAME="IDX66"></A>
+<A NAME="IDX67"></A>
+<A NAME="IDX68"></A>
+<A NAME="IDX69"></A>
+A new environment can be created by <EM>extending</EM> an existing
+environment with a set of new bindings.  Note that "extending an
+environment" does <STRONG>not</STRONG> modify the environment; rather, it
+creates a new environment that contains the new bindings and the old
+ones.  The new bindings <EM>shadow</EM> the old ones; that is, if an
+environment that contains a binding for <CODE>x</CODE> is extended with a new
+binding for <CODE>x</CODE>, then only the new binding is seen when <CODE>x</CODE> is
+looked up in the extended environment.  Sometimes we say that the
+original environment is the <EM>parent</EM> of the new one, or that the new
+environment is a <EM>child</EM> of the old one, or that the new environment
+<EM>inherits</EM> the bindings in the old one.
+</P><P>
+
+<A NAME="IDX70"></A>
+<A NAME="IDX71"></A>
+<A NAME="IDX72"></A>
+<A NAME="IDX73"></A>
+<A NAME="IDX74"></A>
+Procedure calls extend an environment, as do <CODE>let</CODE>, <CODE>let*</CODE>,
+<CODE>letrec</CODE>, and <CODE>do</CODE> expressions.  Internal definitions
+(see section <A HREF="scheme_3.html#SEC35">2.4.2 Internal Definitions</A>) also extend an environment.  (Actually,
+all the constructs that extend environments can be expressed in terms of
+procedure calls, so there is really just one fundamental mechanism for
+environment extension.)
+A top-level definition (see section <A HREF="scheme_3.html#SEC34">2.4.1 Top-Level Definitions</A>) may add a binding to an existing environment.
+</P><P>
+
+<A NAME="Initial and Current Environments"></A>
+<HR SIZE="6">
+<A NAME="SEC10"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC9"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC11"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.2.3 Initial and Current Environments </H3>
+<!--docid::SEC10::-->
+<P>
+
+<A NAME="IDX75"></A>
+<A NAME="IDX76"></A>
+MIT Scheme provides an <EM>initial environment</EM> that contains all
+of the variable bindings described in this manual.  Most environments
+are ultimately extensions of this initial environment.  In Scheme, the
+environment in which your programs execute is actually a child
+(extension) of the environment containing the system's bindings.  Thus,
+system names are visible to your programs, but your names do not
+interfere with system programs.
+</P><P>
+
+<A NAME="IDX77"></A>
+<A NAME="IDX78"></A>
+<A NAME="IDX79"></A>
+<A NAME="IDX80"></A>
+<A NAME="IDX81"></A>
+<A NAME="IDX82"></A>
+The environment in effect at some point in a program is called the
+<EM>current environment</EM> at that point.  In particular, every REP
+loop has a current environment.  (REP stands for
+"read-eval-print"; the REP loop is the Scheme program that reads
+your input, evaluates it, and prints the result.)  The environment of
+the top-level REP loop (the one you are in when Scheme starts up)
+starts as <CODE>user-initial-environment</CODE>, although it can be changed by
+the <CODE>ge</CODE> procedure.  When a new REP loop is created, its
+environment is determined by the program that creates it.
+</P><P>
+
+<A NAME="Static Scoping"></A>
+<HR SIZE="6">
+<A NAME="SEC11"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC10"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC12"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.2.4 Static Scoping </H3>
+<!--docid::SEC11::-->
+<P>
+
+<A NAME="IDX83"></A>
+Scheme is a statically scoped language with block structure.  In this
+respect, it is like Algol and Pascal, and unlike most other dialects of
+Lisp except for Common Lisp.
+</P><P>
+
+<A NAME="IDX84"></A>
+<A NAME="IDX85"></A>
+The fact that Scheme is statically scoped (rather than
+dynamically bound) means that the environment that is extended (and
+becomes current) when a procedure is called is the environment in which
+the procedure was created (i.e. in which the procedure's defining
+lambda expression was evaluated), not the environment in which the
+procedure is called.  Because all the other Scheme <EM>binding
+expressions</EM> can be expressed in terms of procedures, this determines
+how all bindings behave.
+</P><P>
+
+Consider the following definitions, made at the top-level REP loop
+(in the initial environment):
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define x 1)
+(define (f x) (g 2))
+(define (g y) (+ x y))
+(f 5)                                       =>  3 ; not 7
+</pre></td></tr></table></P><P>
+
+Here <CODE>f</CODE> and <CODE>g</CODE> are bound to procedures created in the
+initial environment.  Because Scheme is statically scoped, the call to
+<CODE>g</CODE> from <CODE>f</CODE> extends the initial environment (the one in which
+<CODE>g</CODE> was created) with a binding of <CODE>y</CODE> to <CODE>2</CODE>.  In this
+extended environment, <CODE>y</CODE> is <CODE>2</CODE> and <CODE>x</CODE> is <CODE>1</CODE>.
+(In a dynamically bound Lisp, the call to <CODE>g</CODE> would extend the
+environment in effect during the call to <CODE>f</CODE>, in which <CODE>x</CODE> is
+bound to <CODE>5</CODE> by the call to <CODE>f</CODE>, and the answer would be
+<CODE>7</CODE>.)
+</P><P>
+
+<A NAME="IDX86"></A>
+<A NAME="IDX87"></A>
+<A NAME="IDX88"></A>
+<A NAME="IDX89"></A>
+<A NAME="IDX90"></A>
+Note that with static scoping, you can tell what binding a variable
+reference refers to just from looking at the text of the program; the
+referenced binding cannot depend on how the program is used.  That is,
+the nesting of environments (their parent-child relationship)
+corresponds to the nesting of binding expressions in program text.
+(Because of this connection to the text of the program, static scoping
+is also called <EM>lexical</EM> scoping.)  For each place where a variable
+is bound in a program there is a corresponding <EM>region</EM> of the
+program text within which the binding is effective.  For example, the
+region of a binding established by a <CODE>lambda</CODE> expression is the
+entire body of the <CODE>lambda</CODE> expression.  The documentation of each
+binding expression explains what the region of the bindings it makes is.
+A use of a variable (that is, a reference to or assignment of a
+variable) refers to the innermost binding of that variable whose region
+contains the variable use.  If there is no such region, the use refers
+to the binding of the variable in the global environment (which is an
+ancestor of all other environments, and can be thought of as a region in
+which all your programs are contained).
+</P><P>
+
+<A NAME="True and False"></A>
+<HR SIZE="6">
+<A NAME="SEC12"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC11"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC13"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.2.5 True and False </H3>
+<!--docid::SEC12::-->
+<P>
+
+<A NAME="IDX91"></A>
+<A NAME="IDX92"></A>
+<A NAME="IDX93"></A>
+<A NAME="IDX94"></A>
+<A NAME="IDX95"></A>
+In Scheme, the boolean values true and false are denoted by <CODE>#t</CODE>
+and <CODE>#f</CODE>.  However, any Scheme value can be treated as a boolean
+for the purpose of a conditional test.  This manual uses the word
+<EM>true</EM> to refer to any Scheme value that counts as true, and the
+word <EM>false</EM> to refer to any Scheme value that counts as false.  In
+conditional tests, all values count as true except for <CODE>#f</CODE>, which
+counts as false (see section <A HREF="scheme_3.html#SEC38">2.7 Conditionals</A>).
+</P><P>
+
+Implementation note: In MIT Scheme, <CODE>#f</CODE> and the empty list are the
+same object, and the printed representation of <CODE>#f</CODE> is always
+<SAMP>`()'</SAMP>.  As this contradicts the Scheme standard, MIT Scheme will be
+changed to make <CODE>#f</CODE> and the empty list different objects.
+</P><P>
+
+<A NAME="External Representations"></A>
+<HR SIZE="6">
+<A NAME="SEC13"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC12"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC14"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.2.6 External Representations </H3>
+<!--docid::SEC13::-->
+<P>
+
+<A NAME="IDX96"></A>
+<A NAME="IDX97"></A>
+An important concept in Scheme is that of the
+<EM>external representation</EM> of an object as a sequence of characters.
+For example, an external representation of the integer 28 is the
+sequence of characters <SAMP>`28'</SAMP>, and an external representation of a
+list consisting of the integers 8 and 13 is the sequence of characters
+<SAMP>`(8 13)'</SAMP>.
+</P><P>
+
+The external representation of an object is not necessarily unique.  The
+integer 28 also has representations <SAMP>`#e28.000'</SAMP> and <SAMP>`#x1c'</SAMP>, and
+the list in the previous paragraph also has the representations <SAMP>`(
+08 13 )'</SAMP> and <SAMP>`(8 . (13 . ( )))'</SAMP>.
+</P><P>
+
+Many objects have standard external representations, but some, such as
+procedures and circular data structures, do not have standard
+representations (although particular implementations may define
+representations for them).
+</P><P>
+
+An external representation may be written in a program to obtain the
+corresponding object (see section <A HREF="scheme_3.html#SEC37">2.6 Quoting</A>).
+</P><P>
+
+<A NAME="IDX98"></A>
+<A NAME="IDX99"></A>
+External representations can also be used for input and output.  The
+procedure <CODE>read</CODE> parses external representations, and the procedure
+<CODE>write</CODE> generates them.  Together, they provide an elegant and
+powerful input/output facility.
+</P><P>
+
+Note that the sequence of characters <SAMP>`(+ 2 6)'</SAMP> is <EM>not</EM> an
+external representation of the integer 8, even though it <EM>is</EM> an
+expression that evaluates to the integer 8; rather, it is an external
+representation of a three-element list, the elements of which are the
+symbol <CODE>+</CODE> and the integers <CODE>2</CODE> and <CODE>6</CODE>.  Scheme's syntax
+has the property that any sequence of characters that is an expression
+is also the external representation of some object.  This can lead to
+confusion, since it may not be obvious out of context whether a given
+sequence of characters is intended to denote data or program, but it is
+also a source of power, since it facilitates writing programs such as
+interpreters and compilers that treat programs as data or data as
+programs.
+</P><P>
+
+<A NAME="Disjointness of Types"></A>
+<HR SIZE="6">
+<A NAME="SEC14"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC13"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC15"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.2.7 Disjointness of Types </H3>
+<!--docid::SEC14::-->
+<P>
+
+Every object satisfies at most one of the following predicates (but see
+<A HREF="scheme_2.html#SEC12">1.2.5 True and False</A>, for an exception):
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>bit-string?     environment?    port?           symbol?
+boolean?        null?           procedure?      vector?
+cell?           number?         promise?        weak-pair?
+char?           pair?           string?
+condition?
+</pre></td></tr></table></P><P>
+
+<A NAME="Storage Model"></A>
+<HR SIZE="6">
+<A NAME="SEC15"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC14"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.2.8 Storage Model </H3>
+<!--docid::SEC15::-->
+<P>
+
+This section describes a model that can be used to understand Scheme's
+use of storage.
+</P><P>
+
+<A NAME="IDX100"></A>
+<A NAME="IDX101"></A>
+Variables and objects such as pairs, vectors, and strings implicitly
+denote locations or sequences of locations.  A string, for example,
+denotes as many locations as there are characters in the string.  (These
+locations need not correspond to a full machine word.)  A new value may
+be stored into one of these locations using the <CODE>string-set!</CODE>
+procedure, but the string continues to denote the same locations as
+before.
+  
+<A NAME="IDX102"></A>
+<A NAME="IDX103"></A>
+<A NAME="IDX104"></A>
+<A NAME="IDX105"></A>
+An object fetched from a location, by a variable reference or by a
+procedure such as <CODE>car</CODE>, <CODE>vector-ref</CODE>, or <CODE>string-ref</CODE>,
+is equivalent in the sense of <CODE>eqv?</CODE> to the object last stored in
+the location before the fetch.
+</P><P>
+
+Every location is marked to show whether it is in use.  No variable or
+object ever refers to a location that is not in use.  Whenever this
+document speaks of storage being allocated for a variable or object,
+what is meant is that an appropriate number of locations are chosen from
+the set of locations that are not in use, and the chosen locations are
+marked to indicate that they are now in use before the variable or
+object is made to denote them.
+</P><P>
+
+<A NAME="IDX106"></A>
+<A NAME="IDX107"></A>
+<A NAME="IDX108"></A>
+<A NAME="IDX109"></A>
+In many systems it is desirable for constants (i.e. the values of
+literal expressions) to reside in read-only memory.  To express this, it
+is convenient to imagine that every object that denotes locations is
+associated with a flag telling whether that object is mutable or
+immutable.  The constants and the strings returned by
+<CODE>symbol-&#62;string</CODE> are then the immutable objects, while all objects
+created by other procedures are mutable.  It is an error to attempt to
+store a new value into a location that is denoted by an immutable
+object.  Note that the MIT Scheme compiler takes advantage of this
+property to share constants, but that these constants are not immutable.
+Instead, two constants that are <CODE>equal?</CODE> may be <CODE>eq?</CODE> in
+compiled code.
+</P><P>
+
+<A NAME="Lexical Conventions"></A>
+<HR SIZE="6">
+<A NAME="SEC16"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC15"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC17"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 1.3 Lexical Conventions </H2>
+<!--docid::SEC16::-->
+<P>
+
+This section describes Scheme's lexical conventions.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC17">1.3.1 Whitespace</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC18">1.3.2 Delimiters</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC19">1.3.3 Identifiers</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC20">1.3.4 Uppercase and Lowercase</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC21">1.3.5 Naming Conventions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC22">1.3.6 Comments</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC23">1.3.7 Additional Notations</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Whitespace"></A>
+<HR SIZE="6">
+<A NAME="SEC17"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC18"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.3.1 Whitespace </H3>
+<!--docid::SEC17::-->
+<P>
+
+<A NAME="IDX110"></A>
+<A NAME="IDX111"></A>
+<EM>Whitespace</EM> characters are spaces, newlines, tabs, and page breaks.
+Whitespace is used to improve the readability of your programs and to
+separate tokens from each other, when necessary.  (A <EM>token</EM> is an
+indivisible lexical unit such as an identifier or number.)  Whitespace
+is otherwise insignificant.  Whitespace may occur between any two
+tokens, but not within a token.  Whitespace may also occur inside a
+string, where it is significant.
+</P><P>
+
+<A NAME="Delimiters"></A>
+<HR SIZE="6">
+<A NAME="SEC18"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC17"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC19"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.3.2 Delimiters </H3>
+<!--docid::SEC18::-->
+<P>
+
+<A NAME="IDX112"></A>
+All whitespace characters are <EM>delimiters</EM>.  In addition, the
+following characters act as delimiters:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(  )  ;  "  '  `  |
+</pre></td></tr></table></P><P>
+
+Finally, these next characters act as delimiters, despite the fact that
+Scheme does not define any special meaning for them:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>[  ]  {  }
+</pre></td></tr></table></P><P>
+
+For example, if the value of the variable <CODE>name</CODE> is
+<CODE>"max"</CODE>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(list"Hi"name(+ 1 2))                   =>  ("Hi" "max" 3)
+</pre></td></tr></table></P><P>
+
+<A NAME="Identifiers"></A>
+<HR SIZE="6">
+<A NAME="SEC19"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC18"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC20"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.3.3 Identifiers </H3>
+<!--docid::SEC19::-->
+<P>
+
+<A NAME="IDX113"></A>
+An <EM>identifier</EM> is a sequence of one or more non-delimiter
+characters.  Identifiers are used in several ways in Scheme
+programs:
+</P><P>
+
+<UL>
+<LI>
+Certain identifiers are reserved for use as syntactic keywords; they
+should not be used as variables (for a list of the initial syntactic
+keywords, see section <A HREF="scheme_2.html#SEC27">1.4.3 Special Form Syntax</A>).
+<A NAME="IDX114"></A>
+<P>
+
+<LI>
+Any identifier that is not a syntactic keyword can be used as a
+variable.
+<A NAME="IDX115"></A>
+<P>
+
+<LI>
+When an identifier appears as a literal or within a literal, it denotes
+a symbol.
+<A NAME="IDX116"></A>
+</UL>
+<P>
+
+Scheme accepts most of the identifiers that other programming languages
+allow.  MIT Scheme allows all of the identifiers that standard
+Scheme does, plus many more.
+</P><P>
+
+MIT Scheme defines a potential identifier to be a sequence of
+non-delimiter characters that does not begin with either of the
+characters <SAMP>`#'</SAMP> or <SAMP>`,'</SAMP>.  Any such sequence of characters that
+is not a syntactically valid number (see section <A HREF="scheme_5.html#SEC43">4. Numbers</A>) is considered to
+be a valid identifier.  Note that, although it is legal for <SAMP>`#'</SAMP> and
+<SAMP>`,'</SAMP> to appear in an identifier (other than in the first character
+position), it is poor programming practice.
+</P><P>
+
+Here are some examples of identifiers:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>lambda             q
+list-&#62;vector       soup
++                  V17a
+&#60;=?                a34kTMNs
+the-word-recursion-has-many-meanings
+</pre></td></tr></table></P><P>
+
+<A NAME="Uppercase and Lowercase"></A>
+<HR SIZE="6">
+<A NAME="SEC20"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC19"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC21"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.3.4 Uppercase and Lowercase </H3>
+<!--docid::SEC20::-->
+<P>
+
+<A NAME="IDX117"></A>
+<A NAME="IDX118"></A>
+<A NAME="IDX119"></A>
+<A NAME="IDX120"></A>
+Scheme doesn't distinguish uppercase and lowercase forms of a letter
+except within character and string constants; in other words, Scheme is
+<EM>case-insensitive</EM>.  For example, <SAMP>`Foo'</SAMP> is the same identifier
+as <SAMP>`FOO'</SAMP>, and <SAMP>`#x1AB'</SAMP> is the same number as <SAMP>`#X1ab'</SAMP>.  But
+<SAMP>`#\a'</SAMP> and <SAMP>`#\A'</SAMP> are different characters.
+</P><P>
+
+<A NAME="Naming Conventions"></A>
+<HR SIZE="6">
+<A NAME="SEC21"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC20"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC22"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.3.5 Naming Conventions </H3>
+<!--docid::SEC21::-->
+<P>
+
+<A NAME="IDX121"></A>
+<A NAME="IDX122"></A>
+A <EM>predicate</EM> is a procedure that always returns a boolean value
+(<CODE>#t</CODE> or <CODE>#f</CODE>).  By convention, predicates usually have names
+that end in <SAMP>`?'</SAMP>.
+</P><P>
+
+<A NAME="IDX123"></A>
+<A NAME="IDX124"></A>
+A <EM>mutation procedure</EM> is a procedure that alters a data structure.
+By convention, mutation procedures usually have names that end in
+<SAMP>`!'</SAMP>.
+</P><P>
+
+<A NAME="Comments"></A>
+<HR SIZE="6">
+<A NAME="SEC22"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC21"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC23"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.3.6 Comments </H3>
+<!--docid::SEC22::-->
+<P>
+
+<A NAME="IDX125"></A>
+<A NAME="IDX126"></A>
+<A NAME="IDX127"></A>
+The beginning of a comment is indicated with a semicolon (<CODE>;</CODE>).
+Scheme ignores everything on a line in which a semicolon appears, from
+the semicolon until the end of the line.  The entire comment, including
+the newline character that terminates it, is treated as
+whitespace.
+</P><P>
+
+<A NAME="IDX128"></A>
+<A NAME="IDX129"></A>
+<A NAME="IDX130"></A>
+An alternative form of comment (sometimes called an <EM>extended
+comment</EM>) begins with the characters <SAMP>`#|'</SAMP> and ends with the
+characters <SAMP>`|#'</SAMP>.  This alternative form is an MIT Scheme extension.
+As with ordinary comments, all of the characters in an extended comment,
+including the leading <SAMP>`#|'</SAMP> and trailing <SAMP>`|#'</SAMP>, are treated as
+whitespace.  Comments of this form may extend over multiple lines, and
+additionally may be nested (unlike the comments of the programming
+language C, which have a similar syntax).
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>;;; This is a comment about the FACT procedure.  Scheme
+;;; ignores all of this comment.  The FACT procedure computes
+;;; the factorial of a non-negative integer.
+
+#|
+This is an extended comment.
+Such comments are useful for commenting out code fragments.
+|#
+
+(define fact
+  (lambda (n)
+    (if (= n 0)                      ;This is another comment:
+        1                            ;Base case: return 1
+        (* n (fact (- n 1))))))
+</pre></td></tr></table></P><P>
+
+<A NAME="Additional Notations"></A>
+<HR SIZE="6">
+<A NAME="SEC23"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC22"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC24"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC7"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.3.7 Additional Notations </H3>
+<!--docid::SEC23::-->
+<P>
+
+<A NAME="IDX131"></A>
+<A NAME="IDX132"></A>
+The following list describes additional notations used in Scheme.
+See section <A HREF="scheme_5.html#SEC43">4. Numbers</A>, for a description of the notations used for numbers.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>+ - .</CODE>
+<DD>The plus sign, minus sign, and period are used in numbers, and may also
+occur in an identifier.  A delimited period (not occurring within a
+number or identifier) is used in the notation for pairs and to indicate
+a "rest" parameter in a formal parameter list
+(see section <A HREF="scheme_3.html#SEC30">2.1 Lambda Expressions</A>).
+<P>
+
+<DT><CODE>( )</CODE>
+<DD>Parentheses are used for grouping and to notate lists (see section <A HREF="scheme_8.html#SEC73">7. Lists</A>).
+<P>
+
+<DT><CODE>"</CODE>
+<DD>The double quote delimits strings (see section <A HREF="scheme_7.html#SEC61">6. Strings</A>).
+<P>
+
+<DT><CODE>\</CODE>
+<DD>The backslash is used in the syntax for character constants
+(see section <A HREF="scheme_6.html#SEC54">5. Characters</A>) and as an escape character within string constants
+(see section <A HREF="scheme_7.html#SEC61">6. Strings</A>).
+<P>
+
+<DT><CODE>;</CODE>
+<DD>The semicolon starts a comment.
+<P>
+
+<DT><CODE>'</CODE>
+<DD>The single quote indicates literal data; it suppresses evaluation
+(see section <A HREF="scheme_3.html#SEC37">2.6 Quoting</A>).
+<P>
+
+<DT><CODE>`</CODE>
+<DD>The backquote indicates almost-constant data (see section <A HREF="scheme_3.html#SEC37">2.6 Quoting</A>).
+<P>
+
+<DT><CODE>,</CODE>
+<DD>The comma is used in conjunction with the backquote (see section <A HREF="scheme_3.html#SEC37">2.6 Quoting</A>).
+<P>
+
+<DT><CODE>,@</CODE>
+<DD>A comma followed by an at-sign is used in conjunction with the backquote
+(see section <A HREF="scheme_3.html#SEC37">2.6 Quoting</A>).
+<P>
+
+<DT><CODE>#</CODE>
+<DD>The sharp (or pound) sign has different uses, depending on the character
+that immediately follows it:
+<P>
+
+<DT><CODE>#t #f</CODE>
+<DD>These character sequences denote the boolean constants
+(see section <A HREF="scheme_11.html#SEC96">10.1 Booleans</A>).
+<P>
+
+<DT><CODE>#\</CODE>
+<DD>This character sequence introduces a character constant
+(see section <A HREF="scheme_6.html#SEC54">5. Characters</A>).
+<P>
+
+<DT><CODE>#(</CODE>
+<DD>This character sequence introduces a vector constant (see section <A HREF="scheme_9.html#SEC83">8. Vectors</A>).
+A close parenthesis, <SAMP>`)'</SAMP>, terminates a vector constant.
+<P>
+
+<DT><CODE>#e #i #b #o #d #l #s #x</CODE>
+<DD>These character sequences are used in the notation for numbers
+(see section <A HREF="scheme_5.html#SEC43">4. Numbers</A>).
+<P>
+
+<DT><CODE>#|</CODE>
+<DD>This character sequence introduces an extended comment.  The comment is
+terminated by the sequence <SAMP>`|#'</SAMP>.  This notation is an MIT Scheme
+extension.
+<P>
+
+<DT><CODE>#!</CODE>
+<DD>This character sequence is used to denote a small set of named
+constants.  Currently there are only two of these, <CODE>#!optional</CODE> and
+<CODE>#!rest</CODE>, both of which are used in the <CODE>lambda</CODE> special form
+to mark certain parameters as being "optional" or "rest" parameters.
+This notation is an MIT Scheme extension.
+<A NAME="IDX133"></A>
+<A NAME="IDX134"></A>
+<A NAME="IDX135"></A>
+<P>
+
+<DT><CODE>#*</CODE>
+<DD>This character sequence introduces a bit string (see section <A HREF="scheme_10.html#SEC88">9. Bit Strings</A>).
+This notation is an MIT Scheme extension.
+<P>
+
+<DT><CODE>#[</CODE>
+<DD>This character sequence is used to denote objects that do not have a
+readable external representation (see section <A HREF="scheme_15.html#SEC137">14.7 Custom Output</A>).  A close
+bracket, <SAMP>`]'</SAMP>, terminates the object's notation.  This notation is
+an MIT Scheme extension.
+<P>
+
+<DT><CODE>#@</CODE>
+<DD>This character sequence is a convenient shorthand used to refer to
+objects by their hash number (see section <A HREF="scheme_15.html#SEC137">14.7 Custom Output</A>).  This notation is
+an MIT Scheme extension.
+<P>
+
+<DT><CODE>#=</CODE>
+<DD><DT><CODE>##</CODE>
+<DD>These character sequences introduce a notation used to show circular
+structures in printed output, or to denote them in input.  The notation
+works much like that in Common Lisp, and is an MIT Scheme extension.
+</DL>
+<P>
+
+<A NAME="Expressions"></A>
+<HR SIZE="6">
+<A NAME="SEC24"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC23"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC25"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 1.4 Expressions </H2>
+<!--docid::SEC24::-->
+<P>
+
+<A NAME="IDX136"></A>
+A Scheme <EM>expression</EM> is a construct that returns a value.  An
+expression may be a <EM>literal</EM>, a <EM>variable reference</EM>, a
+<EM>special form</EM>, or a <EM>procedure call</EM>.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC25">1.4.1 Literal Expressions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC26">1.4.2 Variable References</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC27">1.4.3 Special Form Syntax</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_2.html#SEC28">1.4.4 Procedure Call Syntax</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Literal Expressions"></A>
+<HR SIZE="6">
+<A NAME="SEC25"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC24"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC26"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC24"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.4.1 Literal Expressions </H3>
+<!--docid::SEC25::-->
+<P>
+
+<A NAME="IDX137"></A>
+<A NAME="IDX138"></A>
+<A NAME="IDX139"></A>
+<A NAME="IDX140"></A>
+<EM>Literal</EM> constants may be written by using an external
+representation of the data.  In general, the external representation
+must be <EM>quoted</EM> (see section <A HREF="scheme_3.html#SEC37">2.6 Quoting</A>); but some external
+representations can be used without quotation.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>"abc"                                   =>  "abc"
+145932                                  =>  145932
+#t                                      =>  #t
+#\a                                     =>  #\a
+</pre></td></tr></table></P><P>
+
+The external representation of numeric constants, string constants,
+character constants, and boolean constants evaluate to the constants
+themselves.  Symbols, pairs, lists, and vectors require quoting.
+</P><P>
+
+<A NAME="Variable References"></A>
+<HR SIZE="6">
+<A NAME="SEC26"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC25"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC27"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC24"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.4.2 Variable References </H3>
+<!--docid::SEC26::-->
+<P>
+
+<A NAME="IDX141"></A>
+<A NAME="IDX142"></A>
+<A NAME="IDX143"></A>
+<A NAME="IDX144"></A>
+An expression consisting of an identifier (see section <A HREF="scheme_2.html#SEC19">1.3.3 Identifiers</A>) is a
+<EM>variable reference</EM>; the identifier is the name of the variable
+being referenced.  The value of the variable reference is the value
+stored in the location to which the variable is bound.  An error is
+signalled if the referenced variable is unbound or unassigned.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define x 28)
+x                                       =>  28
+</pre></td></tr></table></P><P>
+
+<A NAME="Special Form Syntax"></A>
+<HR SIZE="6">
+<A NAME="SEC27"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC26"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC28"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC24"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.4.3 Special Form Syntax </H3>
+<!--docid::SEC27::-->
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(<VAR>keyword</VAR> <VAR>component</VAR> <small>...</small>)
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX145"></A>
+<A NAME="IDX146"></A>
+<A NAME="IDX147"></A>
+<A NAME="IDX148"></A>
+<A NAME="IDX149"></A>
+A parenthesized expression that starts with a <EM>syntactic keyword</EM> is
+a <EM>special form</EM>.  Each special form has its own syntax, which is
+described later in the manual.  The following list contains all of the
+syntactic keywords that are defined when MIT Scheme is initialized:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>access                  define-syntax           macro
+and                     delay                   make-environment
+begin                   do                      named-lambda
+case                    fluid-let               or
+cond                    if                      quasiquote
+cons-stream             in-package              quote
+declare                 lambda                  scode-quote
+default-object?         let                     sequence
+define                  let*                    set!
+define-integrable       let-syntax              the-environment
+define-macro            letrec                  unassigned?
+define-structure        local-declare           using-syntax
+</pre></td></tr></table></P><P>
+
+<A NAME="Procedure Call Syntax"></A>
+<HR SIZE="6">
+<A NAME="SEC28"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC27"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC24"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 1.4.4 Procedure Call Syntax </H3>
+<!--docid::SEC28::-->
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(<VAR>operator</VAR> <VAR>operand</VAR> <small>...</small>)
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX150"></A>
+<A NAME="IDX151"></A>
+<A NAME="IDX152"></A>
+<A NAME="IDX153"></A>
+A <EM>procedure call</EM> is written by simply enclosing in parentheses
+expressions for the procedure to be called (the <EM>operator</EM>) and the
+arguments to be passed to it (the <EM>operands</EM>).  The <VAR>operator</VAR>
+and <VAR>operand</VAR> expressions are evaluated and the resulting procedure
+is passed the resulting arguments.  See section <A HREF="scheme_3.html#SEC30">2.1 Lambda Expressions</A>, for a
+more complete description of this.
+</P><P>
+
+<A NAME="IDX154"></A>
+Another name for the procedure call expression is <EM>combination</EM>.
+This word is more specific in that it always refers to the expression;
+"procedure call" sometimes refers to the <EM>process</EM> of calling a
+procedure.
+</P><P>
+
+<A NAME="IDX155"></A>
+<A NAME="IDX156"></A>
+<A NAME="IDX157"></A>
+Unlike some other dialects of Lisp, Scheme always evaluates the operator
+expression and the operand expressions with the same evaluation rules,
+and the order of evaluation is unspecified.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(+ 3 4)                                 =>  7
+((if #f = *) 3 4)                       =>  12
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX158"></A>
+<A NAME="IDX159"></A>
+<A NAME="IDX160"></A>
+A number of procedures are available as the values of variables in the
+initial environment; for example, the addition and multiplication
+procedures in the above examples are the values of the variables
+<CODE>+</CODE> and <CODE>*</CODE>.  New procedures are created by evaluating
+<CODE>lambda</CODE> expressions.
+</P><P>
+
+<A NAME="IDX161"></A>
+<A NAME="IDX162"></A>
+If the <VAR>operator</VAR> is a syntactic keyword, then the expression is not
+treated as a procedure call: it is a special form.  Thus you should not
+use syntactic keywords as procedure names.  If you were to bind one of
+these keywords to a procedure, you would have to use <CODE>apply</CODE> to
+call the procedure.  MIT Scheme signals an error when such a
+binding is attempted.
+</P><P>
+
+<A NAME="Special Forms"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC16"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

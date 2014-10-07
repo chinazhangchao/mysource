@@ -1,0 +1,522 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme Reference: Bit Strings</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme Reference: Bit Strings">
+<META NAME="keywords" CONTENT="MIT Scheme Reference: Bit Strings">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC88"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC87"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC89"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_9.html#SEC83"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 9. Bit Strings </H1>
+<!--docid::SEC88::-->
+<P>
+
+<A NAME="IDX1125"></A>
+<A NAME="IDX1126"></A>
+A <EM>bit string</EM> is a sequence of bits.  Bit strings can be used to
+represent sets or to manipulate binary data.  The elements of a bit
+string are numbered from zero up to the number of bits in the string
+less one, in <EM>right to left order</EM>, (the rightmost bit is numbered
+zero).  When you convert from a bit string to an integer, the zero-th
+bit is associated with the zero-th power of two, the first bit is
+associated with the first power, and so on.
+</P><P>
+
+Bit strings are encoded very densely in memory.  Each bit occupies
+exactly one bit of storage, and the overhead for the entire bit string
+is bounded by a small constant.  However, accessing a bit in a bit
+string is slow compared to accessing an element of a vector or character
+string.  If performance is of overriding concern, it is better to use
+character strings to store sets of boolean values even though they
+occupy more space.
+</P><P>
+
+<A NAME="IDX1127"></A>
+<A NAME="IDX1128"></A>
+<A NAME="IDX1129"></A>
+<A NAME="IDX1130"></A>
+<A NAME="IDX1131"></A>
+The <EM>length</EM> of a bit string is the number of bits that it contains.
+This number is an exact non-negative integer that is fixed when the bit
+string is created.  The <EM>valid indexes</EM> of a bit string are the
+exact non-negative integers less than the length of the bit string.
+</P><P>
+
+<A NAME="IDX1132"></A>
+<A NAME="IDX1133"></A>
+<A NAME="IDX1134"></A>
+Bit strings may contain zero or more bits.  They are not limited by the
+length of a machine word.  In the printed representation of a bit
+string, the contents of the bit string are preceded by <SAMP>`#*'</SAMP>.  The
+contents are printed starting with the most significant bit (highest
+index).
+</P><P>
+
+Note that the external representation of bit strings uses a bit ordering
+that is the reverse of the representation for bit strings in Common
+Lisp.  It is likely that MIT Scheme's representation will be
+changed in the future, to be compatible with Common Lisp.  For the time
+being this representation should be considered a convenience for viewing
+bit strings rather than a means of entering them as data.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#*11111
+#*1010
+#*00000000
+#*
+</pre></td></tr></table></P><P>
+
+All of the bit-string procedures are MIT Scheme extensions.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_10.html#SEC89">9.1 Construction of Bit Strings</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_10.html#SEC90">9.2 Selecting Bit String Components</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_10.html#SEC91">9.3 Cutting and Pasting Bit Strings</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_10.html#SEC92">9.4 Bitwise Operations on Bit Strings</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_10.html#SEC93">9.5 Modification of Bit Strings</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_10.html#SEC94">9.6 Integer Conversions of Bit Strings</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Construction of Bit Strings"></A>
+<HR SIZE="6">
+<A NAME="SEC89"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC90"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 9.1 Construction of Bit Strings </H2>
+<!--docid::SEC89::-->
+<P>
+
+<A NAME="IDX1135"></A>
+<DL>
+<DT><U>procedure+:</U> <B>make-bit-string</B> <I>k initialization</I>
+<DD>Returns a newly allocated bit string of length <VAR>k</VAR>.  If
+<VAR>initialization</VAR> is <CODE>#f</CODE>, the bit string is filled with 0 bits;
+otherwise, the bit string is filled with 1 bits.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(make-bit-string 7 #f)                  =>  #*0000000
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1136"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-string-allocate</B> <I>k</I>
+<DD>Returns a newly allocated bit string of length <VAR>k</VAR>, but does not
+initialize it.
+</DL>
+</P><P>
+
+<A NAME="IDX1137"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-string-copy</B> <I>bit-string</I>
+<DD><A NAME="IDX1138"></A>
+Returns a newly allocated copy of <VAR>bit-string</VAR>.
+</DL>
+</P><P>
+
+<A NAME="Selecting Bit String Components"></A>
+<HR SIZE="6">
+<A NAME="SEC90"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC89"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC91"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 9.2 Selecting Bit String Components </H2>
+<!--docid::SEC90::-->
+<P>
+
+<A NAME="IDX1139"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-string?</B> <I>object</I>
+<DD><A NAME="IDX1140"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a bit string; otherwise returns
+<CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1141"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-string-length</B> <I>bit-string</I>
+<DD><A NAME="IDX1142"></A>
+Returns the length of <VAR>bit-string</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1143"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-string-ref</B> <I>bit-string k</I>
+<DD><A NAME="IDX1144"></A>
+<A NAME="IDX1145"></A>
+Returns <CODE>#t</CODE> if the <VAR>k</VAR>th bit is 1; otherwise returns
+<CODE>#f</CODE>.  <VAR>K</VAR> must be a valid index of <VAR>bit-string</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1146"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-string-set!</B> <I>bit-string k</I>
+<DD>Sets the <VAR>k</VAR>th bit in <VAR>bit-string</VAR> to 1 and returns an
+unspecified value.  <VAR>K</VAR> must be a valid index of <VAR>bit-string</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1147"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-string-clear!</B> <I>bit-string k</I>
+<DD>Sets the <VAR>k</VAR>th bit in <VAR>bit-string</VAR> to 0 and returns an
+unspecified value.  <VAR>K</VAR> must be a valid index of <VAR>bit-string</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1148"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-substring-find-next-set-bit</B> <I>bit-string start end</I>
+<DD><A NAME="IDX1149"></A>
+Returns the index of the first occurrence of a set bit in the substring
+of <VAR>bit-string</VAR> from <VAR>start</VAR> (inclusive) to <VAR>end</VAR>
+(exclusive).  If none of the bits in the substring are set <CODE>#f</CODE> is
+returned.  The index returned is relative to the whole bit string, not
+substring.
+</P><P>
+
+The following procedure uses <CODE>bit-substring-find-next-set-bit</CODE> to
+find all the set bits and display their indexes:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (scan-bitstring bs)
+  (let ((end (bit-string-length bs)))
+    (let loop ((start 0))
+      (let ((next
+             (bit-substring-find-next-set-bit bs start end)))
+        (if next
+            (begin
+              (write-line next)
+              (if (&#60; next end)
+                  (loop (+ next 1)))))))))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Cutting and Pasting Bit Strings"></A>
+<HR SIZE="6">
+<A NAME="SEC91"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC90"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC92"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 9.3 Cutting and Pasting Bit Strings </H2>
+<!--docid::SEC91::-->
+<P>
+
+<A NAME="IDX1150"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-string-append</B> <I>bit-string-1 bit-string-2</I>
+<DD><A NAME="IDX1151"></A>
+Appends the two bit string arguments, returning a newly allocated bit
+string as its result.  In the result, the bits copied from
+<VAR>bit-string-1</VAR> are less significant (smaller indices) than those
+copied from <VAR>bit-string-2</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1152"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-substring</B> <I>bit-string start end</I>
+<DD><A NAME="IDX1153"></A>
+Returns a newly allocated bit string whose bits are copied from
+<VAR>bit-string</VAR>, starting at index <VAR>start</VAR> (inclusive) and ending
+at <VAR>end</VAR> (exclusive).
+</DL>
+</P><P>
+
+<A NAME="Bitwise Operations on Bit Strings"></A>
+<HR SIZE="6">
+<A NAME="SEC92"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC91"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC93"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 9.4 Bitwise Operations on Bit Strings </H2>
+<!--docid::SEC92::-->
+<P>
+
+<A NAME="IDX1154"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-string-zero?</B> <I>bit-string</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>bit-string</VAR> contains only 0 bits; otherwise
+returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1155"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-string=?</B> <I>bit-string-1 bit-string-2</I>
+<DD><A NAME="IDX1156"></A>
+<A NAME="IDX1157"></A>
+Compares the two bit string arguments and returns <CODE>#t</CODE> if they are the
+same length and contain the same bits; otherwise returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1158"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-string-not</B> <I>bit-string</I>
+<DD><A NAME="IDX1159"></A>
+Returns a newly allocated bit string that is the bitwise-logical
+negation of <VAR>bit-string</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1160"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-string-movec!</B> <I>target-bit-string bit-string</I>
+<DD>The destructive version of <CODE>bit-string-not</CODE>.  The arguments
+<VAR>target-bit-string</VAR> and <VAR>bit-string</VAR> must be bit strings of the
+same length.  The bitwise-logical negation of <VAR>bit-string</VAR> is
+computed and the result placed in <VAR>target-bit-string</VAR>.  The value of
+this procedure is unspecified.
+</DL>
+</P><P>
+
+<A NAME="IDX1161"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-string-and</B> <I>bit-string-1 bit-string-2</I>
+<DD>Returns a newly allocated bit string that is the bitwise-logical "and"
+of the arguments.  The arguments must be bit strings of identical
+length.
+</DL>
+</P><P>
+
+<A NAME="IDX1162"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-string-andc</B> <I>bit-string-1 bit-string-2</I>
+<DD>Returns a newly allocated bit string that is the bitwise-logical "and"
+of <VAR>bit-string-1</VAR> with the bitwise-logical negation of
+<VAR>bit-string-2</VAR>.  The arguments must be bit strings of identical
+length.
+</DL>
+</P><P>
+
+<A NAME="IDX1163"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-string-or</B> <I>bit-string-1 bit-string-2</I>
+<DD>Returns a newly allocated bit string that is the bitwise-logical
+"inclusive or" of the arguments.  The arguments must be bit strings of
+identical length.
+</DL>
+</P><P>
+
+<A NAME="IDX1164"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-string-xor</B> <I>bit-string-1 bit-string-2</I>
+<DD>Returns a newly allocated bit string that is the bitwise-logical
+"exclusive or" of the arguments.  The arguments must be bit strings of
+identical length.
+</DL>
+</P><P>
+
+<A NAME="IDX1165"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-string-and!</B> <I>target-bit-string bit-string</I>
+<DD><A NAME="IDX1166"></A>
+<DT><U>procedure+:</U> <B>bit-string-or!</B> <I>target-bit-string bit-string</I>
+<DD><A NAME="IDX1167"></A>
+<DT><U>procedure+:</U> <B>bit-string-xor!</B> <I>target-bit-string bit-string</I>
+<DD><A NAME="IDX1168"></A>
+<DT><U>procedure+:</U> <B>bit-string-andc!</B> <I>target-bit-string bit-string</I>
+<DD>These are destructive versions of the above operations.  The arguments
+<VAR>target-bit-string</VAR> and <VAR>bit-string</VAR> must be bit strings of the
+same length.  Each of these procedures performs the corresponding
+bitwise-logical operation on its arguments, places the result into
+<VAR>target-bit-string</VAR>, and returns an unspecified result.
+</DL>
+</P><P>
+
+<A NAME="Modification of Bit Strings"></A>
+<HR SIZE="6">
+<A NAME="SEC93"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC92"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC94"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 9.5 Modification of Bit Strings </H2>
+<!--docid::SEC93::-->
+<P>
+
+<A NAME="IDX1169"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-string-fill!</B> <I>bit-string initialization</I>
+<DD>Fills <VAR>bit-string</VAR> with zeroes if <VAR>initialization</VAR> is <CODE>#f</CODE>;
+otherwise fills <VAR>bit-string</VAR> with ones.  Returns an unspecified
+value.
+</DL>
+</P><P>
+
+<A NAME="IDX1170"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-string-move!</B> <I>target-bit-string bit-string</I>
+<DD>Moves the contents of <VAR>bit-string</VAR> into <VAR>target-bit-string</VAR>.  Both
+arguments must be bit strings of the same length.  The results of the
+operation are undefined if the arguments are the same bit string.
+</DL>
+</P><P>
+
+<A NAME="IDX1171"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-substring-move-right!</B> <I>bit-string-1 start1 end1 bit-string-2 start2</I>
+<DD>Destructively copies the bits of <VAR>bit-string-1</VAR>, starting at index
+<VAR>start1</VAR> (inclusive) and ending at <VAR>end1</VAR> (exclusive), into
+<VAR>bit-string-2</VAR> starting at index <VAR>start2</VAR> (inclusive).
+<VAR>Start1</VAR> and <VAR>end1</VAR> must be valid substring indices for
+<VAR>bit-string-1</VAR>, and <VAR>start2</VAR> must be a valid index for
+<VAR>bit-string-2</VAR>.  The length of the source substring must not exceed
+the length of <VAR>bit-string-2</VAR> minus the index <VAR>start2</VAR>.
+</P><P>
+
+The bits are copied starting from the MSB and working towards the LSB; the
+direction of copying only matters when <VAR>bit-string-1</VAR> and
+<VAR>bit-string-2</VAR> are <CODE>eqv?</CODE>.
+</DL>
+</P><P>
+
+<A NAME="Integer Conversions of Bit Strings"></A>
+<HR SIZE="6">
+<A NAME="SEC94"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC93"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 9.6 Integer Conversions of Bit Strings </H2>
+<!--docid::SEC94::-->
+<P>
+
+<A NAME="IDX1172"></A>
+<DL>
+<DT><U>procedure+:</U> <B>unsigned-integer-&#62;bit-string</B> <I>length integer</I>
+<DD>Both <VAR>length</VAR> and <VAR>integer</VAR> must be exact non-negative integers.
+Converts <VAR>integer</VAR> into a newly allocated bit string of <VAR>length</VAR>
+bits.  Signals an error of type <CODE>condition-type:bad-range-argument</CODE>
+if <VAR>integer</VAR> is too large to be represented in <VAR>length</VAR> bits.
+<A NAME="IDX1173"></A>
+</DL>
+</P><P>
+
+<A NAME="IDX1174"></A>
+<DL>
+<DT><U>procedure+:</U> <B>signed-integer-&#62;bit-string</B> <I>length integer</I>
+<DD><VAR>Length</VAR> must be an exact non-negative integer, and <VAR>integer</VAR>
+may be any exact integer.  Converts <VAR>integer</VAR> into a newly allocated
+bit string of <VAR>length</VAR> bits, using two's complement encoding for
+negative numbers.  Signals an error of type
+<CODE>condition-type:bad-range-argument</CODE> if <VAR>integer</VAR> is too large
+to be represented in <VAR>length</VAR> bits.
+<A NAME="IDX1175"></A>
+</DL>
+</P><P>
+
+<A NAME="IDX1176"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bit-string-&#62;unsigned-integer</B> <I>bit-string</I>
+<DD><A NAME="IDX1177"></A>
+<DT><U>procedure+:</U> <B>bit-string-&#62;signed-integer</B> <I>bit-string</I>
+<DD>Converts <VAR>bit-string</VAR> into an exact integer.
+<CODE>bit-string-&#62;signed-integer</CODE> regards <VAR>bit-string</VAR> as a two's
+complement representation of a signed integer, and produces an integer
+of like sign and absolute value.  <CODE>bit-string-&#62;unsigned-integer</CODE>
+regards <VAR>bit-string</VAR> as an unsigned quantity and converts to an
+integer accordingly.
+</DL>
+</P><P>
+
+<A NAME="Miscellaneous Datatypes"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

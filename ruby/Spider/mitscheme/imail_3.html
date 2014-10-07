@@ -1,0 +1,502 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>IMAIL User's Manual: Concepts</TITLE>
+
+<META NAME="description" CONTENT="IMAIL User's Manual: Concepts">
+<META NAME="keywords" CONTENT="IMAIL User's Manual: Concepts">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC3"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_2.html#SEC2"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC4"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 3. Concepts </H1>
+<!--docid::SEC3::-->
+<P>
+
+To use <FONT SIZE="-1">IMAIL</FONT> effectively, it is helpful to know the
+terminology and understand the concepts underlying <FONT SIZE="-1">IMAIL</FONT>'s
+design.  Here we will introduce you to messages, folders,
+<FONT SIZE="-1">URL</FONT>s, and server connections.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="imail_3.html#SEC4">3.1 Messages</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="imail_3.html#SEC5">3.2 Folders</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="imail_3.html#SEC6">3.3 Containers</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="imail_3.html#SEC7">3.4 URLs</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="imail_3.html#SEC11">3.5 Server Connections</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Messages"></A>
+<HR SIZE="6">
+<A NAME="SEC4"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC3"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC5"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC3"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 3.1 Messages </H2>
+<!--docid::SEC4::-->
+<P>
+
+<A NAME="IDX9"></A>
+<A NAME="IDX10"></A>
+<A NAME="IDX11"></A>
+<A NAME="IDX12"></A>
+<A NAME="IDX13"></A>
+A <EM>message</EM>, or <EM>email message</EM>, is the basic unit of electronic
+mail.  The format of a message is defined by
+<A HREF="http://www.ietf.org/rfc/rfc0822.txt"><FONT SIZE="-1">RFC</FONT> 822</A>.  Nearly
+all email messages are transmitted over the internet, which means that
+the contents of such messages are further constrained by the
+<FONT SIZE="-1">SMTP</FONT> protocol that is used for internet message transmission,
+as defined in <A HREF="http://www.ietf.org/rfc/rfc0821.txt"><FONT SIZE="-1">RFC</FONT>
+821</A>.
+</P><P>
+
+<A NAME="IDX14"></A>
+<A NAME="IDX15"></A>
+<A NAME="IDX16"></A>
+In brief, the primary constraints on an email message is that it may
+contain only printable <FONT SIZE="-1">US-ASCII</FONT> characters, and that lines of
+text in the message may not exceed 1000 characters, <EM>including</EM> the
+carriage-return/linefeed pair at the end of each line.  These
+constraints are fairly strict, and do not permit messages to contain
+text in languages other than English, or to contain non-textual data
+such as images.  The <EM>Multipurpose Internet Mail Extensions</EM>
+(<FONT SIZE="-1">MIME</FONT>, <A HREF="http://www.ietf.org/rfc/rfc2045.txt"><FONT SIZE="-1">RFC</FONT> 2045</A>) provide a way to encode other kinds of text and
+data so that they can be carried in an email message.  Most modern email
+software supports the <FONT SIZE="-1">MIME</FONT> standard; one notable exception is
+Emacs Rmail.
+</P><P>
+
+<A NAME="Folders"></A>
+<HR SIZE="6">
+<A NAME="SEC5"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC4"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC6"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC3"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 3.2 Folders </H2>
+<!--docid::SEC5::-->
+<P>
+
+<A NAME="IDX17"></A>
+Another important concept is a means for grouping messages together.
+All email software provides some means for doing this, and
+<FONT SIZE="-1">IMAIL</FONT> is no exception.  <FONT SIZE="-1">IMAIL</FONT> provides objects
+called <EM>folders</EM>.  A folder is just an object that holds an
+arbitrary number of email messages.  Messages can be added to a folder,
+deleted from a folder, and moved or copied from one folder to another.
+</P><P>
+
+<A NAME="IDX18"></A>
+<A NAME="IDX19"></A>
+<A NAME="IDX20"></A>
+<A NAME="IDX21"></A>
+<A NAME="IDX22"></A>
+<A NAME="IDX23"></A>
+In <FONT SIZE="-1">IMAIL</FONT>, the concept of the folder is used to embrace
+different grouping mechanisms.  This is because <FONT SIZE="-1">IMAIL</FONT> provides
+a uniform means for accessing different kinds of email systems.  In
+particular, <FONT SIZE="-1">IMAIL</FONT> supports access to Emacs Rmail files (also
+known as BABYL files, for historical reasons), to unix mailbox files
+(sometimes called <EM>mbox</EM> files), and to <FONT SIZE="-1">IMAP</FONT> mailboxes.
+Each of these grouping mechanisms, although implemented very
+differently, is viewed as a folder by <FONT SIZE="-1">IMAIL</FONT>.  With some
+exceptions, each of these different <EM>types</EM> of folder are treated
+exactly the same by <FONT SIZE="-1">IMAIL</FONT>.  Finally, because <FONT SIZE="-1">IMAIL</FONT>
+is extensible, other types of folders may be supported in the future.
+</P><P>
+
+<A NAME="Containers"></A>
+<HR SIZE="6">
+<A NAME="SEC6"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC5"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC7"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC3"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 3.3 Containers </H2>
+<!--docid::SEC6::-->
+<P>
+
+<A NAME="IDX24"></A>
+<A NAME="IDX25"></A>
+<A NAME="IDX26"></A>
+Folders can themselves be grouped together inside objects called
+<EM>containers</EM>.  A container is an object that holds folders, much in
+the same way that a folder holds messages.  As for folders, the concept
+of a container is a generalization of the different kinds of mechanisms
+used by the underlying mail technology.  So, for example, the container
+of a file folder is the directory holding that file.
+</P><P>
+
+<A NAME="IDX27"></A>
+<FONT SIZE="-1">IMAP</FONT> containers are a little different: each <FONT SIZE="-1">IMAP</FONT>
+mailbox is capable of holding other mailboxes.  What this means is that,
+from <FONT SIZE="-1">IMAIL</FONT>'s point of view, an <FONT SIZE="-1">IMAP</FONT> mailbox is both
+a folder object and a container object at the same time.  However, when
+<FONT SIZE="-1">IMAIL</FONT> views an <FONT SIZE="-1">IMAP</FONT> mailbox as a container, it is
+treated differently than when it is viewed as a folder, and consequently
+different notation is used in each case.
+</P><P>
+
+<A NAME="URLs"></A>
+<HR SIZE="6">
+<A NAME="SEC7"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC6"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC8"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC3"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC11"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 3.4 URLs </H2>
+<!--docid::SEC7::-->
+<P>
+
+<A NAME="IDX28"></A>
+<A NAME="IDX29"></A>
+<A NAME="IDX30"></A>
+<A NAME="IDX31"></A>
+In email software like Rmail, where mail is stored in files, filenames
+are used to refer to groups of messages.  Since <FONT SIZE="-1">IMAIL</FONT> folders
+often aren't files, it is necessary to use a more general kind of
+reference for folders.  To this end, <FONT SIZE="-1">IMAIL</FONT> uses <EM>Uniform
+Resource Locators</EM> (<FONT SIZE="-1">URL</FONT>s) to refer to
+folders.<A NAME="DOCF2" HREF="imail_fot.html#FOOT2">(2)</A>
+<FONT SIZE="-1">IMAIL</FONT> currently supports two kinds of <FONT SIZE="-1">URL</FONT>s:
+<FONT SIZE="-1">IMAP</FONT> <FONT SIZE="-1">URL</FONT>s and file <FONT SIZE="-1">URL</FONT>s.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="imail_3.html#SEC8">3.4.1 IMAP URLs</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="imail_3.html#SEC9">3.4.2 File URLs</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="imail_3.html#SEC10">3.4.3 Container URLs</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="IMAP URLs"></A>
+<HR SIZE="6">
+<A NAME="SEC8"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC7"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC9"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC6"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC7"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC11"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 3.4.1 IMAP URLs </H3>
+<!--docid::SEC8::-->
+<P>
+
+<A NAME="IDX32"></A>
+<A NAME="IDX33"></A>
+The first kind of <FONT SIZE="-1">URL</FONT> is an <FONT SIZE="-1">IMAP</FONT>
+<FONT SIZE="-1">URL</FONT>,<A NAME="DOCF3" HREF="imail_fot.html#FOOT3">(3)</A> which looks like this:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>imap://<VAR>uname</VAR>@<VAR>hostname</VAR>:<VAR>port</VAR>/<VAR>mailbox</VAR>
+</pre></td></tr></table></P><P>
+
+In this syntax, the parts <SAMP>`<VAR>uname</VAR>@'</SAMP> and <SAMP>`:<VAR>port</VAR>'</SAMP>
+are optional.  <VAR>Hostname</VAR> is the internet host name or <FONT SIZE="-1">IP</FONT>
+address of the <FONT SIZE="-1">IMAP</FONT> server.  <VAR>Uname</VAR> is the user name that
+identifies the account to be accessed on the server; this defaults to
+your user name.  <VAR>Port</VAR> is the server's <FONT SIZE="-1">IP</FONT> port; this
+defaults to <CODE>143</CODE> and is normally not specified.
+</P><P>
+
+<A NAME="IDX34"></A>
+<VAR>Mailbox</VAR> specifies the <FONT SIZE="-1">IMAP</FONT> mailbox (or folder, in
+<FONT SIZE="-1">IMAIL</FONT>'s terminology) that is being referred to.  Since most
+<FONT SIZE="-1">IMAP</FONT> servers support hierarchical mailboxes, <VAR>mailbox</VAR> is
+a structured component indicating the location of the folder in the
+hierarchy, much like filenames or <FONT SIZE="-1">HTTP</FONT> <FONT SIZE="-1">URL</FONT>s.  Here
+are some examples of <FONT SIZE="-1">IMAP</FONT> <FONT SIZE="-1">URL</FONT>s showing different
+mailbox paths:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>imap://localhost/inbox
+imap://localhost/inbox/sysadmin
+imap://localhost/inbox/sysadmin/equipment
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX35"></A>
+<A NAME="IDX36"></A>
+Here you see several interesting properties of <FONT SIZE="-1">IMAP</FONT> mailboxes.
+The first <FONT SIZE="-1">URL</FONT> refers to the primary <FONT SIZE="-1">IMAP</FONT> mailbox for
+this account, called the <EM>inbox</EM>.  All <FONT SIZE="-1">IMAP</FONT> servers must
+support this mailbox, which is always called <SAMP>`inbox'</SAMP>; the name is
+not case sensitive and may be typed in any combination of upper or lower
+case letters.  However, case sensitivity for names other than
+<SAMP>`inbox'</SAMP> is undefined by <FONT SIZE="-1">IMAP</FONT>, so <FONT SIZE="-1">IMAIL</FONT> treats
+all other names as if they were case sensitive.
+</P><P>
+
+<A NAME="IDX37"></A>
+The second and third <FONT SIZE="-1">URL</FONT>s show how hierarchically-nested
+mailboxes are referred to: by writing the components of the path,
+separated by slashes.  Note that <FONT SIZE="-1">IMAP</FONT> does not require
+particular path-separator characters for hierarchical names, and in fact
+different <FONT SIZE="-1">IMAP</FONT> servers use different separators.  However,
+<FONT SIZE="-1">IMAIL</FONT> <EM>always</EM> uses the forward-slash character as a
+separator, and translates to the server's character as
+needed.<A NAME="DOCF4" HREF="imail_fot.html#FOOT4">(4)</A>
+</P><P>
+
+<A NAME="IDX38"></A>
+Another thing to note about these examples is that <FONT SIZE="-1">IMAP</FONT>,
+unlike most file systems, allows a folder to contain messages <EM>and</EM>
+to have subfolders.  This includes the <SAMP>`inbox'</SAMP> folder, as shown
+here.  At least one server (<A HREF="http://asg.web.cmu.edu/cyrus/">Cyrus</A>) puts <EM>all</EM> subfolders for a user account under
+<SAMP>`inbox'</SAMP>, but this is not required by <FONT SIZE="-1">IMAP</FONT> and is not
+generally true.
+</P><P>
+
+<A NAME="File URLs"></A>
+<HR SIZE="6">
+<A NAME="SEC9"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC8"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC10"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC6"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC7"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC11"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 3.4.2 File URLs </H3>
+<!--docid::SEC9::-->
+<P>
+
+<A NAME="IDX39"></A>
+<A NAME="IDX40"></A>
+There is one other <FONT SIZE="-1">URL</FONT> type supported by <FONT SIZE="-1">IMAIL</FONT>: file
+<FONT SIZE="-1">URL</FONT>s.  This uses the <SAMP>`file:'</SAMP> <FONT SIZE="-1">URL</FONT>
+syntax,<A NAME="DOCF5" HREF="imail_fot.html#FOOT5">(5)</A> as
+follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>file://<VAR>hostname</VAR>/<VAR>pathname</VAR>
+</pre></td></tr></table></P><P>
+
+Here <VAR>hostname</VAR> refers to the host on which the file (folder)
+resides.  Since <FONT SIZE="-1">IMAIL</FONT> supports only files on the local file
+system, <VAR>hostname</VAR> must be <SAMP>`localhost'</SAMP>; it may also be omitted,
+as in
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>file:///<VAR>pathname</VAR>
+</pre></td></tr></table></P><P>
+
+<FONT SIZE="-1">IMAIL</FONT> also supports a non-standard abbreviation:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>file:/<VAR>pathname</VAR>
+</pre></td></tr></table></P><P>
+
+As specified by the <FONT SIZE="-1">URL</FONT> standard, <VAR>pathname</VAR> is a
+slash-separated sequence of path components, where unusual characters
+appearing in the components, such as the space character, are specially
+encoded.  However, <FONT SIZE="-1">IMAIL</FONT> will accept nearly any character in a
+component, and encode it if required; with few exceptions you can type
+any pathname without encoding.  <FONT SIZE="-1">IMAIL</FONT> always displays
+<FONT SIZE="-1">URL</FONT>s with proper encoding.
+</P><P>
+
+In practice, this means that most unix filenames are written verbatim,
+with exceptions for special characters, and with the leading slash
+omitted.  However, <FONT SIZE="-1">DOS</FONT>-style filenames, as used by Windows and
+OS/2, must be specially rewritten to conform to this style.
+</P><P>
+
+The rewriting rules for <FONT SIZE="-1">DOS</FONT> file <FONT SIZE="-1">URL</FONT>s are not
+specified by the standard, so consequently <FONT SIZE="-1">IMAIL</FONT> defines its
+own rules for this encoding, as follows.  A <FONT SIZE="-1">DOS</FONT> filename is
+encoded by replacing all of the backslash characters with forward-slash
+characters, and by encoding unusual characters in the path components.
+Finally, the drive letter is prefixed to the path with an additional
+forward-slash separator.  So for, example, the filename
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>C:\My Documents\Mail\My Mail.rmail
+</pre></td></tr></table></P><P>
+
+becomes the <FONT SIZE="-1">URL</FONT>
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>file://localhost/C:/My%20Documents/Mail/My%20Mail.rmail
+</pre></td></tr></table></P><P>
+
+<A NAME="Container URLs"></A>
+<HR SIZE="6">
+<A NAME="SEC10"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC9"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC11"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC6"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC7"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC11"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 3.4.3 Container URLs </H3>
+<!--docid::SEC10::-->
+<P>
+
+<A NAME="IDX41"></A>
+<A NAME="IDX42"></A>
+<FONT SIZE="-1">IMAIL</FONT> also uses <FONT SIZE="-1">URL</FONT>s to refer to containers.  The
+notation used for a container is what you would expect: take a folder
+<FONT SIZE="-1">URL</FONT> and drop everything after the rightmost slash.  For
+example, the folder <FONT SIZE="-1">URL</FONT>
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>imap://localhost/inbox/sysadmin/equipment
+</pre></td></tr></table></P><P>
+
+has the corresponding container <FONT SIZE="-1">URL</FONT>
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>imap://localhost/inbox/sysadmin/
+</pre></td></tr></table></P><P>
+
+Note that this is different from the <FONT SIZE="-1">URL</FONT> for the
+<CODE>sysadmin</CODE> folder:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>imap://localhost/inbox/sysadmin
+</pre></td></tr></table></P><P>
+
+<A NAME="Server Connections"></A>
+<HR SIZE="6">
+<A NAME="SEC11"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC10"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC7"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC3"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 3.5 Server Connections </H2>
+<!--docid::SEC11::-->
+<P>
+
+<A NAME="IDX43"></A>
+Unlike a file folder, in which the folder's contents are always
+available, access to an <FONT SIZE="-1">IMAP</FONT> folder requires an active network
+connection to the <FONT SIZE="-1">IMAP</FONT> server.  This adds an additional layer
+of complexity to the mail-reading process, which is reflected in the
+<EM>connection state</EM> of an <FONT SIZE="-1">IMAP</FONT> folder.
+</P><P>
+
+<A NAME="IDX44"></A>
+<A NAME="IDX45"></A>
+<A NAME="IDX46"></A>
+<A NAME="IDX47"></A>
+<A NAME="IDX48"></A>
+An <FONT SIZE="-1">IMAP</FONT> folder can be in one of two states: <EM>online</EM>,
+meaning that there is an established network connection between
+<FONT SIZE="-1">IMAIL</FONT> and the <FONT SIZE="-1">IMAP</FONT> server, and <EM>offline</EM> when
+there is not.  <FONT SIZE="-1">IMAIL</FONT> is, at present, a very simple
+<FONT SIZE="-1">IMAP</FONT> mail reader: it must be online to read and manipulate
+mail messages.  Mail readers that have this property are said to operate
+in <EM>online mode</EM>.<A NAME="DOCF6" HREF="imail_fot.html#FOOT6">(6)</A> Do not confuse the online <EM>state</EM> with online <EM>mode</EM>.
+When we refer to online or offline in this document, it always means the
+corresponding <EM>state</EM>.
+</P><P>
+
+When an <FONT SIZE="-1">IMAP</FONT> folder is selected in an <FONT SIZE="-1">IMAIL</FONT> buffer,
+the modeline for that buffer shows either <SAMP>`online'</SAMP> or
+<SAMP>`offline'</SAMP> to indicate the folder's connection state.  Normally, an
+<FONT SIZE="-1">IMAP</FONT> folder goes online when it is first selected, and stays
+online indefinitely until it is explicitly
+disconnected.<A NAME="DOCF7" HREF="imail_fot.html#FOOT7">(7)</A> Commands that break the connection
+are explicitly pointed out in their descriptions below; most other
+commands will force an <FONT SIZE="-1">IMAP</FONT> folder into the online state if it
+is offline.
+</P><P>
+
+<A NAME="Commands"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC7"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_4.html#SEC12"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

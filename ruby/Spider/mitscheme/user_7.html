@@ -1,0 +1,215 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme User's Manual: GNU Emacs Interface</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme User's Manual: GNU Emacs Interface">
+<META NAME="keywords" CONTENT="MIT Scheme User's Manual: GNU Emacs Interface">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC58"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC57"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC59"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC53"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC59"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 6. GNU Emacs Interface </H1>
+<!--docid::SEC58::-->
+<P>
+
+There is an interface library, called <TT>`xscheme'</TT>, distributed with
+MIT Scheme and GNU Emacs, which facilitates running Scheme as a
+subprocess of Emacs.  If you wish to use this interface, please install
+the version of <TT>`xscheme.el'</TT> that comes with MIT Scheme, as it is
+guaranteed to be correct for your version of Scheme.
+</P><P>
+
+This interface works under unix only, because it requires unix signals
+for its operation.  Porting it to either OS/2 or Windows would require
+reimplementing the interface to eliminate the use of signals.  We have
+no plans to do this.
+</P><P>
+
+<A NAME="IDX306"></A>
+<A NAME="IDX307"></A>
+To invoke Scheme from Emacs, load the <TT>`xscheme'</TT> library, then use
+<KBD>M-x run-scheme</KBD>.  You may give <CODE>run-scheme</CODE> a prefix argument,
+in which case it will allow you to edit the command line that is used to
+invoke Scheme.  <EM>Do not</EM> remove the <CODE>-emacs</CODE> option!
+</P><P>
+
+<EM>Note carefully:</EM> In Emacs 19 and later, the <CODE>run-scheme</CODE>
+command exists, but is different from the one described here!  In order
+to get this interface, you must load the <TT>`xscheme'</TT> library before
+executing <CODE>run-scheme</CODE>.
+</P><P>
+
+<A NAME="IDX308"></A>
+Scheme will be started up as a subprocess in a buffer called
+<SAMP>`*scheme*'</SAMP>.  This buffer will be in <CODE>scheme-interaction-mode</CODE>
+and all output from the Scheme process will go there.  The mode line for
+the <SAMP>`*scheme*'</SAMP> buffer will have this form:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>--**-*scheme*: 1 [Evaluator]           (Scheme Interaction: input)------
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX309"></A>
+The first field, showing <SAMP>`1'</SAMP> in this example, is the level number.
+</P><P>
+
+The second field, showing <SAMP>`[Evaluator]'</SAMP> in this example, describes
+the type of REPL that is running.  Other values include:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>[Debugger]
+[Where]
+</pre></td></tr></table></P><P>
+
+The <EM>mode</EM> after <SAMP>`Scheme Interaction'</SAMP> is one of:
+</P><P>
+
+<DL COMPACT>
+<DT><SAMP>`input'</SAMP>
+<DD>Scheme is waiting for input.
+<P>
+
+<DT><SAMP>`run'</SAMP>
+<DD>Scheme is running an evaluation.
+<P>
+
+<DT><SAMP>`gc'</SAMP>
+<DD>Scheme is garbage collecting.
+</DL>
+<P>
+
+<A NAME="IDX310"></A>
+When <TT>`xscheme'</TT> is loaded, <CODE>scheme-mode</CODE> is extended to include
+commands for evaluating expressions (do <KBD>C-h m</KBD> in any
+<CODE>scheme-mode</CODE> buffer for the most up-to-date information):
+</P><P>
+
+<DL COMPACT>
+<DT><KBD>M-o</KBD>
+<DD><A NAME="IDX311"></A>
+<A NAME="IDX312"></A>
+Evaluates the current buffer (<CODE>xscheme-send-buffer</CODE>).
+<P>
+
+<DT><KBD>M-z</KBD>
+<DD><A NAME="IDX313"></A>
+<A NAME="IDX314"></A>
+Evaluates the current definition (<CODE>xscheme-send-definition</CODE>).  This
+is also bound to <KBD>C-M-x</KBD>.
+<P>
+
+<DT><KBD>C-M-z</KBD>
+<DD><A NAME="IDX315"></A>
+<A NAME="IDX316"></A>
+Evaluates the current region (<CODE>xscheme-send-region</CODE>).
+<P>
+
+<DT><KBD>C-x C-e</KBD>
+<DD><A NAME="IDX317"></A>
+<A NAME="IDX318"></A>
+Evaluates the expression to the left of point<BR>
+(<CODE>xscheme-send-previous-expression</CODE>).  This is also bound to
+<KBD>M-<KBD>RET</KBD></KBD>.
+<P>
+
+<DT><KBD>C-c C-s</KBD>
+<DD><A NAME="IDX319"></A>
+<A NAME="IDX320"></A>
+Selects the <SAMP>`*scheme*'</SAMP> buffer and places you at its end
+(<CODE>xscheme-select-process-buffer</CODE>).
+<P>
+
+<DT><KBD>C-c C-y</KBD>
+<DD><A NAME="IDX321"></A>
+<A NAME="IDX322"></A>
+Yanks the most recently evaluated expression, placing it at point
+(<CODE>xscheme-yank-previous-send</CODE>).  This works only in the
+<SAMP>`*scheme*'</SAMP> buffer.
+</DL>
+<P>
+
+The following commands provide interrupt capability:
+</P><P>
+
+<DL COMPACT>
+<DT><KBD>C-c C-c</KBD>
+<DD><A NAME="IDX323"></A>
+<A NAME="IDX324"></A>
+Like typing <KBD>C-g</KBD> when running Scheme without Emacs.<BR>
+(<CODE>xscheme-send-control-g-interrupt</CODE>)
+<P>
+
+<DT><KBD>C-c C-x</KBD>
+<DD><A NAME="IDX325"></A>
+<A NAME="IDX326"></A>
+Like typing <KBD>C-c C-x</KBD> when running Scheme without Emacs.<BR>
+(<CODE>xscheme-send-control-x-interrupt</CODE>)
+<P>
+
+<DT><KBD>C-c C-u</KBD>
+<DD><A NAME="IDX327"></A>
+<A NAME="IDX328"></A>
+Like typing <KBD>C-c C-u</KBD> when running Scheme without Emacs.<BR>
+(<CODE>xscheme-send-control-u-interrupt</CODE>)
+<P>
+
+<DT><KBD>C-c C-b</KBD>
+<DD><A NAME="IDX329"></A>
+<A NAME="IDX330"></A>
+Like typing <KBD>C-c C-b</KBD> when running Scheme without Emacs.<BR>
+(<CODE>xscheme-send-breakpoint-interrupt</CODE>)
+<P>
+
+<DT><KBD>C-c C-p</KBD>
+<DD><A NAME="IDX331"></A>
+<A NAME="IDX332"></A>
+Like evaluating <CODE>(continue)</CODE>.  (<CODE>xscheme-send-proceed</CODE>)
+</DL>
+<P>
+
+<A NAME="Edwin"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC53"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_8.html#SEC59"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

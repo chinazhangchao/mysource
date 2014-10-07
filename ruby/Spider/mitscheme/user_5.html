@@ -1,0 +1,1414 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme User's Manual: Compiling Programs</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme User's Manual: Compiling Programs">
+<META NAME="keywords" CONTENT="MIT Scheme User's Manual: Compiling Programs">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC33"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC32"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC34"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC53"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 4. Compiling Programs </H1>
+<!--docid::SEC33::-->
+<P>
+
+Note: the procedures described in this section are only available when
+the <CODE>-compiler</CODE> command-line option is specified.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_5.html#SEC34">4.1 Compilation Procedures</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_5.html#SEC35">4.2 Declarations</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_5.html#SEC41">4.3 Efficiency Tips</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Compilation Procedures"></A>
+<HR SIZE="6">
+<A NAME="SEC34"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC33"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC35"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC33"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC33"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC53"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.1 Compilation Procedures </H2>
+<!--docid::SEC34::-->
+<P>
+
+<A NAME="IDX200"></A>
+<DL>
+<DT><U>procedure+:</U> <B>cf</B> <I>filename [destination]</I>
+<DD>This is the program that transforms a source-code file into native-code
+binary form.  If <VAR>destination</VAR> is not given, as in
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(cf "foo")
+</pre></td></tr></table></P><P>
+
+<CODE>cf</CODE> compiles the file <TT>`foo.scm'</TT>, producing the file
+<TT>`foo.com'</TT> (incidentally it will also produce <TT>`foo.bin'</TT>,
+<TT>`foo.bci'</TT>, and possibly <TT>`foo.ext'</TT>).  If you later evaluate
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(load "foo")
+</pre></td></tr></table></P><P>
+
+<TT>`foo.com'</TT> will be loaded rather than <TT>`foo.scm'</TT>.
+</P><P>
+
+If <VAR>destination</VAR> is given, it says where the output files should go.
+If this argument is a directory, they go in that directory, e.g.:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(cf "foo" "../bar/")
+</pre></td></tr></table></P><P>
+
+will take <TT>`foo.scm'</TT> and generate the file <TT>`../bar/foo.com'</TT>.
+If <VAR>destination</VAR> is not a directory, it is the root name of the
+output:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(cf "foo" "bar")
+</pre></td></tr></table></P><P>
+
+takes <TT>`foo.scm'</TT> and generates <TT>`bar.com'</TT>.
+</DL>
+</P><P>
+
+About the <TT>`.bci'</TT> files: these files contain the debugging
+information that Scheme uses when you call <CODE>debug</CODE> to examine
+compiled code.  When you load a <TT>`.com'</TT> file, Scheme remembers where
+it was loaded from, and when the debugger (or <CODE>pp</CODE>) looks at the
+compiled code from that file, it attempts to find the <TT>`.bci'</TT> file
+in the same directory from which the <TT>`.com'</TT> file was loaded.  Thus
+it is a good idea to leave these files together.
+</P><P>
+
+<TT>`.bci'</TT> files are stored in a compressed format.  The debugger has
+to uncompress the files when it looks at them, and on a slow machine
+this can take a noticeable time.  The system takes steps to reduce the
+impact of this behavior: debugging information is cached in memory, and
+uncompressed versions of <TT>`.bci'</TT> files are kept around.  The default
+behavior is that a temporary file is created and the <TT>`.bci'</TT> file is
+uncompressed into it.  The temporary file is kept around for a while
+afterwards, and during that time if the uncompressed <TT>`.bci'</TT> file is
+needed the temporary file is used.  Each such reference updates an
+`access time' that is associated with the temporary file.  The garbage
+collector checks the access times of all such temporary files, and
+deletes any that have not been accessed in five minutes or more.  All of
+the temporaries are deleted automatically when the Scheme process is
+killed.
+</P><P>
+
+Two other behaviors are available.  One of them uncompresses the
+<TT>`.bci'</TT> file each time it is referenced, and the other uncompresses
+the <TT>`.bci'</TT> file and writes it back out as a <TT>`.bif'</TT> file.  The
+<TT>`.bif'</TT> file remains after Scheme exits.  The time interval and the
+behavior are controlled by the following variables.
+</P><P>
+
+<A NAME="IDX201"></A>
+<DL>
+<DT><U>variable+:</U> <B>*save-uncompressed-files?*</B>
+<DD>This variable affects what happens when <TT>`.bci'</TT> files are
+uncompressed.  It allows a trade-off between performance and disk space.
+There are three possible values:
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>#f</CODE>
+<DD>The uncompressed versions of <TT>`.bci'</TT> files are never saved.  Each
+time the information is needed the <TT>`.bci'</TT> file is uncompressed.
+This option requires the minimum amount of disk space and is the
+slowest.
+<P>
+
+<DT><CODE>automatic</CODE>
+<DD>Uncompressed versions of <TT>`.bci'</TT> files are kept as temporary files.
+The temporary files are deleted when Scheme exits, or if they have not
+been used for a while.  This is the default.
+<P>
+
+<DT><CODE>#t</CODE>
+<DD>The <TT>`.bci'</TT> files are uncompressed to permanent <TT>`.bif'</TT> files.
+These files remain on disk after Scheme exits, and are rather large -
+about twice the size of the corresponding <TT>`.bci'</TT> files.  If you
+choose this option and you are running out of disk space you may delete
+the <TT>`.bif'</TT> files.  They will be regenerated as needed.
+</DL>
+</DL>
+<P>
+
+<A NAME="IDX202"></A>
+<DL>
+<DT><U>variable+:</U> <B>*uncompressed-file-lifetime*</B>
+<DD>The minimum length of time that a temporary uncompressed version of
+a <TT>`.bci'</TT> file will stay on disk after it is last used.
+The time is in milliseconds; the default is <SAMP>`300000'</SAMP> (five
+minutes).
+</DL>
+</P><P>
+
+<A NAME="IDX203"></A>
+<DL>
+<DT><U>variable+:</U> <B>load-debugging-info-on-demand?</B>
+<DD>If this variable is <TT>`#f'</TT>, then printing a compiled procedure
+will print the procedure's name only if the debugging information for
+that procedure is already loaded.  Otherwise, it will force
+loading of the debugging information.
+The default value is <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX204"></A>
+<DL>
+<DT><U>procedure+:</U> <B>sf</B> <I>filename [destination]</I>
+<DD><CODE>sf</CODE> is the program that transforms a source-code file into binary
+SCode form; it is used on machines that do not support native-code
+compilation.  It performs numerous optimizations that can make your
+programs run considerably faster than unoptimized interpreted code.
+Also, the binary files that it generates load very quickly compared to
+source-code files.
+</P><P>
+
+The simplest way to use <CODE>sf</CODE> is just to say:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(sf <VAR>filename</VAR>)
+</pre></td></tr></table></P><P>
+
+This will cause your file to be transformed, and the resulting binary
+file to be written out with the same name, but with pathname type
+<CODE>"bin"</CODE>.  If you do not specify a pathname type on the input file,
+<CODE>"scm"</CODE> is assumed.
+</P><P>
+
+Like <CODE>load</CODE>, the first argument to <CODE>sf</CODE> may be a list of
+filenames rather than a single filename.
+</P><P>
+
+<CODE>sf</CODE> takes an optional second argument, which is the filename of
+the output file.  If this argument is a directory, then the output file
+has its normal name but is put in that directory instead.
+</DL>
+</P><P>
+
+<A NAME="Declarations"></A>
+<HR SIZE="6">
+<A NAME="SEC35"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC34"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC36"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC33"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC33"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC41"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.2 Declarations </H2>
+<!--docid::SEC35::-->
+<P>
+
+Several declarations can be added to your programs to help <CODE>cf</CODE> and
+<CODE>sf</CODE> make them more efficient.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_5.html#SEC36">4.2.1 Standard Names</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_5.html#SEC37">4.2.2 In-line Coding</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_5.html#SEC39">4.2.3 Operator Replacement</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_5.html#SEC40">4.2.4 Operator Reduction</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Standard Names"></A>
+<HR SIZE="6">
+<A NAME="SEC36"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC35"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC37"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC34"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC35"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC41"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 4.2.1 Standard Names </H3>
+<!--docid::SEC36::-->
+<P>
+
+Normally, all files have a line
+</P><P>
+
+<A NAME="IDX205"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(declare (usual-integrations))
+</pre></td></tr></table></P><P>
+
+near their beginning, which tells the compiler that free variables whose
+names are defined in <CODE>system-global-environment</CODE> will not be
+shadowed by other definitions when the program is loaded.  If you
+redefine some global name in your code, for example <CODE>car</CODE>,
+<CODE>cdr</CODE>, and <CODE>cons</CODE>, you should indicate it in the declaration:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(declare (usual-integrations car cdr cons))
+</pre></td></tr></table></P><P>
+
+You can obtain an alphabetically-sorted list of the names that the
+<CODE>usual-integrations</CODE> declaration affects by evaluating the
+following expression:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(eval '(sort (append usual-integrations/constant-names
+                     usual-integrations/expansion-names)
+             (lambda (x y)
+               (string&#60;=? (symbol-&#62;string x)
+                          (symbol-&#62;string y))))
+      (-&#62;environment '(scode-optimizer)))
+</pre></td></tr></table></P><P>
+
+<A NAME="In-line Coding"></A>
+<HR SIZE="6">
+<A NAME="SEC37"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC36"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC39"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC34"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC35"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC41"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 4.2.2 In-line Coding </H3>
+<!--docid::SEC37::-->
+<P>
+
+Another useful facility is the ability to in-line code procedure
+definitions.  In fact, the compiler will perform full beta conversion,
+with automatic renaming, if you request it.  Here are the relevant
+declarations:
+</P><P>
+
+<A NAME="IDX206"></A>
+<DL>
+<DT><U>declaration+:</U> <B>integrate</B> <I>name <small>...</small></I>
+<DD>The variables <VAR>name</VAR>s must be defined in the same file as this
+declaration.  Any reference to one of the named variables that appears
+in the same block as the declaration, or one of its descendant blocks,
+will be replaced by the corresponding binding's value expression.
+</DL>
+</P><P>
+
+<A NAME="IDX207"></A>
+<DL>
+<DT><U>declaration+:</U> <B>integrate-operator</B> <I>name <small>...</small></I>
+<DD>Similar to the <CODE>integrate</CODE> declaration, except that it only
+substitutes for references that appear in the operator position of a
+combination.  All other references are ignored.
+</DL>
+</P><P>
+
+<A NAME="IDX208"></A>
+<DL>
+<DT><U>declaration+:</U> <B>integrate-external</B> <I>filename</I>
+<DD>Causes the compiler to use the top-level integrations provided by
+<VAR>filename</VAR>.  <VAR>filename</VAR> should not specify a file type, and the
+source-code file that it names must have been previously processed by
+the compiler.
+</P><P>
+
+If <VAR>filename</VAR> is a relative filename (the normal case), it is
+interpreted as being relative to the file in which the declaration
+appears.  Thus if the declaration appears in file <TT>`/usr/cph/foo.scm'</TT>,
+then the compiler looks for a file called <TT>`/usr/cph/<VAR>filename</VAR>.ext'</TT>.
+</P><P>
+
+Note: When the compiler finds top-level integrations, it collects them
+and outputs them into an auxiliary file with extension <TT>`.ext'</TT>.
+This <TT>`.ext'</TT> file is what the <CODE>integrate-external</CODE> declaration
+refers to.
+</DL>
+</P><P>
+
+<A NAME="IDX209"></A>
+<A NAME="IDX210"></A>
+Note that the most common use of this facility, in-line coding of
+procedure definitions, requires a somewhat complicated use of these
+declarations.  Because this is so common, there is a special form,
+<CODE>define-integrable</CODE>, which is like <CODE>define</CODE> but performs the
+appropriate declarations.  For example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-integrable (foo-bar foo bar)
+  (vector-ref (vector-ref foo bar) 3))
+</pre></td></tr></table></P><P>
+
+Here is how you do the same thing without this special form: there
+should be an <CODE>integrate-operator</CODE> declaration for the procedure's
+name, and (internal to the procedure's definition) an <CODE>integrate</CODE>
+declaration for each of the procedure's parameters, like this:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(declare (integrate-operator foo-bar))
+
+(define foo-bar
+  (lambda (foo bar)
+    (declare (integrate foo bar))
+    (vector-ref (vector-ref foo bar) 3)))
+</pre></td></tr></table></P><P>
+
+The reason for this complication is as follows: the
+<CODE>integrate-operator</CODE> declaration finds all the references to
+<CODE>foo-bar</CODE> and replaces them with the lambda expression from the
+definition.  Then, the <CODE>integrate</CODE> declarations take effect because
+the combination in which the reference to <CODE>foo-bar</CODE> occurred
+supplies code that is substituted throughout the body of the procedure
+definition.  For example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(foo-bar (car baz) (cdr baz))
+</pre></td></tr></table></P><P>
+
+First use the <CODE>integrate-operator</CODE> declaration:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>((lambda (foo bar)
+   (declare (integrate foo bar))
+   (vector-ref (vector-ref foo bar) 3))
+ (car baz)
+ (cdr baz))
+</pre></td></tr></table></P><P>
+
+Next use the internal <CODE>integrate</CODE> declaration:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>((lambda (foo bar)
+   (vector-ref (vector-ref (car baz) (cdr baz)) 3))
+ (car baz)
+ (cdr baz))
+</pre></td></tr></table></P><P>
+
+Next notice that the variables <CODE>foo</CODE> and <CODE>bar</CODE> are not used,
+and eliminate them:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>((lambda ()
+   (vector-ref (vector-ref (car baz) (cdr baz)) 3)))
+</pre></td></tr></table></P><P>
+
+Finally, remove the <CODE>((lambda () <small>...</small>))</CODE> to produce
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(vector-ref (vector-ref (car baz) (cdr baz)) 3)
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC38"></A>
+<H4> Useful tip </H4>
+<!--docid::SEC38::-->
+To see the effect of integration declarations (and of macros) on a
+source file, pretty-print the <TT>`.bin'</TT> file like this (be prepared
+for a lot of output).
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(sf "foo.scm")
+(pp (fasload "foo.bin"))
+</pre></td></tr></table></P><P>
+
+<A NAME="Replacement of Operators"></A>
+<HR SIZE="6">
+<A NAME="SEC39"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC37"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC40"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC34"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC35"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC41"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 4.2.3 Operator Replacement </H3>
+<!--docid::SEC39::-->
+<P>
+
+The <CODE>replace-operator</CODE> declaration is provided to inform the
+compiler that certain operators may be replaced by other operators
+depending on the number of arguments.
+For example:
+</P><P>
+
+Declaration:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(declare (replace-operator (map (2 map-2) (3 map-3))))
+</pre></td></tr></table></P><P>
+
+Replacements:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(map <VAR>f</VAR> <VAR>x</VAR> <VAR>y</VAR> <VAR>z</VAR>) ==> (map <VAR>f</VAR> <VAR>x</VAR> <VAR>y</VAR> <VAR>z</VAR>)
+(map <VAR>f</VAR> <VAR>x</VAR> <VAR>y</VAR>) ==> (map-3 <VAR>f</VAR> <VAR>x</VAR> <VAR>y</VAR>)
+(map <VAR>f</VAR> <VAR>x</VAR>) ==> (map-2 <VAR>f</VAR> <VAR>x</VAR>)
+(map <VAR>f</VAR>) ==> (map <VAR>f</VAR>)
+(map) ==> (map)
+</pre></td></tr></table></P><P>
+
+Presumably <CODE>map-2</CODE> and <CODE>map-3</CODE> are efficient versions of
+<CODE>map</CODE> that are written for exactly two and three arguments
+respectively.  All the other cases are not expanded but are handled by the
+original, general <CODE>map</CODE> procedure, which is less efficient because
+it must handle a variable number of arguments.
+</P><P>
+
+<A NAME="IDX211"></A>
+<DL>
+<DT><U>declaration+:</U> <B>replace-operator</B> <I>name ...</I>
+<DD></P><P>
+
+The syntax of this declaration is
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(replace-operator
+  (<VAR>name</VAR>
+    (<VAR>nargs1</VAR> <VAR>value1</VAR>)
+    (<VAR>nargs2</VAR> <VAR>value2</VAR>)
+    ...))
+</pre></td></tr></table></P><P>
+
+where
+</P><P>
+
+<UL>
+<LI>
+<VAR>name</VAR> is a symbol.
+<P>
+
+<LI>
+<VAR>nargs1</VAR>, <VAR>nargs2</VAR> etc. are non-negative integers, or one of the
+following symbols:  <CODE>any</CODE>, <CODE>else</CODE> or <CODE>otherwise</CODE>.
+<P>
+
+<LI>
+<VAR>value1</VAR>, <VAR>value2</VAR> etc. are simple
+expressions in one of these forms:
+<P>
+
+<DL COMPACT>
+<DT><CODE>'<VAR>constant</VAR></CODE>
+<DD>A constant.
+<P>
+
+<DT><CODE><VAR>variable</VAR></CODE>
+<DD>A variable.
+<P>
+
+<DT><CODE>(primitive <VAR>primitive-name</VAR> [<VAR>arity</VAR>])</CODE>
+<DD>The primitive procedure named <VAR>primitive-name</VAR>.  The optional
+element <VAR>arity</VAR>, a non-negative integer, specifies the number of
+arguments that the primitive accepts.
+<P>
+
+<DT><CODE>(global <VAR>var</VAR>)</CODE>
+<DD>A global variable.
+</DL>
+</UL>
+<P>
+
+The meanings of these fields are:
+</P><P>
+
+<UL>
+<LI>
+<VAR>name</VAR> is the name of the operator to be reduced.  If is is not
+shadowed (for example, by a let) then it may be replaced according to
+the following rules.
+<P>
+
+<LI>
+If the operator has <VAR>nargsN</VAR> arguments then it is replaced with a
+call to <VAR>valueN</VAR> with the same arguments.
+<P>
+
+<LI>
+If the number of arguments is not listed, and one of the <VAR>nargsN</VAR> is
+<CODE>any</CODE>, <CODE>else</CODE> or <CODE>otherwise</CODE>, then the operation is
+replaced with a call to the corresponding <VAR>valueN</VAR>.
+Only one of the <VAR>nargsN</VAR> may be of this form.
+<P>
+
+<LI>
+If the number of arguments is not listed and none of the <VAR>nargsN</VAR> is
+<CODE>any</CODE>, <CODE>else</CODE> or <CODE>otherwise</CODE>, then the operation is not
+replaced.
+</UL>
+</DL>
+<P>
+
+<A NAME="Reduction of Operators"></A>
+<HR SIZE="6">
+<A NAME="SEC40"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC39"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC41"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC34"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC35"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC41"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 4.2.4 Operator Reduction </H3>
+<!--docid::SEC40::-->
+<P>
+
+<A NAME="IDX212"></A>
+The <CODE>reduce-operator</CODE> declaration is provided to inform the
+compiler that certain names are n-ary versions of binary operators.
+Here are some examples:
+</P><P>
+
+Declaration:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(declare (reduce-operator (cons* cons)))
+</pre></td></tr></table></P><P>
+
+Replacements:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(cons* <VAR>x</VAR> <VAR>y</VAR> <VAR>z</VAR> <VAR>w</VAR>) ==> (cons <VAR>x</VAR> (cons <VAR>y</VAR> (cons <VAR>z</VAR> <VAR>w</VAR>))),
+(cons* <VAR>x</VAR> <VAR>y</VAR>) ==> (cons <VAR>x</VAR> <VAR>y</VAR>)
+(cons* <VAR>x</VAR>) ==> <VAR>x</VAR>
+(cons*) error--> too few arguments
+</pre></td></tr></table></P><P>
+
+Declaration:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(declare (reduce-operator (list cons (null-value '() any))))
+</pre></td></tr></table></P><P>
+
+Replacements:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(list <VAR>x</VAR> <VAR>y</VAR> <VAR>z</VAR> <VAR>w</VAR>) ==> (cons <VAR>x</VAR> (cons <VAR>y</VAR> (cons <VAR>z</VAR> (cons <VAR>w</VAR> '()))))
+(list <VAR>x</VAR> <VAR>y</VAR>) ==> (cons <VAR>x</VAR> (cons <VAR>y</VAR> '()))
+(list <VAR>x</VAR>) ==> (cons <VAR>x</VAR> '())
+(list) ==> '()
+</pre></td></tr></table></P><P>
+
+Declaration:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(declare (reduce-operator (- %- (null-value 0 single) (group left))))
+</pre></td></tr></table></P><P>
+
+Replacements:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(- <VAR>x</VAR> <VAR>y</VAR> <VAR>z</VAR> <VAR>w</VAR>) ==> (%- (%- (%- <VAR>x</VAR> <VAR>y</VAR>) <VAR>z</VAR>) <VAR>w</VAR>)
+(- <VAR>x</VAR> <VAR>y</VAR>) ==> (%- <VAR>x</VAR> <VAR>y</VAR>)
+(- <VAR>x</VAR>) ==> (%- 0 <VAR>x</VAR>)
+(-) ==> 0
+</pre></td></tr></table></P><P>
+
+Declaration:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(declare (reduce-operator (+ %+ (null-value 0 none) (group right))))
+</pre></td></tr></table></P><P>
+
+Replacements:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(+ <VAR>x</VAR> <VAR>y</VAR> <VAR>z</VAR> <VAR>w</VAR>) ==> (%+ <VAR>x</VAR> (%+ <VAR>y</VAR> (%+ <VAR>z</VAR> <VAR>w</VAR>)))
+(+ <VAR>x</VAR> <VAR>y</VAR>) ==> (%+ <VAR>x</VAR> <VAR>y</VAR>)
+(+ <VAR>x</VAR>) ==> <VAR>x</VAR>
+(+) ==> 0
+</pre></td></tr></table></P><P>
+
+Note: This declaration does not cause an appropriate definition of
+<CODE>%+</CODE> (in the last example) to appear in your code.  It merely
+informs the compiler that certain optimizations can be performed on
+calls to <CODE>+</CODE> by replacing them with calls to <CODE>%+</CODE>.  You should
+provide a definition of <CODE>%+</CODE> as well, although it is not required.
+</P><P>
+
+Declaration:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(declare (reduce-operator (apply (primitive cons)
+                                 (group right)
+                                 (wrapper (global apply) 1))))
+</pre></td></tr></table></P><P>
+
+Replacements:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(apply <VAR>f</VAR> <VAR>x</VAR> <VAR>y</VAR> <VAR>z</VAR> <VAR>w</VAR>)
+   ==> ((access apply ()) <VAR>f</VAR> (cons <VAR>x</VAR> (cons <VAR>y</VAR> (cons <VAR>z</VAR> <VAR>w</VAR>))))
+(apply <VAR>f</VAR> <VAR>x</VAR> <VAR>y</VAR>)
+   ==> ((access apply ()) <VAR>f</VAR> (cons <VAR>x</VAR> <VAR>y</VAR>))
+(apply <VAR>f</VAR> <VAR>x</VAR>) ==> (apply <VAR>f</VAR> <VAR>x</VAR>)
+(apply <VAR>f</VAR>) ==> (apply <VAR>f</VAR>)
+(apply) ==> (apply)
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX213"></A>
+<DL>
+<DT><U>declaration+:</U> <B>reduce-operator</B> <I>name ...</I>
+<DD>The general format of the declaration is (brackets denote optional
+elements):
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(reduce-operator
+  (<VAR>name</VAR>
+    <VAR>binop</VAR>
+    [(group <VAR>ordering</VAR>)]
+    [(null-value <VAR>value</VAR> <VAR>null-option</VAR>)]
+    [(singleton <VAR>unop</VAR>)]
+    [(wrapper <VAR>wrap</VAR> [n])]
+    [(maximum <VAR>m</VAR>)]
+  ))
+</pre></td></tr></table></P><P>
+
+where
+</P><P>
+
+<UL>
+<LI>
+<VAR>n</VAR> and <VAR>m</VAR> are non-negative integers.
+<P>
+
+<LI>
+<VAR>name</VAR> is a symbol.
+<P>
+
+<LI>
+<VAR>binop</VAR>, <VAR>value</VAR>, <VAR>unop</VAR>, and <VAR>wrap</VAR> are simple
+expressions in one of these forms:
+<P>
+
+<DL COMPACT>
+<DT><CODE>'<VAR>constant</VAR></CODE>
+<DD>A constant.
+<P>
+
+<DT><CODE><VAR>variable</VAR></CODE>
+<DD>A variable.
+<P>
+
+<DT><CODE>(primitive <VAR>primitive-name</VAR> [<VAR>arity</VAR>])</CODE>
+<DD>The primitive procedure named <VAR>primitive-name</VAR>.  The optional
+element <VAR>arity</VAR> specifies the number of arguments that the primitive
+accepts.
+<P>
+
+<DT><CODE>(global <VAR>var</VAR>)</CODE>
+<DD>A global variable.
+</DL>
+<P>
+
+<LI>
+<VAR>null-option</VAR> is either <CODE>always</CODE>, <CODE>any</CODE>, <CODE>one</CODE>,
+<CODE>single</CODE>, <CODE>none</CODE>, or <CODE>empty</CODE>.
+<P>
+
+<LI>
+<VAR>ordering</VAR> is either <CODE>left</CODE>, <CODE>right</CODE>, or
+<CODE>associative</CODE>.
+</UL>
+<P>
+
+The meaning of these fields is:
+</P><P>
+
+<UL>
+<LI>
+<VAR>name</VAR> is the name of the n-ary operation to be reduced.
+<P>
+
+<LI>
+<VAR>binop</VAR> is the binary operation into which the n-ary operation is to
+be reduced.
+<P>
+
+<LI>
+The <CODE>group</CODE> option specifies whether <VAR>name</VAR> associates to the
+right or left.
+<P>
+
+<LI>
+The <CODE>null-value</CODE> option specifies a value to use in the following
+cases:
+<P>
+
+<DL COMPACT>
+<DT><CODE>none</CODE>
+<DD><DT><CODE>empty</CODE>
+<DD>When no arguments are supplied to <VAR>name</VAR>, <VAR>value</VAR> is returned.
+<P>
+
+<DT><CODE>one</CODE>
+<DD><DT><CODE>single</CODE>
+<DD>When a single argument is provided to <VAR>name</VAR>, <VAR>value</VAR> becomes
+the second argument to <VAR>binop</VAR>.
+<P>
+
+<DT><CODE>any</CODE>
+<DD><DT><CODE>always</CODE>
+<DD><VAR>binop</VAR> is used on the "last" argument, and <VAR>value</VAR> provides
+the remaining argument to <VAR>binop</VAR>.
+</DL>
+<P>
+
+In the above options, when <VAR>value</VAR> is supplied to <VAR>binop</VAR>, it is
+supplied on the left if grouping to the left, otherwise it is supplied
+on the right.
+</P><P>
+
+<LI>
+The <CODE>singleton</CODE> option specifies a function, <VAR>unop</VAR>, to be
+invoked on the single argument given.  This option supersedes the
+<CODE>null-value</CODE> option, which can only take the value <CODE>none</CODE>.
+<P>
+
+<LI>
+The <CODE>wrapper</CODE> option specifies a function, <VAR>wrap</VAR>, to be
+invoked on the result of the outermost call to <VAR>binop</VAR> after the
+expansion.
+If <VAR>n</VAR> is provided it must be a non-negative integer indicating a number
+of arguments that are transferred verbatim from the original call to
+the wrapper.  They are passed to the left of the reduction.
+<P>
+
+<LI>
+The maximum option specifies that calls with more than <VAR>m</VAR> arguments
+should not be reduced.
+</UL>
+</DL>
+<P>
+
+<A NAME="Efficiency Tips"></A>
+<HR SIZE="6">
+<A NAME="SEC41"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC40"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC42"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC35"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC33"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC53"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.3 Efficiency Tips </H2>
+<!--docid::SEC41::-->
+<P>
+
+How you write your programs can have a large impact on how efficiently the
+compiled program runs.  The most important thing to do, after choosing
+suitable data structures, is to put the following declaration near the
+beginning of the file.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(declare (usual-integrations))
+</pre></td></tr></table></P><P>
+
+Without this declaration the compiler cannot recognize any of the common
+operators and compile them efficiently.
+</P><P>
+
+The <CODE>usual-integrations</CODE> declaration is usually sufficient to get
+good quality compiled code.
+</P><P>
+
+If you really need to squeeze more performance out of your code then we
+hope that you find the following grab-bag of tips, hints and
+explanations useful.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_5.html#SEC42">4.3.1 Coding style</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_5.html#SEC46">4.3.2 Global variables</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_5.html#SEC47">4.3.3 Fixnum arithmetic</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_5.html#SEC48">4.3.4 Flonum arithmetic</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Coding style"></A>
+<HR SIZE="6">
+<A NAME="SEC42"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC41"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC46"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC35"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC41"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC53"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 4.3.1 Coding style </H3>
+<!--docid::SEC42::-->
+<P>
+
+Scheme is a rich language, in which there are usually several ways to
+say the same thing.  A <EM>coding style</EM> is a set of rules that a
+programmer uses for choosing an expressive form to use in a given
+situation.  Usually these rules are aesthetic, but sometimes there are
+efficiency issues involved; this section describes a few choices that
+have non-obvious efficiency consequences.
+</P><P>
+
+<A NAME="SEC43"></A>
+<H4> Better predicates </H4>
+<!--docid::SEC43::-->
+<P>
+
+Consider the following implementation of <CODE>map</CODE> as might be found in
+any introductory book on Scheme:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (map f lst)
+  (if (null? lst)
+      '()
+      (cons (f (car lst)) (map f (cdr lst)))))
+</pre></td></tr></table></P><P>
+
+The problem with this definition is that at the points where <CODE>car</CODE>
+and <CODE>cdr</CODE> are called we still do not know that <VAR>lst</VAR> is a pair.
+The compiler must insert a type check, or if type checks are disabled,
+the program might give wrong results.  Since one of the fundamental
+properties of <CODE>map</CODE> is that it transforms lists, we should make the
+relationship between the input pairs and the result pairs more apparent
+in the code:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (map f lst)
+  (cond ((pair? lst)
+         (cons (f (car lst)) (map f (cdr lst))))
+        ((null? lst)
+         '())
+        (else
+         (error "Not a proper list:"  lst))))
+</pre></td></tr></table></P><P>
+
+Note also that the <CODE>pair?</CODE> case comes first because we expect that
+<CODE>map</CODE> will be called on lists which have, on average, length
+greater that one.
+</P><P>
+
+<A NAME="SEC44"></A>
+<H4> Internal procedures </H4>
+<!--docid::SEC44::-->
+<P>
+
+Calls to internal procedures are faster than calls to global procedures.
+There are two things that make internal procedures faster: First, the
+procedure call is compiled to a direct jump to a known location, which
+is more efficient that jumping `via' a global binding.
+Second, there is a knock-on effect: since the compiler can see the
+internal procedure, the compiler can analyze it and possibly produce
+better code for other expressions in the body of the loop too:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (map f original-lst)
+  (let walk ((lst original-lst))
+    (cond ((pair? lst)
+           (cons (f (car lst)) (walk (cdr lst))))
+          ((null? lst)
+           '())
+          (else
+           (error "Not a proper list:"  original-lst)))))
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC45"></A>
+<H4> Internal defines </H4>
+<!--docid::SEC45::-->
+<P>
+
+Internal definitions are a useful tool for structuring larger
+procedures.  However, certain internal definitions can thwart compiler
+optimizations.  Consider the following two procedures, where
+<CODE>compute-100</CODE> is some unknown procedure that we just know returns
+<SAMP>`100'</SAMP>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (f1)
+  (define v 100)
+  (lambda () v))
+
+(define (f2)
+  (define v (compute-100))
+  (lambda () v))  
+</pre></td></tr></table></P><P>
+
+The procedure returned by <CODE>f1</CODE> will always give the same result and
+the compiler can prove this.  The procedure returned by <CODE>f2</CODE> may
+return different results, even if <CODE>f2</CODE> is only called once.
+Because of this, the compiler has to allocate a memory cell to <CODE>v</CODE>.
+How can the procedure return different results?
+</P><P>
+
+The fundamental reason is that the continuation may escape during the
+evaluation of <CODE>(compute-100)</CODE>, allowing the rest of the body of
+<CODE>f2</CODE> to be executed <EM>again</EM>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define keep)
+
+(define (compute-100)
+  (call-with-current-continuation
+   (lambda (k)
+     (set! keep k)
+     100)))
+
+(define p (f2))
+
+(p)                => 100
+(keep -999)        => p     <EM>re-define v and p</EM>
+(p)                => -999
+</pre></td></tr></table></P><P>
+
+To avoid the inefficiency introduced to handle the general case, the
+compiler must prove that the continuation cannot possibly escape.  The
+compiler knows that lambda expressions and constants do not let their
+continuations escape, so order the internal definitions so that
+definitions of the following forms come first:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define x '<EM>something</EM>)
+(define x (lambda (...) ...))
+(define (f u v) ...)
+</pre></td></tr></table></P><P>
+
+Note: The IEEE Scheme standard permits <EM>only</EM> lambda
+expressions and constants as the value of internal defines.
+Furthermore, all internal definitions must appear before any other
+expressions in the body.  Following the standard simultaneously assures
+portability and avoids the implementation inefficiencies described in
+this section.
+</P><P>
+
+<A NAME="Global variables"></A>
+<HR SIZE="6">
+<A NAME="SEC46"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC42"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC47"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC35"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC41"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC53"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 4.3.2 Global variables </H3>
+<!--docid::SEC46::-->
+<P>
+
+<A NAME="IDX214"></A>
+<A NAME="IDX215"></A>
+Compiled code usually accesses variables in top-level first-class
+environments via <EM>variable caches</EM>.  Each compiled procedure has a
+set of variable caches for the global variables that it uses.  There are
+three kinds of variable cache - read caches for getting the value of a
+variable (referencing the variable), write caches for changing the
+value, and execute caches for calling the procedure assigned to that
+variable.
+</P><P>
+
+Sometimes the variable caches contain special objects, called reference
+traps, that indicate that the operation cannot proceed normally and
+must either be completed by the system (in order to keep the caches
+coherent) or must signal an error.  For example, the assignment
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(set! newline my-better-newline)
+</pre></td></tr></table></P><P>
+
+will cause the system to go to each compiled procedure that calls
+<CODE>newline</CODE> and update its execute cache to call the new procedure.
+Obviously you want to avoid updating hundreds of execute caches in a
+critical loop.  Using <CODE>fluid-let</CODE> to temporarily redefine a
+procedure has the same inefficiency (but twice!).
+</P><P>
+
+To behave correctly in all situations, each variable reference or
+assignment must check for the reference traps.
+</P><P>
+
+Sometimes you can prove that the variable (a) will always be bound, (b)
+will never be unassigned, and (c) there will never be any compiled calls
+to that variable.  The compiler can't prove this because it assumes that
+other independently compiled files might be loaded that invalidate these
+assumptions.  If you know that these conditions hold, the following
+declarations can speed up and reduce the size of a program that uses
+global variables.
+</P><P>
+
+<A NAME="IDX216"></A>
+<DL>
+<DT><U>declaration+:</U> <B>ignore-reference-traps</B> <I>variables</I>
+<DD>This declaration tells the compiler that it need not check for
+reference-trap objects when referring to the given <VAR>variables</VAR>.
+If any of the <VAR>variables</VAR> is unbound or unassigned then a variable
+reference will yield a reference-trap object rather than signaling an
+error.  This declaration is relatively safe: the worst that can happen
+is that a reference-trap object finds its way into a data structure
+(e.g. a list) or into interpreted code, in which case it will probably
+cause some `unrelated' variable to mysteriously become unbound or
+unassigned.
+</DL>
+</P><P>
+
+<A NAME="IDX217"></A>
+<DL>
+<DT><U>declaration+:</U> <B>ignore-assignment-traps</B> <I>variables</I>
+<DD>This declaration tells the compiler that it need not check for
+reference-trap objects when assigning to the given <VAR>variables</VAR>.  An
+assignment to a variable that ignores assignment traps can cause a great
+deal of trouble.  If there is a compiled procedure call anywhere in the
+system to this variable, the execute caches will not be updated, causing
+an inconsistency between the value used for the procedure call and the
+value seen by reading the variable.  This mischief is compounded by the
+fact that the assignment can cause other assignments that were compiled
+with checks to behave this way too.
+</DL>
+</P><P>
+
+The <VAR>variables</VAR> are specified with expressions from the following
+set language:
+</P><P>
+
+<A NAME="IDX218"></A>
+<DL>
+<DT><U>variable-specification:</U> <B>set</B> <I>name ...</I>
+<DD>All of the explicitly listed names.
+</DL>
+</P><P>
+
+<A NAME="IDX219"></A>
+<DL>
+<DT><U>variable-specification:</U> <B>all</B>
+<DD><A NAME="IDX220"></A>
+<DT><U>variable-specification:</U> <B>none</B>
+<DD><A NAME="IDX221"></A>
+<DT><U>variable-specification:</U> <B>free</B>
+<DD><A NAME="IDX222"></A>
+<DT><U>variable-specification:</U> <B>bound</B>
+<DD><A NAME="IDX223"></A>
+<DT><U>variable-specification:</U> <B>assigned</B>
+<DD>These expressions name sets of variables. <CODE>all</CODE> is the set of all
+variables, <CODE>none</CODE> is the empty set, <CODE>free</CODE> is all of the
+variables bound outside the current block, <CODE>bound</CODE> is all of the
+variables bound in the current block and <CODE>assigned</CODE> is all of the
+variables for which there exists an assignment (i.e. <CODE>set!</CODE>).
+</DL>
+</P><P>
+
+<A NAME="IDX224"></A>
+<DL>
+<DT><U>variable-specification:</U> <B>union</B> <I>set1 set2</I>
+<DD><A NAME="IDX225"></A>
+<DT><U>variable-specification:</U> <B>intersection</B> <I>set1 set2</I>
+<DD><A NAME="IDX226"></A>
+<DT><U>variable-specification:</U> <B>difference</B> <I>set1 set2</I>
+<DD></P><P>
+
+For example, to ignore reference traps on all the variables except
+<VAR>x</VAR>, <VAR>y</VAR> and any variable that is assigned to
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(declare (ignore-reference-traps
+          (difference all (union assigned (set x y)))))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Fixnum arithmetic"></A>
+<HR SIZE="6">
+<A NAME="SEC47"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC46"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC48"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC35"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC41"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC53"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 4.3.3 Fixnum arithmetic </H3>
+<!--docid::SEC47::-->
+<P>
+
+The usual arithmetic operations like <CODE>+</CODE> and <CODE>&#60;</CODE> are called
+generic arithmetic operations because they work for all (appropriate)
+kinds of number.
+</P><P>
+
+<A NAME="IDX227"></A>
+A <EM>fixnum</EM> is an exact integer that is small enough to fit in a
+machine word.  In MIT Scheme, fixnums are 26 bits on 32-bit machines,
+and 56 bits on 64-bit machines; it is reasonable to assume that fixnums
+are at least 24 bits.  Fixnums are signed; they are encoded using 2's
+complement.
+</P><P>
+
+All exact integers that are small enough to be encoded as fixnums are
+always encoded as fixnums -- in other words, any exact integer that is
+not a fixnum is too big to be encoded as such.  For this reason, small
+constants such as <CODE>0</CODE> or <CODE>1</CODE> are guaranteed to be fixnums.  In
+addition, the lengths of and valid indexes into strings and vectors are
+also always fixnums.
+</P><P>
+
+If you know that a value is always a small fixnum, you can substitute
+the equivalent fixnum operation for the generic operation.  However,
+care should be exercised: if used improperly, these operations can
+return incorrect answers, or even malformed objects that confuse the
+garbage collector.  For a listing of all fixnum operations, see
+section `Fixnum Operations' in <CITE>MIT Scheme Reference Manual</CITE>.
+</P><P>
+
+A fruitful area for inserting fixnum operations is in the index
+operations in tight loops.
+</P><P>
+
+<A NAME="Flonum arithmetic"></A>
+<HR SIZE="6">
+<A NAME="SEC48"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC47"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC53"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC35"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC41"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC53"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 4.3.4 Flonum arithmetic </H3>
+<!--docid::SEC48::-->
+<P>
+
+Getting efficient flonum arithmetic is much more complicated and harder
+than getting efficient fixnum arithmetic.
+</P><P>
+
+<A NAME="SEC49"></A>
+<H4> Flonum consing </H4>
+<!--docid::SEC49::-->
+<P>
+
+<A NAME="IDX228"></A>
+One of the main disadvantages of generic arithmetic is that not all
+kinds of number fit in a machine register.
+Flonums have to be <EM>boxed</EM> because a 64-bit IEEE floating-point
+number (the representation that MIT Scheme uses) does not fit in a
+regular machine word.
+This is true even on 64-bit architectures because some extra bits are
+needed to distinguish floating-point numbers from other objects like
+pairs and strings.
+Values are boxed by storing them in a small record in the heap.
+Every floating-point value that you see at the REPL is boxed.
+Floating-point values are unboxed only for short periods of time when
+they are in the machine's floating-point unit and actual floating-point
+operations are being performed.
+</P><P>
+
+Numerical calculations that happen to be using floating-point numbers
+cause many temporary floating-point numbers to be allocated.  It is not
+uncommon for numerical programs to spend over half of their time creating
+and garbage collecting the boxed flonums.
+</P><P>
+
+Consider the following procedure for computing the distance of a point
+(<VAR>x</VAR>,<VAR>y</VAR>) from the origin.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (distance x y)
+  (sqrt (+ (* x x) (* y y))))
+</pre></td></tr></table></P><P>
+
+The call <CODE>(distance 0.3 0.4)</CODE> returns a new, boxed flonum, 0.5.
+The calculation also generates three intermediate boxed flonums.  This
+next version works only for flonum inputs, generates only one boxed
+flonum (the result) and runs eight times faster:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (flo:distance x y)
+  (flo:sqrt (flo:+ (flo:* x x) (flo:* y y))))
+</pre></td></tr></table></P><P>
+
+Note that <CODE>flo:</CODE> operations are usually effective only within a
+single arithmetic expression.  If the expression contains conditionals
+or calls to procedures then the values tend to get boxed anyway.
+</P><P>
+
+<A NAME="SEC50"></A>
+<H4> Flonum vectors </H4>
+<!--docid::SEC50::-->
+<P>
+
+Flonum vectors are vectors that contain only floating-point values, in
+much the same way as a string is a `vector' containing only character
+values.
+</P><P>
+
+Flonum vectors have the advantages of compact storage (about half
+that of a conventional vector of flonums) and judicious use of flonum
+vectors can decrease flonum consing.
+</P><P>
+
+The disadvantages are that flonum vectors are incompatible with ordinary
+vectors, and if not used carefully, can increase flonum consing.  Flonum
+vectors are a pain to use because they require you to make a decision
+about the representation and stick with it, and it might not be easy to
+ascertain whether the advantages in one part of the program outweigh the
+disadvantages in another.
+</P><P>
+
+The flonum vector operations are:
+</P><P>
+
+<A NAME="IDX229"></A>
+<DL>
+<DT><U>procedure+:</U> <B>flo:vector-cons</B> <I>n</I>
+<DD>Create a flonum vector of length <VAR>n</VAR>.  The contents of the vector
+are arbitrary and might not be valid floating-point numbers.  The
+contents should not be used until initialized.
+</DL>
+</P><P>
+
+<A NAME="IDX230"></A>
+<DL>
+<DT><U>procedure+:</U> <B>flo:vector-ref</B> <I>flonum-vector index</I>
+<DD><A NAME="IDX231"></A>
+<DT><U>procedure+:</U> <B>flo:vector-set!</B> <I>flonum-vector index value</I>
+<DD><A NAME="IDX232"></A>
+<DT><U>procedure+:</U> <B>flo:vector-length</B> <I>flonum-vector</I>
+<DD>These operations are analogous to the ordinary vector operations.
+</DL>
+</P><P>
+
+<A NAME="SEC51"></A>
+<H4> Examples </H4>
+<!--docid::SEC51::-->
+<P>
+
+The following operation causes no flonum consing because the flonum is
+loaded directly from the flonum vector into a floating-point machine
+register, added, and stored again.  There is no need for a temporary
+boxed flonum.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(flo:vector-set! v 0 (flo:+ (flo:vector-ref v 0) 1.2))
+</pre></td></tr></table></P><P>
+
+In this next example, every time <CODE>g</CODE> is called, a new boxed flonum
+has to be created so that a valid Scheme object can be returned.  If
+<CODE>g</CODE> is called more often than the elements of <VAR>v</VAR> are changed
+then an ordinary vector might be more efficient.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (g i)
+  (flo:vector-ref v i))
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC52"></A>
+<H4> Common pitfalls </H4>
+<!--docid::SEC52::-->
+<P>
+
+Pitfall 1:
+Make sure that your literals are floating-point constants:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (f1 a) (flo:+ a 1))
+(define (f2 a) (flo:+ a 1.))
+</pre></td></tr></table></P><P>
+
+<CODE>f1</CODE> will most likely cause a hardware error, and certainly give
+the wrong answer.  <CODE>f2</CODE> is correct.
+</P><P>
+
+Pitfall 2:
+It is tempting to insert calls to <CODE>exact-&#62;inexact</CODE> to coerce values
+into flonums.  This does not always work because complex numbers may be
+exact or inexact too.  Also, the current implementation of
+<CODE>exact-&#62;inexact</CODE> is slow.
+</P><P>
+
+Pitfall 3:
+A great deal of care has to be taken with the standard math procedures.
+For example, when called with a flonum, both <CODE>sqrt</CODE> and <CODE>asin</CODE>
+can return a complex number (e.g with argument <CODE>-1.5</CODE>).
+</P><P>
+
+<A NAME="Debugging"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC35"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_6.html#SEC53"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

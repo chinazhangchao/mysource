@@ -1,0 +1,1489 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme User's Manual: Running Scheme</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme User's Manual: Running Scheme">
+<META NAME="keywords" CONTENT="MIT Scheme User's Manual: Running Scheme">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC9"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC8"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC10"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 2. Running Scheme </H1>
+<!--docid::SEC9::-->
+<P>
+
+This chapter describes how to run MIT Scheme.  It also describes how you
+can customize the behavior of MIT Scheme using command-line options and
+environment variables.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_3.html#SEC10">2.1 Basics of Starting Scheme</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_3.html#SEC11">2.2 Customizing Scheme</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_3.html#SEC12">2.3 Memory Usage</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_3.html#SEC13">2.4 Command-Line Options</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_3.html#SEC14">2.5 Custom Command-line Options</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_3.html#SEC15">2.6 Environment Variables</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_3.html#SEC22">2.7 Starting Scheme from Microsoft Windows</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_3.html#SEC23">2.8 Leaving Scheme</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Basics of Starting Scheme"></A>
+<HR SIZE="6">
+<A NAME="SEC10"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC11"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.1 Basics of Starting Scheme </H2>
+<!--docid::SEC10::-->
+<P>
+
+Usually, MIT Scheme is invoked by typing
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>scheme
+</pre></td></tr></table></P><P>
+
+at your operating system's command interpreter.  Scheme will load
+itself, clear the screen, and print something like this:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>Scheme saved on Wednesday July 18, 2001 at 12:50:28 AM
+  Release 7.5.17
+  Microcode 14.4
+  Runtime 14.189
+</pre></td></tr></table></P><P>
+
+This information, which can be printed again by evaluating
+</P><P>
+
+<A NAME="IDX15"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(identify-world)
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX16"></A>
+<A NAME="IDX17"></A>
+<A NAME="IDX18"></A>
+<A NAME="IDX19"></A>
+tells you the following version information.  <SAMP>`Release'</SAMP> is the
+release number for the entire Scheme system.  This number is changed
+each time a new version of Scheme is released.  <SAMP>`Microcode'</SAMP> is the
+version number for the part of the system that is written in C.
+<SAMP>`Runtime'</SAMP> is the version number for the part of the system that is
+written in Scheme.
+</P><P>
+
+<A NAME="IDX20"></A>
+<A NAME="IDX21"></A>
+<A NAME="IDX22"></A>
+<A NAME="IDX23"></A>
+<A NAME="IDX24"></A>
+<A NAME="IDX25"></A>
+Following this there may be additional version numbers for specific
+subsystems.  <SAMP>`SF'</SAMP> refers to the scode optimization program
+<CODE>sf</CODE>, <SAMP>`Liar'</SAMP> is the native-code compiler, 
+<SAMP>`Edwin'</SAMP> is the Emacs-like text editor,
+and <SAMP>`6.001'</SAMP> is the SICP compatibility package.
+</P><P>
+
+<A NAME="IDX26"></A>
+You can load the compiler by giving Scheme the <CODE>-compiler</CODE> option:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>scheme -compiler
+</pre></td></tr></table></P><P>
+
+This option causes Scheme to use a larger constant space and heap, and
+to load the world image containing the compiler.
+</P><P>
+
+<A NAME="Customizing Scheme"></A>
+<HR SIZE="6">
+<A NAME="SEC11"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC10"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC12"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.2 Customizing Scheme </H2>
+<!--docid::SEC11::-->
+<P>
+
+You can customize your setup by using a variety of tools:
+</P><P>
+
+<UL>
+<LI>
+<A NAME="IDX27"></A>
+<EM>Command-line options</EM>.
+Many parameters, like memory usage and the location of libraries, may be
+varied by command-line options.  See section <A HREF="user_3.html#SEC13">2.4 Command-Line Options</A>.
+<P>
+
+<LI>
+<A NAME="IDX28"></A>
+<EM>Command scripts or batch files</EM>.
+You might like to write scripts that invoke Scheme with your favorite
+command-line options.  For example, you might not have enough memory to
+run Edwin or the compiler with its default memory parameters (it will
+print something like "Not enough memory for this configuration" and
+halt when started), so you can write a shell script (unix), <TT>`.bat'</TT>
+file (Windows), or <TT>`.cmd'</TT> file (OS/2) that will invoke Scheme with
+the appropriate <CODE>-heap</CODE> and other parameters.
+<P>
+
+<LI>
+<A NAME="IDX29"></A>
+Scheme supports <EM>init files</EM>: an init file is a file containing
+Scheme code that is loaded when Scheme is started, immediately after the
+identification banner, and before the input prompt is printed.  This
+file is stored in your home directory, which is normally specified by
+the <CODE>HOME</CODE> environment variable.  Under unix, the file is called
+<TT>`.scheme.init'</TT>; on the PC it is called <TT>`scheme.ini'</TT>.
+<P>
+
+In addition, when Edwin starts up, it loads a separate init file from
+your home directory into the Edwin environment.  This file is called
+<TT>`.edwin'</TT> under unix, and <TT>`edwin.ini'</TT> on the PC
+(see section <A HREF="user_8.html#SEC60">7.1 Starting Edwin</A>).
+</P><P>
+
+You can use both of these files to define new procedures or commands, or
+to change defaults in the system.
+</P><P>
+
+The <CODE>-no-init-file</CODE> command-line option causes Scheme to ignore
+the<BR> <TT>`.scheme.init'</TT> file (see section <A HREF="user_3.html#SEC13">2.4 Command-Line Options</A>).
+</P><P>
+
+<LI>
+<EM>Environment variables</EM>.  Most microcode parameters, and some
+runtime system and Edwin parameters, can be specified by means of
+environment variables.  See section <A HREF="user_3.html#SEC15">2.6 Environment Variables</A>.
+<P>
+
+<LI>
+<EM>Icons</EM>.
+<A NAME="IDX30"></A>
+Under OS/2 and Windows, and with some window managers under X11, it is
+possible to create icons that invoke Scheme with different parameters.
+</UL>
+<P>
+
+<A NAME="Memory Usage"></A>
+<HR SIZE="6">
+<A NAME="SEC12"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC11"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC13"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.3 Memory Usage </H2>
+<!--docid::SEC12::-->
+<P>
+
+Some of the parameters that can be customized determine how much memory
+Scheme uses and how that memory is used.  This section describes how
+Scheme's memory is organized and used; subsequent sections describe
+command-line options and environment variables that you can use to
+customize this usage for your needs.
+</P><P>
+
+Scheme uses four kinds of memory:
+<A NAME="IDX31"></A>
+</P><P>
+
+<UL>
+<LI>
+<A NAME="IDX32"></A>
+A <EM>stack</EM> that is used for recursive procedure calls.
+<P>
+
+<LI>
+<A NAME="IDX33"></A>
+A <EM>heap</EM> that is used for dynamically allocated objects, like
+<SAMP>`cons'</SAMP> cells and strings.  Storage used for objects in the heap
+that become unreferenced is eventually reclaimed by <EM>garbage
+collection</EM>.
+<P>
+
+<LI>
+<A NAME="IDX34"></A>
+A <EM>constant space</EM> that is used for allocated objects, like the
+heap.
+Unlike the heap, storage used for objects in constant space is not
+reclaimed by garbage collection.
+Constant space is used for objects that are essentially permanent, like
+procedures in the runtime system.
+<P>
+
+<LI>
+Some extra storage that is used by the microcode (the part of the system
+that is implemented in C).
+</UL>
+<P>
+
+All kinds of memory except the last may be controlled either by
+command-line options or by environment variables.
+</P><P>
+
+<A NAME="IDX35"></A>
+<A NAME="IDX36"></A>
+MIT Scheme uses a two-space copying garbage collector for reclaiming
+storage in the heap.  There are two versions of Scheme which handle
+garbage collection differently.  The standard Scheme, called
+<TT>`scheme'</TT> under unix and <TT>`scheme.exe'</TT> on the PC, has two heaps,
+one for each "space".  An alternative, called <TT>`bchscheme'</TT> under
+unix and <TT>`bchschem.exe'</TT> on the PC, has one heap and uses a disk
+file for the other "space", thus trading memory usage against garbage
+collection speed (see section <A HREF="user_2.html#SEC8">1.4 Optional Configuration</A>).
+</P><P>
+
+The total storage required by <TT>`scheme'</TT> is:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre><VAR>stack</VAR> + (<VAR>constant</VAR> + 2*<VAR>heap</VAR>) + <VAR>extra</VAR>
+</pre></td></tr></table></P><P>
+
+where <VAR>stack</VAR>, <VAR>constant</VAR> and <VAR>heap</VAR> are parameters that are
+selected when <TT>`scheme'</TT> starts.  For <TT>`bchscheme'</TT>, which has
+only one heap in memory, the equation is
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre><VAR>stack</VAR> + (<VAR>constant</VAR> + <VAR>heap</VAR>) + <VAR>extra</VAR>
+</pre></td></tr></table></P><P>
+
+Once the storage is allocated for the constant space and the heap,
+Scheme will dynamically adjust the proportion of the total that is used
+for constant space; the stack and extra microcode storage is not
+included in this adjustment.  Previous versions of MIT Scheme needed to
+be told the amount of constant space that was required when loading
+bands with the <CODE>-band</CODE> option.  Dynamic adjustment of the heap and
+constant space avoids this problem.
+</P><P>
+
+If the size of the constant space is not specified, it is automatically
+set to the correct size for the band being loaded.  Thus, in general it
+is rarely necessary to explicitly set the size of the constant space.
+Additionally, each band requires a small amount of heap space; this
+amount is added to any specified heap size, so that the specified heap
+size is the amount of free space available.
+</P><P>
+
+The Scheme expression <SAMP>`(print-gc-statistics)'</SAMP> shows how much heap
+and constant space is available (see section <A HREF="user_4.html#SEC32">3.4 Garbage Collection</A>).
+</P><P>
+
+<A NAME="Command-Line Options"></A>
+<HR SIZE="6">
+<A NAME="SEC13"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC12"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC14"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.4 Command-Line Options </H2>
+<!--docid::SEC13::-->
+<P>
+
+Scheme accepts the command-line options detailed in the following
+sections.  The options may appear in any order, with the restriction
+that the microcode options must appear before the runtime options, and
+the runtime options must appear before any other arguments on the
+command line.  Any arguments other than these options will generate a
+warning message when Scheme starts.  If you want to define your own
+command-line options, see <A HREF="user_3.html#SEC14">2.5 Custom Command-line Options</A>.
+</P><P>
+
+These are the microcode options:
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>-compiler</CODE>
+<DD><A NAME="IDX37"></A>
+<A NAME="IDX38"></A>
+This option specifies defaults appropriate for loading the compiler.  It
+specifies the use of large sizes, exactly like <CODE>-large</CODE>; if the
+<CODE>-band</CODE> option is also specified, that is the only effect of this
+option.  Otherwise, the default band's filename is the value of the
+environment variable <CODE>MITSCHEME_COMPILER_BAND</CODE>, if defined, or
+<TT>`compiler.com'</TT>; the library directories are searched to locate this
+file.
+<P>
+
+<DT><CODE>-edwin</CODE>
+<DD><A NAME="IDX39"></A>
+<A NAME="IDX40"></A>
+This option specifies defaults appropriate for loading the editor.  It
+specifies the use of large sizes, exactly like <CODE>-large</CODE>; if the
+<CODE>-band</CODE> option is also specified, that is the only effect of this
+option.  Otherwise, the default band's filename is the value of the
+environment variable <CODE>MITSCHEME_EDWIN_BAND</CODE>, if defined, or
+<TT>`edwin.com'</TT>; the library directories are searched to locate this
+file.
+<P>
+
+<DT><CODE>-compiler -edwin</CODE>
+<DD><A NAME="IDX41"></A>
+If both the <CODE>-compiler</CODE> and <CODE>-edwin</CODE> options are given, Scheme
+will load an environment containing both the compiler and the editor.
+The default band's filename is the value of the environment variable
+<CODE>MITSCHEME_ALL_BAND</CODE>, if defined, or <TT>`all.com'</TT>; the library
+directories are searched to locate this file.
+<P>
+
+<DT><CODE>-band <VAR>filename</VAR></CODE>
+<DD><A NAME="IDX42"></A>
+<A NAME="IDX43"></A>
+<A NAME="IDX44"></A>
+<A NAME="IDX45"></A>
+Specifies the initial world image file (<EM>band</EM>) to be loaded.
+Searches for <VAR>filename</VAR> in the working directory and the library
+directories, using the full pathname of the first readable file of that
+name.  If <VAR>filename</VAR> is an absolute pathname (on unix, this means it
+starts with <TT>`/'</TT>), then no search occurs -- <VAR>filename</VAR> is
+tested for readability and then used directly.  If this option isn't
+given, the filename is the value of the environment variable
+<CODE>MITSCHEME_BAND</CODE>, or if that isn't defined, <TT>`runtime.com'</TT>; in
+these cases the library directories are searched, but not the working
+directory.
+<P>
+
+<DT><CODE>-large</CODE>
+<DD><A NAME="IDX46"></A>
+Specifies that large heap, constant, and stack sizes should be used.
+These are specified by the environment variables
+<P>
+
+<A NAME="IDX47"></A>
+<A NAME="IDX48"></A>
+<A NAME="IDX49"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>MITSCHEME_LARGE_HEAP
+MITSCHEME_LARGE_CONSTANT
+MITSCHEME_LARGE_STACK
+</pre></td></tr></table></P><P>
+
+If this option isn't given, the small sizes are used, specified by the
+environment variables
+</P><P>
+
+<A NAME="IDX50"></A>
+<A NAME="IDX51"></A>
+<A NAME="IDX52"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>MITSCHEME_SMALL_HEAP
+MITSCHEME_SMALL_CONSTANT
+MITSCHEME_SMALL_STACK
+</pre></td></tr></table></P><P>
+
+There are reasonable built-in defaults for all of these environment
+variables, should any of them be undefined.  Note that any or all of the
+defaults can be individually overridden by the <CODE>-heap</CODE>,
+<CODE>-constant</CODE>, and <CODE>-stack</CODE> options.
+</P><P>
+
+<A NAME="IDX53"></A>
+Note: the Scheme expression <SAMP>`(print-gc-statistics)'</SAMP> shows how much
+heap and constant space is available and in use (see section <A HREF="user_4.html#SEC32">3.4 Garbage Collection</A>).
+</P><P>
+
+<DT><CODE>-heap <VAR>blocks</VAR></CODE>
+<DD><A NAME="IDX54"></A>
+Specifies the size of the heap in 1024-word blocks.  Overrides any
+default.  Normally two such heaps are allocated; <TT>`bchscheme'</TT>
+allocates only one, and uses a disk file for the other.
+<P>
+
+The size specified by this option is incremented by the amount of heap
+space needed by the band being loaded.  Consequently, <CODE>-heap</CODE>
+specifies how much free space will be available in the heap when Scheme
+starts, independent of the amount of heap already consumed by the band.
+</P><P>
+
+<DT><CODE>-constant <VAR>blocks</VAR></CODE>
+<DD><A NAME="IDX55"></A>
+Specifies the size of constant space in 1024-word blocks.  Overrides any
+default.  Constant space holds the compiled code for the runtime system
+and other subsystems.
+<P>
+
+<DT><CODE>-stack <VAR>blocks</VAR></CODE>
+<DD><A NAME="IDX56"></A>
+Specifies the size of the stack in 1024-word blocks.  Overrides any
+default.  This is Scheme's stack, <EM>not</EM> the unix stack used by C
+programs.
+<P>
+
+<DT><CODE>-option-summary</CODE>
+<DD><A NAME="IDX57"></A>
+Causes Scheme to write an option summary to standard error.  This shows
+the values of all of the settable microcode option variables.
+<P>
+
+<DT><CODE>-emacs</CODE>
+<DD><A NAME="IDX58"></A>
+Specifies that Scheme is running as a subprocess of GNU Emacs.  This
+option is automatically supplied by GNU Emacs, and should not be given
+under other circumstances.
+<P>
+
+<DT><CODE>-interactive</CODE>
+<DD><A NAME="IDX59"></A>
+If this option isn't specified, and Scheme's standard I/O is not a
+terminal, Scheme will detach itself from its controlling terminal, which
+prevents it from getting signals sent to the process group of that
+terminal.  If this option is specified, Scheme will not detach itself
+from the controlling terminal.
+<P>
+
+This detaching behavior is useful for running Scheme as a background
+job.  For example, using <CODE>bash</CODE>, the following will run Scheme as a
+background job, redirecting its input and output to files, and
+preventing it from being killed by keyboard interrupts or by logging
+out:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>scheme &#60; /usr/cph/foo.in &#62; /usr/cph/foo.out 2&#62;&#38;1 &#38;
+</pre></td></tr></table></P><P>
+
+This option is ignored under non-unix operating systems.
+</P><P>
+
+<DT><CODE>-nocore</CODE>
+<DD><A NAME="IDX60"></A>
+Specifies that Scheme should not generate a core dump under any
+circumstances.  If this option is not given, and Scheme terminates
+abnormally, you will be prompted to decide whether a core dump should be
+generated.
+<P>
+
+This option is ignored under non-unix operating systems.
+</P><P>
+
+<DT><CODE>-library <VAR>path</VAR></CODE>
+<DD><A NAME="IDX61"></A>
+<A NAME="IDX62"></A>
+Sets the library search path to <VAR>path</VAR>.  This is a
+list of directories that is searched to find various library files, such
+as bands.  If this option is not given, the value of the environment
+variable <CODE>MITSCHEME_LIBRARY_PATH</CODE> is used; if that isn't defined,
+the default is used.
+<P>
+
+On unix, the elements of the list are separated by colons, and the
+default value is <TT>`/usr/local/lib/mit-scheme'</TT>.  On PCs, the elements
+of the list are separated by semicolons, and the default value is
+<TT>`c:\scheme\lib'</TT>.
+</P><P>
+
+<DT><CODE>-utabmd <VAR>filename</VAR></CODE>
+<DD><A NAME="IDX63"></A>
+<A NAME="IDX64"></A>
+<A NAME="IDX65"></A>
+Specifies that <VAR>filename</VAR> contains the microcode tables (the
+microcode tables are information that informs the runtime system about
+the microcode's structure).  <VAR>Filename</VAR> is searched for in the
+working directory and the library directories.  If this option isn't
+given, the filename is the value of the environment variable
+<CODE>MITSCHEME_UTABMD_FILE</CODE>, or if that isn't defined,
+<TT>`utabmd.bin'</TT>; in these cases the library directories are searched,
+but not the working directory.
+<P>
+
+<CODE>-utab</CODE> is an alternate name for the <CODE>-utabmd</CODE> option; at most
+one of these options may be given.
+</P><P>
+
+<DT><CODE>-fasl <VAR>filename</VAR></CODE>
+<DD><A NAME="IDX66"></A>
+Specifies that a <EM>cold load</EM> should be performed, using
+<VAR>filename</VAR> as the initial file to be loaded.  If this option isn't
+given, a normal load is performed instead.  This option may not be used
+together with the <CODE>-compiler</CODE>, <CODE>-edwin</CODE>, or <CODE>-band</CODE>
+options.  This option is useful only for maintenance and development of
+the MIT Scheme runtime system.
+</DL>
+<P>
+
+In addition to the above, <TT>`bchscheme'</TT> recognizes the following
+command-line options, all of which specify parameters affecting how
+<TT>`bchscheme'</TT> uses disk storage to do garbage collection:
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>-gc-directory <VAR>directory</VAR></CODE>
+<DD><A NAME="IDX67"></A>
+<A NAME="IDX68"></A>
+Specifies that <VAR>directory</VAR> should be used to create files for
+garbage collection.  If the option is not given, the value of
+environment variable <CODE>MITSCHEME_GC_DIRECTORY</CODE> is used instead, and
+if that is not defined, a standard temporary directory is used (see
+<CODE>TMPDIR</CODE> in see section <A HREF="user_3.html#SEC18">2.6.3 Environment Variables for the Runtime System</A>).
+<P>
+
+<DT><CODE>-gc-file <VAR>filename</VAR></CODE>
+<DD><A NAME="IDX69"></A>
+<A NAME="IDX70"></A>
+<A NAME="IDX71"></A>
+Specifies that <VAR>filename</VAR> should be used for garbage collection.  If
+the option is not given, the value of environment variable
+<CODE>MITSCHEME_GC_FILE</CODE> is used, and if this is not defined, a unique
+filename is generated in the directory specified with
+<CODE>-gc-directory</CODE>.
+<P>
+
+<CODE>-gcfile</CODE> is an alias for <CODE>-gc-file</CODE>; at most one of these
+options should be specified.
+</P><P>
+
+<DT><CODE>-gc-keep</CODE>
+<DD><A NAME="IDX72"></A>
+Specifies that the GC file used for garbage collection should not be
+deleted when Scheme terminates.
+The GC file is deleted only if the file was created
+by this invocation of Scheme, and this option is not set.
+<P>
+
+<DT><CODE>-gc-start-position <VAR>number</VAR></CODE>
+<DD><A NAME="IDX73"></A>
+<A NAME="IDX74"></A>
+Specifies the first byte position in the GC file at which the
+Scheme process can write.  If not given, the value of the environment
+variable <CODE>MITSCHEME_GC_START_POSITION</CODE> is used, and if that is not
+defined, <SAMP>`0'</SAMP> is used, meaning the beginning of the file.  The area
+of the file used (and locked if possible) is the region between
+<CODE>-gc-start-position</CODE> and <CODE>-gc-end-position</CODE>.
+<P>
+
+<DT><CODE>-gc-end-position <VAR>number</VAR></CODE>
+<DD><A NAME="IDX75"></A>
+<A NAME="IDX76"></A>
+Specifies the last byte position in the GC file at which the Scheme
+process can write.  If not given, the value of the environment variable
+<CODE>MITSCHEME_GC_END_POSITION</CODE> is used, and if that is not defined,
+the sum of the start position (as specified by
+<CODE>-gc-start-position</CODE>) and the heap size is used.  The area of the
+file used (and locked if possible) is the region between
+<CODE>-gc-start-position</CODE> and <CODE>-gc-end-position</CODE>.
+<P>
+
+<DT><CODE>-gc-window-size <VAR>blocks</VAR></CODE>
+<DD><A NAME="IDX77"></A>
+<A NAME="IDX78"></A>
+Specifies the size of the windows into new space during garbage
+collection.  If this option is not given, the value of environment
+variable <CODE>MITSCHEME_GC_WINDOW_SIZE</CODE> is used instead, and if that
+is not defined, the value <SAMP>`16'</SAMP> is used.
+</DL>
+<P>
+
+The following command-line options are only used by an experimental
+version of<BR> <TT>`bchscheme'</TT> that uses unix System V-style shared
+memory, and then only if the <TT>`gcdrone'</TT> program is installed in the
+library directory.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>-gc-drone <VAR>program</VAR></CODE>
+<DD><A NAME="IDX79"></A>
+<A NAME="IDX80"></A>
+Specifies that <VAR>program</VAR> should be used as the drone program for
+overlapped I/O during garbage collection.  If the option is not
+given, the value of environment variable <CODE>MITSCHEME_GC_DRONE</CODE> is
+used instead, and if that is not defined, <TT>`gcdrone'</TT> is used.
+<P>
+
+<DT><CODE>-gc-read-overlap <VAR>n</VAR></CODE>
+<DD><A NAME="IDX81"></A>
+<A NAME="IDX82"></A>
+Specifies that Scheme should delegate at most <VAR>n</VAR> simultaneous disk
+read operations during garbage collection.  If the option is not given,
+the value of environment variable <CODE>MITSCHEME_GC_READ_OVERLAP</CODE> is
+used instead, and if that is not defined, <SAMP>`0'</SAMP> is used, disabling
+overlapped reads.
+<P>
+
+<DT><CODE>-gc-write-overlap <VAR>n</VAR></CODE>
+<DD><A NAME="IDX83"></A>
+<A NAME="IDX84"></A>
+Specifies that Scheme should delegate at most <VAR>n</VAR> simultaneous disk
+write operations during garbage collection.  If the option is not given,
+the value of environment variable <CODE>MITSCHEME_GC_WRITE_OVERLAP</CODE> is
+used instead, and if that is not defined, <SAMP>`0'</SAMP> is used, disabling
+overlapped writes.
+</DL>
+<P>
+
+The following options are runtime options.  They are processed after the
+microcode options and after the image file is loaded.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>-no-init-file</CODE>
+<DD><A NAME="IDX85"></A>
+This option causes Scheme to ignore the <TT>`~/.scheme.init'</TT> or
+<TT>`scheme.ini'</TT> file, normally loaded automatically when Scheme starts
+(if it exists).
+<P>
+
+<DT><CODE>-suspend-file</CODE>
+<DD><A NAME="IDX86"></A>
+Under some circumstances Scheme can write out a file called
+<TT>`scheme_suspend'</TT> in the user's home directory.<A NAME="DOCF1" HREF="user_fot.html#FOOT1">(1)</A> This file is a world image containing the
+complete state of the Scheme process; restoring this file continues the
+computation that Scheme was performing at the time the file was written.
+<P>
+
+Normally this file is never written, but the <CODE>-suspend-file</CODE> option
+enables writing of this file.
+</P><P>
+
+<DT><CODE>-eval <VAR>expression</VAR> <small>...</small></CODE>
+<DD><A NAME="IDX87"></A>
+This option causes Scheme to evaluate the <VAR>expression</VAR>s following it
+on the command line, up to (but not including) the next option that
+starts with a hyphen.  The expressions are evaluated in the
+<CODE>user-initial-environment</CODE>.  Unless explicitly handled, errors
+during evaluation are silently ignored.
+<P>
+
+<DT><CODE>-load <VAR>file</VAR> <small>...</small></CODE>
+<DD><A NAME="IDX88"></A>
+This option causes Scheme to load the <VAR>file</VAR>s (or lists of files)
+following it on the command line, up to (but not including) the next
+option that starts with a hyphen.  The files are loaded in the
+<CODE>user-initial-environment</CODE> using the default syntax table.  Unless
+explicitly handled, errors during loading are silently ignored.
+</DL>
+<P>
+
+The following option is supported only when Edwin is loaded.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>-edit</CODE>
+<DD><A NAME="IDX89"></A>
+This option causes Edwin to start immediately when Scheme is started.
+</DL>
+<P>
+
+<A NAME="Custom Command-line Options"></A>
+<HR SIZE="6">
+<A NAME="SEC14"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC13"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC15"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.5 Custom Command-line Options </H2>
+<!--docid::SEC14::-->
+<P>
+
+MIT Scheme provides a mechanism for you to define your own command-line
+options.  This is done by registering handlers to identify particular
+named options and to process them when Scheme starts.  Unfortunately,
+because of the way this mechanism is implemented, you must define the
+options and then save a world image containing your definitions
+(see section <A HREF="user_4.html#SEC31">3.3 World Images</A>).  Later, when you start Scheme using that world
+image, your options will be recognized.
+</P><P>
+
+The following procedures define command-line parsers.  In each, the
+argument <VAR>keyword</VAR> defines the option that will be recognized on the
+command line.  The <VAR>keyword</VAR> must be a string starting with a hyphen
+and containing at least one additional character.
+</P><P>
+
+<A NAME="IDX90"></A>
+<DL>
+<DT><U>procedure+:</U> <B>simple-command-line-parser</B> <I>keyword thunk</I>
+<DD>Defines <VAR>keyword</VAR> to be a simple command-line option.  When this
+keyword is seen on the command line, it causes <VAR>thunk</VAR> to be
+executed.
+</DL>
+</P><P>
+
+<A NAME="IDX91"></A>
+<DL>
+<DT><U>procedure+:</U> <B>argument-command-line-parser</B> <I>keyword multiple? procedure</I>
+<DD>Defines <VAR>keyword</VAR> to be a command-line option that is followed by
+one or more command-line arguments.  <VAR>Procedure</VAR> is a procedure that
+accepts one argument; when <VAR>keyword</VAR> is seen, it is called once for
+each argument.
+</P><P>
+
+<VAR>Multiple?</VAR>, if true, says that <VAR>keyword</VAR> may be followed by
+more than one argument on the command line.  In this case, procedure is
+called once for each argument that follows <VAR>keyword</VAR> and does not
+start with a hyphen.  If <VAR>multiple?</VAR> is <CODE>#f</CODE>, <VAR>procedure</VAR>
+is called once, with the command-line argument following <VAR>keyword</VAR>.
+In this case, it does not matter if the following argument starts with a
+hyphen.
+</DL>
+</P><P>
+
+<A NAME="IDX92"></A>
+<DL>
+<DT><U>procedure+:</U> <B>set-command-line-parser!</B> <I>keyword procedure</I>
+<DD>This low-level procedure defines <VAR>keyword</VAR> to be a command-line
+option that is defined by <VAR>procedure</VAR>.  When <VAR>keyword</VAR> is seen,
+<VAR>procedure</VAR> is called with all of the command-line arguments,
+starting with <VAR>keyword</VAR>, as a single list argument.  <VAR>Procedure</VAR>
+must return two values (using the <CODE>values</CODE> procedure): the unused
+command-line arguments (as a list), and a thunk that is executed to
+implement the behavior of the option.
+</DL>
+</P><P>
+
+<A NAME="Environment Variables"></A>
+<HR SIZE="6">
+<A NAME="SEC15"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC14"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC16"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC22"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.6 Environment Variables </H2>
+<!--docid::SEC15::-->
+<P>
+
+Scheme refers to many environment variables.  This section lists these
+variables and describes how each is used.  The environment variables are
+organized according to the parts of MIT Scheme that they affect.
+</P><P>
+
+Environment variables that affect the microcode must be defined before
+you start Scheme; under unix or Windows, others can be defined or
+overwritten within Scheme by using the <CODE>set-environment-variable!</CODE>
+procedure, e.g.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(set-environment-variable! "EDWIN_FOREGROUND" "32")
+</pre></td></tr></table></P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_3.html#SEC16">2.6.1 Environment Variables for the Microcode</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_3.html#SEC17">2.6.2 Environment Variables for <TT>`bchscheme'</TT></A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_3.html#SEC18">2.6.3 Environment Variables for the Runtime System</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_3.html#SEC19">2.6.4 Environment Variables for Edwin</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_3.html#SEC20">2.6.5 Environment Variables for Microsoft Windows</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_3.html#SEC21">2.6.6 Environment Variables for OS/2</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Microcode Environment Variables"></A>
+<HR SIZE="6">
+<A NAME="SEC16"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC15"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC17"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC14"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC15"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC22"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 2.6.1 Environment Variables for the Microcode </H3>
+<!--docid::SEC16::-->
+<P>
+
+These environment variables are referred to by the microcode (the
+executable C programs called <TT>`scheme'</TT> and <TT>`bchscheme'</TT> under
+unix, and <TT>`scheme.exe'</TT> and <TT>`bchschem.exe'</TT> on the PC).
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>MITSCHEME_ALL_BAND</CODE> (default: <TT>`all.com'</TT> on the library path)
+<DD><A NAME="IDX93"></A>
+The initial band to be loaded if both the <CODE>-compiler</CODE> and
+<CODE>-edwin</CODE> options are given.  Overridden by <CODE>-band</CODE>.
+<P>
+
+<DT><CODE>MITSCHEME_BAND</CODE> (default: <TT>`runtime.com'</TT> on the library path)
+<DD><A NAME="IDX94"></A>
+The initial band to be loaded.  Overridden by <CODE>-band</CODE>,
+<CODE>-compiler</CODE>, or <CODE>-edwin</CODE>.
+<P>
+
+<DT><CODE>MITSCHEME_COMPILER_BAND</CODE> (default: <TT>`compiler.com'</TT> on the library path)
+<DD><A NAME="IDX95"></A>
+The initial band to be loaded if the <CODE>-compiler</CODE> option is given.
+Overridden by <CODE>-band</CODE>.
+<P>
+
+<DT><CODE>MITSCHEME_EDWIN_BAND</CODE> (default: <TT>`edwin.com'</TT> on the library path)
+<DD><A NAME="IDX96"></A>
+The initial band to be loaded if the <CODE>-edwin</CODE> option is given.
+Overridden by <CODE>-band</CODE>.
+<P>
+
+<DT><CODE>MITSCHEME_LARGE_CONSTANT</CODE> (default: as needed)
+<DD><A NAME="IDX97"></A>
+The size of constant space, in 1024-word blocks, if the <CODE>-large</CODE>,
+<CODE>-compiler</CODE>, or <CODE>-edwin</CODE> options are given.  Overridden by
+<CODE>-constant</CODE>.  Note: the default is computed to be the correct size
+for the band being loaded.
+<P>
+
+<DT><CODE>MITSCHEME_LARGE_HEAP</CODE> (default: <SAMP>`1000'</SAMP>)
+<DD><A NAME="IDX98"></A>
+The size of the heap, in 1024-word blocks, if the <CODE>-large</CODE>,
+<CODE>-compiler</CODE>, or <CODE>-edwin</CODE> options are given.  Overridden by
+<CODE>-heap</CODE>.
+<P>
+
+<DT><CODE>MITSCHEME_LARGE_STACK</CODE> (default: <SAMP>`100'</SAMP>)
+<DD><A NAME="IDX99"></A>
+The size of the stack, in 1024-word blocks, if the <CODE>-large</CODE>,
+<CODE>-compiler</CODE>, or <CODE>-edwin</CODE> options are given.  Overridden by
+<CODE>-stack</CODE>.
+<P>
+
+<DT><CODE>MITSCHEME_LIBRARY_PATH</CODE>
+<DD><A NAME="IDX100"></A>
+A list of directories.  These directories are searched,
+left to right, to find bands and various other files.
+On unix systems the list is colon-separated, with the default
+<TT>`/usr/local/lib/mit-scheme'</TT>.
+On PC systems the list is semicolon-separated with the default
+<TT>`c:\scheme\lib'</TT>.
+<P>
+
+<DT><CODE>MITSCHEME_SMALL_CONSTANT</CODE> (default: as needed)
+<DD><A NAME="IDX101"></A>
+The size of constant space, in 1024-word blocks, if the size options are
+not given.  Overridden by <CODE>-constant</CODE>, <CODE>-large</CODE>,
+<CODE>-compiler</CODE>, or <CODE>-edwin</CODE>.  Note: the default is computed to be
+the correct size for the band being loaded.
+<P>
+
+<DT><CODE>MITSCHEME_SMALL_HEAP</CODE> (default: <SAMP>`250'</SAMP>)
+<DD><A NAME="IDX102"></A>
+The size of the heap, in 1024-word blocks, if the size options are not
+given.  Overridden by <CODE>-heap</CODE>, <CODE>-large</CODE>, <CODE>-compiler</CODE>, or
+<CODE>-edwin</CODE>.
+<P>
+
+<DT><CODE>MITSCHEME_SMALL_STACK</CODE> (default: <SAMP>`100'</SAMP>)
+<DD><A NAME="IDX103"></A>
+The size of the stack, in 1024-word blocks, if the size options are not
+given.  Overridden by <CODE>-stack</CODE>, <CODE>-large</CODE>, <CODE>-compiler</CODE>, or
+<CODE>-edwin</CODE>.
+<P>
+
+<DT><CODE>MITSCHEME_UTABMD_FILE</CODE> (default: <TT>`utabmd.bin'</TT> in the library path)
+<DD><A NAME="IDX104"></A>
+The file containing the microcode tables.  Overridden by <CODE>-utabmd</CODE>
+and <CODE>-utab</CODE>.
+</DL>
+<P>
+
+<A NAME="Bchscheme Environment Variables"></A>
+<HR SIZE="6">
+<A NAME="SEC17"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC16"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC18"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC14"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC15"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC22"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 2.6.2 Environment Variables for <TT>`bchscheme'</TT> </H3>
+<!--docid::SEC17::-->
+<P>
+
+These environment variables are referred to by <TT>`bchscheme'</TT>
+(<EM>not</EM> by <TT>`scheme'</TT>).
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>MITSCHEME_GC_DIRECTORY</CODE>
+<DD><A NAME="IDX105"></A>
+The directory in which GC files are written.  Overridden by
+<CODE>-gc-directory</CODE>.  The default for this variable is the standard
+temporary directory (see <CODE>TMPDIR</CODE> in see section <A HREF="user_3.html#SEC18">2.6.3 Environment Variables for the Runtime System</A>).
+<P>
+
+<DT><CODE>MITSCHEME_GC_FILE</CODE> (default: <TT>`GCXXXXXX'</TT>)
+<DD><A NAME="IDX106"></A>
+The name of the file to use for garbage collection.  If it ends in 6
+<CODE>X</CODE>s, the <CODE>X</CODE>s are replaced by a letter and process id of the
+scheme process, thus generating a unique name.  Overridden by
+<CODE>-gc-file</CODE>.
+<P>
+
+<DT><CODE>MITSCHEME_GC_START_POSITION</CODE> (default: <SAMP>`0'</SAMP>)
+<DD><A NAME="IDX107"></A>
+The first position in the GC file to use.  Overridden by
+<CODE>-gc-start-position</CODE>.
+<P>
+
+<DT><CODE>MITSCHEME_GC_END_POSITION</CODE> (default: <VAR>start-position</VAR>+<VAR>heap-size</VAR>)
+<DD><A NAME="IDX108"></A>
+The last position in the GC file to use.  Overridden by
+<CODE>-gc-end-position</CODE>.
+<P>
+
+<DT><CODE>MITSCHEME_GC_WINDOW_SIZE</CODE> (default: <SAMP>`16'</SAMP>)
+<DD><A NAME="IDX109"></A>
+The size in blocks of windows into new space (in the GC file).<BR>
+Overridden by <CODE>-gc-window-size</CODE>.
+</DL>
+<P>
+
+The following environment variables are only used by an experimental
+version of Bchscheme that uses unix System V-style shared memory, and
+then only if the <TT>`gcdrone'</TT> program is installed:
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>MITSCHEME_GC_DRONE</CODE> (default: <TT>`gcdrone'</TT>)
+<DD><A NAME="IDX110"></A>
+The program to use as the I/O drone during garbage collection.<BR>
+Overridden by <CODE>-gc-drone</CODE>.
+<P>
+
+<DT><CODE>MITSCHEME_GC_READ_OVERLAP</CODE> (default: <SAMP>`0'</SAMP>)
+<DD><A NAME="IDX111"></A>
+The maximum number of simultaneous read operations.<BR>
+Overridden by <CODE>-gc-read-overlap</CODE>.
+<P>
+
+<DT><CODE>MITSCHEME_GC_WRITE_OVERLAP</CODE> (default: <SAMP>`0'</SAMP>)
+<DD><A NAME="IDX112"></A>
+The maximum number of simultaneous write operations.<BR>
+Overridden by <CODE>-gc-write-overlap</CODE>.
+</DL>
+<P>
+
+<A NAME="Runtime Environment Variables"></A>
+<HR SIZE="6">
+<A NAME="SEC18"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC17"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC19"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC14"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC15"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC22"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 2.6.3 Environment Variables for the Runtime System </H3>
+<!--docid::SEC18::-->
+<P>
+
+These environment variables are referred to by the runtime system.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>HOME</CODE>
+<DD><A NAME="IDX113"></A>
+Directory in which to look for init files.  E.g. <TT>`c:\users\joe'</TT>
+or <TT>`/home/joe'</TT>.  This variable needs to be set on OS/2 and Windows
+9x.  Under Windows NT, the environment variables <CODE>HOMEDRIVE</CODE> and
+<CODE>HOMEPATH</CODE>, set by the operating system, are used instead.  Under
+unix, <CODE>HOME</CODE> is set by the login shell.
+<P>
+
+<DT><CODE>TMPDIR</CODE>
+<DD><DT><CODE>TEMP</CODE>
+<DD><DT><CODE>TMP</CODE>
+<DD><A NAME="IDX114"></A>
+<A NAME="IDX115"></A>
+<A NAME="IDX116"></A>
+Directory for various temporary files.  The variables are tried in the
+given order.  If none of them is suitable, built-in defaults are used:
+under unix, <TT>`/var/tmp'</TT>, <TT>`/usr/tmp'</TT>, <TT>`/tmp'</TT>; under OS/2
+and Windows, <TT>`\temp'</TT>, <TT>`\tmp'</TT>, and <TT>`\'</TT> (all on the system
+drive).
+<P>
+
+<DT><CODE>MITSCHEME_INF_DIRECTORY</CODE> (default: <TT>`SRC'</TT> on the library path)
+<DD><A NAME="IDX117"></A>
+Directory containing the debugging information files for the Scheme
+system.  Should contain subdirectories corresponding to the
+subdirectories in the source tree.  For example, if its value is
+<TT>`f:\random'</TT>, runtime system debugging files will be expected in
+<TT>`f:\random\runtime'</TT>, while Edwin debugging files will be expected
+in <TT>`f:\random\edwin'</TT>.
+<P>
+
+<DT><CODE>MITSCHEME_LOAD_OPTIONS</CODE> (default: <TT>`optiondb.scm'</TT> on the library path)
+<DD><A NAME="IDX118"></A>
+Specifies the location of the options database file used by the
+<CODE>load-option</CODE> procedure.
+</DL>
+<P>
+
+<A NAME="Edwin Environment Variables"></A>
+<HR SIZE="6">
+<A NAME="SEC19"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC18"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC20"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC14"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC15"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC22"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 2.6.4 Environment Variables for Edwin </H3>
+<!--docid::SEC19::-->
+<P>
+
+These environment variables are referred to by Edwin.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>EDWIN_BINARY_DIRECTORY</CODE> (default: <TT>`edwin/autoload'</TT> on the library path)
+<DD><A NAME="IDX119"></A>
+Directory where Edwin expects to find files providing autoloaded
+facilities.
+<P>
+
+<DT><CODE>EDWIN_INFO_DIRECTORY</CODE> (default: <TT>`edwin/info'</TT> on the library path)
+<DD><A NAME="IDX120"></A>
+Directory where Edwin expects to find files for the `info' documentation
+subsystem.
+<P>
+
+<DT><CODE>EDWIN_ETC_DIRECTORY</CODE> (default: <TT>`edwin/etc'</TT> on the library path)
+<DD><A NAME="IDX121"></A>
+Directory where Edwin expects to find utility programs and documentation
+strings.
+<P>
+
+<DT><CODE>ESHELL</CODE>
+<DD><A NAME="IDX122"></A>
+Filename of the shell program to use in shell buffers.  If not defined,
+the <CODE>SHELL</CODE> environment variable is used instead.
+<P>
+
+<DT><CODE>SHELL</CODE> (default: <TT>`/bin/sh'</TT> (unix), <TT>`cmd.exe'</TT> (PC))
+<DD><A NAME="IDX123"></A>
+Filename of the shell program to use in shell buffers and when executing
+shell commands.  Used to initialize the <CODE>shell-path-name</CODE> editor
+variable.
+<P>
+
+<DT><CODE>PATH</CODE>
+<DD><A NAME="IDX124"></A>
+Used to initialize the <CODE>exec-path</CODE> editor variable, which is
+subsequently used for finding programs to be run as subprocesses.
+<P>
+
+<DT><CODE>DISPLAY</CODE>
+<DD><A NAME="IDX125"></A>
+Used when Edwin runs under unix and uses X11.
+Specifies the display on which Edwin will create windows.
+<P>
+
+<DT><CODE>TERM</CODE>
+<DD><A NAME="IDX126"></A>
+Used when Edwin runs under unix on a terminal.
+Terminal type.
+<P>
+
+<DT><CODE>LINES</CODE> (default: auto-sense)
+<DD><A NAME="IDX127"></A>
+Used when Edwin runs under unix on a terminal.
+Number of text lines on the screen, for systems that don't support
+<SAMP>`TIOCGWINSZ'</SAMP>.
+<P>
+
+<DT><CODE>COLUMNS</CODE> (default: auto-sense)
+<DD><A NAME="IDX128"></A>
+Used when Edwin runs under unix on a terminal.
+Number of text columns on the screen, for systems that don't support
+<SAMP>`TIOCGWINSZ'</SAMP>.
+</DL>
+<P>
+
+<A NAME="Windows Environment Variables"></A>
+<HR SIZE="6">
+<A NAME="SEC20"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC19"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC21"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC14"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC15"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC22"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 2.6.5 Environment Variables for Microsoft Windows </H3>
+<!--docid::SEC20::-->
+<P>
+
+These environment variables are specific to the Microsoft Windows
+implementation.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>MITSCHEME_FONT</CODE> (default: determined by operating system)
+<DD><A NAME="IDX129"></A>
+<A NAME="IDX130"></A>
+A string specifying a font name and characteristics, for example
+<SAMP>`Courier New 16 bold'</SAMP>.  Allowed characteristics are <VAR>integer</VAR>,
+specifying the font size in points, and the following style modifiers:
+<SAMP>`bold'</SAMP>, <SAMP>`italic'</SAMP>, <SAMP>`regular'</SAMP>, <SAMP>`underline'</SAMP> and
+<SAMP>`strikeout'</SAMP>.  You should specify only fixed-width fonts as
+variable-width fonts are not drawn correctly.
+<P>
+
+Once in Edwin, the font can be changed with the <CODE>set-font</CODE> and
+<CODE>set-default-font</CODE> commands.
+</P><P>
+
+<DT><CODE>MITSCHEME_GEOMETRY</CODE> (default: <SAMP>`-1,-1,-1,-1'</SAMP>)
+<DD><A NAME="IDX131"></A>
+<A NAME="IDX132"></A>
+Four integers separated by commas or spaces that specify the placement
+and size of the MIT Scheme window as a
+<VAR>left</VAR>,<VAR>top</VAR>,<VAR>width</VAR>,<VAR>height</VAR> quadruple.  The units are
+screen pixels, and <SAMP>`-1'</SAMP> means allow the system to choose this
+parameter.  E.g. <SAMP>`-1,-1,500,300'</SAMP> places a 500 by 300 pixel window
+at some system-determined position on the screen.  The width and height
+include the window border and title.
+<P>
+
+<DT><CODE>MITSCHEME_FOREGROUND</CODE> (default: according to desktop color scheme)
+<DD><A NAME="IDX133"></A>
+<A NAME="IDX134"></A>
+A value specifying the window
+text color.  The color is specified as hex blue, green and red values
+(<EM>not</EM> RGB): e.g. <CODE>0xff0000</CODE> for blue.
+<P>
+
+<DT><CODE>MITSCHEME_BACKGROUND</CODE> (default: according to desktop color scheme)
+<DD><A NAME="IDX135"></A>
+A value specifying the window background color.  See
+<CODE>MITSCHEME_FOREGROUND</CODE>.
+<P>
+
+<DT><CODE>HOMEDRIVE</CODE>
+<DD><DT><CODE>HOMEPATH</CODE>
+<DD><A NAME="IDX136"></A>
+<A NAME="IDX137"></A>
+These variables are used together to indicate the user's home
+directory.  This is the preferred way to specify the home directory.
+<P>
+
+<DT><CODE>USERNAME</CODE>
+<DD><DT><CODE>USER</CODE>
+<DD><A NAME="IDX138"></A>
+<A NAME="IDX139"></A>
+Specifies the login name of the user running Scheme.  This is used for
+several different purposes.  <CODE>USERNAME</CODE> is preferred; <CODE>USER</CODE>
+is used if <CODE>USERNAME</CODE> is not defined.  If neither of these
+variables is defined, an error is signalled when the username is
+required.
+<P>
+
+<DT><CODE>USERDIR</CODE>
+<DD><A NAME="IDX140"></A>
+Specifies a directory that contains the home directories of users.  One
+of the places in which Scheme looks for the user's home directory, by
+searching for a subdirectory with the user's login name.
+</DL>
+<P>
+
+<A NAME="OS/2 Environment Variables"></A>
+<HR SIZE="6">
+<A NAME="SEC21"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC20"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC22"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC14"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC15"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC22"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 2.6.6 Environment Variables for OS/2 </H3>
+<!--docid::SEC21::-->
+<P>
+
+These environment variables are specific to the OS/2 implementation.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>USER</CODE>
+<DD><A NAME="IDX141"></A>
+Specifies the login name of the user running Scheme.  This is used for
+several different purposes.  If this variable is undefined, an error is
+signalled when the username is required.
+<P>
+
+<DT><CODE>USERDIR</CODE>
+<DD><A NAME="IDX142"></A>
+Specifies a directory that contains the home directories of users.  One
+of the places in which Scheme looks for the user's home directory, by
+searching for a subdirectory with the user's login name.  This variable
+is used only when <CODE>HOME</CODE> is not defined; we recommend using
+<CODE>HOME</CODE> rather than <CODE>USERDIR</CODE>.
+<P>
+
+<DT><CODE>COMSPEC</CODE>
+<DD><A NAME="IDX143"></A>
+Specifies the command shell.  This is set in all versions of OS/2 (and
+is required for proper operation of the operating system).  Scheme uses
+this to determine the user's shell if the environment variable
+<CODE>SHELL</CODE> is not defined.
+</DL>
+<P>
+
+<A NAME="Starting Scheme from Microsoft Windows"></A>
+<HR SIZE="6">
+<A NAME="SEC22"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC21"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC23"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC15"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.7 Starting Scheme from Microsoft Windows </H2>
+<!--docid::SEC22::-->
+<P>
+
+The Microsoft Windows version of MIT Scheme runs as a graphics-based
+application.  Scheme can be started from the command line as described
+at the beginning of this chapter.
+</P><P>
+
+Shortcuts are a convenient way to start Scheme.  The rest of this
+section gives some tips on how to set up shortcuts that run Scheme.  If
+you are unfamiliar with this concept you should read about it in the
+system help.
+</P><P>
+
+<UL>
+<LI>
+Under Windows NT shortcuts can be <EM>common</EM> or <EM>personal</EM>.
+When setting common shortcuts it is important to make the shortcut
+properties independent of the vagaries of the environment of the user
+who is running them.
+<P>
+
+<LI>
+Give the shortcut an accurate <VAR>Description</VAR>.
+<P>
+
+<LI>
+Include absolute pathnames to <TT>`scheme.exe'</TT> and <TT>`bchscheme.exe'</TT>
+in the shortcut <VAR>Command line</VAR>.
+<P>
+
+<LI>
+If you specify the <CODE>-library</CODE> command-line option then you do not
+have to worry about the <CODE>MITSCHEME_LIBRARY_PATH</CODE> environment
+variable.
+<P>
+
+<LI>
+Set the shortcut's <VAR>Working Directory</VAR> to something sensible.  On
+Windows NT you can use <SAMP>`%HOMEDRIVE%%HOMEPATH%'</SAMP> to make Scheme start
+up in the user's home directory.  On Windows 9x you can use
+<SAMP>`%HOME%'</SAMP> to achieve the same effect, provided that you have set the
+<CODE>HOME</CODE> environment variable as we recommend.
+<P>
+
+<LI>
+There are several icons available in the Scheme executable -- choose
+one that best represents the options given on the command line.
+<P>
+
+<LI>
+Specifying a band that contains Edwin is not sufficient to invoke the
+editor.  You also have to put <CODE>-edit</CODE> at the end of the command
+line.
+</UL>
+<P>
+
+<A NAME="Leaving Scheme"></A>
+<HR SIZE="6">
+<A NAME="SEC23"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC22"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.8 Leaving Scheme </H2>
+<!--docid::SEC23::-->
+<P>
+
+There are several ways that you can leave Scheme: there are two Scheme
+procedures that you can call; there are several Edwin commands that you
+can execute; and there are are graphical-interface buttons (and their
+associated keyboard accelerators) that you can activate.
+</P><P>
+
+<UL>
+<LI>
+<EM>Two Scheme procedures that you can call.</EM>  The first is to
+evaluate
+<P>
+
+<A NAME="IDX144"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(exit)
+</pre></td></tr></table></P><P>
+
+which will halt the Scheme system, after first requesting confirmation.
+Any information that was in the environment is lost, so this should not
+be done lightly.
+</P><P>
+
+The second procedure suspends Scheme; when this is done you may later
+restart where you left off.  Unfortunately this is not possible in all
+operating systems; currently it works under unix versions that support
+job control (i.e. all of the unix versions for which we distribute
+Scheme).  To suspend Scheme, evaluate
+</P><P>
+
+<A NAME="IDX145"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(quit)
+</pre></td></tr></table></P><P>
+
+If your system supports suspension, this will cause Scheme to stop, and
+you will be returned to the shell.  Scheme remains stopped, and can be
+continued using the job-control commands of your shell.  If your system
+doesn't support suspension, this procedure does nothing.  (Calling the
+<CODE>quit</CODE> procedure is analogous to typing <KBD>C-z</KBD>, but it allows
+Scheme to respond by typing a prompt when it is unsuspended.)
+</P><P>
+
+<LI>
+<EM>Several Edwin commands that you can execute,</EM> including
+<CODE>save-buffers-kill-scheme</CODE>, normally bound to <KBD>C-x C-c</KBD>, and
+<CODE>suspend-scheme</CODE>, normally bound to <KBD>C-x C-z</KBD>.  These two
+commands correspond to the procedures <CODE>exit</CODE> and <CODE>quit</CODE>,
+respectively.
+<P>
+
+<LI>
+<EM>Graphical-interface buttons that you can activate.</EM>  Under OS/2
+and Windows, closing the console window (Scheme's main window) causes
+Scheme to be terminated.  Under any operating system, closing an Edwin
+window causes that window to go away, and if it is the only Edwin
+window, it terminates Scheme as well.
+<P>
+
+Under OS/2, there are two distinct ways to close the console window.
+The first is to use any of the usual window-closing methods, such as the
+<SAMP>`Close'</SAMP> system-menu item or double-clicking on the system-menu
+icon.  When this is done, you will be presented with a dialog that gives
+you the option to close the window with or without termating Scheme.
+The second way is to select the <SAMP>`Exit'</SAMP> item from the <SAMP>`File'</SAMP>
+menu, which terminates Scheme immediately with no dialog.
+</UL>
+<P>
+
+<A NAME="Using Scheme"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

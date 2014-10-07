@@ -1,0 +1,3472 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme Reference: Operating-System Interface</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme Reference: Operating-System Interface">
+<META NAME="keywords" CONTENT="MIT Scheme Reference: Operating-System Interface">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC146"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC145"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC147"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 15. Operating-System Interface </H1>
+<!--docid::SEC146::-->
+<P>
+
+The Scheme standard provides a simple mechanism for reading and writing
+files: file ports.  MIT Scheme provides additional tools for
+dealing with other aspects of the operating system:
+</P><P>
+
+<UL>
+<LI>
+<EM>Pathnames</EM> are a reasonably operating-system independent tool for
+manipulating the component parts of file names.  This can be useful for
+implementing defaulting of file name components.
+<A NAME="IDX1911"></A>
+<P>
+
+<LI>
+Control over the <EM>current working directory</EM>: the place in the file
+system from which relative file names are interpreted.
+<A NAME="IDX1912"></A>
+<P>
+
+<LI>
+Procedures that rename, copy, delete, and test for the existence of
+files.  Also, procedures that return detailed information about a
+particular file, such as its type (directory, link, etc.) or length.
+<P>
+
+<LI>
+Procedures for reading the contents of a directory.
+<P>
+
+<LI>
+Procedures for obtaining times in various formats, converting between
+the formats, and generating human-readable time strings.
+<P>
+
+<LI>
+Procedures to run other programs as subprocesses of Scheme, to read
+their output, and write input to them.
+<P>
+
+<LI>
+A means to determine the operating system Scheme is running under.
+</UL>
+<P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_16.html#SEC147">15.1 Pathnames</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_16.html#SEC152">15.2 Working Directory</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_16.html#SEC153">15.3 File Manipulation</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_16.html#SEC154">15.4 Directory Reader</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_16.html#SEC155">15.5 Date and Time</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_16.html#SEC161">15.6 Machine Time</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_16.html#SEC162">15.7 Subprocesses</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_16.html#SEC166">15.8 TCP Sockets</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_16.html#SEC167">15.9 Miscellaneous OS Facilities</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Pathnames"></A>
+<HR SIZE="6">
+<A NAME="SEC147"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC148"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC152"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 15.1 Pathnames </H2>
+<!--docid::SEC147::-->
+<P>
+
+<A NAME="IDX1913"></A>
+MIT Scheme programs need to use names to designate files.  The main
+difficulty in dealing with names of files is that different file systems
+have different naming formats for files.  For example, here is a table
+of several file systems (actually, operating systems that provide file
+systems) and what equivalent file names might look like for each one:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>System          File Name
+------          ---------
+TOPS-20         &#60;LISPIO&#62;FORMAT.FASL.13
+TOPS-10         FORMAT.FAS[1,4]
+ITS             LISPIO;FORMAT FASL
+MULTICS         &#62;udd&#62;LispIO&#62;format.fasl
+TENEX           &#60;LISPIO&#62;FORMAT.FASL;13
+VAX/VMS         [LISPIO]FORMAT.FAS;13
+UNIX            /usr/lispio/format.fasl
+DOS             C:\USR\LISPIO\FORMAT.FAS
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX1914"></A>
+<A NAME="IDX1915"></A>
+It would be impossible for each program that deals with file names to
+know about each different file name format that exists; a new operating
+system to which Scheme was ported might use a format different from any
+of its predecessors.  Therefore, MIT Scheme provides <EM>two</EM> ways to
+represent file names: <EM>filenames</EM> (also called <EM>namestrings</EM>),
+which are strings in the implementation-dependent form customary for the
+file system, and <EM>pathnames</EM>, which are special abstract data
+objects that represent file names in an implementation-independent way.
+Procedures are provided to convert between these two representations,
+and all manipulations of files can be expressed in machine-independent
+terms by using pathnames.
+</P><P>
+
+<A NAME="IDX1916"></A>
+In order to allow MIT Scheme programs to operate in a network
+environment that may have more than one kind of file system, the
+pathname facility allows a file name to specify which file system is to
+be used.  In this context, each file system is called a <EM>host</EM>, in
+keeping with the usual networking terminology.<A NAME="DOCF21" HREF="scheme_fot.html#FOOT21">(21)</A>
+</P><P>
+
+Note that the examples given in this section are specific to unix
+pathnames.  Pathnames for other operating systems have different
+external representations.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_16.html#SEC148">15.1.1 Filenames and Pathnames</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_16.html#SEC149">15.1.2 Components of Pathnames</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_16.html#SEC150">15.1.3 Operations on Pathnames</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_16.html#SEC151">15.1.4 Miscellaneous Pathname Procedures</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Filenames and Pathnames"></A>
+<HR SIZE="6">
+<A NAME="SEC148"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC147"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC149"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC147"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC152"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 15.1.1 Filenames and Pathnames </H3>
+<!--docid::SEC148::-->
+<P>
+
+Pathname objects are usually created by parsing filenames (character
+strings) into component parts.  MIT Scheme provides operations that
+convert filenames into pathnames and vice versa.
+</P><P>
+
+<A NAME="IDX1917"></A>
+<DL>
+<DT><U>procedure+:</U> <B>-&#62;pathname</B> <I>object</I>
+<DD><A NAME="IDX1918"></A>
+Returns a pathname that is the equivalent of <VAR>object</VAR>.  <VAR>Object</VAR>
+must be a pathname or a string.  If <VAR>object</VAR> is a pathname, it is
+returned.  If <VAR>object</VAR> is a string, this procedure returns the
+pathname that corresponds to the string; in this case it is equivalent
+to <CODE>(parse-namestring <VAR>object</VAR> #f #f)</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(-&#62;pathname "foo")          =>  #[pathname 65 "foo"]
+(-&#62;pathname "/usr/morris")  =>  #[pathname 66 "/usr/morris"]
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1919"></A>
+<DL>
+<DT><U>procedure+:</U> <B>parse-namestring</B> <I>thing [host [defaults]]</I>
+<DD><A NAME="IDX1920"></A>
+This turns <VAR>thing</VAR> into a pathname.
+<VAR>Thing</VAR> must be a pathname or a string.
+If <VAR>thing</VAR> is a pathname, it is returned.  If <VAR>thing</VAR> is a
+string, this procedure returns the pathname that corresponds to the
+string, parsed according to the syntax of the file system specified by
+<VAR>host</VAR>.
+</P><P>
+
+This procedure <EM>does not</EM> do defaulting of pathname components.
+</P><P>
+
+The optional arguments are used to determine what syntax should be used
+for parsing the string.  In general this is only really useful if your
+implementation of MIT Scheme supports more than one file system,
+otherwise you would use <CODE>-&#62;pathname</CODE>.  If given, <VAR>host</VAR> must be
+a host object or <CODE>#f</CODE>, and <VAR>defaults</VAR> must be a pathname.
+<VAR>Host</VAR> specifies the syntax used to parse the string.  If <VAR>host</VAR>
+is not given or <CODE>#f</CODE>, the host component from <VAR>defaults</VAR> is
+used instead; if <VAR>defaults</VAR> is not given, the host component from
+<CODE>*default-pathname-defaults*</CODE> is used.
+</DL>
+</P><P>
+
+<A NAME="IDX1921"></A>
+<DL>
+<DT><U>procedure+:</U> <B>-&#62;namestring</B> <I>pathname</I>
+<DD><A NAME="IDX1922"></A>
+<CODE>-&#62;namestring</CODE> returns a newly allocated string that is the
+filename corresponding to <VAR>pathname</VAR>.
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(-&#62;namestring (-&#62;pathname "/usr/morris/minor.van"))
+     =>  "/usr/morris/minor.van"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1923"></A>
+<DL>
+<DT><U>procedure+:</U> <B>pathname-simplify</B> <I>pathname</I>
+<DD><A NAME="IDX1924"></A>
+Returns a pathname that locates the same file or directory as
+<VAR>pathname</VAR>, but is in some sense simpler.  Note that
+<CODE>pathname-simplify</CODE> might not always be able to simplify the
+pathname, e.g. on unix with symbolic links the directory
+<TT>`/usr/morris/../'</TT> need not be the same as <TT>`/usr/'</TT>.  In cases
+of uncertainty the behavior is conservative, returning the original or a
+partly simplified pathname.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(pathname-simplify "/usr/morris/../morris/dance")
+     =>  #[pathname "/usr/morris/dance"]
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Components of Pathnames"></A>
+<HR SIZE="6">
+<A NAME="SEC149"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC148"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC150"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC147"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC152"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 15.1.2 Components of Pathnames </H3>
+<!--docid::SEC149::-->
+<P>
+
+A pathname object always has six components, described below.  These
+components are the common interface that allows programs to work the
+same way with different file systems; the mapping of the pathname
+components into the concepts peculiar to each file system is taken care
+of by the Scheme implementation.
+</P><P>
+
+<DL COMPACT>
+<DT><VAR>host</VAR>
+<DD>The name of the file system on which the file resides.  In the current
+implementation, this component is always a host object that is filled in
+automatically by the runtime system.  When specifying the host
+component, use either <CODE>#f</CODE> or the value of the variable
+<CODE>local-host</CODE>.
+<A NAME="IDX1925"></A>
+<P>
+
+<DT><VAR>device</VAR>
+<DD>Corresponds to the "device" or "file structure" concept in many host
+file systems: the name of a (logical or physical) device containing
+files.  This component is the drive letter for PC file systems, and is
+unused for unix file systems.
+<A NAME="IDX1926"></A>
+<P>
+
+<DT><VAR>directory</VAR>
+<DD>Corresponds to the "directory" concept in many host file systems: the
+name of a group of related files (typically those belonging to a single
+user or project).  This component is always used for all file systems.
+<A NAME="IDX1927"></A>
+<P>
+
+<DT><VAR>name</VAR>
+<DD>The name of a group of files that can be thought of as conceptually the
+"same" file.  This component is always used for all file systems.
+<A NAME="IDX1928"></A>
+<P>
+
+<DT><VAR>type</VAR>
+<DD>Corresponds to the "filetype" or "extension" concept in many host
+file systems.  This says what kind of file this is.  Files with the same
+name but different type are usually related in some specific way, such
+as one being a source file, another the compiled form of that source,
+and a third the listing of error messages from the compiler.  This
+component is currently used for all file systems, and is formed by
+taking the characters that follow the last dot in the namestring.
+<A NAME="IDX1929"></A>
+<P>
+
+<DT><VAR>version</VAR>
+<DD>Corresponds to the "version number" concept in many host file systems.
+Typically this is a number that is incremented every time the file is
+modified.  This component is currently unused for all file systems.
+<A NAME="IDX1930"></A>
+</DL>
+<P>
+
+Note that a pathname is not necessarily the name of a specific file.
+Rather, it is a specification (possibly only a partial specification) of
+how to access a file.  A pathname need not correspond to any file that
+actually exists, and more than one pathname can refer to the same file.
+For example, the pathname with a version of <CODE>newest</CODE> may refer to
+the same file as a pathname with the same components except a certain
+number as the version.  Indeed, a pathname with version <CODE>newest</CODE>
+may refer to different files as time passes, because the meaning of such
+a pathname depends on the state of the file system.  In file systems
+with such facilities as "links", multiple file names, logical devices,
+and so on, two pathnames that look quite different may turn out to
+address the same file.  To access a file given a pathname, one must do a
+file-system operation such as <CODE>open-input-file</CODE>.
+</P><P>
+
+Two important operations involving pathnames are <EM>parsing</EM> and
+<EM>merging</EM>.  Parsing is the conversion of a filename (which might be
+something supplied interactively  by the users when asked to supply the
+name of a file) into a pathname object.  This operation is
+implementation-dependent, because the format of filenames is
+implementation-dependent.  Merging takes a pathname with missing
+components and supplies values for those components from a source of
+default values.
+</P><P>
+
+Not all of the components of a pathname need to be specified.  If a
+component of a pathname is missing, its value is <CODE>#f</CODE>.
+Before the file system interface can do anything interesting with a
+file, such as opening the file, all the missing components of a pathname
+must be filled in.  Pathnames with missing components are used
+internally for various purposes; in particular, parsing a namestring
+that does not specify certain components will result in a pathname with
+missing components.
+</P><P>
+
+Any component of a pathname may be the symbol <CODE>unspecific</CODE>, meaning
+that the component simply does not exist, for file systems in which such
+a value makes no sense.  For example, unix, Windows, and OS/2 file
+systems usually do not support version numbers, so the version component
+for such a host might be <CODE>unspecific</CODE>.<A NAME="DOCF22" HREF="scheme_fot.html#FOOT22">(22)</A>
+</P><P>
+
+In addition to <CODE>#f</CODE> and <CODE>unspecific</CODE>, the components of a
+pathname may take on the following meaningful values:
+</P><P>
+
+<DL COMPACT>
+<DT><VAR>host</VAR>
+<DD>An implementation-defined type which may be tested for using the
+<CODE>host?</CODE> predicate.
+<P>
+
+<DT><VAR>device</VAR>
+<DD>On systems that support this component (Windows and OS/2), it may be
+specified as a string containing a single alphabetic character, for
+which the alphabetic case is ignored.
+<P>
+
+<DT><VAR>directory</VAR>
+<DD>A non-empty list, which represents a <EM>directory path</EM>: a sequence of
+directories, each of which has a name in the previous directory, the
+last of which is the directory specified by the entire path.  Each
+element in such a path specifies the name of the directory relative to
+the directory specified by the elements to its left.  The first element
+of the list is either the symbol <CODE>absolute</CODE> or the symbol
+<CODE>relative</CODE>.  If the first element in the list is the symbol
+<CODE>absolute</CODE>, then the directory component (and subsequently the
+pathname) is <EM>absolute</EM>; the first component in the sequence is to
+be found at the "root" of the file system.  If the directory is
+<EM>relative</EM> then the first component is to be found in some as yet
+unspecified directory; typically this is later specified to be the
+<EM>current working directory</EM>.
+<A NAME="IDX1931"></A>
+<A NAME="IDX1932"></A>
+<A NAME="IDX1933"></A>
+<P>
+
+<A NAME="IDX1934"></A>
+<A NAME="IDX1935"></A>
+Aside from <CODE>absolute</CODE> and <CODE>relative</CODE>, which may only appear as
+the first element of the list, each subsequent element in the list is
+either: a string, which is a literal component; the symbol <CODE>wild</CODE>,
+meaningful only when used in conjunction with the directory reader; or
+the symbol <CODE>up</CODE>, meaning the next directory is the "parent" of
+the previous one.  <CODE>up</CODE> corresponds to the file <TT>`..'</TT> in unix
+and PC file systems.
+</P><P>
+
+(The following note does not refer to any file system currently
+supported by MIT Scheme, but is included for completeness.)  In file
+systems that do not have "hierarchical" structure, a specified
+directory component will always be a list whose first element is
+<CODE>absolute</CODE>.  If the system does not support directories other than
+a single global directory, the list will have no other elements.  If the
+system supports "flat" directories, i.e. a global set of directories
+with no subdirectories, then the list will contain a second element,
+which is either a string or <CODE>wild</CODE>.  In other words, a
+non-hierarchical file system is treated as if it were hierarchical, but
+the hierarchical features are unused.  This representation is somewhat
+inconvenient for such file systems, but it discourages programmers from
+making code depend on the lack of a file hierarchy.
+</P><P>
+
+<DT><VAR>name</VAR>
+<DD>A string, which is a literal component; or the symbol <CODE>wild</CODE>,
+meaningful only when used in conjunction with the directory reader.
+<P>
+
+<DT><VAR>type</VAR>
+<DD>A string, which is a literal component; or the symbol <CODE>wild</CODE>,
+meaningful only when used in conjunction with the directory reader.
+<P>
+
+<DT><VAR>version</VAR>
+<DD>An exact positive integer, which is a literal component; the symbol
+<CODE>newest</CODE>, which means to choose the largest available version
+number for that file; the symbol <CODE>oldest</CODE>, which means to choose
+the smallest version number; or the symbol <CODE>wild</CODE>, meaningful only
+when used in conjunction with the directory reader.  In the future some
+other possible values may be added, e.g. <CODE>installed</CODE>.  Note that
+currently no file systems support version numbers; thus this component
+is not used and should be specified as <CODE>#f</CODE>.
+<A NAME="IDX1936"></A>
+<A NAME="IDX1937"></A>
+<A NAME="IDX1938"></A>
+</DL>
+<P>
+
+<A NAME="IDX1939"></A>
+<DL>
+<DT><U>procedure+:</U> <B>make-pathname</B> <I>host device directory name type version</I>
+<DD><A NAME="IDX1940"></A>
+Returns a pathname object whose components are the respective arguments.
+Each argument must satisfy the restrictions for the corresponding
+component, which were outlined above.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(make-pathname #f
+               #f
+               '(absolute "usr" "morris")
+               "foo"
+               "scm"
+               #f)
+     =>  #[pathname 67 "/usr/morris/foo.scm"]
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1941"></A>
+<DL>
+<DT><U>procedure+:</U> <B>pathname-host</B> <I>pathname</I>
+<DD><A NAME="IDX1942"></A>
+<DT><U>procedure+:</U> <B>pathname-device</B> <I>pathname</I>
+<DD><A NAME="IDX1943"></A>
+<DT><U>procedure+:</U> <B>pathname-directory</B> <I>pathname</I>
+<DD><A NAME="IDX1944"></A>
+<DT><U>procedure+:</U> <B>pathname-name</B> <I>pathname</I>
+<DD><A NAME="IDX1945"></A>
+<DT><U>procedure+:</U> <B>pathname-type</B> <I>pathname</I>
+<DD><A NAME="IDX1946"></A>
+<DT><U>procedure+:</U> <B>pathname-version</B> <I>pathname</I>
+<DD>Returns a particular component of <VAR>pathname</VAR>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define x (-&#62;pathname "/usr/morris/foo.scm"))
+(pathname-host x)       =>  #[host 1]
+(pathname-device x)     =>  unspecific
+(pathname-directory x)  =>  (absolute "usr" "morris")
+(pathname-name x)       =>  "foo"
+(pathname-type x)       =>  "scm"
+(pathname-version x)    =>  unspecific
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1947"></A>
+<DL>
+<DT><U>procedure+:</U> <B>pathname-new-device</B> <I>pathname device</I>
+<DD><A NAME="IDX1948"></A>
+<DT><U>procedure+:</U> <B>pathname-new-directory</B> <I>pathname directory</I>
+<DD><A NAME="IDX1949"></A>
+<DT><U>procedure+:</U> <B>pathname-new-name</B> <I>pathname name</I>
+<DD><A NAME="IDX1950"></A>
+<DT><U>procedure+:</U> <B>pathname-new-type</B> <I>pathname type</I>
+<DD><A NAME="IDX1951"></A>
+<DT><U>procedure+:</U> <B>pathname-new-version</B> <I>pathname version</I>
+<DD>Returns a new copy of <VAR>pathname</VAR> with the respective component
+replaced by the second argument.  <VAR>Pathname</VAR> is unchanged.
+Portable programs should not explicitly replace a component with
+<CODE>unspecific</CODE> because this might not be permitted in some
+situations.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define p (-&#62;pathname "/usr/blisp/rel15"))
+p
+     =>  #[pathname 71 "/usr/blisp/rel15"]
+(pathname-new-name p "rel100")
+     =>  #[pathname 72 "/usr/blisp/rel100"]
+(pathname-new-directory p '(relative "test" "morris"))
+     =>  #[pathname 73 "test/morris/rel15"]
+p
+     =>  #[pathname 71 "/usr/blisp/rel15"]
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1952"></A>
+<DL>
+<DT><U>procedure+:</U> <B>pathname-default-device</B> <I>pathname device</I>
+<DD><A NAME="IDX1953"></A>
+<DT><U>procedure+:</U> <B>pathname-default-directory</B> <I>pathname directory</I>
+<DD><A NAME="IDX1954"></A>
+<DT><U>procedure+:</U> <B>pathname-default-name</B> <I>pathname name</I>
+<DD><A NAME="IDX1955"></A>
+<DT><U>procedure+:</U> <B>pathname-default-type</B> <I>pathname type</I>
+<DD><A NAME="IDX1956"></A>
+<DT><U>procedure+:</U> <B>pathname-default-version</B> <I>pathname version</I>
+<DD>These operations are similar to the <CODE>pathname-new-<VAR>component</VAR></CODE>
+operations, except that they only change the specified <VAR>component</VAR>
+if it has the value <CODE>#f</CODE> in <VAR>pathname</VAR>.
+</DL>
+</P><P>
+
+<A NAME="Operations on Pathnames"></A>
+<HR SIZE="6">
+<A NAME="SEC150"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC149"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC151"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC147"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC152"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 15.1.3 Operations on Pathnames </H3>
+<!--docid::SEC150::-->
+<P>
+
+<A NAME="IDX1957"></A>
+<DL>
+<DT><U>procedure+:</U> <B>pathname?</B> <I>object</I>
+<DD><A NAME="IDX1958"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a pathname; otherwise returns
+<CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1959"></A>
+<DL>
+<DT><U>procedure+:</U> <B>pathname=?</B> <I>pathname1 pathname2</I>
+<DD><A NAME="IDX1960"></A>
+Returns <CODE>#t</CODE> if <VAR>pathname1</VAR> is equivalent to <VAR>pathname2</VAR>;
+otherwise returns <CODE>#f</CODE>.
+Pathnames are equivalent if all of their components are equivalent,
+hence two pathnames that are equivalent must identify the same file or
+equivalent partial pathnames.
+However, the converse is not true: non-equivalent pathnames may specify
+the same file (e.g. via absolute and relative directory components),
+and pathnames that specify no file at all (e.g. name and directory
+components unspecified) may be equivalent.
+</DL>
+</P><P>
+
+<A NAME="IDX1961"></A>
+<DL>
+<DT><U>procedure+:</U> <B>pathname-absolute?</B> <I>pathname</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>pathname</VAR> is an absolute rather than relative
+pathname object; otherwise returns <CODE>#f</CODE>.  Specifically, this
+procedure returns <CODE>#t</CODE> when the directory component of
+<VAR>pathname</VAR> is a list starting with the symbol <CODE>absolute</CODE>, and
+returns <CODE>#f</CODE> in all other cases.  All pathnames are either absolute
+or relative, so if this procedure returns <CODE>#f</CODE>, the argument is a
+relative pathname.
+</DL>
+</P><P>
+
+<A NAME="IDX1962"></A>
+<DL>
+<DT><U>procedure+:</U> <B>directory-pathname?</B> <I>pathname</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>pathname</VAR> has only directory components and no
+file components.  This is roughly equivalent to
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (directory-pathname? pathname)
+  (string-null? (file-namestring pathname)))
+</pre></td></tr></table></P><P>
+
+except that it is faster.
+</DL>
+</P><P>
+
+<A NAME="IDX1963"></A>
+<DL>
+<DT><U>procedure+:</U> <B>pathname-wild?</B> <I>pathname</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>pathname</VAR> contains any wildcard components;
+otherwise returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1964"></A>
+<DL>
+<DT><U>procedure+:</U> <B>merge-pathnames</B> <I>pathname [defaults [default-version]]</I>
+<DD><A NAME="IDX1965"></A>
+<A NAME="IDX1966"></A>
+Returns a pathname whose components are obtained by combining those of
+<VAR>pathname</VAR> and <VAR>defaults</VAR>.  <VAR>Defaults</VAR> defaults to the value
+of <CODE>*default-pathname-defaults*</CODE> and <VAR>default-version</VAR> defaults
+to <CODE>newest</CODE>.
+</P><P>
+
+The pathnames are combined by components: if <VAR>pathname</VAR> has a
+non-missing component, that is the resulting component, otherwise the
+component from <VAR>defaults</VAR> is used.
+The default version can be <CODE>#f</CODE> to preserve the information that
+the component was missing from <VAR>pathname</VAR>.
+The directory component is handled specially: if both pathnames have
+directory components that are lists, and the directory component from
+<VAR>pathname</VAR> is relative (i.e. starts with <CODE>relative</CODE>), then the
+resulting directory component is formed by appending <VAR>pathname</VAR>'s
+component to <VAR>defaults</VAR>'s component.
+For example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define path1 (-&#62;pathname "scheme/foo.scm"))
+(define path2 (-&#62;pathname "/usr/morris"))
+path1
+     =>  #[pathname 74 "scheme/foo.scm"]
+path2
+     =>  #[pathname 75 "/usr/morris"]
+(merge-pathnames path1 path2)
+     =>  #[pathname 76 "/usr/scheme/foo.scm"]
+(merge-pathnames path2 path1)
+     =>  #[pathname 77 "/usr/morris.scm"]
+</pre></td></tr></table></P><P>
+
+The merging rules for the version are more complex and depend on whether
+<VAR>pathname</VAR> specifies a name.  If <VAR>pathname</VAR> does not specify a
+name, then the version, if not provided, will come from <VAR>defaults</VAR>.
+However, if <VAR>pathname</VAR> does specify a name then the version is not
+affected by <VAR>defaults</VAR>.  The reason is that the version "belongs
+to" some other file name and is unlikely to have anything to do with
+the new one.  Finally, if this process leaves the version missing, then
+<VAR>default-version</VAR> is used.
+</P><P>
+
+The net effect is that if the user supplies just a name, then the host,
+device, directory and type will come from <VAR>defaults</VAR>, but the
+version will come from <VAR>default-version</VAR>.  If the user supplies
+nothing, or just a directory, the name, type and version will come over
+from <VAR>defaults</VAR> together.
+</DL>
+</P><P>
+
+<A NAME="IDX1967"></A>
+<DL>
+<DT><U>variable+:</U> <B>*default-pathname-defaults*</B>
+<DD><A NAME="IDX1968"></A>
+This is the default pathname-defaults pathname; if any pathname
+primitive that needs a set of defaults is not given one, it uses this
+one.  <CODE>set-working-directory-pathname!</CODE> sets this variable to a new
+value, computed by merging the new working directory with the variable's
+old value.
+</DL>
+</P><P>
+
+<A NAME="IDX1969"></A>
+<DL>
+<DT><U>procedure+:</U> <B>pathname-default</B> <I>pathname device directory name type version</I>
+<DD>This procedure defaults all of the components of <VAR>pathname</VAR>
+simultaneously.  It could have been defined by:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (pathname-default pathname
+                          device directory name type version)
+  (make-pathname (pathname-host pathname)
+                 (or (pathname-device pathname) device)
+                 (or (pathname-directory pathname) directory)
+                 (or (pathname-name pathname) name)
+                 (or (pathname-type pathname) type)
+                 (or (pathname-version pathname) version)))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1970"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-namestring</B> <I>pathname</I>
+<DD><A NAME="IDX1971"></A>
+<DT><U>procedure+:</U> <B>directory-namestring</B> <I>pathname</I>
+<DD><A NAME="IDX1972"></A>
+<DT><U>procedure+:</U> <B>host-namestring</B> <I>pathname</I>
+<DD><A NAME="IDX1973"></A>
+<DT><U>procedure+:</U> <B>enough-namestring</B> <I>pathname [defaults]</I>
+<DD><A NAME="IDX1974"></A>
+These procedures return a string corresponding to a subset of the
+<VAR>pathname</VAR> information.  <CODE>file-namestring</CODE> returns a string
+representing just the <VAR>name</VAR>, <VAR>type</VAR> and <VAR>version</VAR>
+components of <VAR>pathname</VAR>; the result of <CODE>directory-namestring</CODE>
+represents just the <VAR>host</VAR>, <VAR>device</VAR>, and <VAR>directory</VAR>
+components; and <CODE>host-namestring</CODE> returns a string for just the
+<VAR>host</VAR> portion.
+</P><P>
+
+<CODE>enough-namestring</CODE> takes another argument, <VAR>defaults</VAR>.
+It returns an abbreviated namestring that is just sufficient to identify
+the file named by <VAR>pathname</VAR> when considered relative to the
+<VAR>defaults</VAR> (which defaults to <CODE>*default-pathname-defaults*</CODE>).
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(file-namestring "/usr/morris/minor.van")
+     =>  "minor.van"
+(directory-namestring "/usr/morris/minor.van")
+     =>  "/usr/morris/"
+(enough-namestring "/usr/morris/men")
+     =>  "men"      ;perhaps
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1975"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-pathname</B> <I>pathname</I>
+<DD><A NAME="IDX1976"></A>
+<DT><U>procedure+:</U> <B>directory-pathname</B> <I>pathname</I>
+<DD><A NAME="IDX1977"></A>
+<DT><U>procedure+:</U> <B>enough-pathname</B> <I>pathname [defaults]</I>
+<DD><A NAME="IDX1978"></A>
+These procedures return a pathname corresponding to a subset of the
+<VAR>pathname</VAR> information.
+<CODE>file-pathname</CODE> returns a pathname with just the
+<VAR>name</VAR>, <VAR>type</VAR> and <VAR>version</VAR> components of <VAR>pathname</VAR>.
+The result of <CODE>directory-pathname</CODE> is a pathname containing the
+<VAR>host</VAR>, <VAR>device</VAR> and <VAR>directory</VAR> components of <VAR>pathname</VAR>.
+</P><P>
+
+<CODE>enough-pathname</CODE> takes another argument, <VAR>defaults</VAR>.
+It returns an abbreviated pathname that is just sufficient to identify
+the file named by <VAR>pathname</VAR> when considered relative to the
+<VAR>defaults</VAR> (which defaults to <CODE>*default-pathname-defaults*</CODE>).
+</P><P>
+
+These procedures are similar to <CODE>file-namestring</CODE>,
+<CODE>directory-namestring</CODE> and <CODE>enough-namestring</CODE>, but they
+return pathnames instead of strings.
+</DL>
+</P><P>
+
+<A NAME="IDX1979"></A>
+<DL>
+<DT><U>procedure+:</U> <B>directory-pathname-as-file</B> <I>pathname</I>
+<DD><A NAME="IDX1980"></A>
+Returns a pathname that is equivalent to <VAR>pathname</VAR>, but in which
+the directory component is represented as a file.
+The last directory is removed from the directory component and converted
+into name and type components.
+This is the inverse operation to <CODE>pathname-as-directory</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(directory-pathname-as-file (-&#62;pathname "/usr/blisp/"))
+     =>  #[pathname "/usr/blisp"]
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1981"></A>
+<DL>
+<DT><U>procedure+:</U> <B>pathname-as-directory</B> <I>pathname</I>
+<DD><A NAME="IDX1982"></A>
+Returns a pathname that is equivalent to <VAR>pathname</VAR>, but in which
+any file components have been converted to a directory component.  If
+<VAR>pathname</VAR> does not have name, type, or version components, it is
+returned without modification.  Otherwise, these file components are
+converted into a string, and the string is added to the end of the list
+of directory components.  This is the inverse operation to
+<CODE>directory-pathname-as-file</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(pathname-as-directory (-&#62;pathname "/usr/blisp/rel5"))
+     =>  #[pathname "/usr/blisp/rel5/"]
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Miscellaneous Pathnames"></A>
+<HR SIZE="6">
+<A NAME="SEC151"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC150"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC152"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC147"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC152"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 15.1.4 Miscellaneous Pathname Procedures </H3>
+<!--docid::SEC151::-->
+<P>
+
+This section gives some standard operations on host objects, and some
+procedures that return some useful pathnames.
+</P><P>
+
+<A NAME="IDX1983"></A>
+<DL>
+<DT><U>variable+:</U> <B>local-host</B>
+<DD>This variable has as its value the host object that describes the local
+host's file system.
+</DL>
+</P><P>
+
+<A NAME="IDX1984"></A>
+<DL>
+<DT><U>procedure+:</U> <B>host?</B> <I>object</I>
+<DD><A NAME="IDX1985"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a pathname host; otherwise returns
+<CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1986"></A>
+<DL>
+<DT><U>procedure+:</U> <B>host=?</B> <I>host1 host2</I>
+<DD><A NAME="IDX1987"></A>
+Returns <CODE>#t</CODE> if <VAR>host1</VAR> and <VAR>host2</VAR> denote the same
+pathname host; otherwise returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1988"></A>
+<DL>
+<DT><U>procedure+:</U> <B>init-file-pathname</B> <I>[host]</I>
+<DD><A NAME="IDX1989"></A>
+Returns a pathname for the user's initialization file on <VAR>host</VAR>.
+The <VAR>host</VAR> argument defaults to the value of <CODE>local-host</CODE>.  If
+the initialization file does not exist this procedure returns <CODE>#f</CODE>.
+</P><P>
+
+Under unix, the init file is called <TT>`.scheme.init'</TT>; under Windows
+and OS/2, the init file is called <TT>`scheme.ini'</TT>.  In either
+case, it is located in the user's home directory, which is computed by
+<CODE>user-homedir-pathname</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1990"></A>
+<DL>
+<DT><U>procedure+:</U> <B>user-homedir-pathname</B> <I>[host]</I>
+<DD><A NAME="IDX1991"></A>
+Returns a pathname for the user's "home directory" on <VAR>host</VAR>.  The
+<VAR>host</VAR> argument defaults to the value of <CODE>local-host</CODE>.  The
+concept of a "home directory" is itself somewhat
+implementation-dependent, but it should be the place where the user
+keeps personal files, such as initialization files and mail.
+</P><P>
+
+Under unix, the user's home directory is specified by the <CODE>HOME</CODE>
+environment variable.  If this variable is undefined, the user name is
+computed using the <CODE>getlogin</CODE> system call, or if that fails, the
+<CODE>getuid</CODE> system call.  The resulting user name is passed to the
+<CODE>getpwnam</CODE> system call to obtain the home directory.
+</P><P>
+
+Under OS/2, several heuristics are tried to find the user's home
+directory.  First, if the environment variable <CODE>HOME</CODE> is defined,
+that is the home directory.  If <CODE>HOME</CODE> is undefined, but the
+<CODE>USERDIR</CODE> and <CODE>USER</CODE> environment variables are defined and
+the directory <TT>`%USERDIR%\%USER%'</TT> exists, then it is used.  Failing
+that, if the directory <TT>`%USER%'</TT> exists on the OS/2 system
+drive, then it is used.  As a last resort, the OS/2 system drive is
+the home directory.
+</P><P>
+
+Like OS/2, the Windows implementation uses heuristics based on
+environment variables.  The user's home directory is computed by
+examining several environment variables, in the following order:
+</P><P>
+
+<UL>
+<LI>
+<CODE>HOMEDRIVE</CODE> and <CODE>HOMEPATH</CODE> are both defined and
+<TT>`%HOMEDRIVE%%HOMEPATH%'</TT> is an existing directory.  (These variables
+are automatically defined by Windows NT.)
+<P>
+
+<LI>
+<CODE>HOME</CODE> is defined and <TT>`%HOME%'</TT> is an existing directory.
+<P>
+
+<LI>
+<CODE>USERDIR</CODE> and <CODE>USERNAME</CODE> are defined and
+<TT>`%USERDIR%\%USERNAME%'</TT> is an existing directory.
+<P>
+
+<LI>
+<CODE>USERDIR</CODE> and <CODE>USER</CODE> are defined and
+<TT>`%USERDIR%\%USER%'</TT> is an existing directory.
+<P>
+
+<LI>
+<CODE>USERNAME</CODE> is defined and <TT>`%USERNAME%'</TT> is an existing
+directory on the Windows system drive.
+<P>
+
+<LI>
+<CODE>USER</CODE> is defined and <TT>`%USER%'</TT> is an existing directory on the
+Windows system drive.
+<P>
+
+<LI>
+Finally, if all else fails, the Windows system drive is used as the home
+directory.
+</UL>
+</DL>
+<P>
+
+<A NAME="IDX1992"></A>
+<DL>
+<DT><U>procedure+:</U> <B>system-library-pathname</B> <I>pathname</I>
+<DD><A NAME="IDX1993"></A>
+Locates <VAR>pathname</VAR> in MIT Scheme's system library directory.  An
+error of type <CODE>condition-type:file-operation-error</CODE> is signalled if
+<VAR>pathname</VAR> cannot be located on the library search path.
+<A NAME="IDX1994"></A>
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(system-library-pathname "compiler.com")
+  => #[pathname 45 "/usr/local/lib/mit-scheme/compiler.com"]
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1995"></A>
+<DL>
+<DT><U>procedure+:</U> <B>system-library-directory-pathname</B> <I>pathname</I>
+<DD><A NAME="IDX1996"></A>
+Locates the pathname of an MIT Scheme system library directory.  An
+error of type <CODE>condition-type:file-operation-error</CODE> is signalled if
+<VAR>pathname</VAR> cannot be located on the library search path.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(system-library-directory-pathname "options")
+     => #[pathname 44 "/usr/local/lib/mit-scheme/options/"]
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Working Directory"></A>
+<HR SIZE="6">
+<A NAME="SEC152"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC151"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC153"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC147"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 15.2 Working Directory </H2>
+<!--docid::SEC152::-->
+<P>
+
+<A NAME="IDX1997"></A>
+<A NAME="IDX1998"></A>
+<A NAME="IDX1999"></A>
+<A NAME="IDX2000"></A>
+<A NAME="IDX2001"></A>
+<A NAME="IDX2002"></A>
+<A NAME="IDX2003"></A>
+When MIT Scheme is started, the <EM>current working
+directory</EM> (or simply, <EM>working directory</EM>) is initialized in an
+operating-system dependent manner; usually, it is the directory in which
+Scheme was invoked.  The working directory can be determined from within
+Scheme by calling the <CODE>pwd</CODE> procedure, and changed by calling the
+<CODE>cd</CODE> procedure.  Each REP loop has its own working directory,
+and inferior REP loops initialize their working directory from the
+value in effect in their superior at the time they are created.
+</P><P>
+
+<A NAME="IDX2004"></A>
+<DL>
+<DT><U>procedure+:</U> <B>working-directory-pathname</B>
+<DD><A NAME="IDX2005"></A>
+<DT><U>procedure+:</U> <B>pwd</B>
+<DD>Returns the current working directory as a pathname that has no name,
+type, or version components, just host, device, and directory
+components.  <CODE>pwd</CODE> is an alias for
+<CODE>working-directory-pathname</CODE>; the long name is intended for
+programs and the short name for interactive use.
+</DL>
+</P><P>
+
+<A NAME="IDX2006"></A>
+<DL>
+<DT><U>procedure+:</U> <B>set-working-directory-pathname!</B> <I>filename</I>
+<DD><A NAME="IDX2007"></A>
+<DT><U>procedure+:</U> <B>cd</B> <I>filename</I>
+<DD><A NAME="IDX2008"></A>
+<A NAME="IDX2009"></A>
+Makes <VAR>filename</VAR> the current working directory and returns the new
+current working directory as a pathname.  <VAR>Filename</VAR> is coerced to a
+pathname using <CODE>pathname-as-directory</CODE>.  <CODE>cd</CODE> is an alias for
+<CODE>set-working-directory-pathname!</CODE>; the long name is intended for
+programs and the short name for interactive use.
+</P><P>
+
+Additionally, <CODE>set-working-directory-pathname!</CODE> modifies the value
+of<BR> <CODE>*default-pathname-defaults*</CODE> by merging the new working
+directory into it.
+</P><P>
+
+When this procedure is executed in the top-level REP loop, it
+changes the working directory of the running Scheme executable.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(set-working-directory-pathname! "/usr/morris/blisp")
+     =>  #[pathname "/usr/morris/blisp/"]
+(set-working-directory-pathname! "~")
+     =>  #[pathname "/usr/morris/"]
+</pre></td></tr></table></P><P>
+
+This procedure signals an error if <VAR>filename</VAR> does not refer to an
+existing directory.
+</P><P>
+
+If <VAR>filename</VAR> describes a relative rather than absolute pathname,
+this procedure interprets it as relative to the current working
+directory, before changing the working directory.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(working-directory-pathname)
+     =>  #[pathname "/usr/morris/"]
+(set-working-directory-pathname! "foo")
+     =>  #[pathname "/usr/morris/foo/"]
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2010"></A>
+<DL>
+<DT><U>procedure+:</U> <B>with-working-directory-pathname</B> <I>filename thunk</I>
+<DD>This procedure temporarily rebinds the current working directory to
+<VAR>filename</VAR>, invokes <VAR>thunk</VAR> (a procedure of no arguments), then
+restores the previous working directory and returns the value yielded by
+<VAR>thunk</VAR>.  <VAR>Filename</VAR> is coerced to a pathname using
+<CODE>pathname-as-directory</CODE>.  In addition to binding the working
+directory, <CODE>with-working-directory-pathname</CODE> also binds the
+variable <CODE>*default-pathname-defaults*</CODE>, merging the old value of
+that variable with the new working directory pathname.  Both bindings
+are performed in exactly the same way as dynamic binding of a variable
+(see section <A HREF="scheme_3.html#SEC32">2.3 Dynamic Binding</A>).
+</DL>
+</P><P>
+
+<A NAME="File Manipulation"></A>
+<HR SIZE="6">
+<A NAME="SEC153"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC152"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC154"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 15.3 File Manipulation </H2>
+<!--docid::SEC153::-->
+<P>
+
+This section describes procedures that manipulate files and directories.
+Any of these procedures can signal a number of errors for many reasons.
+The specifics of these errors are much too operating-system dependent to
+document here.  However, if such an error is signalled by one of
+these procedures, it will be of type
+<CODE>condition-type:file-operation-error</CODE>.
+<A NAME="IDX2011"></A>
+</P><P>
+
+<A NAME="IDX2012"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-exists?</B> <I>filename</I>
+<DD><A NAME="IDX2013"></A>
+<DT><U>procedure+:</U> <B>file-exists-direct?</B> <I>filename</I>
+<DD><A NAME="IDX2014"></A>
+<DT><U>procedure+:</U> <B>file-exists-indirect?</B> <I>filename</I>
+<DD><A NAME="IDX2015"></A>
+These procedures return <CODE>#t</CODE> if <VAR>filename</VAR> is an existing file
+or directory; otherwise they return <CODE>#f</CODE>.  In operating systems
+that support symbolic links, if the file is a symbolic link,
+<CODE>file-exists-direct?</CODE> tests for the existence of the link, while
+<CODE>file-exists-indirect?</CODE> and <CODE>file-exists?</CODE> test for the
+existence of the file pointed to by the link.
+</DL>
+</P><P>
+
+<A NAME="IDX2016"></A>
+<DL>
+<DT><U>procedure+:</U> <B>copy-file</B> <I>source-filename target-filename</I>
+<DD><A NAME="IDX2017"></A>
+Makes a copy of the file named by <VAR>source-filename</VAR>.  The copy is
+performed by creating a new file called <VAR>target-filename</VAR>, and
+filling it with the same data as <VAR>source-filename</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX2018"></A>
+<DL>
+<DT><U>procedure+:</U> <B>rename-file</B> <I>source-filename target-filename</I>
+<DD><A NAME="IDX2019"></A>
+<A NAME="IDX2020"></A>
+Changes the name of <VAR>source-filename</VAR> to be <VAR>target-filename</VAR>.
+In the unix implementation, this will not rename across file systems.
+</DL>
+</P><P>
+
+<A NAME="IDX2021"></A>
+<DL>
+<DT><U>procedure+:</U> <B>delete-file</B> <I>filename</I>
+<DD><A NAME="IDX2022"></A>
+Deletes the file named <VAR>filename</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX2023"></A>
+<DL>
+<DT><U>procedure+:</U> <B>delete-file-no-errors</B> <I>filename</I>
+<DD>Like <CODE>delete-file</CODE>, but returns a boolean value indicating whether
+an error occurred during the deletion.  If no errors occurred, <CODE>#t</CODE>
+is returned.  If an error of type <CODE>condition-type:file-error</CODE> or
+<CODE>condition-type:port-error</CODE> is signalled, <CODE>#f</CODE> is returned.
+</DL>
+</P><P>
+
+<A NAME="IDX2024"></A>
+<DL>
+<DT><U>procedure+:</U> <B>hard-link-file</B> <I>source-filename target-filename</I>
+<DD><A NAME="IDX2025"></A>
+<A NAME="IDX2026"></A>
+Makes a hard link from <VAR>source-filename</VAR> to <VAR>target-filename</VAR>.
+This operation gives the file specified by <VAR>source-filename</VAR> a new
+name, in addition to the old name.
+</P><P>
+
+This currently works only on unix systems.  It is further restricted to
+work only when  <VAR>source-filename</VAR> and <VAR>target-filename</VAR> refer to
+names in the same file system.
+</DL>
+</P><P>
+
+<A NAME="IDX2027"></A>
+<DL>
+<DT><U>procedure+:</U> <B>soft-link-file</B> <I>source-filename target-filename</I>
+<DD><A NAME="IDX2028"></A>
+<A NAME="IDX2029"></A>
+<A NAME="IDX2030"></A>
+Creates a new soft link called <VAR>target-filename</VAR> that points at the
+file <VAR>source-filename</VAR>.  (Soft links are also sometimes called
+<EM>symbolic</EM> links.)  Note that <VAR>source-filename</VAR> will be
+interpreted as a string (although you may specify it as a pathname
+object, if you wish).  The contents of this string will be stored in the
+file system as the soft link.  When a file operation attempts to open
+the link, the contents of the link are interpreted relative to the
+link's location at that time.
+</P><P>
+
+This currently works only on unix systems.
+</DL>
+</P><P>
+
+<A NAME="IDX2031"></A>
+<DL>
+<DT><U>procedure+:</U> <B>make-directory</B> <I>filename</I>
+<DD>Creates a new directory named <VAR>filename</VAR>.  Signals an error if
+<VAR>filename</VAR> already exists, or if the directory cannot be created.
+</DL>
+</P><P>
+
+<A NAME="IDX2032"></A>
+<DL>
+<DT><U>procedure+:</U> <B>delete-directory</B> <I>filename</I>
+<DD>Deletes the directory named <VAR>filename</VAR>.  Signals an error if
+the directory does not exist, is not a directory, or contains any files
+or subdirectories.
+</DL>
+</P><P>
+
+<A NAME="IDX2033"></A>
+<DL>
+<DT><U>procedure+:</U> <B>-&#62;truename</B> <I>filename</I>
+<DD><A NAME="IDX2034"></A>
+This procedure attempts to discover and return the "true name" of the
+file associated with <VAR>filename</VAR> within the file system.  An error of
+type <CODE>condition-type:file-operation-error</CODE> is signalled if the
+appropriate file cannot be located within the file system.
+<A NAME="IDX2035"></A>
+</DL>
+</P><P>
+
+<A NAME="IDX2036"></A>
+<DL>
+<DT><U>procedure+:</U> <B>call-with-temporary-file-pathname</B> <I>procedure</I>
+<DD>Calls <CODE>temporary-file-pathname</CODE> to create a temporary file, then
+calls <VAR>procedure</VAR> with one argument, the pathname referring to that
+file.  When <VAR>procedure</VAR> returns, if the temporary file still exists,
+it is deleted; then, the value yielded by <VAR>procedure</VAR> is returned.
+If <VAR>procedure</VAR> escapes from its continuation, and the file still
+exists, it is deleted.
+</DL>
+</P><P>
+
+<A NAME="IDX2037"></A>
+<DL>
+<DT><U>procedure+:</U> <B>temporary-file-pathname</B> <I>[directory]</I>
+<DD>Creates a new empty temporary file and returns a pathname referring to
+it.  The temporary file is created with Scheme's default permissions, so
+barring unusual circumstances it can be opened for input and/or output
+without error.  The temporary file will remain in existence until
+explicitly deleted.  If the file still exists when the Scheme process
+terminates, it will be deleted.
+</P><P>
+
+If <VAR>directory</VAR> is specified, the temporary file will be stored
+there.  If it is not specified, or if it is <CODE>#f</CODE>, the temporary
+file will be stored in the directory returned by
+<CODE>temporary-directory-pathname</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2038"></A>
+<DL>
+<DT><U>procedure+:</U> <B>temporary-directory-pathname</B>
+<DD>Returns the pathname of an existing directory that can be used to store
+temporary files.  These directory names are tried, in order, until a
+writeable directory is found:
+</P><P>
+
+<UL>
+<LI>
+The directories specified by the environment variables <CODE>TMPDIR</CODE>,
+<CODE>TEMP</CODE>, or <CODE>TMP</CODE>.
+<P>
+
+<LI>
+Under unix, the directories <TT>`/var/tmp'</TT>, <TT>`/usr/tmp'</TT>, or
+<TT>`/tmp'</TT>.
+<P>
+
+<LI>
+Under OS/2 or Windows, the following directories on the system drive:
+<TT>`\temp'</TT>, <TT>`\tmp'</TT>, or <TT>`\'</TT>.
+<P>
+
+<LI>
+Under OS/2 or Windows, the current directory, as specified by
+<CODE>*default-pathname-defaults*</CODE>.
+</UL>
+</DL>
+<P>
+
+<A NAME="IDX2039"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-directory?</B> <I>filename</I>
+<DD><A NAME="IDX2040"></A>
+Returns <CODE>#t</CODE> if the file named <VAR>filename</VAR> exists and is a
+directory.  Otherwise returns <CODE>#f</CODE>.  In operating systems that
+support symbolic links, if <VAR>filename</VAR> names a symbolic link, this
+examines the file linked to, not the link itself.
+</P><P>
+
+This is equivalent to
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(eq? 'directory (file-type-indirect <VAR>filename</VAR>))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2041"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-regular?</B> <I>filename</I>
+<DD><A NAME="IDX2042"></A>
+<A NAME="IDX2043"></A>
+Returns <CODE>#t</CODE> if the file named <VAR>filename</VAR> exists and is a
+regular file (i.e. not a directory, symbolic link, device file, etc.).
+Otherwise returns <CODE>#f</CODE>.  In operating systems that support symbolic
+links, if <VAR>filename</VAR> names a symbolic link, this examines the file
+linked to, not the link itself.
+</P><P>
+
+This is equivalent to
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(eq? 'regular (file-type-indirect <VAR>filename</VAR>))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2044"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-symbolic-link?</B> <I>filename</I>
+<DD><A NAME="IDX2045"></A>
+In operating systems that support symbolic links, if the file named
+<VAR>filename</VAR> exists and is a symbolic link, this procedure returns the
+contents of the symbolic link as a newly allocated string.  The returned
+value is the name of the file that the symbolic link points to and must
+be interpreted relative to the directory of <VAR>filename</VAR>.  If
+<VAR>filename</VAR> either does not exist or is not a symbolic link, or if
+the operating system does not support symbolic links, this procedure
+returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2046"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-type-direct</B> <I>filename</I>
+<DD><A NAME="IDX2047"></A>
+<DT><U>procedure+:</U> <B>file-type-indirect</B> <I>filename</I>
+<DD><A NAME="IDX2048"></A>
+If the file named <VAR>filename</VAR> exists, <CODE>file-type-direct</CODE> returns
+a symbol specifying what type of file it is.  For example, if
+<VAR>filename</VAR> refers to a directory, the symbol <CODE>directory</CODE> is
+returned.  If <VAR>filename</VAR> doesn't refer to an existing file,
+<CODE>#f</CODE> is returned.
+</P><P>
+
+If <VAR>filename</VAR> refers to a symbolic link, <CODE>file-type-direct</CODE>
+returns the type of the link itself, while <CODE>file-type-indirect</CODE>
+returns the type of the file linked to.
+</P><P>
+
+At this time, the symbols that can be returned are the following.  The
+names are intended to be self-explanatory.  Most of these names can only
+be returned on particular operating systems, and so the operating-system
+name is prefixed to the name.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>regular
+directory
+unix-symbolic-link
+unix-character-device
+unix-block-device
+unix-named-pipe
+unix-socket
+os2-named-pipe
+win32-named-pipe
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2049"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-readable?</B> <I>filename</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>filename</VAR> names a file that can be opened for
+input; i.e. a <EM>readable</EM> file.  Otherwise returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2050"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-writeable?</B> <I>filename</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>filename</VAR> names a file that can be opened for
+output; i.e. a <EM>writeable</EM> file.  Otherwise returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2051"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-executable?</B> <I>filename</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>filename</VAR> names a file that can be executed.
+Otherwise returns <CODE>#f</CODE>.  Under unix, an executable file is
+identified by its mode bits.  Under OS/2, an executable file has
+one of the file extensions <TT>`.exe'</TT>, <TT>`.com'</TT>, <TT>`.cmd'</TT>, or
+<TT>`.bat'</TT>.  Under Windows, an executable file has one of the file
+extensions <TT>`.exe'</TT>, <TT>`.com'</TT>, or <TT>`.bat'</TT>.
+</DL>
+</P><P>
+
+<A NAME="IDX2052"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-access</B> <I>filename mode</I>
+<DD><VAR>Mode</VAR> must be an exact integer between <CODE>0</CODE> and <CODE>7</CODE>
+inclusive; it is a bitwise-encoded predicate selector with <CODE>1</CODE>
+meaning "executable", <CODE>2</CODE> meaning "writeable", and <CODE>4</CODE>
+meaning "readable".  <CODE>file-access</CODE> returns <CODE>#t</CODE> if
+<VAR>filename</VAR> exists and satisfies the predicates selected by
+<VAR>mode</VAR>.  For example, if <VAR>mode</VAR> is <CODE>5</CODE>, then <VAR>filename</VAR>
+must be both readable and executable.  If <VAR>filename</VAR> doesn't exist,
+or if it does not satisfy the selected predicates, <CODE>#f</CODE> is
+returned.
+</DL>
+</P><P>
+
+<A NAME="IDX2053"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-eq?</B> <I>filename1 filename2</I>
+<DD>Determines whether <VAR>filename1</VAR> and <VAR>filename2</VAR> refer to the same
+file.  Under unix, this is done by comparing the inodes and devices of
+the two files.  Under OS/2 and Windows, this is done by comparing
+the filename strings.
+</DL>
+</P><P>
+
+<A NAME="IDX2054"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-modes</B> <I>filename</I>
+<DD>If <VAR>filename</VAR> names an existing file, <CODE>file-modes</CODE> returns an
+exact non-negative integer encoding the file's permissions.  The
+encoding of this integer is operating-system dependent.  Under unix, it
+is the least-significant 12 bits of the <CODE>st_mode</CODE> element of the
+<CODE>struct stat</CODE> structure.  Under OS/2 and Windows, it is the file
+attribute bits, which are described below.  If <VAR>filename</VAR> does not
+name an existing file, <CODE>#f</CODE> is returned.
+</DL>
+</P><P>
+
+<A NAME="IDX2055"></A>
+<DL>
+<DT><U>procedure+:</U> <B>set-file-modes!</B> <I>filename modes</I>
+<DD><VAR>Filename</VAR> must name an existing file.  <VAR>Modes</VAR> must be an exact
+non-negative integer that could have been returned by a call to
+<CODE>file-modes</CODE>.  <CODE>set-file-modes!</CODE> modifies the file's
+permissions to be those encoded by <VAR>modes</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX2056"></A>
+<DL>
+<DT><U>variable+:</U> <B>os2-file-mode/read-only</B>
+<DD><A NAME="IDX2057"></A>
+<DT><U>variable+:</U> <B>os2-file-mode/hidden</B>
+<DD><A NAME="IDX2058"></A>
+<DT><U>variable+:</U> <B>os2-file-mode/system</B>
+<DD><A NAME="IDX2059"></A>
+<DT><U>variable+:</U> <B>os2-file-mode/directory</B>
+<DD><A NAME="IDX2060"></A>
+<DT><U>variable+:</U> <B>os2-file-mode/archived</B>
+<DD>The values of these variables are the "mode bits" that comprise the
+value returned by <CODE>file-modes</CODE> under OS/2.  These bits are small
+integers that are combined by adding to form a complete set of modes.
+The integer zero represents a set of modes in which none of these bits
+are set.
+</DL>
+</P><P>
+
+<A NAME="IDX2061"></A>
+<DL>
+<DT><U>variable+:</U> <B>nt-file-mode/read-only</B>
+<DD><A NAME="IDX2062"></A>
+<DT><U>variable+:</U> <B>nt-file-mode/hidden</B>
+<DD><A NAME="IDX2063"></A>
+<DT><U>variable+:</U> <B>nt-file-mode/system</B>
+<DD><A NAME="IDX2064"></A>
+<DT><U>variable+:</U> <B>nt-file-mode/directory</B>
+<DD><A NAME="IDX2065"></A>
+<DT><U>variable+:</U> <B>nt-file-mode/archive</B>
+<DD><A NAME="IDX2066"></A>
+<DT><U>variable+:</U> <B>nt-file-mode/normal</B>
+<DD><A NAME="IDX2067"></A>
+<DT><U>variable+:</U> <B>nt-file-mode/temporary</B>
+<DD><A NAME="IDX2068"></A>
+<DT><U>variable+:</U> <B>nt-file-mode/compressed</B>
+<DD>The values of these variables are the "mode bits" that comprise the
+value returned by <CODE>file-modes</CODE> under Windows.  These bits are small
+integers that are combined by adding to form a complete set of modes.
+The integer zero represents a set of modes in which none of these bits
+are set.
+</DL>
+</P><P>
+
+<A NAME="IDX2069"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-modification-time</B> <I>filename</I>
+<DD><A NAME="IDX2070"></A>
+Returns the modification time of <VAR>filename</VAR> as an exact non-negative
+integer.  The result may be compared to other file times using ordinary
+integer arithmetic.  If <VAR>filename</VAR> names a file that does not exist,
+<CODE>file-modification-time</CODE> returns <CODE>#f</CODE>.
+</P><P>
+
+<A NAME="IDX2071"></A>
+<A NAME="IDX2072"></A>
+In operating systems that support symbolic links, if <VAR>filename</VAR>
+names a symbolic link, <CODE>file-modification-time</CODE> returns the
+modification time of the file linked to.  An alternate procedure,
+<CODE>file-modification-time-direct</CODE>, returns the modification time of
+the link itself; in all other respects it is identical to
+<CODE>file-modification-time</CODE>.  For symmetry,
+<CODE>file-modification-time-indirect</CODE> is a synonym of
+<CODE>file-modification-time</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2073"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-access-time</B> <I>filename</I>
+<DD><A NAME="IDX2074"></A>
+Returns the access time of <VAR>filename</VAR> as an exact non-negative
+integer.  The result may be compared to other file times using ordinary
+integer arithmetic.  If <VAR>filename</VAR> names a file that does not exist,
+<CODE>file-access-time</CODE> returns <CODE>#f</CODE>.
+</P><P>
+
+<A NAME="IDX2075"></A>
+<A NAME="IDX2076"></A>
+In operating systems that support symbolic links, if <VAR>filename</VAR>
+names a symbolic link, <CODE>file-access-time</CODE> returns the access time
+of the file linked to.  An alternate procedure,
+<CODE>file-access-time-direct</CODE>, returns the access time of the link
+itself; in all other respects it is identical to
+<CODE>file-access-time</CODE>.  For symmetry, <CODE>file-access-time-indirect</CODE>
+is a synonym of <CODE>file-access-time</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2077"></A>
+<DL>
+<DT><U>procedure+:</U> <B>set-file-times!</B> <I>filename access-time modification-time</I>
+<DD><VAR>Filename</VAR> must name an existing file, while <VAR>access-time</VAR> and
+<VAR>modification-time</VAR> must be valid file times that might have been
+returned by <CODE>file-access-time</CODE> and <CODE>file-modification-time</CODE>,
+respectively.  <CODE>set-file-times!</CODE> alters the access and modification
+times of the file specified by <VAR>filename</VAR> to the values given by
+<VAR>access-time</VAR> and <VAR>modification-time</VAR>, respectively.  For
+convenience, either of the time arguments may be specified as <CODE>#f</CODE>;
+in this case the corresponding time is not changed.
+<CODE>set-file-times!</CODE> returns an unspecified value.
+</DL>
+</P><P>
+
+<A NAME="IDX2078"></A>
+<DL>
+<DT><U>procedure+:</U> <B>current-file-time</B>
+<DD>Returns the current time as an exact non-negative integer, in the same
+format used by the above file-time procedures.  This number can be
+compared to other file times using ordinary arithmetic operations.
+</DL>
+</P><P>
+
+<A NAME="IDX2079"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-touch</B> <I>filename</I>
+<DD><EM>Touches</EM> the file named <VAR>filename</VAR>.  If the file already
+exists, its modification time is set to the current file time and
+<CODE>#f</CODE> is returned.  Otherwise, the file is created and <CODE>#t</CODE> is
+returned.  This is an atomic test-and-set operation, so it is useful as
+a synchronization mechanism.
+</DL>
+</P><P>
+
+<A NAME="IDX2080"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-length</B> <I>filename</I>
+<DD>Returns the length, in bytes, of the file named <VAR>filename</VAR> as an
+exact non-negative integer.
+</DL>
+</P><P>
+
+<A NAME="IDX2081"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-attributes</B> <I>filename</I>
+<DD><A NAME="IDX2082"></A>
+This procedure determines if the file named <VAR>filename</VAR> exists, and
+returns information about it if so; if the file does not exist, it
+returns <CODE>#f</CODE>.
+</P><P>
+
+<A NAME="IDX2083"></A>
+<A NAME="IDX2084"></A>
+In operating systems that support symbolic links, if <VAR>filename</VAR>
+names a symbolic link, <CODE>file-attributes</CODE> returns the attributes of
+the link itself.  An alternate procedure,
+<CODE>file-attributes-indirect</CODE>, returns the attributes of the file
+linked to; in all other respects it is identical to
+<CODE>file-attributes</CODE>.  For symmetry, <CODE>file-attributes-direct</CODE> is
+a synonym of <CODE>file-attributes</CODE>.
+</DL>
+</P><P>
+
+The information returned by <CODE>file-attributes</CODE> is decoded by
+accessor procedures.  The following accessors are defined in all
+operating systems:
+</P><P>
+
+<A NAME="IDX2085"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-attributes/type</B> <I>attributes</I>
+<DD>The file type: <CODE>#t</CODE> if the file is a directory, a character string
+(the name linked to) if a symbolic link, or <CODE>#f</CODE> for all other
+types of file.
+</DL>
+</P><P>
+
+<A NAME="IDX2086"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-attributes/access-time</B> <I>attributes</I>
+<DD>The last access time of the file, an exact non-negative integer.
+</DL>
+</P><P>
+
+<A NAME="IDX2087"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-attributes/modification-time</B> <I>attributes</I>
+<DD>The last modification time of the file, an exact non-negative integer.
+</DL>
+</P><P>
+
+<A NAME="IDX2088"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-attributes/change-time</B> <I>attributes</I>
+<DD>The last change time of the file, an exact non-negative integer.
+</DL>
+</P><P>
+
+<A NAME="IDX2089"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-attributes/length</B> <I>attributes</I>
+<DD>The length of the file in bytes.
+</DL>
+</P><P>
+
+<A NAME="IDX2090"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-attributes/mode-string</B> <I>attributes</I>
+<DD>The mode string of the file, a newly allocated string showing the file's
+mode bits.  Under unix, this string is in unix format.  Under OS/2 and
+Windows, this string shows the standard "DOS" attributes in their
+usual format.
+</DL>
+</P><P>
+
+<A NAME="IDX2091"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-attributes/n-links</B> <I>attributes</I>
+<DD>The number of links to the file, an exact positive integer.  Under
+Windows and OS/2, this is always <CODE>1</CODE>.
+</DL>
+</P><P>
+
+The following additional accessors are defined under unix:
+</P><P>
+
+<A NAME="IDX2092"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-attributes/uid</B> <I>attributes</I>
+<DD>The user id of the file's owner, an exact non-negative integer.
+</DL>
+</P><P>
+
+<A NAME="IDX2093"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-attributes/gid</B> <I>attributes</I>
+<DD>The group id of the file's group, an exact non-negative integer.
+</DL>
+</P><P>
+
+<A NAME="IDX2094"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-attributes/inode-number</B> <I>attributes</I>
+<DD>The inode number of the file, an exact non-negative integer.
+</DL>
+</P><P>
+
+The following additional accessor is defined under OS/2 and Windows:
+</P><P>
+
+<A NAME="IDX2095"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-attributes/modes</B> <I>attributes</I>
+<DD>The attribute bits of the file.  This is an exact non-negative integer
+containing the file's attribute bits, exactly as specified by the
+operating system's API.
+</DL>
+</P><P>
+
+The following additional accessor is defined under OS/2:
+</P><P>
+
+<A NAME="IDX2096"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-attributes/allocated-length</B> <I>attributes</I>
+<DD>The allocated length of the file, which can be larger than the length of
+the file due to fixed-length allocation units.
+</DL>
+</P><P>
+
+<A NAME="Directory Reader"></A>
+<HR SIZE="6">
+<A NAME="SEC154"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC153"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC155"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 15.4 Directory Reader </H2>
+<!--docid::SEC154::-->
+<P>
+
+<A NAME="IDX2097"></A>
+<DL>
+<DT><U>procedure+:</U> <B>directory-read</B> <I>directory [sort?]</I>
+<DD><VAR>Directory</VAR> must be an object that can be converted into a pathname
+by<BR> <CODE>-&#62;pathname</CODE>.  The directory specified by <VAR>directory</VAR> is
+read, and the contents of the directory is returned as a newly allocated
+list of absolute pathnames.  The result is sorted according to the usual
+sorting conventions for directories, unless <VAR>sort?</VAR> is specified as
+<CODE>#f</CODE>.  If <VAR>directory</VAR> has name, type, or version components,
+the returned list contains only those pathnames whose name, type, and
+version components match those of <VAR>directory</VAR>; <CODE>wild</CODE> or
+<CODE>#f</CODE> as one of these components means "match anything".
+</P><P>
+
+The OS/2 and Windows implementations support "globbing", in which the
+characters <CODE>*</CODE> and <CODE>?</CODE> are interpreted to mean "match
+anything" and "match any character", respectively.  This "globbing"
+is supported only in the file part of <VAR>directory</VAR>.
+</DL>
+</P><P>
+
+<A NAME="Date and Time"></A>
+<HR SIZE="6">
+<A NAME="SEC155"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC154"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC156"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC161"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 15.5 Date and Time </H2>
+<!--docid::SEC155::-->
+<P>
+
+MIT Scheme provides a simple set of procedures for manipulating date
+and time information.  There are four time representations, each of
+which serves a different purpose.  Each representation may be
+converted to any of the others.
+</P><P>
+
+<A NAME="IDX2098"></A>
+<A NAME="IDX2099"></A>
+The primary time representation, <EM>universal time</EM>, is an exact
+non-negative integer counting the number of seconds that have elapsed
+since midnight January 1, 1900 UTC.  (UTC stands for <EM>Coordinated
+Universal Time</EM>, and is the modern name for Greenwich Mean Time.)  This
+format is produced by <CODE>get-universal-time</CODE> and
+<CODE>decoded-time-&#62;universal-time</CODE>.
+</P><P>
+
+<A NAME="IDX2100"></A>
+<A NAME="IDX2101"></A>
+The second representation, <EM>decoded time</EM>, is a record structure in
+which the time is broken down into components, such as month, minute,
+etc.  Decoded time is always relative to a particular time zone, which
+is a component of the structure.  This format is produced by
+<CODE>global-decoded-time</CODE> and <CODE>local-decoded-time</CODE>.
+</P><P>
+
+<A NAME="IDX2102"></A>
+<A NAME="IDX2103"></A>
+The third representation, <EM>file time</EM>, is an exact non-negative
+integer that is larger for increasing time.  Unlike universal time,
+this representation is operating-system dependent.  This format is
+produced by all of the file-attribute procedures, for example
+<CODE>file-modification-time</CODE> and <CODE>file-attributes</CODE>.
+</P><P>
+
+<A NAME="IDX2104"></A>
+The fourth representation, the <EM>time string</EM>, is an external
+representation for time.  This format is defined by RFC-822,
+<CITE>Standard for the format of ARPA Internet text messages</CITE>, with the
+modification that years are represented as four-digit numbers rather
+than two-digit numbers.  This format is the standard format for Internet
+email and numerous other network protocols.
+</P><P>
+
+Within this section, argument variables named <VAR>universal-time</VAR>,
+<VAR>decoded-time</VAR>, <VAR>file-time</VAR>, and <VAR>time-string</VAR> are
+respectively required to be of the corresponding format.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_16.html#SEC156">15.5.1 Universal Time</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_16.html#SEC157">15.5.2 Decoded Time</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_16.html#SEC158">15.5.3 File Time</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_16.html#SEC159">15.5.4 Time-Format Conversion</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_16.html#SEC160">15.5.5 External Representation of Time</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Universal Time"></A>
+<HR SIZE="6">
+<A NAME="SEC156"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC155"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC157"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC154"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC155"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC161"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 15.5.1 Universal Time </H3>
+<!--docid::SEC156::-->
+<P>
+
+<A NAME="IDX2105"></A>
+<DL>
+<DT><U>procedure+:</U> <B>get-universal-time</B>
+<DD>Return the current time in universal format.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(get-universal-time) => 3131453078
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2106"></A>
+<DL>
+<DT><U>variable+:</U> <B>epoch</B>
+<DD><CODE>epoch</CODE> is the representation of midnight January 1, 1970 UTC in
+universal-time format.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>epoch => 2208988800
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Decoded Time"></A>
+<HR SIZE="6">
+<A NAME="SEC157"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC156"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC158"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC154"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC155"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC161"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 15.5.2 Decoded Time </H3>
+<!--docid::SEC157::-->
+<P>
+
+Objects representing standard time components, such as seconds and
+minutes, are required to be exact non-negative integers.  Seconds and
+minutes must be inclusively between <CODE>0</CODE> and <CODE>59</CODE>; hours
+between <CODE>0</CODE> and <CODE>23</CODE>; days between <CODE>1</CODE> and <CODE>31</CODE>;
+months between <CODE>1</CODE> and <CODE>12</CODE>; years are represented in
+"four-digit" form, in which 1999 is represented as <CODE>1999</CODE> ---
+<EM>not</EM> <CODE>99</CODE>.
+</P><P>
+
+<A NAME="IDX2107"></A>
+<DL>
+<DT><U>procedure+:</U> <B>local-decoded-time</B>
+<DD>Return the current time in decoded format.  The decoded time is
+represented in the local time zone.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(pp (local-decoded-time))
+-| #[decoded-time 76]
+-| (second 2)
+-| (minute 12)
+-| (hour 11)
+-| (day 27)
+-| (month 4)
+-| (year 1999)
+-| (day-of-week 1)
+-| (daylight-savings-time 1)
+-| (zone 5)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2108"></A>
+<DL>
+<DT><U>procedure+:</U> <B>global-decoded-time</B>
+<DD>Return the current time in decoded format.  The decoded time is
+represented in UTC.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(pp (global-decoded-time))
+-| #[decoded-time 77]
+-| (second 8)
+-| (minute 12)
+-| (hour 15)
+-| (day 27)
+-| (month 4)
+-| (year 1999)
+-| (day-of-week 1)
+-| (daylight-savings-time 0)
+-| (zone 0)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2109"></A>
+<DL>
+<DT><U>procedure+:</U> <B>make-decoded-time</B> <I>second minute hour day month year [zone]</I>
+<DD>Return a new decoded-time object representing the given time.  The
+arguments must be valid components according to the above rules, and
+must form a valid date.
+</P><P>
+
+If <VAR>zone</VAR> is not supplied or is <CODE>#f</CODE>, the resulting decoded
+time will be represented in the local time zone.  Otherwise, <VAR>zone</VAR>
+must be a valid time zone, and the result will be represented in that
+zone.
+</P><P>
+
+<STRONG>Warning</STRONG>: because this procedure depends on the operating
+system's runtime library, it is not capable of representing all dates.
+In particular, on most unix systems, it is not possible to encode dates
+that occur prior to midnight, January 1, 1970 UTC.  Attempting to do
+this will signal an error.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(pp (make-decoded-time 0 9 11 26 3 1999))
+-| #[decoded-time 19]
+-| (second 0)
+-| (minute 9)
+-| (hour 11)
+-| (day 26)
+-| (month 3)
+-| (year 1999)
+-| (day-of-week 4)
+-| (daylight-savings-time 0)
+-| (zone 5)
+
+(pp (make-decoded-time 0 9 11 26 3 1999 3))
+-| #[decoded-time 80]
+-| (second 0)
+-| (minute 9)
+-| (hour 11)
+-| (day 26)
+-| (month 3)
+-| (year 1999)
+-| (day-of-week 4)
+-| (daylight-savings-time 0)
+-| (zone 3)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2110"></A>
+<DL>
+<DT><U>procedure+:</U> <B>decoded-time/second</B> <I>decoded-time</I>
+<DD><A NAME="IDX2111"></A>
+<DT><U>procedure+:</U> <B>decoded-time/minute</B> <I>decoded-time</I>
+<DD><A NAME="IDX2112"></A>
+<DT><U>procedure+:</U> <B>decoded-time/hour</B> <I>decoded-time</I>
+<DD><A NAME="IDX2113"></A>
+<DT><U>procedure+:</U> <B>decoded-time/day</B> <I>decoded-time</I>
+<DD><A NAME="IDX2114"></A>
+<DT><U>procedure+:</U> <B>decoded-time/month</B> <I>decoded-time</I>
+<DD><A NAME="IDX2115"></A>
+<DT><U>procedure+:</U> <B>decoded-time/year</B> <I>decoded-time</I>
+<DD>Return the corresponding component of <VAR>decoded-time</VAR>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(decoded-time/second (local-decoded-time)) => 17
+(decoded-time/year (local-decoded-time)) => 1999
+(decoded-time/day (local-decoded-time)) => 26
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2116"></A>
+<DL>
+<DT><U>procedure+:</U> <B>decoded-time/day-of-week</B> <I>decoded-time</I>
+<DD>Return the day of the week on which <VAR>decoded-time</VAR> falls, encoded
+as an exact integer between <CODE>0</CODE> (Monday) and <CODE>6</CODE> (Sunday),
+inclusive.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(decoded-time/day-of-week (local-decoded-time)) => 4
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2117"></A>
+<DL>
+<DT><U>procedure+:</U> <B>decoded-time/daylight-savings-time?</B> <I>decoded-time</I>
+<DD>Return <CODE>#t</CODE> if <VAR>decoded-time</VAR> is represented using daylight
+savings time.  Otherwise return <CODE>#f</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(decoded-time/daylight-savings-time? (local-decoded-time))
+                  => #f
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2118"></A>
+<DL>
+<DT><U>procedure+:</U> <B>decoded-time/zone</B> <I>decoded-time</I>
+<DD>Return the time zone in which <VAR>decoded-time</VAR> is represented.  This
+is an exact rational number between <CODE>-24</CODE> and <CODE>+24</CODE> inclusive,
+that when multiplied by <CODE>3600</CODE> is an integer.  The value is the
+number of hours west of UTC.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(decoded-time/zone (local-decoded-time)) => 5
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2119"></A>
+<DL>
+<DT><U>procedure+:</U> <B>time-zone?</B> <I>object</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>object</VAR> is an exact number between <CODE>-24</CODE>
+and <CODE>+24</CODE> inclusive, that when multiplied by <CODE>3600</CODE> is an
+integer.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(time-zone? -5)   => #t
+(time-zone? 11/2) => #t
+(time-zone? 11/7) => #f
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2120"></A>
+<DL>
+<DT><U>procedure+:</U> <B>month/max-days</B> <I>month</I>
+<DD>Returns the maximum number of days possible in <VAR>month</VAR>.  <VAR>Month</VAR>
+must be an exact integer between <CODE>1</CODE> and <CODE>12</CODE> inclusive.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(month/max-days 2) => 29
+(month/max-days 3) => 31
+(month/max-days 4) => 30
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="File Time"></A>
+<HR SIZE="6">
+<A NAME="SEC158"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC157"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC159"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC154"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC155"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC161"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 15.5.3 File Time </H3>
+<!--docid::SEC158::-->
+<P>
+
+As stated above, file time is operating-system dependent.  As of this
+writing, two formats are used.  For unix and Windows systems, file time
+is the number of seconds since midnight January 1, 1970 UTC (the
+standard unix time convention).
+</P><P>
+
+OS/2 represents file time as a 32-bit unsigned integer, in which the
+time components are broken down into unsigned bit fields.  The
+components are always stated in local time.  The fields, from MSB to
+LSB, are:
+</P><P>
+
+<UL>
+<LI>
+7 bits representing the year, relative to 1900.
+<P>
+
+<LI>
+4 bits representing the month, numbered 1 to 12.
+<P>
+
+<LI>
+5 bits representing the day of the month, numbered 1 to 31.
+<P>
+
+<LI>
+5 bits representing the hour of the day, numbered 0 to 23.
+<P>
+
+<LI>
+6 bits representing the minute, numbered 0 to 59.
+<P>
+
+<LI>
+5 bits representing the second.  This field is unusual in that it counts
+units of two seconds, so it is a number between 0 and 29, representing
+second counts corresponding to 0 through 58.
+</UL>
+<P>
+
+The following procedures generate their results in file-time format:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>file-access-time
+file-access-time-direct
+file-access-time-indirect
+file-modification-time
+file-modification-time-direct
+file-modification-time-indirect
+file-attributes/access-time
+file-attributes/modification-time
+file-attributes/change-time
+</pre></td></tr></table></P><P>
+
+Additionally, <CODE>set-file-times!</CODE> accepts its time arguments in
+file-time format.
+</P><P>
+
+<A NAME="Time-Format Conversion"></A>
+<HR SIZE="6">
+<A NAME="SEC159"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC158"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC160"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC154"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC155"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC161"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 15.5.4 Time-Format Conversion </H3>
+<!--docid::SEC159::-->
+<P>
+
+The procedures described in this section convert times from one format
+to another.
+</P><P>
+
+<A NAME="IDX2121"></A>
+<DL>
+<DT><U>procedure+:</U> <B>universal-time-&#62;local-decoded-time</B> <I>universal-time</I>
+<DD><A NAME="IDX2122"></A>
+<DT><U>procedure+:</U> <B>universal-time-&#62;global-decoded-time</B> <I>universal-time</I>
+<DD>Converts an argument in universal-time format to decoded-time format.
+The result is in the local time zone or UTC, respectively.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(pp (universal-time-&#62;local-decoded-time (get-universal-time)))
+-| #[decoded-time 21]
+-| (second 23)
+-| (minute 57)
+-| (hour 17)
+-| (day 29)
+-| (month 4)
+-| (year 1999)
+-| (day-of-week 3)
+-| (daylight-savings-time 1)
+-| (zone 5)
+
+(pp (universal-time-&#62;global-decoded-time
+     (get-universal-time)))
+-| #[decoded-time 22]
+-| (second 27)
+-| (minute 57)
+-| (hour 21)
+-| (day 29)
+-| (month 4)
+-| (year 1999)
+-| (day-of-week 3)
+-| (daylight-savings-time 0)
+-| (zone 0)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2123"></A>
+<DL>
+<DT><U>procedure+:</U> <B>universal-time-&#62;file-time</B> <I>universal-time</I>
+<DD>Converts an argument in universal-time format to file-time format.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(universal-time-&#62;file-time (get-universal-time))
+    => 925422988
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2124"></A>
+<DL>
+<DT><U>procedure+:</U> <B>universal-time-&#62;local-time-string</B> <I>universal-time</I>
+<DD><A NAME="IDX2125"></A>
+<DT><U>procedure+:</U> <B>universal-time-&#62;global-time-string</B> <I>universal-time</I>
+<DD>Converts an argument in universal-time format to a time string.  The
+result is in the local time zone or UTC, respectively.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(universal-time-&#62;local-time-string (get-universal-time))
+    => "Thu, 29 Apr 1999 17:55:31 -0400"
+(universal-time-&#62;global-time-string (get-universal-time))
+    => "Thu, 29 Apr 1999 21:55:51 +0000"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2126"></A>
+<DL>
+<DT><U>procedure+:</U> <B>decoded-time-&#62;universal-time</B> <I>decoded-time</I>
+<DD>Converts an argument in decoded-time format to universal-time format.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(decoded-time-&#62;universal-time (local-decoded-time))
+    => 3134411942
+(decoded-time-&#62;universal-time (global-decoded-time))
+    => 3134411947
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2127"></A>
+<DL>
+<DT><U>procedure+:</U> <B>decoded-time-&#62;file-time</B> <I>decoded-time</I>
+<DD>Converts an argument in decoded-time format to file-time format.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(decoded-time-&#62;file-time (local-decoded-time))
+    => 925423191
+(decoded-time-&#62;file-time (global-decoded-time))
+    => 925423195
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2128"></A>
+<DL>
+<DT><U>procedure+:</U> <B>decoded-time-&#62;string</B> <I>decoded-time</I>
+<DD>Convert an argument in decoded-time format to a time string.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(decoded-time-&#62;string (local-decoded-time))
+    => "Thu, 29 Apr 1999 18:00:43 -0400"
+(decoded-time-&#62;string (global-decoded-time))
+    => "Thu, 29 Apr 1999 22:00:46 +0000"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2129"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-time-&#62;universal-time</B> <I>file-time</I>
+<DD>Converts an argument in universal-time format to file-time format.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(file-time-&#62;universal-time (file-modification-time "/"))
+    => 3133891907
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2130"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-time-&#62;local-decoded-time</B> <I>file-time</I>
+<DD><A NAME="IDX2131"></A>
+<DT><U>procedure+:</U> <B>file-time-&#62;global-decoded-time</B> <I>file-time</I>
+<DD>Converts an argument in file-time format to decoded-time format.  The
+result is in the local time zone or UTC, respectively.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(pp (file-time-&#62;local-decoded-time
+     (file-modification-time "/")))
+-| #[decoded-time 26]
+-| (second 47)
+-| (minute 31)
+-| (hour 17)
+-| (day 23)
+-| (month 4)
+-| (year 1999)
+-| (day-of-week 4)
+-| (daylight-savings-time 1)
+-| (zone 5)
+
+(pp (file-time-&#62;global-decoded-time
+     (file-modification-time "/")))
+-| #[decoded-time 27]
+-| (second 47)
+-| (minute 31)
+-| (hour 21)
+-| (day 23)
+-| (month 4)
+-| (year 1999)
+-| (day-of-week 4)
+-| (daylight-savings-time 0)
+-| (zone 0)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2132"></A>
+<DL>
+<DT><U>procedure+:</U> <B>file-time-&#62;local-time-string</B> <I>file-time</I>
+<DD><A NAME="IDX2133"></A>
+<DT><U>procedure+:</U> <B>file-time-&#62;global-time-string</B> <I>file-time</I>
+<DD>Converts an argument in file-time format to a time string.  The result
+is in the local time zone or UTC, respectively.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(file-time-&#62;local-time-string (file-modification-time "/"))
+    => "Fri, 23 Apr 1999 17:31:47 -0400"
+(file-time-&#62;global-time-string (file-modification-time "/"))
+    => "Fri, 23 Apr 1999 21:31:47 +0000"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2134"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-&#62;universal-time</B> <I>time-string</I>
+<DD>Converts a time-string argument to universal-time format.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-&#62;universal-time "Fri, 23 Apr 1999 21:31:47 +0000")
+    => 3133888307
+(string-&#62;universal-time "Fri, 23 Apr 1999 17:31:47 -0400")
+    => 3133888307
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2135"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-&#62;decoded-time</B> <I>time-string</I>
+<DD>Converts a time-string argument to decoded-time format.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(pp (string-&#62;decoded-time "Fri, 23 Apr 1999 17:31:47 -0400"))
+-| #[decoded-time 30]
+-| (second 47)
+-| (minute 31)
+-| (hour 17)
+-| (day 23)
+-| (month 4)
+-| (year 1999)
+-| (day-of-week 4)
+-| (daylight-savings-time 0)
+-| (zone 4)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2136"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-&#62;file-time</B> <I>time-string</I>
+<DD>Converts a time-string argument to file-time format.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-&#62;file-time "Fri, 23 Apr 1999 17:31:47 -0400")
+    => 924899507
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="External Representation of Time"></A>
+<HR SIZE="6">
+<A NAME="SEC160"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC159"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC161"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC154"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC155"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC161"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 15.5.5 External Representation of Time </H3>
+<!--docid::SEC160::-->
+<P>
+
+The normal external representation for time is the time string, as
+described above.  The procedures in this section generate alternate
+external representations of time which are more verbose and may be more
+suitable for presentation to human readers.
+</P><P>
+
+<A NAME="IDX2137"></A>
+<DL>
+<DT><U>procedure+:</U> <B>decoded-time/date-string</B> <I>decoded-time</I>
+<DD><A NAME="IDX2138"></A>
+<DT><U>procedure+:</U> <B>decoded-time/time-string</B> <I>decoded-time</I>
+<DD>These procedures return strings containing external representations of
+the date and time, respectively, represented by <VAR>decoded-time</VAR>.  The
+results are implicitly in local time.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(decoded-time/date-string (local-decoded-time))
+    => "Tuesday March 30, 1999"
+(decoded-time/time-string (local-decoded-time))
+    => "11:22:38 AM"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2139"></A>
+<DL>
+<DT><U>procedure+:</U> <B>day-of-week/long-string</B> <I>day-of-week</I>
+<DD><A NAME="IDX2140"></A>
+<DT><U>procedure+:</U> <B>day-of-week/short-string</B> <I>day-of-week</I>
+<DD>Returns a string representing the given <VAR>day-of-week</VAR>.  The argument
+must be an exact non-negative integer between <CODE>0</CODE> and <CODE>6</CODE>
+inclusive.  <CODE>day-of-week/long-string</CODE> returns a long string that
+fully spells out the name of the day.  <CODE>day-of-week/short-string</CODE>
+returns a shortened string that abbreviates the day to three letters.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(day-of-week/long-string 0)  => "Monday"
+(day-of-week/short-string 0) => "Mon"
+(day-of-week/short-string 3) => "Thu"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2141"></A>
+<DL>
+<DT><U>procedure+:</U> <B>month/long-string</B> <I>month</I>
+<DD><A NAME="IDX2142"></A>
+<DT><U>procedure+:</U> <B>month/short-string</B> <I>month</I>
+<DD>Returns a string representing the given <VAR>month</VAR>.  The argument must
+be an exact non-negative integer between <CODE>1</CODE> and <CODE>12</CODE>
+inclusive.  <CODE>month/long-string</CODE> returns a long string that fully
+spells out the name of the month.  <CODE>month/short-string</CODE> returns a
+shortened string that abbreviates the month to three letters.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(month/long-string 1)   => "January"
+(month/short-string 1)  => "Jan"
+(month/short-string 10) => "Oct"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2143"></A>
+<DL>
+<DT><U>procedure+:</U> <B>time-zone-&#62;string</B>
+<DD>Returns a string corresponding to the given time zone.  This string is
+the same string that is used to generate RFC-822 time strings.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(time-zone-&#62;string 5)    => "-0500"
+(time-zone-&#62;string -4)   => "+0400"
+(time-zone-&#62;string 11/2) => "-0530"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Machine Time"></A>
+<HR SIZE="6">
+<A NAME="SEC161"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC160"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC162"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC155"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 15.6 Machine Time </H2>
+<!--docid::SEC161::-->
+<P>
+
+The previous section dealt with procedures that manipulate clock time.
+This section describes procedures that deal with computer time: elapsed
+CPU time, elapsed real time, and so forth.  These procedures are useful
+for measuring the amount of time it takes to execute code.
+</P><P>
+
+<A NAME="IDX2144"></A>
+Some of the procedures in this section manipulate a time representation
+called <EM>ticks</EM>.  A tick is a unit of time that is unspecified here
+but can be converted to and from seconds by supplied procedures.  A
+count in ticks is represented as an exact integer.  At present each tick
+is one millisecond, but this may change in the future.
+</P><P>
+
+<A NAME="IDX2145"></A>
+<DL>
+<DT><U>procedure+:</U> <B>process-time-clock</B>
+<DD>Returns the amount of process time, in ticks, that has elapsed since
+Scheme was started.  Process time is measured by the operating system
+and is time during which the Scheme process is computing.  It does not
+include time in system calls, but depending on the operating system it
+may include time used by subprocesses.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(process-time-clock) => 21290
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2146"></A>
+<DL>
+<DT><U>procedure+:</U> <B>real-time-clock</B>
+<DD>Returns the amount of real time, in ticks, that has elapsed since Scheme
+was started.  Real time is the time measured by an ordinary clock.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(real-time-clock) => 33474836
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2147"></A>
+<DL>
+<DT><U>procedure+:</U> <B>internal-time/ticks-&#62;seconds</B> <I>ticks</I>
+<DD>Returns the number of seconds corresponding to <VAR>ticks</VAR>.  The result
+is always a real number.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(internal-time/ticks-&#62;seconds 21290) => 21.29
+(internal-time/ticks-&#62;seconds 33474836) => 33474.836
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2148"></A>
+<DL>
+<DT><U>procedure+:</U> <B>internal-time/seconds-&#62;ticks</B> <I>seconds</I>
+<DD>Returns the number of ticks corresponding to <VAR>seconds</VAR>.
+<VAR>Seconds</VAR> must be a real number.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(internal-time/seconds-&#62;ticks 20.88) => 20880
+(internal-time/seconds-&#62;ticks 20.83) => 20830
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2149"></A>
+<DL>
+<DT><U>procedure+:</U> <B>system-clock</B>
+<DD>Returns the amount of process time, in seconds, that has elapsed since
+Scheme was started.  Roughly equivalent to:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(internal-time/ticks-&#62;seconds (process-time-clock))
+</pre></td></tr></table></P><P>
+
+Example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(system-clock) => 20.88
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2150"></A>
+<DL>
+<DT><U>procedure+:</U> <B>runtime</B>
+<DD>Returns the amount of process time, in seconds, that has elapsed since
+Scheme was started.  However, it does not include time spent in garbage
+collection.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(runtime) => 20.83
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2151"></A>
+<DL>
+<DT><U>procedure+:</U> <B>with-timings</B> <I>thunk receiver</I>
+<DD>Calls <VAR>thunk</VAR> with no arguments.  After <VAR>thunk</VAR> returns,
+<VAR>receiver</VAR> is called with three arguments describing the time spent
+while computing <VAR>thunk</VAR>: the elapsed run time, the amount of time
+spent in the garbage collector, and the elapsed real time.  All three
+times are in ticks.
+</P><P>
+
+This procedure is most useful for doing performance measurements, and is
+designed to have relatively low overhead.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(with-timings
+ (lambda () ...hairy computation...)
+ (lambda (run-time gc-time real-time)
+   (write (internal-time/ticks-&#62;seconds run-time))
+   (write-char #\space)
+   (write (internal-time/ticks-&#62;seconds gc-time))
+   (write-char #\space)
+   (write (internal-time/ticks-&#62;seconds real-time))
+   (newline)))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2152"></A>
+<DL>
+<DT><U>procedure+:</U> <B>measure-interval</B> <I>runtime? procedure</I>
+<DD>Calls <VAR>procedure</VAR>, passing it the current process time, in seconds,
+as an argument.  The result of this call must be another procedure.
+When <VAR>procedure</VAR> returns, the resulting procedure is
+tail-recursively called with the ending time, in seconds, as an
+argument.
+</P><P>
+
+If <VAR>runtime?</VAR> is <CODE>#f</CODE>, the elapsed time is deducted from the
+elapsed system time returned by <CODE>runtime</CODE>.
+</P><P>
+
+While this procedure can be used for time measurement, its interface is
+somewhat clumsy for that purpose.  We recommend that you use
+<CODE>with-timings</CODE> instead, because it is more convenient and has lower
+overhead.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(measure-interval #t
+                  (lambda (start-time)
+                    (let ((v ...hairy computation...))
+                      (lambda (end-time)
+                        (write (- end-time start-time))
+                        (newline)
+                        v))))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Subprocesses"></A>
+<HR SIZE="6">
+<A NAME="SEC162"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC161"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC163"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC166"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 15.7 Subprocesses </H2>
+<!--docid::SEC162::-->
+<P>
+
+<A NAME="IDX2153"></A>
+<A NAME="IDX2154"></A>
+MIT Scheme provides the ability to run and control subprocesses.  This
+support is divided into two parts: a low-level set of primitives that
+maps onto the underlying operating system's process-control primitives,
+and a high-level set of procedures for starting a subprocess and running
+it to completion in a single call.  Subprocesses that are run in the
+latter fashion are referred to as <EM>synchronous</EM>, because they are
+started and stopped in synchrony with a Scheme procedure call.
+</P><P>
+
+This chapter documents Scheme's high-level synchronous-subprocess
+support.  The low-level support is not documented but is available for
+those who are willing to read the source code.
+</P><P>
+
+Synchronous-subprocess support is a run-time-loadable option.  To use
+it, execute
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(load-option 'synchronous-subprocess)
+</pre></td></tr></table></P><P>
+
+once before calling it.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_16.html#SEC163">15.7.1 Subprocess Procedures</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_16.html#SEC164">15.7.2 Subprocess Conditions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_16.html#SEC165">15.7.3 Subprocess Options</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Subprocess Procedures"></A>
+<HR SIZE="6">
+<A NAME="SEC163"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC162"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC164"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC161"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC162"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC166"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 15.7.1 Subprocess Procedures </H3>
+<!--docid::SEC163::-->
+<P>
+
+There are two commands for running synchronous subprocesses under
+Scheme.  <CODE>run-shell-command</CODE> is very simple to use, provides access
+to all shell features, and is to be preferred in most situations.
+<CODE>run-synchronous-subprocess</CODE> allows direct execution of a program
+and precise control of the command-line arguments passed to the program,
+but does not provide file globbing, I/O redirection, or other shell
+features.
+</P><P>
+
+<A NAME="IDX2155"></A>
+<DL>
+<DT><U>procedure+:</U> <B>run-shell-command</B> <I>command option <small>...</small></I>
+<DD>Runs <VAR>command</VAR>, which must be a string.  <VAR>Command</VAR> is passed to
+a command shell for interpretation; how the shell is chosen is detailed
+below.
+</P><P>
+
+The <VAR>option</VAR>s are a sequence of keyword/value pairs that specify
+optional behavior.  See below for more information about options.
+</P><P>
+
+<CODE>run-shell-command</CODE> waits until the subprocess completes its
+execution and returns the exit code from the subprocess.  If the
+subprocess is killed or stopped, an error is signalled and the procedure
+does not return.
+</DL>
+</P><P>
+
+<A NAME="IDX2156"></A>
+<DL>
+<DT><U>procedure+:</U> <B>run-synchronous-subprocess</B> <I>program arguments option <small>...</small></I>
+<DD>Runs <VAR>program</VAR>, passing it the given command-line <VAR>arguments</VAR>.
+<VAR>Program</VAR> must be either the name of a program on the path, or else
+a pathname to a specific program.  <VAR>Arguments</VAR> must be a list of
+strings; each string is a single command-line argument to the program.
+</P><P>
+
+The <VAR>option</VAR>s are a sequence of keyword/value pairs that specify
+optional behavior.  See below for more information about options.
+</P><P>
+
+<CODE>run-synchronous-subprocess</CODE> waits until the subprocess completes
+its execution and returns the exit code from the subprocess.  If the
+subprocess is killed or stopped, an error is signalled and the procedure
+does not return.
+</DL>
+</P><P>
+
+<A NAME="Subprocess Conditions"></A>
+<HR SIZE="6">
+<A NAME="SEC164"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC163"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC165"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC161"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC162"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC166"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 15.7.2 Subprocess Conditions </H3>
+<!--docid::SEC164::-->
+<P>
+
+If a subprocess spawned by one of the above procedures is killed or
+suspended, then one of the following errors will be signalled.
+</P><P>
+
+<A NAME="IDX2157"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:subprocess-signalled</B> <I>subprocess reason</I>
+<DD>This condition type is a subtype of
+<CODE>condition-type:subprocess-abnormal-termination</CODE>.  It is signalled
+when the subprocess is killed.
+</P><P>
+
+<VAR>Subprocess</VAR> is an object that represents the subprocess involved.
+The internals of this object can be accessed but the interface is not
+documented at this time; see the source code for details.
+</P><P>
+
+<VAR>Reason</VAR> is interesting only on unix systems, where it is the signal
+that killed the process.  On other systems it has a fixed value that
+conveys no useful information.
+</DL>
+</P><P>
+
+<A NAME="IDX2158"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:subprocess-stopped</B> <I>subprocess reason</I>
+<DD>This condition type is a subtype of
+<CODE>condition-type:subprocess-abnormal-termination</CODE>.  It is signalled
+when the subprocess is stopped or suspended.
+</P><P>
+
+<VAR>Subprocess</VAR> is an object that represents the subprocess involved.
+The internals of this object can be accessed but the interface is not
+documented at this time; see the source code for details.
+</P><P>
+
+<VAR>Reason</VAR> is interesting only on unix systems, where it is the signal
+that stopped the process.  On other systems it has a fixed value that
+conveys no useful information.
+</DL>
+</P><P>
+
+<A NAME="IDX2159"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:subprocess-abnormal-termination</B> <I>subprocess reason</I>
+<DD>This condition type is a subtype of <CODE>condition-type:error</CODE>.  This
+is an abstract type that is never signalled.  It is provided so that
+condition handlers can be bound to it.
+</DL>
+</P><P>
+
+<A NAME="Subprocess Options"></A>
+<HR SIZE="6">
+<A NAME="SEC165"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC164"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC166"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC161"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC162"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC166"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 15.7.3 Subprocess Options </H3>
+<!--docid::SEC165::-->
+<P>
+
+The following subprocess options may be passed to
+<CODE>run-shell-command</CODE> or <CODE>run-synchronous-subprocess</CODE>.  These
+options are passed as alternating keyword/value pairs, for example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(run-shell-command "ls /"
+                   'output my-output-port
+                   'output-buffer-size 8192)
+</pre></td></tr></table></P><P>
+
+The example shows a shell command being run with two options specified:
+<CODE>output</CODE> and <CODE>output-buffer-size</CODE>.
+</P><P>
+
+<A NAME="IDX2160"></A>
+<DL>
+<DT><U>subprocess option+:</U> <B>input</B> <I>port</I>
+<DD>Specifies the standard input of the subprocess.  <VAR>Port</VAR> may be an
+input port, in which case characters are read from <VAR>port</VAR> and fed to
+the subprocess until <VAR>port</VAR> reaches end-of-file.  Alternatively,
+<VAR>port</VAR> may be <CODE>#f</CODE>, indicating that the subprocess has no
+standard input.
+</P><P>
+
+The default value of this option is <CODE>#f</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(call-with-input-file "foo.in"
+  (lambda (port)
+    (run-shell-command "cat > /dev/null" 'input port)))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2161"></A>
+<DL>
+<DT><U>subprocess option+:</U> <B>input-line-translation</B> <I>line-ending</I>
+<DD>Specifies how line-endings should be translated when writing characters
+to the subprocess.  Ignored if the <CODE>input</CODE> option is <CODE>#f</CODE>.
+<VAR>Line-ending</VAR> must be either a string specifying the line ending, or
+the symbol <CODE>default</CODE>, meaning to use the operating system's
+standard line ending.  In either case, newline characters to be written
+to the <CODE>input</CODE> port are translated to the specified line ending
+before being written.
+</P><P>
+
+The default value of this option is <CODE>default</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(call-with-input-file "foo.in"
+  (lambda (port)
+    (run-shell-command "cat > /dev/null"
+                       'input port
+                       'input-line-translation "\r\n")))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2162"></A>
+<DL>
+<DT><U>subprocess option+:</U> <B>input-buffer-size</B> <I>n</I>
+<DD>Specifies the size of the input buffer for the standard input of the
+subprocess.  (This is the buffer on the Scheme side, and has nothing to
+do with any buffering done on the subprocess side.)  Ignored if the
+<CODE>input</CODE> option is <CODE>#f</CODE>.  <VAR>N</VAR> must be an exact positive
+integer specifying the number of characters the buffer can hold.
+</P><P>
+
+The default value of this option is <CODE>512</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(call-with-input-file "foo.in"
+  (lambda (port)
+    (run-shell-command "cat > /dev/null"
+                       'input port
+                       'input-buffer-size 4096)))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2163"></A>
+<DL>
+<DT><U>subprocess option+:</U> <B>output</B> <I>port</I>
+<DD>Specifies the standard output and standard error of the subprocess.
+<VAR>Port</VAR> may be an output port, in which case characters are read from
+the subprocess and fed to <VAR>port</VAR> until the subprocess finishes.
+Alternatively, <VAR>port</VAR> may be <CODE>#f</CODE>, indicating that the
+subprocess has no standard output or standard error.
+</P><P>
+
+The default value of this option is the value of
+<CODE>(current-output-port)</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(call-with-output-file "foo.out"
+  (lambda (port)
+    (run-shell-command "ls -la /etc" 'output port)))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2164"></A>
+<DL>
+<DT><U>subprocess option+:</U> <B>output-line-translation</B> <I>line-ending</I>
+<DD>Specifies how line-endings should be translated when reading characters
+from the standard output of the subprocess.  Ignored if the
+<CODE>output</CODE> option is <CODE>#f</CODE>.  <VAR>Line-ending</VAR> must be either a
+string specifying the line ending, or the symbol <CODE>default</CODE>, meaning
+to use the operating system's standard line ending.  In either case,
+newline characters read from the subprocess port are translated to the
+specified line ending.
+</P><P>
+
+The default value of this option is <CODE>default</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(call-with-output-file "foo.out"
+  (lambda (port)
+    (run-shell-command "ls -la /etc"
+                       'output port
+                       'output-line-translation "\r\n")))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2165"></A>
+<DL>
+<DT><U>subprocess option+:</U> <B>output-buffer-size</B> <I>n</I>
+<DD>Specifies the size of the output buffer for the standard output of the
+subprocess.  (This is the buffer on the Scheme side, and has nothing to
+do with any buffering done on the subprocess side.)  Ignored if the
+<CODE>output</CODE> option is <CODE>#f</CODE>.  <VAR>N</VAR> must be an exact positive
+integer specifying the number of characters the buffer can hold.
+</P><P>
+
+The default value of this option is <CODE>512</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(call-with-output-file "foo.out"
+  (lambda (port)
+    (run-shell-command "ls -la /etc"
+                       'output port
+                       'output-buffer-size 4096)))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2166"></A>
+<DL>
+<DT><U>subprocess option+:</U> <B>redisplay-hook</B> <I>thunk</I>
+<DD>Specifies that <VAR>thunk</VAR> is to be run periodically when output from
+the subprocess is available.  <VAR>Thunk</VAR> must be a procedure of no
+arguments, or <CODE>#f</CODE> indicating that no hook is supplied.  This
+option is mostly useful for interactive systems.  For example, the Edwin
+text editor uses this to update output buffers when running some
+subprocesses.
+</P><P>
+
+The default value of this option is <CODE>#f</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(run-shell-command "ls -la /etc"
+                   'redisplay-hook
+                   (lambda ()
+                     (update-buffer-contents buffer)))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2167"></A>
+<DL>
+<DT><U>subprocess option+:</U> <B>environment</B> <I>environment</I>
+<DD>Specifies the environment variables that are to be used for the
+subprocess.  <VAR>Environment</VAR> must be either a vector of strings or
+<CODE>#f</CODE> indicating the default environment.  If it is a vector of
+strings, each string must be a name/value pair where the name and value
+are separated by an equal sign, for example, <CODE>"foo=bar"</CODE>.  To
+define a variable with no value, just omit the value, as in <CODE>"foo="</CODE>.
+</P><P>
+
+<A NAME="IDX2168"></A>
+Note that the variable <CODE>scheme-subprocess-environment</CODE> is bound to
+the default subprocess environment.
+</P><P>
+
+The default value of this option is <CODE>#f</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(run-shell-command "ls -la /etc"
+                   'environment
+                   (let* ((v scheme-subprocess-environment)
+                          (n (vector-length v))
+                          (v (vector-grow v (+ n 1))))
+                     (vector-set! v n "TERM=none")
+                     v))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2169"></A>
+<DL>
+<DT><U>subprocess option+:</U> <B>working-directory</B> <I>pathname</I>
+<DD>Specifies the working directory in which the subprocess will run.
+</P><P>
+
+The default value of this option is <CODE>(working-directory-pathname)</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(run-shell-command "ls -la" 'working-directory "/etc/")
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2170"></A>
+<DL>
+<DT><U>subprocess option+:</U> <B>use-pty?</B> <I>boolean</I>
+<DD>This option is meaningful only on unix systems; on other systems it is
+ignored.  Specifies whether to communicate with the subprocess using
+PTY devices; if true, PTYs will be used, otherwise pipes will
+be used.
+</P><P>
+
+The default value of this option is <CODE>#f</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(run-shell-command "ls -la /etc" 'use-pty? #t)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2171"></A>
+<DL>
+<DT><U>subprocess option+:</U> <B>shell-file-name</B> <I>pathname</I>
+<DD>Specifies the shell program to use for <CODE>run-shell-command</CODE>.
+</P><P>
+
+The default value of this option is <CODE>(os/shell-file-name)</CODE>.  This
+is the value of the environment variable <CODE>SHELL</CODE>, or if
+<CODE>SHELL</CODE> is not set, the value is operating-system dependent as
+follows:
+</P><P>
+
+<UL>
+<LI>
+On unix systems, <TT>`/bin/sh'</TT> is used.
+<P>
+
+<LI>
+On OS/2 systems, the value of the environment variable <CODE>COMSPEC</CODE> is
+used, or if that is not set, <TT>`cmd.exe'</TT> on the current path.
+<P>
+
+<LI>
+On Windows systems, the value of the environment variable <CODE>COMSPEC</CODE>
+is used.  If that is not set, <TT>`cmd.exe'</TT> is used for Windows NT, or
+<TT>`command.com'</TT> is used for Windows 9x; in each case the shell is
+found by searching the path.
+</UL>
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(run-shell-command "ls -la /etc"
+                   'shell-file-name "/usr/local/bin/bash")
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="TCP Sockets"></A>
+<HR SIZE="6">
+<A NAME="SEC166"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC165"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC167"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC162"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 15.8 TCP Sockets </H2>
+<!--docid::SEC166::-->
+<P>
+
+<A NAME="IDX2172"></A>
+MIT Scheme provides access to <EM>sockets</EM>, which are a mechanism for
+inter-process communication.  TCP stream sockets are supported,
+which communicate between computers over a TCP/IP network.
+TCP sockets are supported on all operating systems.
+</P><P>
+
+<A NAME="IDX2173"></A>
+<A NAME="IDX2174"></A>
+TCP sockets have two distinct interfaces: one interface to
+implement a <EM>client</EM> and another to implement a <EM>server</EM>.  The
+basic protocol is that servers set up a listening port and wait for
+connections from clients.  Implementation of clients is simpler and will
+be treated first.
+</P><P>
+
+<A NAME="IDX2175"></A>
+The socket procedures accept two special arguments, called
+<VAR>host-name</VAR> and <VAR>service</VAR>.  <VAR>Host-name</VAR> is a string which
+must be the name of an internet host.  It is looked up using the
+ordinary lookup rules for your computer.  For example, if your host is
+<CODE>foo.mit.edu</CODE> and <VAR>host-name</VAR> is <CODE>"bar"</CODE>, then it
+specifies <CODE>bar.mit.edu</CODE>.
+</P><P>
+
+<A NAME="IDX2176"></A>
+<A NAME="IDX2177"></A>
+<VAR>Service</VAR> specifies the service to which you will connect.  A
+networked computer normally provides several different services, such as
+telnet or <FONT SIZE="-1">FTP</FONT>.  Each service is associated with a unique
+<EM>port number</EM>; for example, the <CODE>"www"</CODE> service is associated
+with port <CODE>80</CODE>.  The <VAR>service</VAR> argument specifies the port
+number, either as a string, or directly as an exact non-negative
+integer.  Port strings are decoded by the operating system using a
+table; for example, on unix the table is in <TT>`/etc/services'</TT>.
+Usually you will use a port string rather than a number.
+</P><P>
+
+<A NAME="IDX2178"></A>
+<DL>
+<DT><U>procedure+:</U> <B>open-tcp-stream-socket</B> <I>host-name service [buffer-size [line-translation]]</I>
+<DD><CODE>open-tcp-stream-socket</CODE> opens a connection to the host specified
+by <VAR>host-name</VAR>.  <VAR>Host-name</VAR> is looked up using the ordinary
+lookup rules for your computer.  The connection is established to the
+service specified by <VAR>service</VAR>.  The returned value is an I/O
+port, to which you can read and write characters using ordinary Scheme
+I/O procedures such as <CODE>read-char</CODE> and <CODE>write-char</CODE>.
+</P><P>
+
+<VAR>Buffer-size</VAR> specifies the size of the read and write buffers used
+by the port; if this is unspecified or <CODE>#f</CODE>, the buffers will hold
+<CODE>4096</CODE> bytes.
+</P><P>
+
+<VAR>Line-translation</VAR> specifies how end-of-line characters will be
+translated when reading or writing to the socket.  If this is
+unspecified or <CODE>#f</CODE>, then lines will be terminated by CR-LF,
+which is the standard for most internet protocols.  Otherwise, it must
+be a string, which specifies the line-ending character sequence to use.
+</P><P>
+
+When you wish to close the connection, just use <CODE>close-port</CODE>.
+</P><P>
+
+As an example, here is how you can open a connection to a web server:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(open-tcp-stream-socket "web.mit.edu" "www")
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2179"></A>
+Next we will treat setting up a TCP server, which is slightly more
+complicated.  Creating a server is a two-part process.  First, you must
+open a <EM>server socket</EM>, which causes the operating system to listen
+to the network on a port that you specify.  Once the server socket is
+opened, the operating system will allow clients to connect to your
+computer on that port.
+</P><P>
+
+In the second step of the process, you <EM>accept</EM> the connection,
+which completes the connection initiated by the client, and allows you
+to communicate with the client.  Accepting a connection does not affect
+the server socket; it continues to listen for additional client
+connections.  You can have multiple client connections to the same
+server socket open simultaneously.
+</P><P>
+
+<A NAME="IDX2180"></A>
+<DL>
+<DT><U>procedure+:</U> <B>open-tcp-server-socket</B> <I>service [address]</I>
+<DD>This procedure opens a server socket that listens for connections to
+<VAR>service</VAR>; the socket will continue to listen until you close it.
+The returned value is a server socket object.
+</P><P>
+
+An error is signalled if another process is already listening on the
+service.  Additionally, ports whose number is less than <CODE>1024</CODE> are
+privileged on many operating systems, and cannot be used by
+non-privileged processes; if <VAR>service</VAR> specifies such a port and you
+do not have administrative privileges, an error may be signalled.
+</P><P>
+
+The optional argument <VAR>address</VAR> specifies the <FONT SIZE="-1">IP</FONT> address
+on which the socket will listen.  If this argument is not supplied or is
+given as <CODE>#f</CODE>, then the socket listens on all <FONT SIZE="-1">IP</FONT>
+addresses for this machine.  (This is equivalent to passing the result
+of calling <CODE>host-address-any</CODE>.)
+</DL>
+</P><P>
+
+<A NAME="IDX2181"></A>
+<DL>
+<DT><U>procedure+:</U> <B>tcp-server-connection-accept</B> <I>server-socket block? peer-address</I>
+<DD>Checks to see if a client has connected to <VAR>server-socket</VAR>.  If so,
+an I/O port is returned.  The returned port can be read and written
+using ordinary Scheme I/O procedures such as <CODE>read-char</CODE> and
+<CODE>write-char</CODE>.
+</P><P>
+
+The argument <VAR>block?</VAR> says what to do if no client has connected at
+the time of the call.  If <CODE>#f</CODE>, it says to return immediately with
+two values of <CODE>#f</CODE>.  Otherwise, the call waits until a client
+connects.
+</P><P>
+
+The argument <VAR>peer-address</VAR> is either <CODE>#f</CODE> or an <FONT SIZE="-1">IP</FONT>
+address as allocated by <CODE>allocate-host-address</CODE>.  If it is an
+<FONT SIZE="-1">IP</FONT> address, the address is modified to be the address of the
+client making the connection.
+</P><P>
+
+Note that closing the port returned by this procedure does not affect
+<VAR>server-socket</VAR>; it just closes the particular client connection
+that was opened by the call.  To close <VAR>server-socket</VAR>, use
+<CODE>close-tcp-server-socket</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2182"></A>
+<DL>
+<DT><U>procedure+:</U> <B>close-tcp-server-socket</B> <I>server-socket</I>
+<DD>Closes the server socket <VAR>server-socket</VAR>.  The operating system will
+cease listening for network connections to that service.  Client
+connections to <VAR>server-socket</VAR> that have already been accepted will
+not be affected.
+</DL>
+</P><P>
+
+<A NAME="Miscellaneous OS Facilities"></A>
+<HR SIZE="6">
+<A NAME="SEC167"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC166"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 15.9 Miscellaneous OS Facilities </H2>
+<!--docid::SEC167::-->
+<P>
+
+This section contains assorted operating-system facilities that don't
+fit into other categories.
+</P><P>
+
+<A NAME="IDX2183"></A>
+<DL>
+<DT><U>variable+:</U> <B>microcode-id/operating-system</B>
+<DD><A NAME="IDX2184"></A>
+<DT><U>variable+:</U> <B>microcode-id/operating-system-name</B>
+<DD><CODE>microcode-id/operating-system</CODE> is bound to a symbol that specifies
+the type of operating system that Scheme is running under.  There are
+three possible values: <CODE>unix</CODE>, <CODE>os/2</CODE>, or <CODE>nt</CODE>.
+</P><P>
+
+<CODE>microcode-id/operating-system-name</CODE> is a string containing the
+same name as <CODE>microcode-id/operating-system</CODE>; the latter is created
+by interning the former as a symbol.
+</DL>
+</P><P>
+
+<A NAME="IDX2185"></A>
+<DL>
+<DT><U>variable+:</U> <B>microcode-id/operating-system-variant</B>
+<DD>This variable is a string that identifies the particular variant of the
+operating system that Scheme is running under.  Here are some of the
+possible values:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>"GNU/Linux"
+"FreeBSD"
+"HP-UX"
+"SunOS"
+"OS/2 2.1"
+"OS/2 4.0"
+"Microsoft Windows NT 4.0 (Build 1381; Service Pack 3)"
+"Microsoft Windows 98 (Build 410)"
+</pre></td></tr></table></P><P>
+
+For Windows systems, it is recommended that you match on the prefix of
+this string and ignore the <CODE>"Build"</CODE> suffix.  This is because the
+suffix may contain information about service packs or fixes, while the
+prefix will be constant for a particular version of Windows.
+</DL>
+</P><P>
+
+The next few procedures provide access to the <EM>domain name service</EM>
+(<FONT SIZE="-1">DNS</FONT>), which maintains associations between internet host
+names such as <CODE>"www.swiss.ai.mit.edu"</CODE> and <FONT SIZE="-1">IP</FONT> addresses,
+such as <CODE>18.23.0.16</CODE>.  In MIT Scheme, we represent an internet host
+name as a string, and an <FONT SIZE="-1">IP</FONT> address as a byte vector of length
+4 (byte vectors are just character strings that are accessed using
+<CODE>vector-8b-ref</CODE> rather than <CODE>string-ref</CODE>).  The bytes in an
+<FONT SIZE="-1">IP</FONT> address read in the same order as they do when written out:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(get-host-by-name "www.swiss") => #("\022\027\000\020")
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX2186"></A>
+<DL>
+<DT><U>procedure+:</U> <B>get-host-by-name</B> <I>host-name</I>
+<DD>Looks up the internet host name <VAR>host-name</VAR> using the <FONT SIZE="-1">DNS</FONT>,
+returning a vector of <FONT SIZE="-1">IP</FONT> addresses for the corresponding host,
+or <CODE>#f</CODE> if there is no such host.  Usually the returned vector has
+only one element, but if a host has more than one network interface, the
+vector might have more than one element.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(get-host-by-name "www.swiss") => #("\022\027\000\020")
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2187"></A>
+<DL>
+<DT><U>procedure+:</U> <B>get-host-by-address</B> <I>ip-address</I>
+<DD>Does a reverse <FONT SIZE="-1">DNS</FONT> lookup on <VAR>ip-address</VAR>, returning the
+internet host name corresponding to that address, or <CODE>#f</CODE> if there
+is no such host.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(get-host-by-address "\022\027\000\020") => "swissnet.ai.mit.edu"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2188"></A>
+<DL>
+<DT><U>procedure+:</U> <B>canonical-host-name</B> <I>host-name</I>
+<DD>Finds the "canonical" internet host name for <VAR>host-name</VAR>.  For
+example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(canonical-host-name "zurich")    => "zurich.ai.mit.edu"
+(canonical-host-name "www.swiss") => "swissnet.ai.mit.edu"
+</pre></td></tr></table></P><P>
+
+In both examples, the default internet domain <SAMP>`ai.mit.edu'</SAMP> is added
+to <VAR>host-name</VAR>.  In the second example, <CODE>"www.swiss"</CODE> is an
+alias for another computer named <CODE>"swissnet"</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2189"></A>
+<DL>
+<DT><U>procedure+:</U> <B>get-host-name</B>
+<DD>Returns the string that identifies the computer that MIT Scheme is
+running on.  Usually this is an unqualified internet host name, i.e.
+the host name without the domain suffix:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(get-host-name) => "aarau"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2190"></A>
+<DL>
+<DT><U>procedure+:</U> <B>os/hostname</B>
+<DD>Returns the canonical internet host name of the computer that MIT Scheme
+is running on.  So, in contrast to the example for <CODE>get-host-name</CODE>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(os/hostname) => "aarau.ai.mit.edu"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2191"></A>
+<DL>
+<DT><U>procedure+:</U> <B>allocate-host-address</B>
+<DD>Allocates and returns an <FONT SIZE="-1">IP</FONT> address object.  This is just a
+string of a fixed length (current 4 bytes) into which an <FONT SIZE="-1">IP</FONT>
+address may be stored.  This procedure is used to generate an
+appropriate argument to be passed to
+<CODE>tcp-server-connection-accept</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(allocate-host-address) => "Xe\034\241"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2192"></A>
+<DL>
+<DT><U>procedure+:</U> <B>host-address-any</B>
+<DD>Return an <FONT SIZE="-1">IP</FONT> address object that specifies "any host".  This
+object is useful only when passed as the <VAR>address</VAR> argument to
+<CODE>open-tcp-server-socket</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(host-address-any) => "\000\000\000\000"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2193"></A>
+<DL>
+<DT><U>procedure+:</U> <B>host-address-loopback</B>
+<DD><A NAME="IDX2194"></A>
+Return an <FONT SIZE="-1">IP</FONT> address object that specifies the local
+<EM>loopback</EM> network interface.  The loopback interface is a software
+network interface that can be used only for communicating between
+processes on the same computer.  This address object is useful only when
+passed as the <VAR>address</VAR> argument to <CODE>open-tcp-server-socket</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(host-address-loopback) => "\177\000\000\001"
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Error System"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

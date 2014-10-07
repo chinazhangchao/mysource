@@ -1,0 +1,363 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme Reference: Environments</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme Reference: Environments">
+<META NAME="keywords" CONTENT="MIT Scheme Reference: Environments">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC125"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_13.html#SEC124"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC126"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_13.html#SEC120"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 13. Environments </H1>
+<!--docid::SEC125::-->
+<P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_14.html#SEC126">13.1 Environment Operations</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_14.html#SEC127">13.2 Environment Variables</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_14.html#SEC128">13.3 REPL Environment</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_14.html#SEC129">13.4 Interpreter Environments</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Environment Operations"></A>
+<HR SIZE="6">
+<A NAME="SEC126"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC125"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC127"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC125"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC125"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 13.1 Environment Operations </H2>
+<!--docid::SEC126::-->
+<P>
+
+Environments are first-class objects in MIT Scheme.  An environment
+consists of some bindings and possibly a parent environment, from which
+other bindings are inherited.  The operations in this section reveal the
+frame-like structure of environments by permitting you to examine the
+bindings of a particular environment separately from those of its
+parent.
+</P><P>
+
+<A NAME="IDX1614"></A>
+<DL>
+<DT><U>procedure+:</U> <B>environment?</B> <I>object</I>
+<DD><A NAME="IDX1615"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is an environment; otherwise returns
+<CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1616"></A>
+<DL>
+<DT><U>procedure+:</U> <B>environment-has-parent?</B> <I>environment</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>environment</VAR> has a parent environment;
+otherwise returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1617"></A>
+<DL>
+<DT><U>procedure+:</U> <B>environment-parent</B> <I>environment</I>
+<DD>Returns the parent environment of <VAR>environment</VAR>.  It is an error if
+<VAR>environment</VAR> has no parent.
+</DL>
+</P><P>
+
+<A NAME="IDX1618"></A>
+<DL>
+<DT><U>procedure+:</U> <B>environment-bound-names</B> <I>environment</I>
+<DD>Returns a newly allocated list of the names (symbols) that are bound by
+<VAR>environment</VAR>.  This does not include the names that are bound by
+the parent environment of <VAR>environment</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1619"></A>
+<DL>
+<DT><U>procedure+:</U> <B>environment-bindings</B> <I>environment</I>
+<DD>Returns a newly allocated list of the bindings of <VAR>environment</VAR>;
+does not include the bindings of the parent environment.
+Each element of this list takes one of two forms: <CODE>(<VAR>name</VAR>)</CODE>
+indicates that <VAR>name</VAR> is bound but unassigned, while
+<CODE>(<VAR>name</VAR> <VAR>object</VAR>)</CODE> indicates that <VAR>name</VAR> is bound, and
+its value is <VAR>object</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1620"></A>
+<DL>
+<DT><U>procedure+:</U> <B>environment-bound?</B> <I>environment symbol</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>symbol</VAR> is bound in <VAR>environment</VAR> or one
+of its ancestor environments; otherwise returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1621"></A>
+<DL>
+<DT><U>procedure+:</U> <B>environment-lookup</B> <I>environment symbol</I>
+<DD><VAR>Symbol</VAR> must be bound in <VAR>environment</VAR> or one of its ancestor
+environments.  Returns the value to which it is bound.
+</DL>
+</P><P>
+
+<A NAME="IDX1622"></A>
+<DL>
+<DT><U>procedure+:</U> <B>environment-assignable?</B> <I>environment symbol</I>
+<DD><VAR>Symbol</VAR> must be bound in <VAR>environment</VAR> or one of its ancestor
+environments.  Returns <CODE>#t</CODE> if the binding may be modified by side
+effect.
+</DL>
+</P><P>
+
+<A NAME="IDX1623"></A>
+<DL>
+<DT><U>procedure+:</U> <B>environment-assign!</B> <I>environment symbol object</I>
+<DD><VAR>Symbol</VAR> must be bound in <VAR>environment</VAR> or one of its ancestor
+environments, and must be assignable.  Modifies the binding to have
+<VAR>object</VAR> as its value, and returns an unspecified result.
+</DL>
+</P><P>
+
+<A NAME="IDX1624"></A>
+<DL>
+<DT><U>procedure+:</U> <B>eval</B> <I>expression environment</I>
+<DD><A NAME="IDX1625"></A>
+<A NAME="IDX1626"></A>
+Evaluates <VAR>expression</VAR>, a list-structure representation (sometimes
+called s-expression representation) of a Scheme expression, in
+<VAR>environment</VAR>.  You rarely need <CODE>eval</CODE> in ordinary programs; it
+is useful mostly for evaluating expressions that have been created "on
+the fly" by a program.  <CODE>eval</CODE> is relatively expensive because it
+must convert <VAR>expression</VAR> to an internal form before it is executed.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define foo (list '+ 1 2))
+(eval foo (the-environment))            =>  3
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Environment Variables"></A>
+<HR SIZE="6">
+<A NAME="SEC127"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC126"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC128"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC125"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC125"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 13.2 Environment Variables </H2>
+<!--docid::SEC127::-->
+<P>
+
+<A NAME="IDX1627"></A>
+The <CODE>user-initial-environment</CODE> is where the top-level
+read-eval-print (REP) loop evaluates expressions and stores
+definitions.  It is a child of the <CODE>system-global-environment</CODE>,
+which is where all of the Scheme system definitions are stored.  All of
+the bindings in <CODE>system-global-environment</CODE> are available when the
+current environment is <CODE>user-initial-environment</CODE>.  However, any
+new bindings that you create in the REP loop (with <CODE>define</CODE>
+forms or by loading files containing <CODE>define</CODE> forms) occur in
+<CODE>user-initial-environment</CODE>.
+</P><P>
+
+<A NAME="IDX1628"></A>
+<DL>
+<DT><U>variable+:</U> <B>system-global-environment</B>
+<DD>The variable <CODE>system-global-environment</CODE> is bound to the
+environment that's the parent of the <CODE>user-initial-environment</CODE>.
+Primitives and system procedures are bound (and sometimes closed) in
+this environment.
+</DL>
+</P><P>
+
+<A NAME="IDX1629"></A>
+<DL>
+<DT><U>variable+:</U> <B>user-initial-environment</B>
+<DD>The variable <CODE>user-initial-environment</CODE> is bound to the default
+environment in which typed expressions are evaluated by the top-level
+REP loop.
+</P><P>
+
+Although all bindings in <CODE>system-global-environment</CODE> are visible to
+the REP loop, definitions that are typed at, or loaded by, the
+REP loop occur in the <CODE>user-initial-environment</CODE>.  This is
+partly a safety measure: if you enter a definition that happens to have
+the same name as a critical system procedure, your definition will be
+visible only to the procedures you define in the
+<CODE>user-initial-environment</CODE>; the MIT Scheme system procedures, which
+are defined in the <CODE>system-global-environment</CODE>, will continue to
+see the original definition.
+</DL>
+</P><P>
+
+<A NAME="REPL Environment"></A>
+<HR SIZE="6">
+<A NAME="SEC128"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC127"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC129"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC125"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC125"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 13.3 REPL Environment </H2>
+<!--docid::SEC128::-->
+<P>
+
+<A NAME="IDX1630"></A>
+<DL>
+<DT><U>procedure+:</U> <B>nearest-repl/environment</B>
+<DD><A NAME="IDX1631"></A>
+Returns the current REP loop environment (i.e. the current
+environment of the closest enclosing REP loop).  When Scheme first
+starts up, this is the same as <CODE>user-initial-environment</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1632"></A>
+<DL>
+<DT><U>procedure+:</U> <B>ge</B> <I>environment</I>
+<DD>Changes the current REP loop environment to <VAR>environment</VAR>.
+<VAR>Environment</VAR> can be either an environment or a procedure object.
+If it's a procedure, the environment in which that procedure was closed
+is the new environment.
+</DL>
+</P><P>
+
+<A NAME="Interpreter Environments"></A>
+<HR SIZE="6">
+<A NAME="SEC129"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC128"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC125"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC125"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 13.4 Interpreter Environments </H2>
+<!--docid::SEC129::-->
+<P>
+
+The operations in this section return environments that are constructed
+by the interpreter.  These operations should only be used at the top
+level of a file; they are not supported in any other place.  In
+particular, they force the current environment to be represented in a
+form suitable for use by the interpreter.  This prevents the compiler
+from performing many useful optimizations on such environments, and
+forces the use of the interpreter for variable references in them.
+However, because all top-level environments (such as
+<CODE>user-initial-environment</CODE>) are already interpreter environments,
+it does no harm to use such operations on them.
+</P><P>
+
+<STRONG>Warning</STRONG>: A future release of MIT Scheme will support hygienic
+macros, which are incompatible with non-top-level instances of
+<CODE>make-environment</CODE> and <CODE>the-environment</CODE>.  At that time, other
+uses of these constructs will be disallowed.
+</P><P>
+
+<A NAME="IDX1633"></A>
+<DL>
+<DT><U>special form+:</U> <B>make-environment</B> <I>expression <small>...</small></I>
+<DD><A NAME="IDX1634"></A>
+Produces a new environment that is a child of the environment in which
+it is executed, evaluates the <VAR>expression</VAR>s sequentially in the new
+environment, and returns the new environment.  Note that
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(make-environment <VAR>expression</VAR> <small>...</small>)
+</pre></td></tr></table></P><P>
+
+is equivalent to:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(let ()
+  <VAR>expression</VAR> <small>...</small>
+  (the-environment))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1635"></A>
+<DL>
+<DT><U>special form+:</U> <B>the-environment</B>
+<DD>Returns the current environment.
+</DL>
+</P><P>
+
+<A NAME="IDX1636"></A>
+<DL>
+<DT><U>procedure+:</U> <B>interpreter-environment?</B> <I>object</I>
+<DD><A NAME="IDX1637"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is an interpreter environment;
+otherwise returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="Input/Output"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_14.html#SEC125"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_15.html#SEC130"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

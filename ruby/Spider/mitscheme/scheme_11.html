@@ -1,0 +1,1212 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme Reference: Miscellaneous Datatypes</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme Reference: Miscellaneous Datatypes">
+<META NAME="keywords" CONTENT="MIT Scheme Reference: Miscellaneous Datatypes">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC95"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC94"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC96"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_10.html#SEC88"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_12.html#SEC103"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 10. Miscellaneous Datatypes </H1>
+<!--docid::SEC95::-->
+<P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_11.html#SEC96">10.1 Booleans</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_11.html#SEC97">10.2 Symbols</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_11.html#SEC98">10.3 Cells</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_11.html#SEC99">10.4 Records</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_11.html#SEC100">10.5 Promises</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_11.html#SEC101">10.6 Streams</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_11.html#SEC102">10.7 Weak Pairs</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Booleans"></A>
+<HR SIZE="6">
+<A NAME="SEC96"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC97"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_12.html#SEC103"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 10.1 Booleans </H2>
+<!--docid::SEC96::-->
+<P>
+
+<A NAME="IDX1178"></A>
+<A NAME="IDX1179"></A>
+<A NAME="IDX1180"></A>
+<A NAME="IDX1181"></A>
+<A NAME="IDX1182"></A>
+<A NAME="IDX1183"></A>
+<A NAME="IDX1184"></A>
+The <EM>boolean objects</EM> are <EM>true</EM> and <EM>false</EM>.  The boolean
+constant true is written as <SAMP>`#t'</SAMP>, and the boolean constant false is
+written as <SAMP>`#f'</SAMP>.
+</P><P>
+
+<A NAME="IDX1185"></A>
+<A NAME="IDX1186"></A>
+<A NAME="IDX1187"></A>
+<A NAME="IDX1188"></A>
+The primary use for boolean objects is in the conditional expressions
+<CODE>if</CODE>, <CODE>cond</CODE>, <CODE>and</CODE>, and <CODE>or</CODE>; the behavior of these
+expressions is determined by whether objects are true or false.  These
+expressions count only <CODE>#f</CODE> as false.  They count everything else,
+including <CODE>#t</CODE>, pairs, symbols, numbers, strings, vectors, and
+procedures as true (but see section <A HREF="scheme_2.html#SEC12">1.2.5 True and False</A>).
+</P><P>
+
+<A NAME="IDX1189"></A>
+<A NAME="IDX1190"></A>
+Programmers accustomed to other dialects of Lisp should note that Scheme
+distinguishes <CODE>#f</CODE> and the empty list from the symbol <CODE>nil</CODE>.
+Similarly, <CODE>#t</CODE> is distinguished from the symbol <CODE>t</CODE>.  In
+fact, the boolean objects (and the empty list) are not symbols at all.
+</P><P>
+
+Boolean constants evaluate to themselves, so you don't need to quote
+them.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#t                                      =>  #t
+#f                                      =>  #f
+'#f                                     =>  #f
+t                                       error--> Unbound variable
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX1191"></A>
+<DL>
+<DT><U>variable+:</U> <B>false</B>
+<DD><A NAME="IDX1192"></A>
+<DT><U>variable+:</U> <B>true</B>
+<DD>These variables are bound to the objects <CODE>#f</CODE> and <CODE>#t</CODE>
+respectively.  The compiler, given the <CODE>usual-integrations</CODE>
+declaration, replaces references to these variables with their
+respective values.
+</P><P>
+
+Note that the symbol <CODE>true</CODE> is not equivalent to <CODE>#t</CODE>, and the
+symbol <CODE>false</CODE> is not equivalent to <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1193"></A>
+<DL>
+<DT><U>procedure:</U> <B>boolean?</B> <I>object</I>
+<DD><A NAME="IDX1194"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is either <CODE>#t</CODE> or <CODE>#f</CODE>;
+otherwise returns <CODE>#f</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(boolean? #f)                           =>  #t
+(boolean? 0)                            =>  #f
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1195"></A>
+<DL>
+<DT><U>procedure:</U> <B>not</B> <I>object</I>
+<DD><A NAME="IDX1196"></A>
+<DT><U>procedure+:</U> <B>false?</B> <I>object</I>
+<DD><A NAME="IDX1197"></A>
+<A NAME="IDX1198"></A>
+These procedures return <CODE>#t</CODE> if <VAR>object</VAR> is false; otherwise
+they return <CODE>#f</CODE>.  In other words they <EM>invert</EM> boolean
+values.  These two procedures have identical semantics; their names are
+different to give different connotations to the test.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(not #t)                                =>  #f
+(not 3)                                 =>  #f
+(not (list 3))                          =>  #f
+(not #f)                                =>  #t
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1199"></A>
+<DL>
+<DT><U>procedure+:</U> <B>boolean=?</B> <I>obj1 obj2</I>
+<DD><A NAME="IDX1200"></A>
+<A NAME="IDX1201"></A>
+<A NAME="IDX1202"></A>
+This predicate is true iff <VAR>obj1</VAR> and <VAR>obj2</VAR> are either both true
+or both false.
+</DL>
+</P><P>
+
+<A NAME="IDX1203"></A>
+<DL>
+<DT><U>procedure+:</U> <B>boolean/and</B> <I>object <small>...</small></I>
+<DD>This procedure returns <CODE>#t</CODE> if none of its arguments are <CODE>#f</CODE>.
+Otherwise it returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1204"></A>
+<DL>
+<DT><U>procedure+:</U> <B>boolean/or</B> <I>object <small>...</small></I>
+<DD>This procedure returns <CODE>#f</CODE> if all of its arguments are <CODE>#f</CODE>.
+Otherwise it returns <CODE>#t</CODE>.
+</DL>
+</P><P>
+
+<A NAME="Symbols"></A>
+<HR SIZE="6">
+<A NAME="SEC97"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC96"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC98"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_12.html#SEC103"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 10.2 Symbols </H2>
+<!--docid::SEC97::-->
+<P>
+
+<A NAME="IDX1205"></A>
+<A NAME="IDX1206"></A>
+<A NAME="IDX1207"></A>
+<A NAME="IDX1208"></A>
+<A NAME="IDX1209"></A>
+<A NAME="IDX1210"></A>
+MIT Scheme provides two types of symbols: <EM>interned</EM> and
+<EM>uninterned</EM>.  Interned symbols are far more common than uninterned
+symbols, and there are more ways to create them.  Interned symbols have
+an external representation that is recognized by the procedure
+<CODE>read</CODE>; uninterned symbols do not.<A NAME="DOCF10" HREF="scheme_fot.html#FOOT10">(10)</A>
+</P><P>
+
+<A NAME="IDX1211"></A>
+<A NAME="IDX1212"></A>
+Interned symbols have an extremely useful property: any two interned
+symbols whose names are the same, in the sense of <CODE>string=?</CODE>, are
+the same object (i.e. they are <CODE>eq?</CODE> to one another).  The term
+<EM>interned</EM> refers to the process of <EM>interning</EM> by which this is
+accomplished.  Uninterned symbols do not share this property.
+</P><P>
+
+<A NAME="IDX1213"></A>
+<A NAME="IDX1214"></A>
+<A NAME="IDX1215"></A>
+The names of interned symbols are not distinguished by their alphabetic
+case.  Because of this, MIT Scheme converts all alphabetic
+characters in the name of an interned symbol to a specific case (lower
+case) when the symbol is created.  When the name of an interned symbol
+is referenced (using <CODE>symbol-&#62;string</CODE>) or written (using
+<CODE>write</CODE>) it appears in this case.  It is a bad idea to depend on
+the name being lower case.  In fact, it is preferable to take this one
+step further: don't depend on the name of a symbol being in a uniform
+case.
+</P><P>
+
+<A NAME="IDX1216"></A>
+<A NAME="IDX1217"></A>
+<A NAME="IDX1218"></A>
+The rules for writing an interned symbol are the same as the rules for
+writing an identifier (see section <A HREF="scheme_2.html#SEC19">1.3.3 Identifiers</A>).  Any interned symbol that
+has been returned as part of a literal expression, or read using the
+<CODE>read</CODE> procedure and subsequently written out using the
+<CODE>write</CODE> procedure, will read back in as the identical symbol (in
+the sense of <CODE>eq?</CODE>).
+</P><P>
+
+Usually it is also true that reading in an interned symbol that was
+previously written out produces the same symbol.  An exception are
+symbols created by the procedures <CODE>string-&#62;symbol</CODE> and
+<CODE>intern</CODE>; they can create symbols for which this write/read
+invariance may not hold because the symbols' names contain special
+characters or letters in the non-standard case.<A NAME="DOCF11" HREF="scheme_fot.html#FOOT11">(11)</A>
+</P><P>
+
+<A NAME="IDX1219"></A>
+The external representation for uninterned symbols is special, to
+distinguish them from interned symbols and prevent them from being
+recognized by the <CODE>read</CODE> procedure:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-&#62;uninterned-symbol "foo")
+     =>  #[uninterned-symbol 30 foo]
+</pre></td></tr></table></P><P>
+
+In this section, the procedures that return symbols as values will
+either always return interned symbols, or always return uninterned
+symbols.  The procedures that accept symbols as arguments will always
+accept either interned or uninterned symbols, and do not distinguish the
+two.
+</P><P>
+
+<A NAME="IDX1220"></A>
+<DL>
+<DT><U>procedure:</U> <B>symbol?</B> <I>object</I>
+<DD><A NAME="IDX1221"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a symbol, otherwise returns
+<CODE>#f</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(symbol? 'foo)                                  =>  #t
+(symbol? (car '(a b)))                          =>  #t
+(symbol? "bar")                                 =>  #f
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1222"></A>
+<DL>
+<DT><U>procedure:</U> <B>symbol-&#62;string</B> <I>symbol</I>
+<DD><A NAME="IDX1223"></A>
+<A NAME="IDX1224"></A>
+<A NAME="IDX1225"></A>
+<A NAME="IDX1226"></A>
+Returns the name of <VAR>symbol</VAR> as a string.  If <VAR>symbol</VAR> was
+returned by <CODE>string-&#62;symbol</CODE>, the value of this procedure will be
+identical (in the sense of <CODE>string=?</CODE>) to the string that was
+passed to <CODE>string-&#62;symbol</CODE>.  It is an error to apply mutation
+procedures such as <CODE>string-set!</CODE> to strings returned by this
+procedure.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(symbol-&#62;string 'flying-fish)           =>  "flying-fish"
+(symbol-&#62;string 'Martin)                =>  "martin"
+(symbol-&#62;string (string-&#62;symbol "Malvina"))
+                                        =>  "Malvina"
+</pre></td></tr></table></P><P>
+
+Note that two distinct uninterned symbols can have the same name.
+</DL>
+</P><P>
+
+<A NAME="IDX1227"></A>
+<DL>
+<DT><U>procedure+:</U> <B>intern</B> <I>string</I>
+<DD><A NAME="IDX1228"></A>
+<A NAME="IDX1229"></A>
+Returns the interned symbol whose name is <VAR>string</VAR>.  Converts
+<VAR>string</VAR> to the standard alphabetic case before generating the
+symbol.  This is the preferred way to create interned symbols, as it
+guarantees the following independent of which case the implementation
+uses for symbols' names:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(eq? 'bitBlt (intern "bitBlt")) =>     #t
+</pre></td></tr></table></P><P>
+
+The user should take care that <VAR>string</VAR> obeys the rules for
+identifiers (see section <A HREF="scheme_2.html#SEC19">1.3.3 Identifiers</A>), otherwise the resulting symbol cannot
+be read as itself.
+</DL>
+</P><P>
+
+<A NAME="IDX1230"></A>
+<DL>
+<DT><U>procedure+:</U> <B>intern-soft</B> <I>string</I>
+<DD>Returns the interned symbol whose name is <VAR>string</VAR>.  Converts
+<VAR>string</VAR> to the standard alphabetic case before generating the
+symbol.  If no such interned symbol exists, returns <CODE>#f</CODE>.
+</P><P>
+
+This is exactly like <CODE>intern</CODE>, except that it will not create an
+interned symbol, but only returns symbols that already exist.
+</DL>
+</P><P>
+
+<A NAME="IDX1231"></A>
+<DL>
+<DT><U>procedure:</U> <B>string-&#62;symbol</B> <I>string</I>
+<DD><A NAME="IDX1232"></A>
+Returns the interned symbol whose name is <VAR>string</VAR>.  Although you
+can use this procedure to create symbols with names containing special
+characters or lowercase letters, it's usually a bad idea to create such
+symbols because they cannot be read as themselves.  See
+<CODE>symbol-&#62;string</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(eq? 'mISSISSIppi 'mississippi)         =>  #t
+(string-&#62;symbol "mISSISSIppi")
+     =>  the symbol with the name "mISSISSIppi"
+(eq? 'bitBlt (string-&#62;symbol "bitBlt")) =>  #f
+(eq? 'JollyWog
+      (string-&#62;symbol
+        (symbol-&#62;string 'JollyWog)))    =>  #t
+(string=? "K. Harper, M.D."
+           (symbol-&#62;string
+             (string-&#62;symbol
+               "K. Harper, M.D.")))     =>  #t
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1233"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-&#62;uninterned-symbol</B> <I>string</I>
+<DD>Returns a newly allocated uninterned symbol whose name is <VAR>string</VAR>.
+It is unimportant what case or characters are used in
+<VAR>string</VAR>.
+</P><P>
+
+Note: this is the fastest way to make a symbol.
+</DL>
+</P><P>
+
+<A NAME="IDX1234"></A>
+<DL>
+<DT><U>procedure+:</U> <B>generate-uninterned-symbol</B> <I>[object]</I>
+<DD><A NAME="IDX1235"></A>
+<A NAME="IDX1236"></A>
+Returns a newly allocated uninterned symbol that is guaranteed to be
+different from any other object.  The symbol's name consists of a prefix
+string followed by the (exact non-negative integer) value of an internal
+counter.  The counter is initially zero, and is incremented after each
+call to this procedure.
+</P><P>
+
+The optional argument <VAR>object</VAR> is used to control how the symbol is
+generated.  It may take one of the following values:
+</P><P>
+
+<UL>
+<LI>
+If <VAR>object</VAR> is omitted or <CODE>#f</CODE>, the prefix is <CODE>"G"</CODE>.
+<P>
+
+<LI>
+If <VAR>object</VAR> is an exact non-negative integer, the internal counter
+is set to that integer prior to generating the result.
+<P>
+
+<LI>
+If <VAR>object</VAR> is a string, it is used as the prefix.
+<P>
+
+<LI>
+If <VAR>object</VAR> is a symbol, its name is used as the prefix.
+</UL>
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(generate-uninterned-symbol)
+     =>  #[uninterned-symbol 31 G0]
+(generate-uninterned-symbol)
+     =>  #[uninterned-symbol 32 G1]
+(generate-uninterned-symbol 'this)
+     =>  #[uninterned-symbol 33 this2]
+(generate-uninterned-symbol)
+     =>  #[uninterned-symbol 34 G3]
+(generate-uninterned-symbol 100)
+     =>  #[uninterned-symbol 35 G100]
+(generate-uninterned-symbol)
+     =>  #[uninterned-symbol 36 G101]
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1237"></A>
+<DL>
+<DT><U>procedure+:</U> <B>symbol-append</B> <I>symbol <small>...</small></I>
+<DD><A NAME="IDX1238"></A>
+<A NAME="IDX1239"></A>
+Returns the interned symbol whose name is formed by concatenating the
+names of the given symbols.  This procedure preserves the case of the
+names of its arguments, so if one or more of the arguments' names has
+non-standard case, the result will also have non-standard case.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(symbol-append 'foo- 'bar)              =>  foo-bar
+;; the arguments may be uninterned:
+(symbol-append 'foo- (string-&#62;uninterned-symbol "baz"))
+                                        =>  foo-baz
+;; the result has the same case as the arguments:
+(symbol-append 'foo- (string-&#62;symbol "BAZ"))    =>  foo-BAZ
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1240"></A>
+<DL>
+<DT><U>procedure+:</U> <B>symbol-hash</B> <I>symbol</I>
+<DD><A NAME="IDX1241"></A>
+<A NAME="IDX1242"></A>
+Returns a hash number for <VAR>symbol</VAR>, which is computed by calling
+<CODE>string-hash</CODE> on <VAR>symbol</VAR>'s name.  The hash number is an exact
+non-negative integer.
+</DL>
+</P><P>
+
+<A NAME="IDX1243"></A>
+<DL>
+<DT><U>procedure+:</U> <B>symbol-hash-mod</B> <I>symbol modulus</I>
+<DD><VAR>Modulus</VAR> must be an exact positive integer.  Equivalent to
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(modulo (symbol-hash <VAR>symbol</VAR>) <VAR>modulus</VAR>)
+</pre></td></tr></table></P><P>
+
+This procedure is provided for convenience in constructing hash tables.
+However, it is normally preferable to use <CODE>make-eq-hash-table</CODE> to
+build hash tables keyed by symbols, because <CODE>eq?</CODE> hash tables are
+much faster.
+</DL>
+</P><P>
+
+<A NAME="IDX1244"></A>
+<DL>
+<DT><U>procedure+:</U> <B>symbol&#60;?</B> <I>symbol1 symbol2</I>
+<DD>This procedure computes a total order on symbols.  It is equivalent to
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string&#60;? (symbol-&#62;string <VAR>symbol1</VAR>)
+          (symbol-&#62;string <VAR>symbol2</VAR>))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Cells"></A>
+<HR SIZE="6">
+<A NAME="SEC98"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC97"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC99"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_12.html#SEC103"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 10.3 Cells </H2>
+<!--docid::SEC98::-->
+<P>
+
+<A NAME="IDX1245"></A>
+<EM>Cells</EM> are data structures similar to pairs except that they have
+only one element.  They are useful for managing state.
+</P><P>
+
+<A NAME="IDX1246"></A>
+<DL>
+<DT><U>procedure+:</U> <B>cell?</B> <I>object</I>
+<DD><A NAME="IDX1247"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a cell; otherwise returns
+<CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1248"></A>
+<DL>
+<DT><U>procedure+:</U> <B>make-cell</B> <I>object</I>
+<DD><A NAME="IDX1249"></A>
+Returns a newly allocated cell whose contents is <VAR>object</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1250"></A>
+<DL>
+<DT><U>procedure+:</U> <B>cell-contents</B> <I>cell</I>
+<DD><A NAME="IDX1251"></A>
+<A NAME="IDX1252"></A>
+Returns the current contents of <VAR>cell</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1253"></A>
+<DL>
+<DT><U>procedure+:</U> <B>set-cell-contents!</B> <I>cell object</I>
+<DD>Alters the contents of <VAR>cell</VAR> to be <VAR>object</VAR>.  Returns an
+unspecified value.
+</DL>
+</P><P>
+
+<A NAME="IDX1254"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bind-cell-contents!</B> <I>cell object thunk</I>
+<DD>Alters the contents of <VAR>cell</VAR> to be <VAR>object</VAR>, calls <VAR>thunk</VAR>
+with no arguments, then restores the original contents of <VAR>cell</VAR> and
+returns the value returned by <VAR>thunk</VAR>.  This is completely
+equivalent to dynamic binding of a variable, including the behavior when
+continuations are used (see section <A HREF="scheme_3.html#SEC32">2.3 Dynamic Binding</A>).
+</DL>
+</P><P>
+
+<A NAME="Records"></A>
+<HR SIZE="6">
+<A NAME="SEC99"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC98"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC100"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_12.html#SEC103"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 10.4 Records </H2>
+<!--docid::SEC99::-->
+<P>
+
+MIT Scheme provides a <EM>record</EM> abstraction, which is a simple and
+flexible mechanism for building structures with named components.
+Records can be defined and accessed using the procedures defined in this
+section.  A less flexible but more concise way to manipulate records is
+to use the <CODE>define-structure</CODE> special form (see section <A HREF="scheme_3.html#SEC41">2.10 Structure Definitions</A>).
+<A NAME="IDX1255"></A>
+</P><P>
+
+<A NAME="IDX1256"></A>
+<DL>
+<DT><U>procedure+:</U> <B>make-record-type</B> <I>type-name field-names</I>
+<DD><A NAME="IDX1257"></A>
+Returns a <EM>record-type descriptor</EM>, a value representing a new data
+type, disjoint from all others.  The <VAR>type-name</VAR> argument must be a
+string, but is only used for debugging purposes (such as the printed
+representation of a record of the new type).  The <VAR>field-names</VAR>
+argument is a list of symbols naming the <EM>fields</EM> of a record of the
+new type.  It is an error if the list contains any duplicates.  It is
+unspecified how record-type descriptors are represented.
+</DL>
+</P><P>
+
+<A NAME="IDX1258"></A>
+<DL>
+<DT><U>procedure+:</U> <B>record-constructor</B> <I>record-type [field-names]</I>
+<DD>Returns a procedure for constructing new members of the type represented
+by <VAR>record-type</VAR>.  The returned procedure accepts exactly as many
+arguments as there are symbols in the given list, <VAR>field-names</VAR>;
+these are used, in order, as the initial values of those fields in a new
+record, which is returned by the constructor procedure.  The values of
+any fields not named in the list of <VAR>field-names</VAR> are unspecified.
+The <VAR>field-names</VAR> argument defaults to the list of field-names in
+the call to <CODE>make-record-type</CODE> that created the type represented by
+<VAR>record-type</VAR>; if the <VAR>field-names</VAR> argument is provided, it is
+an error if it contains any duplicates or any symbols not in the default
+list.
+</DL>
+</P><P>
+
+<A NAME="IDX1259"></A>
+<DL>
+<DT><U>procedure+:</U> <B>record-predicate</B> <I>record-type</I>
+<DD>Returns a procedure for testing membership in the type represented by
+<VAR>record-type</VAR>.  The returned procedure accepts exactly one argument
+and returns <CODE>#t</CODE> if the argument is a member of the indicated
+record type; it returns <CODE>#f</CODE> otherwise.
+</DL>
+</P><P>
+
+<A NAME="IDX1260"></A>
+<DL>
+<DT><U>procedure+:</U> <B>record-accessor</B> <I>record-type field-name</I>
+<DD>Returns a procedure for reading the value of a particular field of a
+member of the type represented by <VAR>record-type</VAR>.  The returned
+procedure accepts exactly one argument which must be a record of the
+appropriate type; it returns the current value of the field named by the
+symbol <VAR>field-name</VAR> in that record.  The symbol <VAR>field-name</VAR>
+must be a member of the list of field names in the call to
+<CODE>make-record-type</CODE> that created the type represented by
+<VAR>record-type</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1261"></A>
+<DL>
+<DT><U>procedure+:</U> <B>record-modifier</B> <I>record-type field-name</I>
+<DD>Returns a procedure for writing the value of a particular field of a
+member of the type represented by <VAR>record-type</VAR>.  The returned
+procedure accepts exactly two arguments: first, a record of the
+appropriate type, and second, an arbitrary Scheme value; it modifies the
+field named by the symbol <VAR>field-name</VAR> in that record to contain the
+given value.  The returned value of the modifier procedure is
+unspecified.  The symbol <VAR>field-name</VAR> must be a member of the list
+of field names in the call to <CODE>make-record-type</CODE> that created the
+type represented by <VAR>record-type</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1262"></A>
+<DL>
+<DT><U>procedure+:</U> <B>record?</B> <I>object</I>
+<DD><A NAME="IDX1263"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a record of any type and <CODE>#f</CODE>
+otherwise.  Note that <CODE>record?</CODE> may be true of any Scheme value; of
+course, if it returns <CODE>#t</CODE> for some particular value, then
+<CODE>record-type-descriptor</CODE> is applicable to that value and returns an
+appropriate descriptor.
+</DL>
+</P><P>
+
+<A NAME="IDX1264"></A>
+<DL>
+<DT><U>procedure+:</U> <B>record-type-descriptor</B> <I>record</I>
+<DD>Returns the record-type descriptor representing the type of
+<VAR>record</VAR>.  That is, for example, if the returned descriptor were
+passed to <CODE>record-predicate</CODE>, the resulting predicate would return
+<CODE>#t</CODE> when passed <VAR>record</VAR>.  Note that it is not necessarily the
+case that the returned descriptor is the one that was passed to
+<CODE>record-constructor</CODE> in the call that created the constructor
+procedure that created <VAR>record</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1265"></A>
+<DL>
+<DT><U>procedure+:</U> <B>record-type?</B> <I>object</I>
+<DD><A NAME="IDX1266"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a record-type descriptor; otherwise
+returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1267"></A>
+<DL>
+<DT><U>procedure+:</U> <B>record-type-name</B> <I>record-type</I>
+<DD>Returns the type name associated with the type represented by
+<VAR>record-type</VAR>.  The returned value is <CODE>eqv?</CODE> to the
+<VAR>type-name</VAR> argument given in the call to <CODE>make-record-type</CODE>
+that created the type represented by <VAR>record-type</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1268"></A>
+<DL>
+<DT><U>procedure+:</U> <B>record-type-field-names</B> <I>record-type</I>
+<DD>Returns a list of the symbols naming the fields in members of the type
+represented by <VAR>record-type</VAR>.  The returned value is <CODE>equal?</CODE>
+to the <VAR>field-names</VAR> argument given in the call to
+<CODE>make-record-type</CODE> that created the type represented by
+<VAR>record-type</VAR>.<A NAME="DOCF12" HREF="scheme_fot.html#FOOT12">(12)</A>
+</DL>
+</P><P>
+
+<A NAME="Promises"></A>
+<HR SIZE="6">
+<A NAME="SEC100"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC99"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC101"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_12.html#SEC103"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 10.5 Promises </H2>
+<!--docid::SEC100::-->
+<P>
+
+<A NAME="IDX1269"></A>
+<DL>
+<DT><U>special form:</U> <B>delay</B> <I>expression</I>
+<DD><A NAME="IDX1270"></A>
+<A NAME="IDX1271"></A>
+<A NAME="IDX1272"></A>
+<A NAME="IDX1273"></A>
+<A NAME="IDX1274"></A>
+<A NAME="IDX1275"></A>
+<A NAME="IDX1276"></A>
+The <CODE>delay</CODE> construct is used together with the procedure
+<CODE>force</CODE> to implement <EM>lazy evaluation</EM> or <EM>call by need</EM>.
+<CODE>(delay <VAR>expression</VAR>)</CODE> returns an object called a <EM>promise</EM>
+which at some point in the future may be asked (by the <CODE>force</CODE>
+procedure) to evaluate <VAR>expression</VAR> and deliver the resulting value.
+</DL>
+</P><P>
+
+<A NAME="IDX1277"></A>
+<DL>
+<DT><U>procedure:</U> <B>force</B> <I>promise</I>
+<DD><A NAME="IDX1278"></A>
+<A NAME="IDX1279"></A>
+<A NAME="IDX1280"></A>
+Forces the value of <EM>promise</EM>.  If no value has been computed for
+the promise, then a value is computed and returned.  The value of the
+promise is cached (or "memoized") so that if it is forced a second
+time, the previously computed value is returned without any
+recomputation.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(force (delay (+ 1 2)))                 =>  3
+
+(let ((p (delay (+ 1 2))))
+  (list (force p) (force p)))           =>  (3 3)
+
+(define head car)
+
+(define tail
+  (lambda (stream)
+    (force (cdr stream))))
+
+(define a-stream
+  (letrec ((next
+            (lambda (n)
+              (cons n (delay (next (+ n 1)))))))
+    (next 0)))
+
+(head (tail (tail a-stream)))           =>  2
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1281"></A>
+<DL>
+<DT><U>procedure+:</U> <B>promise?</B> <I>object</I>
+<DD><A NAME="IDX1282"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a promise; otherwise returns
+<CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1283"></A>
+<DL>
+<DT><U>procedure+:</U> <B>promise-forced?</B> <I>promise</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>promise</VAR> has been forced and its value cached;
+otherwise returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1284"></A>
+<DL>
+<DT><U>procedure+:</U> <B>promise-value</B> <I>promise</I>
+<DD>If <VAR>promise</VAR> has been forced and its value cached, this procedure
+returns the cached value.  Otherwise, an error is signalled.
+</DL>
+</P><P>
+
+<CODE>force</CODE> and <CODE>delay</CODE> are mainly intended for programs written
+in functional style.  The following examples should not be considered to
+illustrate good programming style, but they illustrate the property that
+the value of a promise is computed at most once.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define count 0)
+
+(define p
+  (delay
+   (begin
+     (set! count (+ count 1))
+     (* x 3))))
+
+(define x 5)
+
+count                                   =>  0
+p                                       =>  #[promise 54]
+(force p)                               =>  15
+p                                       =>  #[promise 54]
+count                                   =>  1
+(force p)                               =>  15
+count                                   =>  1
+</pre></td></tr></table></P><P>
+
+Here is a possible implementation of <CODE>delay</CODE> and <CODE>force</CODE>.  We
+define the expression
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(delay <VAR>expression</VAR>)
+</pre></td></tr></table></P><P>
+
+to have the same meaning as the procedure call
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(make-promise (lambda () <VAR>expression</VAR>))
+</pre></td></tr></table></P><P>
+
+where <CODE>make-promise</CODE> is defined as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define make-promise
+  (lambda (proc)
+    (let ((already-run? #f)
+          (result #f))
+      (lambda ()
+        (cond ((not already-run?)
+               (set! result (proc))
+               (set! already-run? #t)))
+        result))))
+</pre></td></tr></table></P><P>
+
+Promises are implemented here as procedures of no arguments, and
+<CODE>force</CODE> simply calls its argument.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define force
+  (lambda (promise)
+    (promise)))
+</pre></td></tr></table></P><P>
+
+Various extensions to this semantics of <CODE>delay</CODE> and <CODE>force</CODE>
+are supported in some implementations (none of these are currently
+supported in MIT Scheme):
+</P><P>
+
+<UL>
+<LI>
+Calling <CODE>force</CODE> on an object that is not a promise may simply
+return the object.
+<P>
+
+<LI>
+It may be the case that there is no means by which a promise can be
+operationally distinguished from its forced value.  That is, expressions
+like the following may evaluate to either <CODE>#t</CODE> or <CODE>#f</CODE>,
+depending on the implementation:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(eqv? (delay 1) 1)              =>  unspecified
+(pair? (delay (cons 1 2)))      =>  unspecified
+</pre></td></tr></table></P><P>
+
+<LI>
+Some implementations will implement "implicit forcing", where the
+value of a promise is forced by primitive procedures like <CODE>car</CODE> and
+<CODE>+</CODE>:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(+ (delay (* 3 7)) 13)          =>  34
+</pre></td></tr></table></UL>
+<P>
+
+<A NAME="Streams"></A>
+<HR SIZE="6">
+<A NAME="SEC101"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC100"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC102"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_12.html#SEC103"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 10.6 Streams </H2>
+<!--docid::SEC101::-->
+<P>
+
+<A NAME="IDX1285"></A>
+In addition to promises, MIT Scheme supports a higher-level abstraction
+called <EM>streams</EM>.  Streams are similar to lists, except that the
+tail of a stream is not computed until it is referred to.
+This allows streams to be used to represent infinitely long lists.
+</P><P>
+
+<A NAME="IDX1286"></A>
+<DL>
+<DT><U>procedure+:</U> <B>stream</B> <I>object <small>...</small></I>
+<DD><A NAME="IDX1287"></A>
+Returns a newly allocated stream whose elements are the arguments.  Note
+that the expression <CODE>(stream)</CODE> returns the empty stream, or
+end-of-stream marker.
+</DL>
+</P><P>
+
+<A NAME="IDX1288"></A>
+<DL>
+<DT><U>procedure+:</U> <B>list-&#62;stream</B> <I>list</I>
+<DD><A NAME="IDX1289"></A>
+Returns a newly allocated stream whose elements are the elements of
+<VAR>list</VAR>.  Equivalent to <CODE>(apply stream <VAR>list</VAR>)</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1290"></A>
+<DL>
+<DT><U>procedure+:</U> <B>stream-&#62;list</B> <I>stream</I>
+<DD><A NAME="IDX1291"></A>
+Returns a newly allocated list whose elements are the elements of
+<VAR>stream</VAR>.  If <VAR>stream</VAR> has infinite length this procedure will
+not terminate.  This could have been defined by
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (stream-&#62;list stream)
+  (if (stream-null? stream)
+      '()
+      (cons (stream-car stream)
+            (stream-&#62;list (stream-cdr stream)))))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1292"></A>
+<DL>
+<DT><U>special form+:</U> <B>cons-stream</B> <I>object expression</I>
+<DD>Returns a newly allocated stream pair.  Equivalent to <CODE>(cons
+<VAR>object</VAR> (delay <VAR>expression</VAR>))</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1293"></A>
+<DL>
+<DT><U>procedure+:</U> <B>stream-pair?</B> <I>object</I>
+<DD><A NAME="IDX1294"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a pair whose cdr contains a
+promise.  Otherwise returns <CODE>#f</CODE>.  This could have been defined by
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (stream-pair? object)
+  (and (pair? object)
+       (promise? (cdr object))))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX1295"></A>
+<DL>
+<DT><U>procedure+:</U> <B>stream-car</B> <I>stream</I>
+<DD><A NAME="IDX1296"></A>
+<DT><U>procedure+:</U> <B>stream-first</B> <I>stream</I>
+<DD><A NAME="IDX1297"></A>
+Returns the first element in <VAR>stream</VAR>.  <CODE>stream-car</CODE> is
+equivalent to <CODE>car</CODE>.  <CODE>stream-first</CODE> is a synonym for
+<CODE>stream-car</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1298"></A>
+<DL>
+<DT><U>procedure+:</U> <B>stream-cdr</B> <I>stream</I>
+<DD><A NAME="IDX1299"></A>
+<DT><U>procedure+:</U> <B>stream-rest</B> <I>stream</I>
+<DD><A NAME="IDX1300"></A>
+<A NAME="IDX1301"></A>
+Returns the first tail of <VAR>stream</VAR>.  Equivalent to <CODE>(force (cdr
+<VAR>stream</VAR>))</CODE>.  <CODE>stream-rest</CODE> is a synonym for <CODE>stream-cdr</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1302"></A>
+<DL>
+<DT><U>procedure+:</U> <B>stream-null?</B> <I>stream</I>
+<DD><A NAME="IDX1303"></A>
+<A NAME="IDX1304"></A>
+Returns <CODE>#t</CODE> if <VAR>stream</VAR> is the end-of-stream marker; otherwise
+returns <CODE>#f</CODE>.  This is equivalent to <CODE>null?</CODE>, but should be
+used whenever testing for the end of a stream.
+</DL>
+</P><P>
+
+<A NAME="IDX1305"></A>
+<DL>
+<DT><U>procedure+:</U> <B>stream-length</B> <I>stream</I>
+<DD><A NAME="IDX1306"></A>
+Returns the number of elements in <VAR>stream</VAR>.  If <VAR>stream</VAR> has an
+infinite number of elements this procedure will not terminate.  Note
+that this procedure forces all of the promises that comprise
+<VAR>stream</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1307"></A>
+<DL>
+<DT><U>procedure+:</U> <B>stream-ref</B> <I>stream k</I>
+<DD><A NAME="IDX1308"></A>
+<A NAME="IDX1309"></A>
+Returns the element of <VAR>stream</VAR> that is indexed by <VAR>k</VAR>; that is,
+the <VAR>k</VAR>th element.  <VAR>K</VAR> must be an exact non-negative integer
+strictly less than the length of <VAR>stream</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1310"></A>
+<DL>
+<DT><U>procedure+:</U> <B>stream-head</B> <I>stream k</I>
+<DD>Returns the first <VAR>k</VAR> elements of <VAR>stream</VAR> as a list.  <VAR>K</VAR>
+must be an exact non-negative integer strictly less than the length of
+<VAR>stream</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1311"></A>
+<DL>
+<DT><U>procedure+:</U> <B>stream-tail</B> <I>stream k</I>
+<DD>Returns the tail of <VAR>stream</VAR> that is indexed by <VAR>k</VAR>; that is,
+the <VAR>k</VAR>th tail.  This is equivalent to performing <CODE>stream-cdr</CODE>
+<VAR>k</VAR> times.  <VAR>K</VAR> must be an exact non-negative integer strictly
+less than the length of <VAR>stream</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1312"></A>
+<DL>
+<DT><U>procedure+:</U> <B>stream-map</B> <I>procedure stream stream <small>...</small></I>
+<DD><A NAME="IDX1313"></A>
+Returns a newly allocated stream, each element being the result of
+invoking <VAR>procedure</VAR> with the corresponding elements of the
+<VAR>stream</VAR>s as its arguments.
+</DL>
+</P><P>
+
+<A NAME="Weak Pairs"></A>
+<HR SIZE="6">
+<A NAME="SEC102"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC101"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_12.html#SEC103"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_12.html#SEC103"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 10.7 Weak Pairs </H2>
+<!--docid::SEC102::-->
+<P>
+
+<A NAME="IDX1314"></A>
+<A NAME="IDX1315"></A>
+<EM>Weak pairs</EM> are a mechanism for building data structures that point
+at objects without protecting them from garbage collection.  The car of
+a weak pair holds its pointer weakly, while the cdr holds its pointer in
+the normal way.  If the object in the car of a weak pair is not held
+normally by any other data structure, it will be garbage-collected.
+</P><P>
+
+<A NAME="IDX1316"></A>
+Note: weak pairs are <EM>not</EM> pairs; that is, they do not satisfy the
+predicate <CODE>pair?</CODE>.
+</P><P>
+
+<A NAME="IDX1317"></A>
+<DL>
+<DT><U>procedure+:</U> <B>weak-pair?</B> <I>object</I>
+<DD><A NAME="IDX1318"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a weak pair; otherwise returns
+<CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX1319"></A>
+<DL>
+<DT><U>procedure+:</U> <B>weak-cons</B> <I>car cdr</I>
+<DD><A NAME="IDX1320"></A>
+Allocates and returns a new weak pair, with components <VAR>car</VAR> and
+<VAR>cdr</VAR>.  The <VAR>car</VAR> component is held weakly.
+</DL>
+</P><P>
+
+<A NAME="IDX1321"></A>
+<DL>
+<DT><U>procedure+:</U> <B>weak-pair/car?</B> <I>weak-pair</I>
+<DD>This predicate returns <CODE>#f</CODE> if the car of <VAR>weak-pair</VAR> has been
+garbage-collected; otherwise returns <CODE>#t</CODE>.  In other words, it is
+true if <VAR>weak-pair</VAR> has a valid car component.
+</DL>
+</P><P>
+
+<A NAME="IDX1322"></A>
+<DL>
+<DT><U>procedure+:</U> <B>weak-car</B> <I>weak-pair</I>
+<DD><A NAME="IDX1323"></A>
+<A NAME="IDX1324"></A>
+Returns the car component of <VAR>weak-pair</VAR>.  If the car component has
+been garbage-collected, this operation returns <CODE>#f</CODE>, but it can
+also return <CODE>#f</CODE> if that is the value that was stored in the car.
+</DL>
+</P><P>
+
+Normally, <CODE>weak-pair/car?</CODE> is used to determine if <CODE>weak-car</CODE>
+would return a valid value.  An obvious way of doing this would be:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(if (weak-pair/car? x)
+    (weak-car x)
+    <small>...</small>)
+</pre></td></tr></table></P><P>
+
+However, since a garbage collection could occur between the call to
+<CODE>weak-pair/car?</CODE> and <CODE>weak-car</CODE>, this would not always work
+correctly.  Instead, the following should be used, which always works:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(or (weak-car x)
+    (and (not (weak-pair/car? x))
+         <small>...</small>))
+</pre></td></tr></table></P><P>
+
+The reason that the latter expression works is that <CODE>weak-car</CODE>
+returns <CODE>#f</CODE> in just two instances: when the car component is
+<CODE>#f</CODE>, and when the car component has been garbage-collected.  In
+the former case, if a garbage collection happens between the two calls,
+it won't matter, because <CODE>#f</CODE> will never be garbage-collected.  And
+in the latter case, it also won't matter, because the car component no
+longer exists and cannot be affected by the garbage collector.
+</P><P>
+
+<A NAME="IDX1325"></A>
+<DL>
+<DT><U>procedure+:</U> <B>weak-set-car!</B> <I>weak-pair object</I>
+<DD>Sets the car component of <VAR>weak-pair</VAR> to <VAR>object</VAR> and returns an
+unspecified result.
+</DL>
+</P><P>
+
+<A NAME="IDX1326"></A>
+<DL>
+<DT><U>procedure+:</U> <B>weak-cdr</B> <I>weak-pair</I>
+<DD>Returns the cdr component of <VAR>weak-cdr</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX1327"></A>
+<DL>
+<DT><U>procedure+:</U> <B>weak-set-cdr!</B> <I>weak-pair object</I>
+<DD>Sets the cdr component of <VAR>weak-pair</VAR> to <VAR>object</VAR> and returns an
+unspecified result.
+</DL>
+</P><P>
+
+<A NAME="Associations"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_11.html#SEC95"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_12.html#SEC103"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

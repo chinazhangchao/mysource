@@ -1,0 +1,193 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>The SOS Reference Manual: Instances</TITLE>
+
+<META NAME="description" CONTENT="The SOS Reference Manual: Instances">
+<META NAME="keywords" CONTENT="The SOS Reference Manual: Instances">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC7"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC6"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_4.html#SEC8"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_4.html#SEC8"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_9.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 2. Instances </H1>
+<!--docid::SEC7::-->
+<P>
+
+<A NAME="IDX76"></A>
+An <EM>instance</EM> is a compound data structure much like a record,
+except that it is defined by a class rather than a record type
+descriptor.  Instances are more powerful than records, because their
+representation is designed to support inheritance, while the
+representation of records is not.
+</P><P>
+
+<A NAME="IDX77"></A>
+<DL>
+<DT><U>Procedure:</U> <B>instance-constructor</B> <I>class slot-names [n-init-args]</I>
+<DD>Creates and returns a procedure that, when called, will create and
+return a newly allocated instance of <VAR>class</VAR>.
+</P><P>
+
+<VAR>Class</VAR> must be a subclass of <CODE>&#60;instance&#62;</CODE>.  <VAR>Slot-names</VAR>
+must be a list of symbols, each of which must be the name of a slot in
+<VAR>class</VAR>.  <VAR>N-init-args</VAR> will be described below.
+</P><P>
+
+In its basic operation, <CODE>instance-constructor</CODE> works much like
+<CODE>record-constructor</CODE>: the <VAR>slot-names</VAR> argument specifies how
+many arguments the returned constructor accepts, and each of those
+arguments is stored in the corresponding slot of the returned instance.
+Any slots that are not specified in <VAR>slot-names</VAR> are given their
+initial values, as specified by the <CODE>initial-value</CODE> or
+<CODE>initializer</CODE> slot properties; otherwise they are left
+uninitialized.
+</P><P>
+
+<A NAME="IDX78"></A>
+<A NAME="IDX79"></A>
+After the new instance is created and its slots filled in, but before it
+is returned, it is passed to the generic procedure
+<CODE>initialize-instance</CODE>.  Normally, <CODE>initialize-instance</CODE> does
+nothing, but because it is always called, the programmer can add methods
+to it to specify an initialization that is to be performed on every
+instance of the class.
+</P><P>
+
+By default, <CODE>initialize-instance</CODE> is called with one argument, the
+newly created instance.  However, the optional argument
+<VAR>n-init-args</VAR> can be used to specify additional arguments that will
+be passed to <CODE>initialize-instance</CODE>.
+</P><P>
+
+The way this works is that the returned constructor procedure accepts
+additional arguments after the specified number of slot values, and
+passes these extra arguments to <CODE>initialize-instance</CODE>.  When
+<VAR>n-init-args</VAR> is not supplied or is <CODE>#t</CODE>, any number of extra
+arguments are accepted and passed along.  When <VAR>n-init-args</VAR> is an
+exact non-negative integer, exactly that number of extra arguments must
+be supplied when the constructor is called.  Finally, if
+<VAR>n-init-args</VAR> is the symbol <CODE>no-initialize-instance</CODE>, then the
+constructor accepts no extra arguments and does not call
+<CODE>initialize-instance</CODE> at all; this is desirable when
+<CODE>initialize-instance</CODE> is not needed, because it makes the
+constructor significantly faster.
+</P><P>
+
+For notational convenience, <VAR>n-init-args</VAR> may take two other forms.
+First, it may be a list of symbols, which is equivalent to the integer
+that is the length of the list.  Second, it may be the symbol
+<CODE>no-init</CODE>, which is an abbreviation for
+<CODE>no-initialize-instance</CODE>.
+</P><P>
+
+Note that the default method on <CODE>initialize-instance</CODE> accepts no
+extra arguments and does nothing.
+</P><P>
+
+Examples of <CODE>instance-constructor</CODE>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-class &#60;simple-reference&#62; (&#60;reference&#62;)
+  (from accessor reference-from)
+  (to accessor reference-to)
+  (cx accessor reference-cx)
+  (cy accessor reference-cy))
+
+(define make-simple-reference
+  (instance-constructor &#60;simple-reference&#62;
+                        '(from to cx cy)
+                        'no-init))
+
+(define-class &#60;simple-wirenet&#62; (&#60;wirenet&#62;)
+  (cell accessor wirenet-cell)
+  (wires accessor wirenet-wires
+         modifier set-wirenet-wires!
+         initial-value '()))
+
+(define make-simple-wirenet
+  (instance-constructor &#60;simple-wirenet&#62; '(cell)))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX80"></A>
+<DL>
+<DT><U>Procedure:</U> <B>instance?</B> <I>object</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>object</VAR> is an instance, otherwise returns
+<CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX81"></A>
+<DL>
+<DT><U>Procedure:</U> <B>instance-class</B> <I>instance</I>
+<DD>Returns the class of <VAR>instance</VAR>.  This is faster than
+<CODE>object-class</CODE>, but it works only for instances, and not for other
+objects.
+</DL>
+</P><P>
+
+<A NAME="IDX82"></A>
+<DL>
+<DT><U>Procedure:</U> <B>instance-of?</B> <I>object specializer</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>object</VAR> is a general instance of
+<VAR>specializer</VAR>, otherwise returns <CODE>#f</CODE>.  This is equivalent to
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(subclass? (object-class <VAR>object</VAR>) <VAR>specializer</VAR>)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX83"></A>
+<DL>
+<DT><U>Procedure:</U> <B>instance-predicate</B> <I>specializer</I>
+<DD>Returns a predicate procedure for <VAR>specializer</VAR>.  The returned
+procedure accepts one argument and returns <CODE>#t</CODE> if the argument is
+an instance of <VAR>specializer</VAR> and <CODE>#f</CODE> otherwise.
+</DL>
+</P><P>
+
+<A NAME="Slots"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_4.html#SEC8"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_9.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

@@ -1,0 +1,874 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme User's Manual: Using Scheme</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme User's Manual: Using Scheme">
+<META NAME="keywords" CONTENT="MIT Scheme User's Manual: Using Scheme">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC24"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC23"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC25"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_3.html#SEC9"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC33"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 3. Using Scheme </H1>
+<!--docid::SEC24::-->
+<P>
+
+This chapter describes how to use Scheme to evaluate expressions and
+load programs.  It also describes how to save custom "world images",
+and how to control the garbage collector.  Subsequent chapters will
+describe how to use the compiler, and how to debug your programs.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_4.html#SEC25">3.1 The Read-Eval-Print Loop</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_4.html#SEC30">3.2 Loading Files</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_4.html#SEC31">3.3 World Images</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_4.html#SEC32">3.4 Garbage Collection</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="REPL"></A>
+<HR SIZE="6">
+<A NAME="SEC25"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC26"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC30"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 3.1 The Read-Eval-Print Loop </H2>
+<!--docid::SEC25::-->
+<P>
+
+<A NAME="IDX146"></A>
+When you first start up Scheme from the command line, you will be typing
+at a program called the <EM>Read-Eval-Print Loop</EM> (abbreviated
+<EM>REPL</EM>).  It displays a prompt at the left hand side of the screen
+whenever it is waiting for input.  You then type an expression
+(terminating it with <KBD>RET</KBD>).  Scheme evaluates the expression,
+prints the result, and gives you another prompt.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_4.html#SEC26">3.1.1 The Prompt and Level Number</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_4.html#SEC27">3.1.2 Interrupting</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_4.html#SEC28">3.1.3 Restarting</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="user_4.html#SEC29">3.1.4 The Current REPL Environment</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="The Prompt and Level Number"></A>
+<HR SIZE="6">
+<A NAME="SEC26"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC25"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC27"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC25"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC30"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 3.1.1 The Prompt and Level Number </H3>
+<!--docid::SEC26::-->
+<P>
+
+<A NAME="IDX147"></A>
+The REPL <EM>prompt</EM> normally has the form
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>1 ]=&#62;
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX148"></A>
+The <SAMP>`1'</SAMP> in the prompt is a <EM>level number</EM>, which is always a
+positive integer.  This number is incremented under certain
+circumstances, the most common being an error.  For example, here is
+what you will see if you type <KBD>f o o <KBD>RET</KBD></KBD> after starting
+Scheme:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>;Unbound variable: foo
+;To continue, call RESTART with an option number:
+; (RESTART 3) =&#62; Specify a value to use instead of foo.
+; (RESTART 2) =&#62; Define foo to a given value.
+; (RESTART 1) =&#62; Return to read-eval-print level 1.
+
+2 error&#62; 
+</pre></td></tr></table></P><P>
+
+In this case, the level number has been incremented to <SAMP>`2'</SAMP>, which
+indicates that a new REPL has been started (also the prompt string
+has been changed to remind you that the REPL was started because of
+an error).  The <SAMP>`2'</SAMP> means that this new REPL is "over" the
+old one.  The original REPL still exists, and is waiting for you to
+return to it, for example, by entering <CODE>(restart 1)</CODE>.  Furthermore,
+if an error occurs while you are in this REPL, yet another
+REPL will be started, and the level number will be increased to
+<SAMP>`3'</SAMP>.  This can continue ad infinitum, but normally it is rare to
+use more than a few levels.
+</P><P>
+
+The normal way to get out of an error REPL and back to the top
+level REPL is to use the <KBD>C-g</KBD> interrupt.  This is a
+single-keystroke command executed by holding down the <KBD>CTRL</KBD> key and
+pressing the <KBD>G</KBD> key.  <KBD>C-g</KBD> always terminates whatever is
+running and returns you to the top level REPL immediately.
+</P><P>
+
+Note: The appearance of the <SAMP>`error&#62;'</SAMP> prompt does not mean that
+Scheme is in some weird inconsistent state that you should avoid.  It is
+merely a reminder that your program was in error: an illegal operation
+was attempted, but it was detected and avoided.  Often the best way to
+find out what is in error is to do some poking around in the error
+REPL.  If you abort out of it, the context of the error will be
+destroyed, and you may not be able to find out what happened.
+</P><P>
+
+<A NAME="Interrupting"></A>
+<HR SIZE="6">
+<A NAME="SEC27"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC26"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC28"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC25"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC30"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 3.1.2 Interrupting </H3>
+<!--docid::SEC27::-->
+<P>
+
+<A NAME="IDX149"></A>
+<A NAME="IDX150"></A>
+Scheme has several interrupt keys, which vary depending on the
+underlying operating system: under unix, <KBD>C-g</KBD> and <KBD>C-c</KBD>; under
+OS/2 and Windows, <KBD>C-g</KBD>, <KBD>C-b</KBD>, <KBD>C-x</KBD> and <KBD>C-u</KBD>.  The
+<KBD>C-g</KBD> key stops any Scheme evaluation that is running and returns
+you to the top level REPL.  <KBD>C-c</KBD> prompts you for another
+character and performs some action based on that character.  It is not
+necessary to type <KBD>RET</KBD> after <KBD>C-g</KBD> or <KBD>C-c</KBD>, nor is it
+needed after the character that <KBD>C-c</KBD> will ask you for.
+</P><P>
+
+Here are the definitions of the more common interrupt keys; on unix,
+type <KBD>C-c ?</KBD> for more possibilities.  Note that in any given
+implementation, only a subset of the following keys is available.
+</P><P>
+
+<DL COMPACT>
+<DT><KBD>C-c C-c</KBD>
+<DD><DT><KBD>C-g</KBD>
+<DD><A NAME="IDX151"></A>
+<A NAME="IDX152"></A>
+Abort whatever Scheme evaluation is currently running and return to the
+top-level REPL.  If no evaluation is running, this is equivalent to
+evaluating
+<P>
+
+<A NAME="IDX153"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(cmdl-interrupt/abort-top-level)
+</pre></td></tr></table></P><P>
+
+<DT><KBD>C-c C-x</KBD>
+<DD><DT><KBD>C-x</KBD>
+<DD><A NAME="IDX154"></A>
+<A NAME="IDX155"></A>
+Abort whatever Scheme evaluation is currently running and return to the
+"current" REPL.  If no evaluation is running, this is equivalent
+to evaluating
+<P>
+
+<A NAME="IDX156"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(cmdl-interrupt/abort-nearest)
+</pre></td></tr></table></P><P>
+
+<DT><KBD>C-c C-u</KBD>
+<DD><DT><KBD>C-u</KBD>
+<DD><A NAME="IDX157"></A>
+<A NAME="IDX158"></A>
+Abort whatever Scheme evaluation is running and go up one level.  If you
+are already at level number 1, the evaluation is aborted, leaving you at
+level 1.  If no evaluation is running, this is equivalent to evaluating
+<P>
+
+<A NAME="IDX159"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(cmdl-interrupt/abort-previous)
+</pre></td></tr></table></P><P>
+
+<DT><KBD>C-c C-b</KBD>
+<DD><DT><KBD>C-b</KBD>
+<DD><A NAME="IDX160"></A>
+<A NAME="IDX161"></A>
+<A NAME="IDX162"></A>
+Suspend whatever Scheme evaluation is running and start a
+<EM>breakpoint</EM> REPL.  The evaluation can be resumed by evaluating
+<P>
+
+<A NAME="IDX163"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(continue)
+</pre></td></tr></table></P><P>
+
+in that REPL at any time.
+</P><P>
+
+<DT><KBD>C-c q</KBD>
+<DD><A NAME="IDX164"></A>
+<A NAME="IDX165"></A>
+Similar to typing <CODE>(exit)</CODE> at the REPL, except that it works
+even if Scheme is running an evaluation, and does not request
+confirmation.
+<P>
+
+<DT><KBD>C-c z</KBD>
+<DD><A NAME="IDX166"></A>
+<A NAME="IDX167"></A>
+Similar to typing <CODE>(quit)</CODE> at the REPL, except that it works
+even if Scheme is running an evaluation.
+<P>
+
+<DT><KBD>C-c i</KBD>
+<DD><A NAME="IDX168"></A>
+Ignore the interrupt.  Type this if you made a mistake and didn't
+really mean to type <KBD>C-c</KBD>.
+<P>
+
+<DT><KBD>C-c ?</KBD>
+<DD><A NAME="IDX169"></A>
+Print help information.  This will describe any other options not
+documented here.
+</DL>
+<P>
+
+<A NAME="Restarting"></A>
+<HR SIZE="6">
+<A NAME="SEC28"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC27"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC29"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC25"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC30"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 3.1.3 Restarting </H3>
+<!--docid::SEC28::-->
+<P>
+
+Another way to exit a REPL is to use the <CODE>restart</CODE> procedure:
+</P><P>
+
+<A NAME="IDX170"></A>
+<DL>
+<DT><U>procedure+:</U> <B>restart</B> <I>[k]</I>
+<DD><A NAME="IDX171"></A>
+This procedure selects and invokes a <EM>restart method</EM>.  The list of
+restart methods is different for each REPL and for each error; in
+the case of an error REPL, this list is printed when the REPL
+is started:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>;Unbound variable: foo
+;To continue, call RESTART with an option number:
+; (RESTART 3) =&#62; Specify a value to use instead of foo.
+; (RESTART 2) =&#62; Define foo to a given value.
+; (RESTART 1) =&#62; Return to read-eval-print level 1.
+
+2 error&#62; 
+</pre></td></tr></table></P><P>
+
+If the <VAR>k</VAR> argument is given, it must be a positive integer index
+into the list (in the example it must be between one and three
+inclusive).  The integer <VAR>k</VAR> selects an item from the list and
+invokes it.  If <VAR>k</VAR> is not given, <CODE>restart</CODE> prints the list and
+prompts for the integer index:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>2 error&#62; (restart)
+;Choose an option by number:
+;  3: Specify a value to use instead of foo.
+;  2: Define foo to a given value.
+;  1: Return to read-eval-print level 1.
+
+Option number:
+</pre></td></tr></table></P><P>
+
+The simplest restart methods just perform their actions.  For example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>2 error&#62; (restart 1)
+;Abort!
+
+1 ]=&#62;
+</pre></td></tr></table></P><P>
+
+Other methods will prompt for more input before continuing:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>2 error&#62; (restart)
+;Choose an option by number:
+;  3: Specify a value to use instead of foo.
+;  2: Define foo to a given value.
+;  1: Return to read-eval-print level 1.
+
+Option number: 3
+
+Value to use instead of foo: '(a b)
+;Value: (a b)
+
+1 ]=&#62;
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="The Current REPL Environment"></A>
+<HR SIZE="6">
+<A NAME="SEC29"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC28"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC30"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC25"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC30"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 3.1.4 The Current REPL Environment </H3>
+<!--docid::SEC29::-->
+<P>
+
+<A NAME="IDX172"></A>
+<A NAME="IDX173"></A>
+<A NAME="IDX174"></A>
+Every REPL has a <EM>current environment</EM>, which is the place
+where expressions are evaluated and definitions are stored.  When Scheme
+is started, this environment is the value of the variable
+<CODE>user-initial-environment</CODE>.  There are a number of other
+environments in the system, for example
+<CODE>system-global-environment</CODE>, where the runtime system's bindings
+are stored.
+</P><P>
+
+You can get the current REPL environment by evaluating
+</P><P>
+
+<A NAME="IDX175"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(nearest-repl/environment)
+</pre></td></tr></table></P><P>
+
+There are several other ways to obtain environments.  For example, if
+you have a procedure object, you can get a pointer to the environment in
+which it was closed by evaluating
+</P><P>
+
+<A NAME="IDX176"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(procedure-environment <VAR>procedure</VAR>)
+</pre></td></tr></table></P><P>
+
+Here is the procedure that changes the REPL's environment:
+</P><P>
+
+<A NAME="IDX177"></A>
+<DL>
+<DT><U>procedure+:</U> <B>ge</B> <I>environment</I>
+<DD>Changes the current REPL environment to be <VAR>environment</VAR>
+(<CODE>ge</CODE> stands for "Goto Environment").  <VAR>Environment</VAR> is
+allowed to be a procedure as well as an environment object.  If it is a
+procedure, then the closing environment of that procedure is used in its
+place.
+</DL>
+</P><P>
+
+<A NAME="IDX178"></A>
+<DL>
+<DT><U>procedure+:</U> <B>pe</B>
+<DD>This procedure is useful for finding out which environment you are in
+(<CODE>pe</CODE> stands for "Print Environment").  If the current REPL
+environment belongs to a package, then <CODE>pe</CODE> returns the package
+name (a list of symbols).  If the current REPL environment does not
+belong to a package then the environment is returned.
+</DL>
+</P><P>
+
+<A NAME="IDX179"></A>
+<DL>
+<DT><U>procedure+:</U> <B>gst</B> <I>syntax-table</I>
+<DD>In addition to the current environment, each REPL maintains a
+current <EM>syntax table</EM>.  The current syntax table tells the
+REPL which keywords are used to identify special forms (e.g.
+<CODE>if</CODE>, <CODE>lambda</CODE>).  If you write macros, you may want to
+make your own syntax table, in which case it is useful to be able to
+make that syntax table be the current one; <CODE>gst</CODE> allows you to do
+that.
+</DL>
+</P><P>
+
+<A NAME="Loading Files"></A>
+<HR SIZE="6">
+<A NAME="SEC30"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC29"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC31"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC25"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC33"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 3.2 Loading Files </H2>
+<!--docid::SEC30::-->
+<P>
+
+To load files of Scheme code, use the procedure <CODE>load</CODE>:
+</P><P>
+
+<A NAME="IDX180"></A>
+<DL>
+<DT><U>procedure:</U> <B>load</B> <I>filename [environment [syntax-table [purify?]]]</I>
+<DD><VAR>Filename</VAR> may be a string naming a file, or a list of strings
+naming multiple files.  <VAR>Environment</VAR>, if given, is the environment to
+evaluate the file in; if not given the current REPL environment is
+used.  Likewise <VAR>syntax-table</VAR> is the syntax table to use.  
+</P><P>
+
+<A NAME="IDX181"></A>
+The optional argument <VAR>purify?</VAR> is a boolean that says whether to
+move the contents of the file into constant space after it is loaded but
+before it is evaluated.  This is performed by calling the procedure
+<CODE>purify</CODE> (see section <A HREF="user_4.html#SEC32">3.4 Garbage Collection</A>).  If <VAR>purify?</VAR> is given
+and true, this is done; otherwise it is not.
+</P><P>
+
+<A NAME="IDX182"></A>
+<CODE>load</CODE> determines whether the file to be loaded is binary or source
+code, and performs the appropriate action.  By convention, files of
+source code have a pathname type of <CODE>"scm"</CODE>, and files of binary
+SCode have pathname type <CODE>"bin"</CODE>.  Native-code binaries have
+pathname type <CODE>"com"</CODE>.  (See the description of
+<CODE>pathname-type</CODE> in section `Components of Pathnames' in <CITE>MIT Scheme Reference Manual</CITE>.)
+</DL>
+</P><P>
+
+<A NAME="IDX183"></A>
+<DL>
+<DT><U>variable+:</U> <B>load-noisily?</B>
+<DD>If <CODE>load-noisily?</CODE> is set to <CODE>#t</CODE>, <CODE>load</CODE> will print the
+value of each expression in the file as it is evaluated.  Otherwise,
+nothing is printed except for the value of the last expression in the
+file.  (Note: the noisy loading feature is implemented for source-code
+files only.)
+</DL>
+</P><P>
+
+<A NAME="IDX184"></A>
+<DL>
+<DT><U>variable+:</U> <B>load/default-types</B>
+<DD>When load is given a pathname without a type, it uses the value of this
+variable to determine what pathname types to look for and how to load
+the file.  <CODE>load/default-types</CODE> is a list of associations that maps
+pathname types (strings) to loader procedures.  <CODE>load</CODE> tries the
+pathname types in the order that they appear in the list.  The initial
+value of this variable has pathname types in this order:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>"com" "so" "sl" "bin" "scm"
+</pre></td></tr></table></P><P>
+
+This means that, for example, <CODE>(load "foo")</CODE> will try to load
+<TT>`foo.com'</TT> first, and <TT>`foo.scm'</TT> only after looking for and
+failing to find the other pathname types.
+</DL>
+</P><P>
+
+<A NAME="IDX185"></A>
+<A NAME="IDX186"></A>
+<A NAME="IDX187"></A>
+All pathnames are interpreted relative to a working directory, which is
+initialized when Scheme is started.  The working directory can be
+obtained by calling the procedure <CODE>pwd</CODE> or modified by calling the
+procedure <CODE>cd</CODE>; see section `Working Directory' in <CITE>MIT Scheme Reference Manual</CITE>.  Files may be loaded when Scheme first starts;
+see the <CODE>-load</CODE> command-line option for details.
+</P><P>
+
+<A NAME="IDX188"></A>
+<DL>
+<DT><U>procedure+:</U> <B>load-option</B> <I>symbol [no-error?]</I>
+<DD>Loads the option specified by <VAR>symbol</VAR>; if already loaded, does
+nothing.  Returns <VAR>symbol</VAR>; if there is no such option, an error is
+signalled.  However, if <VAR>no-error?</VAR> is specified and true, no error
+is signalled in this case, and <CODE>#f</CODE> is returned.
+</P><P>
+
+A number of built-in options are defined:
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>compress</CODE>
+<DD>Support to compress and uncompress files.  Undocumented; see the source
+file <TT>`runtime/cpress.scm'</TT>.  Used by the runtime system for
+compression of compiled-code debugging information.
+<P>
+
+<DT><CODE>format</CODE>
+<DD>The <CODE>format</CODE> procedure.  See section `Format' in <CITE>MIT Scheme Reference Manual</CITE>.
+<P>
+
+<DT><CODE>gdbm</CODE>
+<DD>Support to access <CODE>gdbm</CODE> databases.  Undocumented; see the source
+files <TT>`runtime/gdbm.scm'</TT> and <TT>`microcode/prgdbm.c'</TT>.
+<P>
+
+<DT><CODE>hash-table</CODE>
+<DD>The hash-table data type.  See section `Hash Tables' in <CITE>MIT Scheme Reference Manual</CITE>.
+<P>
+
+<DT><CODE>ordered-vector</CODE>
+<DD>Support to search and do completion on vectors of ordered elements.
+Undocumented; see the source file <TT>`runtime/ordvec.scm'</TT>.
+<P>
+
+<DT><CODE>rb-tree</CODE>
+<DD>The red-black tree data type.  See section `Red-Black Trees' in <CITE>MIT Scheme Reference Manual</CITE>.
+<P>
+
+<DT><CODE>regular-expression</CODE>
+<DD>Support to search and match strings for regular expressions.
+See section `Regular Expressions' in <CITE>MIT Scheme Reference Manual</CITE>.
+<P>
+
+<DT><CODE>stepper</CODE>
+<DD>Support to step through the evaluation of Scheme expressions.
+Undocumented; see the source file <TT>`runtime/ystep.scm'</TT>.  Used by the
+Edwin command <KBD>step-expression</KBD>.
+<P>
+
+<DT><CODE>subprocess</CODE>
+<DD>Support to run other programs as subprocesses of the Scheme process.
+Undocumented; see the source file <TT>`runtime/process.scm'</TT>.  Used
+extensively by Edwin.
+<P>
+
+<DT><CODE>synchronous-subprocess</CODE>
+<DD>Support to run synchronous subprocesses.  See section `Subprocesses' in <CITE>MIT Scheme Reference Manual</CITE>.
+<P>
+
+<DT><CODE>wt-tree</CODE>
+<DD>The weight-balanced tree data type.  See section `Weight-Balanced Trees' in <CITE>MIT Scheme Reference Manual</CITE>.
+</DL>
+</DL>
+<P>
+
+In addition to the built-in options, you may define other options to be
+loaded by <CODE>load-options</CODE> by modifying the file <TT>`optiondb.scm'</TT>
+on the library path.  An example file is included with the distribution;
+normally this file consists of a series of calls to the procedure
+<CODE>define-load-option</CODE>, terminated by the expression
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(further-load-options standard-load-options)
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX189"></A>
+<DL>
+<DT><U>procedure+:</U> <B>define-load-option</B> <I>symbol thunk <small>...</small></I>
+<DD>Each <VAR>thunk</VAR> must be a procedure of no arguments.  Defines the load
+option named <VAR>symbol</VAR>.  When the procedure <CODE>load-option</CODE> is
+called with <VAR>symbol</VAR> as an argument, the <VAR>thunk</VAR> arguments are
+executed in order from left to right.
+</DL>
+</P><P>
+
+<A NAME="World Images"></A>
+<HR SIZE="6">
+<A NAME="SEC31"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC30"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC32"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC33"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 3.3 World Images </H2>
+<!--docid::SEC31::-->
+<P>
+
+<A NAME="IDX190"></A>
+<A NAME="IDX191"></A>
+A <EM>world image</EM>, also called a <EM>band</EM>, is a file that contains a
+complete Scheme system, perhaps additionally including user application
+code.  Scheme provides a method for saving and restoring world images.
+The method writes a file containing all of the Scheme code and data in
+the running process.  The file <TT>`runtime.com'</TT> that is loaded by the
+microcode is just such a band.  To make your own band, use the procedure
+<CODE>disk-save</CODE>.
+</P><P>
+
+<A NAME="IDX192"></A>
+<DL>
+<DT><U>procedure+:</U> <B>disk-save</B> <I>filename [identify]</I>
+<DD>Causes a band to be written to the file specified by <VAR>filename</VAR>.
+The optional argument <VAR>identify</VAR> controls what happens when that
+band is restored, as follows:
+</P><P>
+
+<DL COMPACT>
+<DT>not specified
+<DD>Start up in the top-level REPL, identifying the world in the normal
+way.
+<P>
+
+<DT>a string
+<DD>Do the same thing except print that string instead of <SAMP>`Scheme'</SAMP> when
+restarting.
+<P>
+
+<DT>the constant <CODE>#t</CODE>
+<DD>Restart exactly where you were when the call to <CODE>disk-save</CODE> was
+performed.  This is especially useful for saving your state when an
+error has occurred and you are not in the top-level REPL.
+<P>
+
+<DT>the constant <CODE>#f</CODE>
+<DD>Just like <CODE>#t</CODE>, except that the runtime system will not perform
+normal restart initializations; in particular, it will not load your
+init file.
+</DL>
+</DL>
+<P>
+
+<A NAME="IDX193"></A>
+To restore a saved band, give the <CODE>-band</CODE> option when starting
+Scheme.  Alternatively, evaluate <CODE>(disk-restore <VAR>filename</VAR>)</CODE>,
+which will destroy the current world, replacing it with the saved world.
+The argument to <CODE>disk-restore</CODE> may be omitted, in which case it
+defaults to the filename from which the current world was last restored.
+</P><P>
+
+<A NAME="Garbage Collection"></A>
+<HR SIZE="6">
+<A NAME="SEC32"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC31"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC33"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC33"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 3.4 Garbage Collection </H2>
+<!--docid::SEC32::-->
+<P>
+
+This section describes procedures that control garbage collection.
+See section <A HREF="user_3.html#SEC12">2.3 Memory Usage</A>, for a discussion of how MIT Scheme uses memory.
+</P><P>
+
+<A NAME="IDX194"></A>
+<DL>
+<DT><U>procedure+:</U> <B>gc-flip</B> <I>[safety-margin]</I>
+<DD>Forces a garbage collection to occur.  Returns the number of words of
+storage available after collection, an exact non-negative integer.
+</P><P>
+
+<VAR>Safety-margin</VAR> determines the number of words of storage available
+to system tasks after the need for a garbage collection is detected and
+before the garbage collector is started.  (An example of such a system
+task is changing the run-light to show "gc" when scheme is running
+under Emacs.)  <STRONG>Note well</STRONG>: you should not specify
+<VAR>safety-margin</VAR> unless you know what you are doing.  If you specify
+a value that is too small, you can put Scheme in an unusable state.
+</DL>
+</P><P>
+
+<A NAME="IDX195"></A>
+<DL>
+<DT><U>procedure+:</U> <B>purify</B> <I>object [pure-space? [queue?]]</I>
+<DD>Moves <VAR>object</VAR> from the heap into constant space.  Has no effect if
+<VAR>object</VAR> is already stored in constant space.  <VAR>Object</VAR> is moved
+in its entirety; if it is a compound object such as a list, a vector, or
+a record, then all of the objects that <VAR>object</VAR> points to are also
+moved to constant space.
+</P><P>
+
+There are three important effects associated with moving an object to
+constant space.  The first and most important effect is that the object
+takes up half as much space, because when in the heap, the system must
+reserve space for the object in both the active heap and the inactive
+heap; if the object is in constant space it is not copied and therefore
+no extra space is required.  The second effect is that garbage
+collection will take less time, because <VAR>object</VAR> will no longer be
+copied.  The third effect is that the space allocated to <VAR>object</VAR> is
+permanently allocated, because constant space is never cleaned; any
+unreachable objects in constant space remain there until the Scheme
+process is terminated.
+</P><P>
+
+The optional argument <VAR>pure-space?</VAR> is obsolete; it defaults to
+<CODE>#t</CODE> and when explicitly specified should always be <CODE>#t</CODE>.
+</P><P>
+
+The optional argument <VAR>queue?</VAR>, if <CODE>#f</CODE>, specifies that
+<VAR>object</VAR> should be moved to constant space immediately; otherwise
+<VAR>object</VAR> is queued to be moved during the next garbage collection.
+This argument defaults to <CODE>#t</CODE>.  The reason for queuing these
+requests is that moving an object to constant space requires a garbage
+collection to occur, a relatively slow process.  By queuing the
+requests, this overhead is avoided, because moving an object during a
+garbage collection has no effect on the time of the garbage collection.
+Furthermore, if several requests are queued, they can all be processed
+together in one garbage collection, while if done separately they would
+each require their own garbage collection.
+</DL>
+</P><P>
+
+<A NAME="IDX196"></A>
+<DL>
+<DT><U>procedure+:</U> <B>flush-purification-queue!</B>
+<DD>Forces any pending queued purification requests to be processed.  This
+examines the <CODE>purify</CODE> queue, and if it contains any requests,
+forces a garbage collection to process them.  If the queue is empty,
+does nothing.
+</DL>
+</P><P>
+
+<A NAME="IDX197"></A>
+<DL>
+<DT><U>procedure+:</U> <B>print-gc-statistics</B>
+<DD>Prints out information about memory allocation and the garbage
+collector.  The information is printed to the current output port.
+Shows how much space is "in use" and how much is "free", separately
+for the heap and constant space.  The amounts are shown in words, and
+also in 1024-word blocks; the block figures make it convenient to use
+these numbers to adjust the arguments given to the <CODE>-heap</CODE> and
+<CODE>-constant</CODE> command-line options.  Following the allocation
+figures, information about the most recent 8 garbage collections is
+shown, in the same format as a GC notification.
+</P><P>
+
+Note that these numbers are accurate at the time that
+<CODE>print-gc-statistics</CODE> is called.  In the case of the heap, the "in
+use" figure shows how much memory has been used since the last garbage
+collection, and includes all live objects as well as any uncollected
+garbage that has accumulated since then.  The only accurate way to
+determine the size of live storage is to subtract the value of
+<SAMP>`(gc-flip)'</SAMP> from the size of the heap.  The size of the heap can be
+determined by adding the "in use" and "free" figures reported by
+<CODE>print-gc-statistics</CODE>.
+</DL>
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(print-gc-statistics)
+constant in use:   534121 words =   521 blocks +  617 words
+constant free:        128 words =     0 blocks +  128 words
+heap in use:        34845 words =    34 blocks +   29 words
+heap free:         205530 words =   200 blocks +  730 words
+GC #1: took: 0.13 (81%) CPU time, 0.15 (1%) real time; free: 207210
+;No value
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX198"></A>
+<DL>
+<DT><U>procedure+:</U> <B>set-gc-notification!</B> <I>[on?]</I>
+<DD>Controls whether the user is notified of garbage collections.  If
+<VAR>on?</VAR> is true, notification is enabled; otherwise notification is
+disabled.  If <VAR>on?</VAR> is not given, it defaults to <CODE>#t</CODE>.  When
+Scheme starts, notification is disabled.
+</P><P>
+
+The notification appears as a single line like the following, showing
+how many garbage collections have occurred, the time taken to perform the
+garbage collection and the free storage remaining (in words) after
+collection.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>GC #5: took: 0.50 (8%) CPU time, 0.70 (2%) real time; free: 364346
+</pre></td></tr></table></P><P>
+
+To operate comfortably, the amount of free storage after garbage
+collection should be a substantial proportion of the heap size.  If the
+CPU time percentage is consistently high (over 20%), you should consider
+running with a larger heap.  A rough rule of thumb to halve the GC
+overhead is to take the amount of free storage, divide by 1000, and add
+this figure to the current value used for the <CODE>-heap</CODE> command-line
+option.  Unfortunately there is no way to adjust the heap size without
+restarting Scheme.
+</DL>
+</P><P>
+
+<A NAME="IDX199"></A>
+<DL>
+<DT><U>procedure+:</U> <B>toggle-gc-notification!</B>
+<DD>Toggles GC notification on and off.  If GC notification is
+turned on, turns it off; otherwise turns it on.
+</DL>
+</P><P>
+
+<A NAME="Compiling Programs"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_4.html#SEC24"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_5.html#SEC33"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_11.html#SEC75">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="user_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

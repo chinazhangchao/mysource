@@ -1,0 +1,983 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme Reference: Win32 Package Reference</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme Reference: Win32 Package Reference">
+<META NAME="keywords" CONTENT="MIT Scheme Reference: Win32 Package Reference">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC205"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC204"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC206"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_20.html#SEC214"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 18. Win32 Package Reference </H1>
+<!--docid::SEC205::-->
+<P>
+
+The Win32 implementation is still in a state of development.  It is
+expected that changes will be necessary when MIT Scheme is ported to
+Windows NT on the DEC Alpha architecture.  In particular, the
+current system is not arranged in a way that adequately distinguishes 
+between issues that are a consequence of the NT operating system and
+those which are a consequence of the Intel x86 architecture.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_19.html#SEC206">18.1 Overview</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_19.html#SEC207">18.2 Foreign Function Interface</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_19.html#SEC211">18.3 Device Independent Bitmap Utilities</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Win32 Package Overview"></A>
+<HR SIZE="6">
+<A NAME="SEC206"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC207"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_20.html#SEC214"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 18.1 Overview </H2>
+<!--docid::SEC206::-->
+<P>
+
+The Win32 implementation is still in a state of development.  It is
+expected that changes will be necessary when MIT Scheme is ported to
+Windows NT on the DEC Alpha architecture.  In particular, the
+current system is not arranged in a way that adequately distinguishes
+between issues that are a consequence of the NT operating system and
+those which are a consequence of the Intel x86 architecture.
+<A NAME="IDX2568"></A>
+</P><P>
+
+Thus this documentation is not definitive, it merely outlines how the
+current system works.  Parts of the system will change and any project
+implemented using the win32 system must plan for a re-implementation
+stage.
+</P><P>
+
+The Win32 implementation has several components:
+</P><P>
+
+<UL>
+
+<LI>
+Special microcode primitives.
+<P>
+
+<LI>
+A foreign function interface (FFI) for calling procedures in dynamically
+linked libraries (DLLs).
+<P>
+
+<LI>
+An interface for Edwin.
+<P>
+
+<LI>
+The Win32 package provides support for using the features of the
+Windows 3.1 and Windows NT 3.1 environments.
+<P>
+
+<LI>
+Device Independent Bitmap utilities.  These are used by the win32 Scheme
+Graphics implementation.  (The Scheme Graphics implementation is
+described in the Reference Manual).
+<P>
+
+</UL>
+<P>
+
+Note that all the names in the Win32 support are part of the
+<CODE>win32</CODE> package.  The names are bound in the <CODE>(win32)</CODE>
+environment, and do not appear as bindings in the user or root
+environments.
+An effect of this is that it is far easier to develop Win32 software in
+the <CODE>(win32)</CODE> package environment or a child environment.
+</P><P>
+
+<A NAME="Foreign function interface"></A>
+<HR SIZE="6">
+<A NAME="SEC207"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC206"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC208"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC211"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 18.2 Foreign Function Interface </H2>
+<!--docid::SEC207::-->
+<P>
+
+The Win32 foreign function interface (FFI) is a primitive and fairly
+simple system for calling procedures written in C in a
+dynamically linked library (DLL).  Both user's procedures from a custom
+DLL and system procedures (e.g. MessageBox) are called using the same
+mechanism.
+</P><P>
+
+<A NAME="IDX2569"></A>
+<STRONG>Warning</STRONG>: The FFI as it stands has several flaws which make it
+difficult to use reliably.  It is expected that both the interface to
+and the mechanisms used by the FFI will be changed in the future.  We
+provide it, and this documentation, only to give people an early start
+in accessing some of the features of Win32 from Scheme.  Should you use
+it in an experiment we welcome any feedback.
+</P><P>
+
+The FFI is designed for calling C procedures that use C data types
+rather than Scheme data objects.  Thus it is not possible to write and
+call a C procedure that returns, for example, a Scheme list.  The object
+returned will always be an integer (which may represent the address of a
+C data structure).
+</P><P>
+
+<A NAME="IDX2570"></A>
+<STRONG>Warning</STRONG>: It is extremely dangerous to try to pass Scheme
+callback procedures to C procedures.  It is only possible by passing
+integer `handles' rather than the actual procedures, and even so, if a
+garbage collection occurs during the execution of the callback procedure
+objects in Scheme's heap will have moved.  Thus in a foreign procedure
+that has a callback and a string, after calling the callback the string
+value may no longer be valid.  Playing this game requires a profound
+knowledge of the implementation.
+</P><P>
+
+The interface to the FFI has two main components: a language for
+declaring the types of values passed to and returned from the foreign
+procedures and a form for declaring foreign procedures.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_19.html#SEC208">18.2.1 Windows Types</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_19.html#SEC209">18.2.2 Windows Foreign Procedures</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_19.html#SEC210">18.2.3 Win32 API names and procedures</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Windows Types"></A>
+<HR SIZE="6">
+<A NAME="SEC208"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC207"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC209"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC206"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC207"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC211"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 18.2.1 Windows Types </H3>
+<!--docid::SEC208::-->
+<P>
+
+<A NAME="IDX2571"></A>
+<A NAME="IDX2572"></A>
+<A NAME="IDX2573"></A>
+<A NAME="IDX2574"></A>
+Foreign types are designed to represent a correspondence between a
+Scheme data type that is used to represent an object within the Scheme
+world and a C data type that represents the data object in the C world.
+Thus we cannot manipulate true C objects in Scheme, nor can we
+manipulate Scheme objects in C.
+</P><P>
+
+Each foreign type has four aspects that together ensure that the
+correspondence between the Scheme and C objects is maintained.  These
+aspects are all encoded as procedures that either check for validity or
+convert between representations.  Thus a foreign type is not a
+declarative type so much as a procedural description of how to pass the
+type.  The underlying foreign procedure call mechanism can pass integers
+and vector-like Scheme objects, and returns integer values.  All other
+objects must be translated into integers or some other basic type, and
+must be recovered from integers.
+</P><P>
+
+The aspects are:
+</P><P>
+
+<DL COMPACT>
+
+<DT><VAR>check</VAR>
+<DD>A predicate that returns <CODE>#t</CODE> if the argument is of an acceptable
+Scheme type, otherwise returns <CODE>#f</CODE>.
+The <VAR>check</VAR> procedure is used for type-checking.
+<P>
+
+<DT><VAR>convert</VAR>
+<DD>A procedure of one argument which returns a Scheme object of one of the
+basic types.
+It is used to convert an object into a `simpler' object that will
+eventually be converted into a C object.
+The legal simpler objects are integers and strings.
+<P>
+
+<DT><VAR>return-convert</VAR>
+<DD>A procedure of one argument that, given an integer, returns a Scheme
+object of a type satisfying <VAR>check</VAR>.
+Its purpose is to convert the result returned by the foreign procedure
+into a Scheme value.
+<P>
+
+<DT><VAR>revert</VAR>
+<DD>Some C procedures modify one or more of their arguments.  These
+arguments are passed by reference, i.e. as a pointer to their address.
+Since a Scheme object might have a different memory layout and storage
+conventions, it must be passed by copy-in and copy-out rather than by
+reference.
+<VAR>Revert</VAR> is a procedure of two parameters, the original object
+passed and the result of <VAR>convert</VAR> on that object.
+<VAR>Revert</VAR> may then inspect the converted object and copy back the
+changes to the original.
+<P>
+
+</DL>
+<P>
+
+<A NAME="IDX2575"></A>
+<DL>
+<DT><U>special form+:</U> <B>define-windows-type</B> <I>name check convert return revert</I>
+<DD><A NAME="IDX2576"></A>
+<DT><U>special form+:</U> <B>define-similar-windows-type</B> <I>name model [check [convert [return [revert]]]]</I>
+<DD><A NAME="IDX2577"></A>
+Both forms define a windows type.
+The first form defines a type in terms of its aspects as described
+above.
+The second defines the type as being like another type, except for
+certain aspects, which are redefined.
+<VAR>Name</VAR> is the name of the type.
+<VAR>Model</VAR> is the name of a type.
+<VAR>Check</VAR>, <VAR>convert</VAR>, <VAR>return</VAR> and <VAR>revert</VAR> are
+procedures or the value <CODE>#f</CODE>.
+A <CODE>#f</CODE> means use the default value, which in the second form means
+use the definition provided for <VAR>model</VAR>.
+The defaults are
+</P><P>
+
+<DL COMPACT>
+<DT><VAR>check</VAR>
+<DD><CODE>(lambda (x) #t)</CODE>, i.e. unchecked.
+<DT><VAR>convert</VAR>
+<DD><CODE>(lambda (x) x)</CODE>, i.e. no translation performed.
+<DT><VAR>return</VAR>
+<DD><CODE>(lambda (x) x)</CODE>, i.e. no translation performed.
+<DT><VAR>revert</VAR>
+<DD><CODE>(lambda (x y) unspecific)</CODE>, i.e. no update performed
+</DL>
+<P>
+
+The <CODE>unchecked</CODE> windows type (see below) is defined as:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-windows-type unchecked #f #f #f #f)
+</pre></td></tr></table></P><P>
+
+Windows types are <EM>not</EM> first class values, so they cannot be
+stored in variables or defined using <CODE>define</CODE>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define my-type unchecked)            error-->  Unbound variable
+(define-similar-windows-type my-type unchecked)
+                                      ;; the correct way
+</pre></td></tr></table></P><P>
+
+Scheme characters must be converted to integers.  This is accomplished
+as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-windows-type char
+   char?          ; check
+   char-&#62;integer  ; convert
+   integer-&#62;char  ; convert return value
+   #f             ; cannot be passed by reference
+)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2578"></A>
+<DL>
+<DT><U>windows type:</U> <B>unchecked</B>
+<DD>The type which is not checked and undergoes only the basic conversion
+from a Scheme integer to a C integer or from a Scheme string to a C
+pointer to the first byte of the string.
+Returned <CODE>unchecked</CODE> values are returned as integers.
+</DL>
+</P><P>
+
+<A NAME="IDX2579"></A>
+<DL>
+<DT><U>windows type:</U> <B>bool</B>
+<DD>Scheme booleans are analogous to C integers <CODE>0</CODE> and <CODE>1</CODE>.
+Windows type <CODE>bool</CODE> have been defined as:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-windows-type bool
+   boolean?
+   (lambda (x) (if x 1 0))
+   (lambda (x) (if (eq? x 0) #f #t))
+   #f)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2580"></A>
+<DL>
+<DT><U>windows type:</U> <B>char</B>
+<DD>Scheme characters are converted into C objects of type <CODE>char</CODE>,
+which are indistinguishable from small integers.
+</DL>
+</P><P>
+
+<A NAME="IDX2581"></A>
+<DL>
+<DT><U>windows type:</U> <B>int</B>
+<DD><A NAME="IDX2582"></A>
+<DT><U>windows type:</U> <B>uint</B>
+<DD><A NAME="IDX2583"></A>
+<DT><U>windows type:</U> <B>long</B>
+<DD><A NAME="IDX2584"></A>
+<DT><U>windows type:</U> <B>ulong</B>
+<DD><A NAME="IDX2585"></A>
+<DT><U>windows type:</U> <B>short</B>
+<DD><A NAME="IDX2586"></A>
+<DT><U>windows type:</U> <B>ushort</B>
+<DD><A NAME="IDX2587"></A>
+<DT><U>windows type:</U> <B>word</B>
+<DD><A NAME="IDX2588"></A>
+<DT><U>windows type:</U> <B>byte</B>
+<DD>Various integer types that are passed without conversion.
+</DL>
+</P><P>
+
+<A NAME="IDX2589"></A>
+<DL>
+<DT><U>windows type:</U> <B>string</B>
+<DD>A string that is passed as a C pointer of type <CODE>char*</CODE> to the first
+character in the string.
+</DL>
+</P><P>
+
+<A NAME="IDX2590"></A>
+<DL>
+<DT><U>windows type:</U> <B>char*</B>
+<DD>A string or <CODE>#f</CODE>.  The string is passed as a pointer to characters.
+The string is correctly null-terminated.  <CODE>#f</CODE> is passed as the null
+pointer.  This is an example where there is a more complex mapping
+between C objects and Scheme objects.  C's <CODE>char*</CODE> type is
+represented as one of two Scheme types depending on its value.  This
+allows us us to distinguish between the C string (pointer) that points
+to the empty sequence of characters and the null pointer (which doesnt
+point anywhere).
+</DL>
+</P><P>
+
+<A NAME="IDX2591"></A>
+<DL>
+<DT><U>windows type:</U> <B>handle</B>
+<DD><A NAME="IDX2592"></A>
+<DT><U>windows type:</U> <B>hbitmap</B>
+<DD><A NAME="IDX2593"></A>
+<DT><U>windows type:</U> <B>hbrush</B>
+<DD><A NAME="IDX2594"></A>
+<DT><U>windows type:</U> <B>hcursor</B>
+<DD><A NAME="IDX2595"></A>
+<DT><U>windows type:</U> <B>hdc</B>
+<DD><A NAME="IDX2596"></A>
+<DT><U>windows type:</U> <B>hicon</B>
+<DD><A NAME="IDX2597"></A>
+<DT><U>windows type:</U> <B>hinstance</B>
+<DD><A NAME="IDX2598"></A>
+<DT><U>windows type:</U> <B>hmenu</B>
+<DD><A NAME="IDX2599"></A>
+<DT><U>windows type:</U> <B>hpalette</B>
+<DD><A NAME="IDX2600"></A>
+<DT><U>windows type:</U> <B>hpen</B>
+<DD><A NAME="IDX2601"></A>
+<DT><U>windows type:</U> <B>hrgn</B>
+<DD><A NAME="IDX2602"></A>
+<DT><U>windows type:</U> <B>hwnd</B>
+<DD>Various kinds of Win32 handle.  These names correspond to the same, but
+all uppercase, names in the Windows C language header files.  Win32 API
+calls are the source of values of this type and the values are
+meaningless except as arguments to other Win32 API calls.  Currently
+these values are represented as integers but we expect that Win32
+handles will in future be represented by allocated Scheme objects
+(e.g. records) that will allow predicates (e.g. <CODE>hmenu?</CODE>) and
+sensible interlocking with the garbage collector to free the programmer
+of the current tedious allocation and deallocation of handles.
+</DL>
+</P><P>
+
+<A NAME="IDX2603"></A>
+<DL>
+<DT><U>windows type:</U> <B>resource-id</B>
+<DD>A Windows resource identifier is either a small integer or a string.
+In C, this distinction is possible because pointers look like
+larger integers, so a machine word representing a small integer can be
+distinguished from a machine word that is a pointer to the text of the
+name of the resource.
+</DL>
+</P><P>
+
+<A NAME="Windows Foreign Procedures"></A>
+<HR SIZE="6">
+<A NAME="SEC209"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC208"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC210"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC206"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC207"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC211"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 18.2.2 Windows Foreign Procedures </H3>
+<!--docid::SEC209::-->
+<P>
+
+Foreign procedures are declared as callable entry-points in a module,
+usually a dynamically linked library (DLL).
+</P><P>
+
+<A NAME="IDX2604"></A>
+<DL>
+<DT><U>procedure+:</U> <B>find-module</B> <I>name</I>
+<DD><A NAME="IDX2605"></A>
+<A NAME="IDX2606"></A>
+Returns a module suitable for use in creating procedures with
+<CODE>windows-procedure</CODE>.  <VAR>Name</VAR> is a string which is the name of a
+DLL file.  Internally, <CODE>find-module</CODE> uses the <CODE>LoadLibrary</CODE>
+Win32 API, so <VAR>name</VAR> should conform to the specifications for this
+call.  <VAR>Name</VAR> should be either a full path name of a DLL, or the
+name of a DLL that resides in the same directory as the Scheme binary
+<TT>`SCHEME.EXE'</TT> or in the system directory.
+</P><P>
+
+The module returned is a description for the DLL, and the DLL need not
+necessarily be linked at or immediately after this call.  DLL modules
+are linked on need and unlinked before Scheme exits and when there
+are no remaining references to entry points after a garbage-collection.
+This behavior ensures that the Scheme system can run when a DLL is
+absent, provided the DLL is not actually used (i.e. no attempt is made
+to call a procedure in the DLL).
+</DL>
+</P><P>
+
+<A NAME="IDX2607"></A>
+<DL>
+<DT><U>variable+:</U> <B>gdi32.dll</B>
+<DD><A NAME="IDX2608"></A>
+This variable is bound to the module describing the <TT>`GDI32.DLL'</TT>
+library, which contains the Win32 API graphics calls, e.g.
+<CODE>LineTo</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2609"></A>
+<DL>
+<DT><U>variable+:</U> <B>kernel32.dll</B>
+<DD><A NAME="IDX2610"></A>
+This variable is bound to the module describing the <TT>`KERNEL32.DLL'</TT>
+library.
+</DL>
+</P><P>
+
+<A NAME="IDX2611"></A>
+<DL>
+<DT><U>variable+:</U> <B>user32.dll</B>
+<DD><A NAME="IDX2612"></A>
+This variable is bound to the module describing the <TT>`USER32.DLL'</TT>
+library.  This module contains many useful Win32 API procedures, like
+<CODE>MessageBox</CODE> and <CODE>SetWindowText</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2613"></A>
+<DL>
+<DT><U>special form+:</U> <B>windows-procedure</B> <I>(name (parameter type) ...) return-type module entry-name [options]</I>
+<DD><A NAME="IDX2614"></A>
+This form creates a procedure, and could be thought of as
+"foreign-named-lambda".  The form creates a Scheme procedure that
+calls the C procedure identified by the exported entry point
+<VAR>entry-name</VAR> in the module identified by the value of <VAR>module</VAR>.
+Both <VAR>entry-name</VAR> and <VAR>module</VAR> are evaluated at procedure
+creation time, so either may be expression.  <VAR>Entry-name</VAR> must
+evaluate to a string and <VAR>module</VAR> must evaluate to a module as
+returned by <CODE>find-module</CODE>.
+These are the only parts of the form that are evaluated at procedure
+creation time.
+</P><P>
+
+<VAR>Name</VAR> is the name of the procedure and is for documentation
+purposes only.  This form <EM>does not</EM> define a procedure called
+<VAR>name</VAR>.  It is more like <CODE>lambda</CODE>.  The name might be used for
+debugging and pretty-printing.
+</P><P>
+
+A windows procedure has a fixed number of parameters (i.e. no `rest'
+parameters or `varargs'), each of which is named and associated with a
+windows type <VAR>type</VAR>.  Both the name <VAR>parameter</VAR> and the windows
+type <VAR>type</VAR> must be symbols and are not evaluated.  The procedure
+returns a value of the windows type <VAR>return-type</VAR>.
+</P><P>
+
+The following example creates a procedure that takes a window handle
+(<CODE>hwnd</CODE>) and a string and returns a boolean (<CODE>bool</CODE>) result.
+The procedure does this by calling the <CODE>SetWindowText</CODE> entry in the
+module that is the value of the variable <CODE>user32.dll</CODE>.  The
+variable <CODE>set-window-title</CODE> is defined to have this procedure as
+it's value.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define set-window-title
+  (windows-procedure
+   (set-window-text (window hwnd) (text string))
+   bool user32.dll "SetWindowText"))
+
+(set-window-title my-win "Hi")
+                         =>  #t
+                         ;; Changes window's title/text
+
+set-window-title         =>  #[compiled-procedure  ...]
+set-window-text          error-->  Unbound variable
+</pre></td></tr></table></P><P>
+
+When there are no <VAR>options</VAR> the created procedure will (a) check its
+arguments against the types, (b) convert the arguments, (c) call the C
+procedure and (d) convert the returned value.  No reversion is
+performed, even if one of the <VAR>types</VAR> has a reversion defined.
+(Reverted types are rare [I have never used one], so paying a cost for
+this unless it is used seems silly).
+</P><P>
+
+The following options are allowed:
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>with-reversions</CODE>
+<DD>The reversions are included in the type conversions.
+<P>
+
+<DT><CODE>expand</CODE>
+<DD>A synonym for <CODE>with-reversions</CODE>.
+<P>
+
+<DT><VAR>Scheme code</VAR>
+<DD>The <VAR>Scheme code</VAR> is placed between steps (a) and (b) in the default
+process.  The Scheme code can enforce constraints on the arguments,
+including constraints between arguments such as checking that an index
+refers to a valid position in a string.
+</DL>
+<P>
+
+If both options (i.e. <CODE>with-reversions</CODE> and Scheme code) are used,
+<CODE>with-reversions</CODE> must appear first.  There can be arbitrarily many
+Scheme expression.
+</DL>
+</P><P>
+
+<A NAME="Win32 API names and procedures"></A>
+<HR SIZE="6">
+<A NAME="SEC210"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC209"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC211"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC206"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC207"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC211"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 18.2.3 Win32 API names and procedures </H3>
+<!--docid::SEC210::-->
+<P>
+
+This section is a moving target.
+<A NAME="IDX2615"></A>
+<A NAME="IDX2616"></A>
+</P><P>
+
+The <CODE>#define</CODE> values from <TT>`wingdi.h'</TT> and <TT>`winuser.h'</TT> are
+available as bindings in the <CODE>(win32)</CODE> package environment.  The
+<CODE>#define</CODE> symbols are all uppercase; these have been translated to
+all lowercase Scheme identifiers, thus <CODE>WM_LBUTTONUP</CODE> is the scheme
+variable <CODE>wm_lbuttonup</CODE>.  As Scheme is case insensitive, the
+upper-case version may be used and probably should to make the code look
+more like conventional Windows code.  The Scheme bindings have been
+produced automagically.  Most of the <CODE>#define</CODE>-symbols contain an
+underscore so there are not many name clashes.  There is one very
+notable name clash, however: <CODE>ERROR</CODE> is <CODE>#define</CODE>d to 0, which
+shadows the scheme procedure <CODE>error</CODE> in the root package
+environment.  To signal an error, use <CODE>access</CODE> to get <CODE>error</CODE>
+from the system global environment:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(declare (usual-integrations))
+...
+((access error system-global-environment) "Complain" ...)
+</pre></td></tr></table></P><P>
+
+The set of procedures is incomplete because procedures have been added
+on a by-need basis for the implementation of other parts of the system,
+e.g.  Scheme Graphics.  Look in the implementation for further details.
+</P><P>
+
+Win32 API procedure names have been uniformly converted into Scheme
+identifiers as follows:
+</P><P>
+
+<UL>
+<LI>
+A leading uppercase letter is translated into a lowercase letter.
+<LI>
+Subsequent sequences of uppercase letters are translated into lowercase
+letters preceeded by a hyphen (minus symbol), i.e. hyphens are inserted
+at a lowercase to uppercase transition.
+<LI>
+Predicates beginning with <CODE>Is</CODE> finally have a
+question-mark appended.
+</UL>
+<P>
+
+Example: applying these rules to <CODE>IsWindow</CODE> yields
+<CODE>is-window?</CODE>, and <CODE>GetDC</CODE> is translated into <CODE>get-dc</CODE>.
+</P><P>
+
+<A NAME="Device Independent Bitmap Utilities"></A>
+<HR SIZE="6">
+<A NAME="SEC211"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC210"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC212"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC207"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC205"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_20.html#SEC214"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 18.3 Device Independent Bitmap Utilities </H2>
+<!--docid::SEC211::-->
+<P>
+
+The Device Independent Bitmap (DIB) utilities library <TT>`DIBUTILS.DLL'</TT>
+and the associated procedures in <TT>`dib.scm'</TT> in the Win32 system
+source is an example of how to use the foreign function interface to
+access and manipulate non-Scheme objects.
+<A NAME="IDX2617"></A>
+</P><P>
+
+<A NAME="IDX2618"></A>
+<DL>
+<DT><U>windows type:</U> <B>dib</B>
+<DD>In the C world a DIB is a <EM>handle</EM> to a piece of memory containing
+the bits that represent information about the image and the pixels of
+the image.  The handle is a machine-word sized piece of data which may
+be thought of as a 32 bit integer.  The handle may be null (i.e. zero),
+indicating that there is no block of memory describing the DIB.  The
+null value is usually returned by C functions that are supposed to
+create a DIB but failed, for some reason like the memory could not be
+allocated or a file could not be opened.
+</P><P>
+
+In the Scheme world a DIB is a structure containing information
+about the bitmap (specifically the integer that represents the handle).
+We also include <CODE>#f</CODE> in the <CODE>dib</CODE> windows type to mirror the
+null handle error value.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define dib-result
+  (lambda (handle)
+    (if (= handle 0)
+        #f
+        (make-dib handle))))
+
+(define dib-arg
+  (lambda (dib)
+    (if dib
+        (cell-contents (dib-handle dib))
+        0)))  
+
+(define-windows-type dib
+  (lambda (thing) (or (dib? thing) (eq? thing #f)))
+  dib-arg
+  dib-result)
+</pre></td></tr></table></DL>
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_19.html#SEC212">18.3.1 DIB procedures</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_19.html#SEC213">18.3.2 Other parts of the DIB Utilities implementation</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="DIB procedures"></A>
+<HR SIZE="6">
+<A NAME="SEC212"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC211"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC213"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC207"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC211"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_20.html#SEC214"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 18.3.1 DIB procedures </H3>
+<!--docid::SEC212::-->
+<P>
+
+The following procedures have typed parameters, using the same
+convention as <CODE>windows-procedure</CODE>.
+</P><P>
+
+<A NAME="IDX2619"></A>
+<DL>
+<DT><U>procedure+:</U> <B>open-dib</B> <I>(filename string)</I>
+<DD>Return type: <VAR>dib</VAR>.  Calls the <CODE>OpenDIB</CODE> entry of
+<TT>`DIBUTILS.DLL'</TT>.  If the return value is not <CODE>#f</CODE> then the file
+<VAR>filename</VAR> was found, successfully opened, and the contents were
+suitable for loading into memory as a device independent bitmap.
+</DL>
+</P><P>
+
+<A NAME="IDX2620"></A>
+<DL>
+<DT><U>procedure+:</U> <B>write-dib</B> <I>(filename string) (dib dib)</I>
+<DD>Return type: <VAR>bool</VAR>.  Calls the <CODE>WriteDIB</CODE> entry of
+<TT>`DIBUTILS.DLL'</TT>.  Returns <CODE>#t</CODE> if the file <VAR>filename</VAR> could
+be opened and written to.  After this operation the file contains the
+bitmap data in a standard format that is understood by <CODE>open-dib</CODE>
+and various system utilities like the bitmap editor.  Any problems
+resulting in failure are signalled by a <CODE>#f</CODE> return value.
+</DL>
+</P><P>
+
+<A NAME="IDX2621"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bitmap-from-dib</B> <I>(dib dib) (palette hpalette)</I>
+<DD>Return type: <VAR>hbitmap</VAR>.
+Calls the <CODE>BitmapFromDib</CODE> entry of <TT>`DIBUTILS.DLL'</TT>.  The returned
+value is a device dependent bitmap.  The colours from the DIB are
+matched against colors in <VAR>palette</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX2622"></A>
+<DL>
+<DT><U>procedure+:</U> <B>dib-from-bitmap</B> <I>(bitmap hbitmap) (style dword) (bits word) (palette hpalette)</I>
+<DD>Return type: <VAR>dib</VAR>.
+Returns a DIB containing the same image as the device dependent bitmap
+<VAR>bitmap</VAR>.
+<VAR>Style</VAR> determines the kind of DIB, e.g. compression style.
+Calls the <CODE>DibFromBitmap</CODE> entry of <TT>`DIBUTILS.DLL'</TT>.
+</DL>
+</P><P>
+
+<A NAME="IDX2623"></A>
+<DL>
+<DT><U>procedure+:</U> <B>dib-blt</B> <I>(dest hdc) (x int) (y int) (w int) (h int) (src dib) (src-x int) (src-y int) (raster-op long)</I>
+<DD>Return type: <VAR>bool</VAR>.  Calls the <CODE>DibBlt</CODE> entry of
+<TT>`DIBUTILS.DLL'</TT>.  Similar to the Win32 API <CODE>BitBlt</CODE> call, but
+draws a DIB rather than a piece of another device context.  Draws the
+<VAR>dib</VAR> on device context <VAR>hdc</VAR> at position (<VAR>x</VAR>,<VAR>y</VAR>).  A
+rectangle of width <VAR>w</VAR> and height <VAR>h</VAR> is copied from position
+(<VAR>src-x</VAR>,<VAR>src-y</VAR>) of <VAR>dib</VAR>.
+<VAR>Raster-op</VAR> is supposed to allow the source and destination to be
+combined but I don't think I got this right so stick to <CODE>SRCCOPY</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2624"></A>
+<DL>
+<DT><U>procedure+:</U> <B>%delete-dib</B> <I>(dib-handle handle)</I>
+<DD>Return type: <VAR>bool</VAR>.
+Calls the <CODE>DeleteDIB</CODE> entry of <TT>`DIBUTILS.DLL'</TT>.
+Note that the parameter is a <VAR>handle</VAR>, and not a <VAR>dib</VAR>.
+This allows us to destroy a DIB and reclaim its memory by knowing only
+the handle value, and not needing the <CODE>dib</CODE> record.
+The importance of this is that if the <CODE>dib</CODE> record is GC-ed then a
+GC hook can reclaim the storage knowing only the handle.
+</DL>
+</P><P>
+
+<A NAME="IDX2625"></A>
+<DL>
+<DT><U>procedure+:</U> <B>delete-dib</B> <I>(dib dib)</I>
+<DD>Return type: <VAR>bool</VAR>.
+This procedure calls <CODE>%delete-dib</CODE> to reclaim the storage occupied
+by a DIB.
+After being deleted, the DIB should not be used.
+This procedure allows the programmer to reclaim external heap storage
+rather than risking it running out before the next garbage collection.
+</DL>
+</P><P>
+
+<A NAME="IDX2626"></A>
+<DL>
+<DT><U>procedure+:</U> <B>dib-height</B> <I>(dib dib)</I>
+<DD>Return type: <VAR>int</VAR>.
+Calls the <CODE>DibHeight</CODE> expand entry of <TT>`DIBUTILS.DLL'</TT>, which returns
+the height of the bitmap in pixels.
+</DL>
+</P><P>
+
+<A NAME="IDX2627"></A>
+<DL>
+<DT><U>procedure+:</U> <B>dib-width</B> <I>(dib dib)</I>
+<DD>Return type: <VAR>int</VAR>.
+Calls the <CODE>DibWidth</CODE> entry of <TT>`DIBUTILS.DLL'</TT>, which returns
+the width of the bitmap in pixels.
+</DL>
+</P><P>
+
+<A NAME="IDX2628"></A>
+<DL>
+<DT><U>procedure+:</U> <B>copy-bitmap</B> <I>(bm hbitmap)</I>
+<DD>Return type: <VAR>hbitmap</VAR>.
+Calls the <CODE>CopyBitmap</CODE> of <TT>`DIBUTILS.DLL'</TT>, which creates a new
+bitmap with the same size and contents as the original.
+</DL>
+</P><P>
+
+<A NAME="IDX2629"></A>
+<DL>
+<DT><U>procedure+:</U> <B>create-dib</B> <I>(width int) (height int) (style int) (depth int) (palette hpalette)</I>
+<DD>Return type: <VAR>dib</VAR>.
+Calls the <CODE>CreateDIB</CODE> entry of <TT>`DIBUTILS.DLL'</TT>.
+Creates a DIB of <VAR>width</VAR> by <VAR>height</VAR> pixels and <VAR>depth</VAR> bits
+of colour information.
+The <VAR>style</VAR> parameter determines how the bitmap is stored.
+I have only ever used <CODE>BI_RGB</CODE>.
+If <VAR>depth</VAR>&#60;=8 then the <VAR>palette</VAR> determines the DIB's colour table.
+</DL>
+</P><P>
+
+<A NAME="IDX2630"></A>
+<DL>
+<DT><U>procedure+:</U> <B>crop-bitmap</B> <I>(bm hbitmap) (left int) (top int) (right int) (bottom int)</I>
+<DD>Return type: <VAR>hbitmap</VAR>.
+Calls the <CODE>CropBitmap</CODE> entry of <TT>`DIBUTILS.DLL'</TT>.
+Returns a new bitmap containing the image from a region of the original.
+</DL>
+</P><P>
+
+<A NAME="IDX2631"></A>
+<DL>
+<DT><U>procedure+:</U> <B>dib-set-pixels-unaligned</B> <I>dib (pixels string)</I>
+<DD>Return type: <VAR>bool</VAR>.
+Calls the <CODE>DIBSetPixelsUnaligned</CODE> entry of<BR> <TT>`DIBUTILS.DLL'</TT>.  Stuffs
+bytes from <VAR>pixels</VAR> into the bitmap.  There are no alignment
+constraints on <VAR>pixels</VAR> (the usual way of doing this is to use the
+<CODE>SetDIBits</CODE> function which requires that every scan line of the
+bitmap is 32-bit word aligned, even if the scan lines are not a multiple
+of 4 bytes long).  doing this
+</DL>
+</P><P>
+
+<A NAME="Other parts of the DIB Utilities implementation"></A>
+<HR SIZE="6">
+<A NAME="SEC213"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC212"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_20.html#SEC214"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC207"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC211"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_20.html#SEC214"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 18.3.2 Other parts of the DIB Utilities implementation </H3>
+<!--docid::SEC213::-->
+<P>
+
+The <TT>`DIBUTILS.DLL'</TT> library is an ordinary DLL.  See the standard
+Microsoft Windows documentation on how to create DLLs.  Look at the code
+in the <TT>`WIN32/DIBUTILS'</TT> directory of the Scheme source.
+</P><P>
+
+Please note:
+<UL>
+<LI>
+<A NAME="IDX2632"></A>
+For the foreign function interface to find the procedures they must be
+declared as exports in the <TT>`.DEF'</TT> definition file.
+<P>
+
+<LI>
+To load the <TT>`.DLL'</TT> file use the <CODE>find-module</CODE> Scheme function.
+Look at <TT>`WIN32/DIB.SCM'</TT> to see how this is done.
+<P>
+
+<LI>
+The current system works with C procedures with the <CODE>__stdcall</CODE> and
+<CODE>__cdecl</CODE> calling conventions but <EM>not</EM> the <CODE>__fastcall</CODE>
+calling convention.
+</UL>
+<P>
+
+<A NAME="GNU Free Documentation License"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_19.html#SEC207"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_20.html#SEC214"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

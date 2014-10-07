@@ -1,0 +1,1767 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme Reference: Numbers</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme Reference: Numbers">
+<META NAME="keywords" CONTENT="MIT Scheme Reference: Numbers">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC43"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_4.html#SEC42"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC44"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_4.html#SEC42"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 4. Numbers </H1>
+<!--docid::SEC43::-->
+<P>
+
+(This section is largely taken from the <CITE>Revised^4 Report on the
+Algorithmic Language Scheme</CITE>.)
+</P><P>
+
+Numerical computation has traditionally been neglected by the Lisp
+community.  Until Common Lisp there was no carefully thought out
+strategy for organizing numerical computation, and with the exception of
+the MacLisp system little effort was made to execute numerical code
+efficiently.  This report recognizes the excellent work of the Common
+Lisp committee and accepts many of their recommendations.  In some ways
+this report simplifies and generalizes their proposals in a manner
+consistent with the purposes of Scheme.
+</P><P>
+
+It is important to distinguish between the mathematical numbers, the
+Scheme numbers that attempt to model them, the machine representations
+used to implement the Scheme numbers, and notations used to write
+numbers.  This report uses the types <EM>number</EM>, <EM>complex</EM>,
+<EM>real</EM>, <EM>rational</EM>, and <EM>integer</EM> to refer to both
+mathematical numbers and Scheme numbers.  Machine representations such
+as fixed point and floating point are referred to by names such as
+<EM>fixnum</EM> and <EM>flonum</EM>.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_5.html#SEC44">4.1 Numerical types</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_5.html#SEC45">4.2 Exactness</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_5.html#SEC46">4.3 Implementation restrictions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_5.html#SEC47">4.4 Syntax of numerical constants</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_5.html#SEC48">4.5 Numerical operations</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_5.html#SEC49">4.6 Numerical input and output</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_5.html#SEC50">4.7 Fixnum and Flonum Operations</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_5.html#SEC53">4.8 Random Numbers</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Numerical types"></A>
+<HR SIZE="6">
+<A NAME="SEC44"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC43"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC45"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC43"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC43"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.1 Numerical types </H2>
+<!--docid::SEC44::-->
+<P>
+
+Mathematically, numbers may be arranged into a tower of subtypes in
+which each level is a subset of the level above it:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=display><pre style="font-family: serif">number
+complex
+real
+rational
+integer
+</pre></td></tr></table></P><P>
+
+For example, 3 is an integer.  Therefore 3 is also a rational, a real,
+and a complex.  The same is true of the Scheme numbers that model 3.
+For Scheme numbers, these types are defined by the predicates
+<CODE>number?</CODE>, <CODE>complex?</CODE>, <CODE>real?</CODE>, <CODE>rational?</CODE>, and
+<CODE>integer?</CODE>.
+</P><P>
+
+There is no simple relationship between a number's type and its
+representation inside a computer.  Although most implementations of
+Scheme will offer at least two different representations of 3, these
+different representations denote the same integer.
+</P><P>
+
+Scheme's numerical operations treat numbers as abstract data, as
+independent of their representation as possible.  Although an
+implementation of Scheme may use fixnum, flonum, and perhaps other
+representations for numbers, this should not be apparent to a casual
+programmer writing simple programs.
+</P><P>
+
+It is necessary, however, to distinguish between numbers that are
+represented exactly and those that may not be.  For example, indexes
+into data structures must be known exactly, as must some polynomial
+coefficients in a symbolic algebra system.  On the other hand, the
+results of measurements are inherently inexact, and irrational numbers
+may be approximated by rational and therefore inexact approximations.
+In order to catch uses of inexact numbers where exact numbers are
+required, Scheme explicitly distinguishes exact from inexact numbers.
+This distinction is orthogonal to the dimension of type.
+</P><P>
+
+<A NAME="Exactness"></A>
+<HR SIZE="6">
+<A NAME="SEC45"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC44"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC46"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC43"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC43"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.2 Exactness </H2>
+<!--docid::SEC45::-->
+<P>
+
+Scheme numbers are either <EM>exact</EM> or <EM>inexact</EM>.  A number is
+exact if it was written as an exact constant or was derived from exact
+numbers using only exact operations.  A number is inexact if it was
+written as an inexact constant, if it was derived using inexact
+ingredients, or if it was derived using inexact operations. Thus
+inexactness is a contagious property of a number.
+</P><P>
+
+If two implementations produce exact results for a computation that did
+not involve inexact intermediate results, the two ultimate results will
+be mathematically equivalent.  This is generally not true of
+computations involving inexact numbers since approximate methods such as
+floating point arithmetic may be used, but it is the duty of each
+implementation to make the result as close as practical to the
+mathematically ideal result.
+</P><P>
+
+<A NAME="IDX363"></A>
+Rational operations such as <CODE>+</CODE> should always produce exact results
+when given exact arguments.  If the operation is unable to produce an
+exact result, then it may either report the violation of an
+implementation restriction or it may silently coerce its result to an
+inexact value.  See section <A HREF="scheme_5.html#SEC46">4.3 Implementation restrictions</A>.
+</P><P>
+
+<A NAME="IDX364"></A>
+With the exception of <CODE>inexact-&#62;exact</CODE>, the operations described in
+this section must generally return inexact results when given any
+inexact arguments.  An operation may, however, return an exact result if
+it can prove that the value of the result is unaffected by the
+inexactness of its arguments.  For example, multiplication of any number
+by an exact zero may produce an exact zero result, even if the other
+argument is inexact.
+</P><P>
+
+<A NAME="Implementation restrictions"></A>
+<HR SIZE="6">
+<A NAME="SEC46"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC45"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC47"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC43"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC43"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.3 Implementation restrictions </H2>
+<!--docid::SEC46::-->
+<P>
+
+Implementations of Scheme are not required to implement the whole tower
+of subtypes (see section <A HREF="scheme_5.html#SEC44">4.1 Numerical types</A>), but they must implement a
+coherent subset consistent with both the purposes of the implementation
+and the spirit of the Scheme language.  For example, an implementation
+in which all numbers are real may still be quite useful.<A NAME="DOCF1" HREF="scheme_fot.html#FOOT1">(1)</A>
+</P><P>
+
+Implementations may also support only a limited range of numbers of any
+type, subject to the requirements of this section.  The supported range
+for exact numbers of any type may be different from the supported range
+for inexact numbers of that type.  For example, an implementation that
+uses flonums to represent all its inexact real numbers may support a
+practically unbounded range of exact integers and rationals while
+limiting the range of inexact reals (and therefore the range of inexact
+integers and rationals) to the dynamic range of the flonum format.
+Furthermore the gaps between the representable inexact integers and
+rationals are likely to be very large in such an implementation as the
+limits of this range are approached.
+</P><P>
+
+<A NAME="IDX365"></A>
+<A NAME="IDX366"></A>
+<A NAME="IDX367"></A>
+An implementation of Scheme must support exact integers throughout the
+range of numbers that may be used for indexes of lists, vectors, and
+strings or that may result from computing the length of a list, vector,
+or string.  The <CODE>length</CODE>, <CODE>vector-length</CODE>, and
+<CODE>string-length</CODE> procedures must return an exact integer, and it is
+an error to use anything but an exact integer as an index.  Furthermore
+any integer constant within the index range, if expressed by an exact
+integer syntax, will indeed be read as an exact integer, regardless of
+any implementation restrictions that may apply outside this range.
+Finally, the procedures listed below will always return an exact integer
+result provided all their arguments are exact integers and the
+mathematically expected result is representable as an exact integer
+within the implementation:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>*                gcd                modulo
++                imag-part          numerator
+-                inexact-&#62;exact     quotient
+abs              lcm                rationalize
+angle            magnitude          real-part
+ceiling          make-polar         remainder
+denominator      make-rectangular   round
+expt             max                truncate
+floor            min
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX368"></A>
+Implementations are encouraged, but not required, to support exact
+integers and exact rationals of practically unlimited size and
+precision, and to implement the above procedures and the <CODE>/</CODE>
+procedure in such a way that they always return exact results when given
+exact arguments.  If one of these procedures is unable to deliver an
+exact result when given exact arguments, then it may either report a
+violation of an implementation restriction or it may silently coerce its
+result to an inexact number.  Such a coercion may cause an error
+later.
+</P><P>
+
+An implementation may use floating point and other approximate
+representation strategies for inexact numbers.  This report recommends,
+but does not require, that the IEEE 32-bit and 64-bit floating
+point standards be followed by implementations that use flonum
+representations, and that implementations using other representations
+should match or exceed the precision achievable using these floating
+point standards.
+</P><P>
+
+<A NAME="IDX369"></A>
+In particular, implementations that use flonum representations must
+follow these rules: A flonum result must be represented with at least as
+much precision as is used to express any of the inexact arguments to
+that operation.  It is desirable (but not required) for potentially
+inexact operations such as <CODE>sqrt</CODE>, when applied to exact arguments,
+to produce exact answers whenever possible (for example the square root
+of an exact 4 ought to be an exact 2).  If, however, an exact number is
+operated upon so as to produce an inexact result (as by <CODE>sqrt</CODE>),
+and if the result is represented as a flonum, then the most precise
+flonum format available must be used; but if the result is represented
+in some other way then the representation must have at least as much
+precision as the most precise flonum format available.
+</P><P>
+
+Although Scheme allows a variety of written notations for numbers, any
+particular implementation may support only some of them.<A NAME="DOCF2" HREF="scheme_fot.html#FOOT2">(2)</A> For
+example, an implementation in which all numbers are real need not
+support the rectangular and polar notations for complex numbers.  If an
+implementation encounters an exact numerical constant that it cannot
+represent as an exact number, then it may either report a violation of
+an implementation restriction or it may silently represent the constant
+by an inexact number.
+</P><P>
+
+<A NAME="Syntax of numerical constants"></A>
+<HR SIZE="6">
+<A NAME="SEC47"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC46"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC48"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC43"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC43"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.4 Syntax of numerical constants </H2>
+<!--docid::SEC47::-->
+<P>
+
+<A NAME="IDX370"></A>
+<A NAME="IDX371"></A>
+<A NAME="IDX372"></A>
+<A NAME="IDX373"></A>
+<A NAME="IDX374"></A>
+<A NAME="IDX375"></A>
+<A NAME="IDX376"></A>
+<A NAME="IDX377"></A>
+A number may be written in binary, octal, decimal, or hexadecimal by the
+use of a radix prefix.  The radix prefixes are <CODE>#b</CODE> (binary),
+<CODE>#o</CODE> (octal), <CODE>#d</CODE> (decimal), and <CODE>#x</CODE> (hexadecimal).
+With no radix prefix, a number is assumed to be expressed in
+decimal.
+</P><P>
+
+<A NAME="IDX378"></A>
+<A NAME="IDX379"></A>
+<A NAME="IDX380"></A>
+<A NAME="IDX381"></A>
+<A NAME="IDX382"></A>
+<A NAME="IDX383"></A>
+A numerical constant may be specified to be either exact or inexact by a
+prefix.  The prefixes are <CODE>#e</CODE> for exact, and <CODE>#i</CODE> for
+inexact.  An exactness prefix may appear before or after any radix
+prefix that is used.  If the written representation of a number has no
+exactness prefix, the constant may be either inexact or exact.  It is
+inexact if it contains a decimal point, an exponent, or a <CODE>#</CODE>
+character in the place of a digit, otherwise it is exact.
+</P><P>
+
+<A NAME="IDX384"></A>
+<A NAME="IDX385"></A>
+<A NAME="IDX386"></A>
+<A NAME="IDX387"></A>
+<A NAME="IDX388"></A>
+<A NAME="IDX389"></A>
+<A NAME="IDX390"></A>
+<A NAME="IDX391"></A>
+<A NAME="IDX392"></A>
+<A NAME="IDX393"></A>
+<A NAME="IDX394"></A>
+<A NAME="IDX395"></A>
+<A NAME="IDX396"></A>
+In systems with inexact numbers of varying precisions it may be useful
+to specify the precision of a constant.  For this purpose, numerical
+constants may be written with an <EM>exponent marker</EM> that indicates
+the desired precision of the inexact representation.  The letters
+<CODE>s</CODE>, <CODE>f</CODE>, <CODE>d</CODE>, and <CODE>l</CODE> specify the use of
+<EM>short</EM>, <EM>single</EM>, <EM>double</EM>, and <EM>long</EM> precision,
+respectively.  (When fewer than four internal inexact representations
+exist, the four size specifications are mapped onto those available.
+For example, an implementation with two internal representations may map
+short and single together and long and double together.)  In addition,
+the exponent marker <CODE>e</CODE> specifies the default precision for the
+implementation.  The default precision has at least as much precision as
+<EM>double</EM>, but implementations may wish to allow this default to be
+set by the user.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>3.14159265358979F0
+       Round to single --- 3.141593
+0.6L0
+       Extend to long --- .600000000000000
+</pre></td></tr></table></P><P>
+
+<A NAME="Numerical operations"></A>
+<HR SIZE="6">
+<A NAME="SEC48"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC47"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC49"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC43"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC43"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.5 Numerical operations </H2>
+<!--docid::SEC48::-->
+<P>
+
+See section <A HREF="scheme_2.html#SEC6">1.1.3 Entry Format</A>, for a summary of the naming conventions used to
+specify restrictions on the types of arguments to numerical routines.
+The examples used in this section assume that any numerical constant
+written using an exact notation is indeed represented as an exact
+number.  Some examples also assume that certain numerical constants
+written using an inexact notation can be represented without loss of
+accuracy; the inexact constants were chosen so that this is likely to be
+true in implementations that use flonums to represent inexact
+numbers.
+</P><P>
+
+<A NAME="IDX397"></A>
+<DL>
+<DT><U>procedure:</U> <B>number?</B> <I>object</I>
+<DD><A NAME="IDX398"></A>
+<DT><U>procedure:</U> <B>complex?</B> <I>object</I>
+<DD><A NAME="IDX399"></A>
+<DT><U>procedure:</U> <B>real?</B> <I>object</I>
+<DD><A NAME="IDX400"></A>
+<DT><U>procedure:</U> <B>rational?</B> <I>object</I>
+<DD><A NAME="IDX401"></A>
+<DT><U>procedure:</U> <B>integer?</B> <I>object</I>
+<DD><A NAME="IDX402"></A>
+These numerical type predicates can be applied to any kind of argument,
+including non-numbers.  They return <CODE>#t</CODE> if the object is of the
+named type, and otherwise they return <CODE>#f</CODE>.  In general, if a type
+predicate is true of a number then all higher type predicates are also
+true of that number.  Consequently, if a type predicate is false of a
+number, then all lower type predicates are also false of that
+number.<A NAME="DOCF3" HREF="scheme_fot.html#FOOT3">(3)</A>
+</P><P>
+
+<A NAME="IDX403"></A>
+<A NAME="IDX404"></A>
+If <VAR>z</VAR> is an inexact complex number, then <CODE>(real? <VAR>z</VAR>)</CODE> is
+true if and only if <CODE>(zero? (imag-part <VAR>z</VAR>))</CODE> is true.  If
+<VAR>x</VAR> is an inexact real number, then <CODE>(integer? <VAR>x</VAR>)</CODE> is
+true if and only if <CODE>(= <VAR>x</VAR> (round <VAR>x</VAR>))</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(complex? 3+4i)         =>  #t
+(complex? 3)            =>  #t
+(real? 3)               =>  #t
+(real? -2.5+0.0i)       =>  #t
+(real? #e1e10)          =>  #t
+(rational? 6/10)        =>  #t
+(rational? 6/3)         =>  #t
+(integer? 3+0i)         =>  #t
+(integer? 3.0)          =>  #t
+(integer? 8/4)          =>  #t
+</pre></td></tr></table></P><P>
+
+Note: The behavior of these type predicates on inexact numbers is
+unreliable, since any inaccuracy may affect the result.
+</P><P>
+
+</DL>
+</P><P>
+
+<A NAME="IDX405"></A>
+<DL>
+<DT><U>procedure:</U> <B>exact?</B> <I>z</I>
+<DD><A NAME="IDX406"></A>
+<DT><U>procedure:</U> <B>inexact?</B> <I>z</I>
+<DD>These numerical predicates provide tests for the exactness of a
+quantity.  For any Scheme number, precisely one of these predicates is
+true.
+</DL>
+</P><P>
+
+<A NAME="IDX407"></A>
+<DL>
+<DT><U>procedure+:</U> <B>exact-integer?</B> <I>object</I>
+<DD><A NAME="IDX408"></A>
+<DT><U>procedure+:</U> <B>exact-nonnegative-integer?</B> <I>object</I>
+<DD><A NAME="IDX409"></A>
+<DT><U>procedure+:</U> <B>exact-rational?</B> <I>object</I>
+<DD>These procedures test for some very common types of numbers.  These
+tests could be written in terms of simpler predicates, but are more
+efficient.
+</DL>
+</P><P>
+
+<A NAME="IDX410"></A>
+<DL>
+<DT><U>procedure:</U> <B>=</B> <I>z1 z2 z3 <small>...</small></I>
+<DD><A NAME="IDX411"></A>
+<DT><U>procedure:</U> <B>&#60;</B> <I>x1 x2 x3 <small>...</small></I>
+<DD><A NAME="IDX412"></A>
+<DT><U>procedure:</U> <B>&#62;</B> <I>x1 x2 x3 <small>...</small></I>
+<DD><A NAME="IDX413"></A>
+<DT><U>procedure:</U> <B>&#60;=</B> <I>x1 x2 x3 <small>...</small></I>
+<DD><A NAME="IDX414"></A>
+<DT><U>procedure:</U> <B>&#62;=</B> <I>x1 x2 x3 <small>...</small></I>
+<DD><A NAME="IDX415"></A>
+<A NAME="IDX416"></A>
+<A NAME="IDX417"></A>
+These procedures return <CODE>#t</CODE> if their arguments are (respectively):
+equal, monotonically increasing, monotonically decreasing, monotonically
+nondecreasing, or monotonically nonincreasing.
+</P><P>
+
+These predicates are transitive.  Note that the traditional
+implementations of these predicates in Lisp-like languages are not
+transitive.
+</P><P>
+
+Note: While it is not an error to compare inexact numbers using these
+predicates, the results may be unreliable because a small inaccuracy may
+affect the result; this is especially true of <CODE>=</CODE> and <CODE>zero?</CODE>.
+When in doubt, consult a numerical analyst.
+</DL>
+</P><P>
+
+<A NAME="IDX418"></A>
+<DL>
+<DT><U>procedure:</U> <B>zero?</B> <I>z</I>
+<DD><A NAME="IDX419"></A>
+<DT><U>procedure:</U> <B>positive?</B> <I>x</I>
+<DD><A NAME="IDX420"></A>
+<DT><U>procedure:</U> <B>negative?</B> <I>x</I>
+<DD><A NAME="IDX421"></A>
+<DT><U>procedure:</U> <B>odd?</B> <I>x</I>
+<DD><A NAME="IDX422"></A>
+<DT><U>procedure:</U> <B>even?</B> <I>x</I>
+<DD><A NAME="IDX423"></A>
+<A NAME="IDX424"></A>
+<A NAME="IDX425"></A>
+<A NAME="IDX426"></A>
+<A NAME="IDX427"></A>
+These numerical predicates test a number for a particular property,
+returning <CODE>#t</CODE> or <CODE>#f</CODE>.  See note above regarding inexact
+numbers.
+</DL>
+</P><P>
+
+<A NAME="IDX428"></A>
+<DL>
+<DT><U>procedure:</U> <B>max</B> <I>x1 x2 <small>...</small></I>
+<DD><A NAME="IDX429"></A>
+<DT><U>procedure:</U> <B>min</B> <I>x1 x2 <small>...</small></I>
+<DD><A NAME="IDX430"></A>
+<A NAME="IDX431"></A>
+These procedures return the maximum or minimum of their
+arguments.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(max 3 4)              =>  4    ; exact
+(max 3.9 4)            =>  4.0  ; inexact
+</pre></td></tr></table></P><P>
+
+Note: If any argument is inexact, then the result will also be inexact
+(unless the procedure can prove that the inaccuracy is not large enough
+to affect the result, which is possible only in unusual
+implementations).  If <CODE>min</CODE> or <CODE>max</CODE> is used to compare
+numbers of mixed exactness, and the numerical value of the result cannot
+be represented as an inexact number without loss of accuracy, then the
+procedure may report a violation of an implementation
+restriction.<A NAME="DOCF4" HREF="scheme_fot.html#FOOT4">(4)</A>
+<A NAME="IDX432"></A>
+</DL>
+</P><P>
+
+<A NAME="IDX433"></A>
+<DL>
+<DT><U>procedure:</U> <B>+</B> <I>z1 <small>...</small></I>
+<DD><A NAME="IDX434"></A>
+<DT><U>procedure:</U> <B>*</B> <I>z1 <small>...</small></I>
+<DD><A NAME="IDX435"></A>
+<A NAME="IDX436"></A>
+<A NAME="IDX437"></A>
+<A NAME="IDX438"></A>
+<A NAME="IDX439"></A>
+<A NAME="IDX440"></A>
+These procedures return the sum or product of their arguments.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(+ 3 4)                 =>  7
+(+ 3)                   =>  3
+(+)                     =>  0
+(* 4)                   =>  4
+(*)                     =>  1
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX441"></A>
+<DL>
+<DT><U>procedure:</U> <B>-</B> <I>z1 z2 <small>...</small></I>
+<DD><A NAME="IDX442"></A>
+<DT><U>procedure:</U> <B>/</B> <I>z1 z2 <small>...</small></I>
+<DD><A NAME="IDX443"></A>
+<A NAME="IDX444"></A>
+<A NAME="IDX445"></A>
+<A NAME="IDX446"></A>
+<A NAME="IDX447"></A>
+<A NAME="IDX448"></A>
+With two or more arguments, these procedures return the difference or
+quotient of their arguments, associating to the left.  With one
+argument, however, they return the additive or multiplicative inverse of
+their argument.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(- 3 4)                 =>  -1
+(- 3 4 5)               =>  -6
+(- 3)                   =>  -3
+(/ 3 4 5)               =>  3/20
+(/ 3)                   =>  1/3
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX449"></A>
+<DL>
+<DT><U>procedure+:</U> <B>1+</B> <I>z</I>
+<DD><A NAME="IDX450"></A>
+<DT><U>procedure+:</U> <B>-1+</B> <I>z</I>
+<DD><CODE>(1+ z)</CODE> is equivalent to <CODE>(+ z 1)</CODE>; <CODE>(-1+ z)</CODE> is
+equivalent to <CODE>(- z 1)</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX451"></A>
+<DL>
+<DT><U>procedure:</U> <B>abs</B> <I>x</I>
+<DD><A NAME="IDX452"></A>
+<A NAME="IDX453"></A>
+<CODE>abs</CODE> returns the magnitude of its argument.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(abs -7)                =>  7
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX454"></A>
+<DL>
+<DT><U>procedure:</U> <B>quotient</B> <I>n1 n2</I>
+<DD><A NAME="IDX455"></A>
+<DT><U>procedure:</U> <B>remainder</B> <I>n1 n2</I>
+<DD><A NAME="IDX456"></A>
+<DT><U>procedure:</U> <B>modulo</B> <I>n1 n2</I>
+<DD><A NAME="IDX457"></A>
+<A NAME="IDX458"></A>
+<A NAME="IDX459"></A>
+<A NAME="IDX460"></A>
+<A NAME="IDX461"></A>
+These procedures implement number-theoretic (integer) division: for
+positive integers <VAR>n1</VAR> and <VAR>n2</VAR>, if <VAR>n3</VAR> and <VAR>n4</VAR> are
+integers such that
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre><VAR>n1</VAR> = (<VAR>n2</VAR> * <VAR>n3</VAR>) + <VAR>n4</VAR>
+
+0 &#60;= <VAR>n4</VAR> &#60; <VAR>n2</VAR>
+</pre></td></tr></table></P><P>
+
+then
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(quotient <VAR>n1</VAR> <VAR>n2</VAR>)        =>  <VAR>n3</VAR>
+(remainder <VAR>n1</VAR> <VAR>n2</VAR>)       =>  <VAR>n4</VAR>
+(modulo <VAR>n1</VAR> <VAR>n2</VAR>)          =>  <VAR>n4</VAR>
+</pre></td></tr></table></P><P>
+
+For integers <VAR>n1</VAR> and <VAR>n2</VAR> with <VAR>n2</VAR> not equal to 0,
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(= <VAR>n1</VAR> 
+   (+ (* <VAR>n2</VAR> (quotient <VAR>n1</VAR> <VAR>n2</VAR>))
+      (remainder <VAR>n1</VAR> <VAR>n2</VAR>)))
+                                    =>  #t
+</pre></td></tr></table></P><P>
+
+provided all numbers involved in that computation are exact.
+</P><P>
+
+The value returned by <CODE>quotient</CODE> always has the sign of the product
+of its arguments.  <CODE>remainder</CODE> and <CODE>modulo</CODE> differ on negative
+arguments -- the <CODE>remainder</CODE> always has the sign of the dividend,
+the <CODE>modulo</CODE> always has the sign of the divisor:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(modulo 13 4)           =>  1
+(remainder 13 4)        =>  1
+
+(modulo -13 4)          =>  3
+(remainder -13 4)       =>  -1
+
+(modulo 13 -4)          =>  -3
+(remainder 13 -4)       =>  1
+
+(modulo -13 -4)         =>  -1
+(remainder -13 -4)      =>  -1
+
+(remainder -13 -4.0)    =>  -1.0  ; inexact
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX462"></A>
+Note that <CODE>quotient</CODE> is the same as <CODE>integer-truncate</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX463"></A>
+<DL>
+<DT><U>procedure+:</U> <B>integer-floor</B> <I>n1 n2</I>
+<DD><A NAME="IDX464"></A>
+<DT><U>procedure+:</U> <B>integer-ceiling</B> <I>n1 n2</I>
+<DD><A NAME="IDX465"></A>
+<DT><U>procedure+:</U> <B>integer-truncate</B> <I>n1 n2</I>
+<DD><A NAME="IDX466"></A>
+<DT><U>procedure+:</U> <B>integer-round</B> <I>n1 n2</I>
+<DD>These procedures combine integer division with rounding.  For example,
+the following are equivalent:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(integer-floor <VAR>n1</VAR> <VAR>n2</VAR>)
+(floor (/ <VAR>n1</VAR> <VAR>n2</VAR>))
+</pre></td></tr></table></P><P>
+
+However, the former is faster and does not produce an intermediate
+result.
+</P><P>
+
+<A NAME="IDX467"></A>
+Note that <CODE>integer-truncate</CODE> is the same as <CODE>quotient</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX468"></A>
+<DL>
+<DT><U>procedure+:</U> <B>integer-divide</B> <I>n1 n2</I>
+<DD><A NAME="IDX469"></A>
+<DT><U>procedure+:</U> <B>integer-divide-quotient</B> <I>qr</I>
+<DD><A NAME="IDX470"></A>
+<DT><U>procedure+:</U> <B>integer-divide-remainder</B> <I>qr</I>
+<DD><A NAME="IDX471"></A>
+<A NAME="IDX472"></A>
+<CODE>integer-divide</CODE> is equivalent to performing both <CODE>quotient</CODE>
+and <CODE>remainder</CODE> at once.  The result of <CODE>integer-divide</CODE> is an
+object with two components; the procedures
+<CODE>integer-divide-quotient</CODE> and <CODE>integer-divide-remainder</CODE>
+select those components.  These procedures are useful when both the
+quotient and remainder are needed; often computing both of these numbers
+simultaneously is much faster than computing them separately.
+</P><P>
+
+For example, the following are equivalent:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(lambda (n d)
+  (cons (quotient n d)
+        (remainder n d)))
+
+(lambda (n d)
+  (let ((qr (integer-divide n d)))
+    (cons (integer-divide-quotient qr)
+          (integer-divide-remainder qr))))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX473"></A>
+<DL>
+<DT><U>procedure:</U> <B>gcd</B> <I>n1 <small>...</small></I>
+<DD><A NAME="IDX474"></A>
+<DT><U>procedure:</U> <B>lcm</B> <I>n1 <small>...</small></I>
+<DD><A NAME="IDX475"></A>
+<A NAME="IDX476"></A>
+These procedures return the greatest common divisor or least common
+multiple of their arguments.  The result is always non-negative.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(gcd 32 -36)            =>  4
+(gcd)                   =>  0
+
+(lcm 32 -36)            =>  288
+(lcm 32.0 -36)          =>  288.0  ; inexact
+(lcm)                   =>  1
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX477"></A>
+<DL>
+<DT><U>procedure:</U> <B>numerator</B> <I>q</I>
+<DD><A NAME="IDX478"></A>
+<DT><U>procedure:</U> <B>denominator</B> <I>q</I>
+<DD>These procedures return the numerator or denominator of their argument;
+the result is computed as if the argument was represented as a fraction
+in lowest terms.  The denominator is always positive.  The denominator
+of 0 is defined to be 1.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(numerator (/ 6 4))  =>  3
+(denominator (/ 6 4))  =>  2
+(denominator (exact-&#62;inexact (/ 6 4))) => 2.0
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX479"></A>
+<DL>
+<DT><U>procedure:</U> <B>floor</B> <I>x</I>
+<DD><A NAME="IDX480"></A>
+<DT><U>procedure:</U> <B>ceiling</B> <I>x</I>
+<DD><A NAME="IDX481"></A>
+<DT><U>procedure:</U> <B>truncate</B> <I>x</I>
+<DD><A NAME="IDX482"></A>
+<DT><U>procedure:</U> <B>round</B> <I>x</I>
+<DD>These procedures return integers.  <CODE>floor</CODE> returns the largest
+integer not larger than <VAR>x</VAR>.  <CODE>ceiling</CODE> returns the smallest
+integer not smaller than <VAR>x</VAR>.  <CODE>truncate</CODE> returns the integer
+closest to <VAR>x</VAR> whose absolute value is not larger than the absolute
+value of <VAR>x</VAR>.  <CODE>round</CODE> returns the closest integer to <VAR>x</VAR>,
+rounding to even when <VAR>x</VAR> is halfway between two integers.
+</P><P>
+
+Rationale: <CODE>round</CODE> rounds to even for consistency with the rounding
+modes required by the IEEE floating point standard.
+</P><P>
+
+Note: If the argument to one of these procedures is inexact, then the
+result will also be inexact.  If an exact value is needed, the result
+should be passed to the <CODE>inexact-&#62;exact</CODE> procedure (or use one of
+the procedures below).
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(floor -4.3)          =>  -5.0
+(ceiling -4.3)        =>  -4.0
+(truncate -4.3)       =>  -4.0
+(round -4.3)          =>  -4.0
+
+(floor 3.5)           =>  3.0
+(ceiling 3.5)         =>  4.0
+(truncate 3.5)        =>  3.0
+(round 3.5)           =>  4.0  ; inexact
+
+(round 7/2)           =>  4    ; exact
+(round 7)             =>  7
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX483"></A>
+<DL>
+<DT><U>procedure+:</U> <B>floor-&#62;exact</B> <I>x</I>
+<DD><A NAME="IDX484"></A>
+<DT><U>procedure+:</U> <B>ceiling-&#62;exact</B> <I>x</I>
+<DD><A NAME="IDX485"></A>
+<DT><U>procedure+:</U> <B>truncate-&#62;exact</B> <I>x</I>
+<DD><A NAME="IDX486"></A>
+<DT><U>procedure+:</U> <B>round-&#62;exact</B> <I>x</I>
+<DD>These procedures are similar to the preceding procedures except that
+they always return an exact result.  For example, the following are
+equivalent
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(floor-&#62;exact x)
+(inexact-&#62;exact (floor x))
+</pre></td></tr></table></P><P>
+
+except that the former is faster and has fewer range restrictions.
+</DL>
+</P><P>
+
+<A NAME="IDX487"></A>
+<DL>
+<DT><U>procedure:</U> <B>rationalize</B> <I>x y</I>
+<DD><A NAME="IDX488"></A>
+<DT><U>procedure+:</U> <B>rationalize-&#62;exact</B> <I>x y</I>
+<DD><A NAME="IDX489"></A>
+<A NAME="IDX490"></A>
+<CODE>rationalize</CODE> returns the <EM>simplest</EM> rational number differing
+from <VAR>x</VAR> by no more than <VAR>y</VAR>.  A rational number <VAR>r1</VAR> is
+<EM>simpler</EM> than another rational number <VAR>r2</VAR> if
+<TT><VAR>r1</VAR>=<VAR>p1</VAR>/<VAR>q1</VAR></TT> and <TT><VAR>r2</VAR>=<VAR>p2</VAR>/<VAR>q2</VAR></TT> (both
+in lowest terms) and <TT>|<VAR>p1</VAR>|&#60;=|<VAR>p2</VAR>|</TT> and
+<TT>|<VAR>q1</VAR>|&#60;=|<VAR>q2</VAR>|</TT>.  Thus <TT>3/5</TT> is simpler than <TT>4/7</TT>.
+Although not all rationals are comparable in this ordering (consider
+<TT>2/7</TT> and <TT>3/5</TT>) any interval contains a rational number that is
+simpler than every other rational number in that interval (the simpler
+<TT>2/5</TT> lies between <TT>2/7</TT> and <TT>3/5</TT>).  Note that <TT>0=0/1</TT> is the
+simplest rational of all.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(rationalize (inexact-&#62;exact .3) 1/10)  => 1/3    ; exact
+(rationalize .3 1/10)                   => #i1/3  ; inexact
+</pre></td></tr></table></P><P>
+
+<CODE>rationalize-&#62;exact</CODE> is similar to <CODE>rationalize</CODE> except that
+it always returns an exact result.
+</DL>
+</P><P>
+
+<A NAME="IDX491"></A>
+<DL>
+<DT><U>procedure+:</U> <B>simplest-rational</B> <I>x y</I>
+<DD><A NAME="IDX492"></A>
+<DT><U>procedure+:</U> <B>simplest-exact-rational</B> <I>x y</I>
+<DD><CODE>simplest-rational</CODE> returns the simplest rational number between
+<VAR>x</VAR> and <VAR>y</VAR> inclusive; <CODE>simplest-exact-rational</CODE> is similar
+except that it always returns an exact result.
+</P><P>
+
+These procedures implement the same functionality as <CODE>rationalize</CODE>
+and <CODE>rationalize-&#62;exact</CODE>, except that they specify the input range
+by its endpoints; <CODE>rationalize</CODE> specifies the range by its center
+point and its (half-) width.
+</DL>
+</P><P>
+
+<A NAME="IDX493"></A>
+<DL>
+<DT><U>procedure:</U> <B>exp</B> <I>z</I>
+<DD><A NAME="IDX494"></A>
+<DT><U>procedure:</U> <B>log</B> <I>z</I>
+<DD><A NAME="IDX495"></A>
+<DT><U>procedure:</U> <B>sin</B> <I>z</I>
+<DD><A NAME="IDX496"></A>
+<DT><U>procedure:</U> <B>cos</B> <I>z</I>
+<DD><A NAME="IDX497"></A>
+<DT><U>procedure:</U> <B>tan</B> <I>z</I>
+<DD><A NAME="IDX498"></A>
+<DT><U>procedure:</U> <B>asin</B> <I>z</I>
+<DD><A NAME="IDX499"></A>
+<DT><U>procedure:</U> <B>acos</B> <I>z</I>
+<DD><A NAME="IDX500"></A>
+<DT><U>procedure:</U> <B>atan</B> <I>z</I>
+<DD><A NAME="IDX501"></A>
+<DT><U>procedure:</U> <B>atan</B> <I>y x</I>
+<DD><A NAME="IDX502"></A>
+<A NAME="IDX503"></A>
+These procedures compute the usual transcendental functions.  <CODE>log</CODE>
+computes the natural logarithm of <VAR>z</VAR> (not the base ten logarithm).
+<CODE>asin</CODE>, <CODE>acos</CODE>, and <CODE>atan</CODE> compute arcsine, arccosine,
+and arctangent, respectively.  The two-argument variant of <CODE>atan</CODE>
+computes <CODE>(angle (make-rectangular <VAR>x</VAR> <VAR>y</VAR>))</CODE> (see
+below).
+</P><P>
+
+In general, the mathematical functions log, arcsine, arccosine, and
+arctangent are multiply defined.  For nonzero real <VAR>x</VAR>, the value of
+log <VAR>x</VAR> is defined to be the one whose imaginary part lies in the
+range minus <VAR>pi</VAR> (exclusive) to <VAR>pi</VAR> (inclusive).  log 0 is
+undefined.  The value of log <VAR>z</VAR> when <VAR>z</VAR> is complex is defined
+according to the formula
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>log <VAR>z</VAR> = log magnitude(<VAR>z</VAR>) + i angle(<VAR>z</VAR>)
+</pre></td></tr></table></P><P>
+
+With log defined this way, the values of arcsine, arccosine, and
+arctangent are according to the following formulae:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>arcsin(<VAR>z</VAR>) = -i log(i <VAR>z</VAR> + sqrt(1 - <VAR>z</VAR>^2))
+arccos(<VAR>z</VAR>) = pi/2 - arcsin(<VAR>z</VAR>)
+arctan(<VAR>z</VAR>) = (log(1 + i <VAR>z</VAR>) + log(1 - i <VAR>z</VAR>)) / (2 i)
+</pre></td></tr></table></P><P>
+
+The above specification follows <CITE>Common Lisp: the Language</CITE>, which
+in turn cites <CITE>Principal Values and Branch Cuts in Complex APL</CITE>;
+refer to these sources for more detailed discussion of branch cuts,
+boundary conditions, and implementation of these functions.  When it is
+possible these procedures produce a real result from a real
+argument.
+</DL>
+</P><P>
+
+<A NAME="IDX504"></A>
+<DL>
+<DT><U>procedure:</U> <B>sqrt</B> <I>z</I>
+<DD>Returns the principal square root of <VAR>z</VAR>.  The result will have
+either positive real part, or zero real part and non-negative imaginary
+part.
+</DL>
+</P><P>
+
+<A NAME="IDX505"></A>
+<DL>
+<DT><U>procedure:</U> <B>expt</B> <I>z1 z2</I>
+<DD>Returns <VAR>z1</VAR> raised to the power <VAR>z2</VAR>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre><VAR>z1</VAR>^<VAR>z2</VAR> = e^(<VAR>z2</VAR> log <VAR>z1</VAR>)
+</pre></td></tr></table></P><P>
+
+0^0 is defined to be equal to 1.
+</DL>
+</P><P>
+
+<A NAME="IDX506"></A>
+<DL>
+<DT><U>procedure:</U> <B>make-rectangular</B> <I>x1 x2</I>
+<DD><A NAME="IDX507"></A>
+<DT><U>procedure:</U> <B>make-polar</B> <I>x3 x4</I>
+<DD><A NAME="IDX508"></A>
+<DT><U>procedure:</U> <B>real-part</B> <I>z</I>
+<DD><A NAME="IDX509"></A>
+<DT><U>procedure:</U> <B>imag-part</B> <I>z</I>
+<DD><A NAME="IDX510"></A>
+<DT><U>procedure:</U> <B>magnitude</B> <I>z</I>
+<DD><A NAME="IDX511"></A>
+<DT><U>procedure:</U> <B>angle</B> <I>z</I>
+<DD><A NAME="IDX512"></A>
+<DT><U>procedure+:</U> <B>conjugate</B> <I>z</I>
+<DD>Suppose <VAR>x1</VAR>, <VAR>x2</VAR>, <VAR>x3</VAR>, and <VAR>x4</VAR> are real numbers and
+<VAR>z</VAR> is a complex number such that
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre><VAR>z</VAR> = <VAR>x1</VAR> + <VAR>x2</VAR> i = <VAR>x3</VAR> e^(i <VAR>x4</VAR>)
+</pre></td></tr></table></P><P>
+
+Then <CODE>make-rectangular</CODE> and <CODE>make-polar</CODE> return <VAR>z</VAR>,
+<CODE>real-part</CODE> returns <VAR>x1</VAR>, <CODE>imag-part</CODE> returns <VAR>x2</VAR>,
+<CODE>magnitude</CODE> returns <VAR>x3</VAR>, and <CODE>angle</CODE> returns <VAR>x4</VAR>.
+In the case of <CODE>angle</CODE>, whose value is not uniquely determined by
+the preceding rule, the value returned will be the one in the range
+minus <VAR>pi</VAR> (exclusive) to <VAR>pi</VAR> (inclusive).
+</P><P>
+
+<CODE>conjugate</CODE> returns the complex conjugate of <VAR>z</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX513"></A>
+<DL>
+<DT><U>procedure:</U> <B>exact-&#62;inexact</B> <I>z</I>
+<DD><A NAME="IDX514"></A>
+<DT><U>procedure:</U> <B>inexact-&#62;exact</B> <I>z</I>
+<DD><CODE>exact-&#62;inexact</CODE> returns an inexact representation of <VAR>z</VAR>.  The
+value returned is the inexact number that is numerically closest to the
+argument.  If an exact argument has no reasonably close inexact
+equivalent, then a violation of an implementation restriction may be
+reported; MIT Scheme signals an error of type
+<CODE>condition-type:bad-range-argument</CODE> in this case.
+<A NAME="IDX515"></A>
+</P><P>
+
+<CODE>inexact-&#62;exact</CODE> returns an exact representation of <VAR>z</VAR>.  The
+value returned is the exact number that is numerically closest to the
+argument.  If an inexact argument has no reasonably close exact
+equivalent, then a violation of an implementation restriction may be
+reported; in MIT Scheme this case does not occur because all inexact
+numbers are representable as exact numbers.
+</P><P>
+
+These procedures implement the natural one-to-one correspondence between
+exact and inexact integers throughout an implementation-dependent range.
+See section <A HREF="scheme_5.html#SEC46">4.3 Implementation restrictions</A>.
+</DL>
+</P><P>
+
+<A NAME="Numerical input and output"></A>
+<HR SIZE="6">
+<A NAME="SEC49"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC48"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC50"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC43"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC43"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.6 Numerical input and output </H2>
+<!--docid::SEC49::-->
+<P>
+
+<A NAME="IDX516"></A>
+<DL>
+<DT><U>procedure:</U> <B>number-&#62;string</B> <I>number [radix]</I>
+<DD><VAR>Radix</VAR> must be an exact integer, either 2, 8, 10, or 16.  If
+omitted, <VAR>radix</VAR> defaults to 10.  The procedure
+<CODE>number-&#62;string</CODE> takes a number and a radix and returns as a string
+an external representation of the given number in the given radix such
+that
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(let ((number <VAR>number</VAR>)
+      (radix <VAR>radix</VAR>))
+  (eqv? number
+        (string-&#62;number (number-&#62;string number radix)
+                        radix)))
+</pre></td></tr></table></P><P>
+
+is true.  It is an error if no possible result makes this expression
+true.
+</P><P>
+
+If <VAR>number</VAR> is inexact, the radix is 10, and the above expression
+can be satisfied by a result that contains a decimal point, then the
+result contains a decimal point and is expressed using the minimum
+number of digits (exclusive of exponent and trailing zeroes) needed to
+make the above expression true; otherwise the format of the result is
+unspecified.
+</P><P>
+
+The result returned by <CODE>number-&#62;string</CODE> never contains an explicit
+radix prefix.
+</P><P>
+
+Note: The error case can occur only when <VAR>number</VAR> is not a complex
+number or is a complex number with an non-rational real or imaginary
+part.
+</P><P>
+
+Rationale: If <VAR>number</VAR> is an inexact number represented using
+flonums, and the radix is 10, then the above expression is normally
+satisfied by a result containing a decimal point.  The unspecified case
+allows for infinities, NaNs, and non-flonum representations.
+</DL>
+</P><P>
+
+<A NAME="IDX517"></A>
+<DL>
+<DT><U>variable+:</U> <B>flonum-parser-fast?</B>
+<DD>This variable controls the behavior of <CODE>string-&#62;number</CODE> when
+parsing inexact numbers.  Specifically, it allows the user to trade off
+accuracy against speed.
+</P><P>
+
+When set to its default value, <CODE>#f</CODE>, the parser provides maximal
+accuracy, as required by the Scheme standard.  If set to <CODE>#t</CODE>, the
+parser uses faster algorithms that will sometimes introduce small errors
+in the result.  The errors affect a few of the least-significant bits of
+the result, and consequently can be tolerated by many applications.
+</DL>
+</P><P>
+
+<A NAME="IDX518"></A>
+<DL>
+<DT><U>variable+:</U> <B>flonum-unparser-cutoff</B>
+<DD>This variable controls the action of <CODE>number-&#62;string</CODE> when
+<VAR>number</VAR> is a flonum (and consequently controls all printing of
+flonums).  The value of this variable is normally a list of three items:
+</P><P>
+
+<DL COMPACT>
+<DT><VAR>rounding-type</VAR>
+<DD>One of the following symbols: <CODE>normal</CODE>, <CODE>relative</CODE>, or
+<CODE>absolute</CODE>.  The symbol <CODE>normal</CODE> means that the number should
+be printed with full precision.  The symbol <CODE>relative</CODE> means that
+the number should be rounded to a specific number of digits.  The symbol
+<CODE>absolute</CODE> means that the number should be rounded so that there
+are a specific number of digits to the right of the decimal point.
+<P>
+
+<DT><VAR>precision</VAR>
+<DD>An exact integer.  If <VAR>rounding-type</VAR> is <CODE>normal</CODE>,
+<VAR>precision</VAR> is ignored.  If <VAR>rounding-type</VAR> is <CODE>relative</CODE>,
+<VAR>precision</VAR> must be positive, and it specifies the number of digits
+to which the printed representation will be rounded.  If
+<VAR>rounding-type</VAR> is <CODE>absolute</CODE>, the printed representation will
+be rounded <VAR>precision</VAR> digits to the right of the decimal point; if
+<VAR>precision</VAR> is negative, the representation is rounded <CODE>(-
+<VAR>precision</VAR>)</CODE> digits to the left of the decimal point.
+<P>
+
+<DT><VAR>format-type</VAR>
+<DD>One of the symbols: <CODE>normal</CODE>, <CODE>scientific</CODE>, or
+<CODE>engineering</CODE>.  This specifies the format in which the number will
+be printed.<BR>  <CODE>scientific</CODE> specifies that the number will be printed
+using scientific notation: <CODE><VAR>x</VAR>.<VAR>xxx</VAR>e<VAR>yyy</VAR></CODE>.  In other
+words, the number is printed as a mantissa between zero inclusive and
+ten exclusive, and an exponent.  <CODE>engineering</CODE> is like
+<CODE>scientific</CODE>, except that the exponent is always a power of three,
+and the mantissa is constrained to be between zero inclusive and 1000
+exclusive.  If <CODE>normal</CODE> is specified, the number will be printed in
+positional notation if it is "small enough", otherwise it is printed
+in scientific notation.  A number is "small enough" when the number of
+digits that would be printed using positional notation does not exceed
+the number of digits of precision in the underlying floating-point
+number representation; IEEE double-precision floating-point numbers
+have 17 digits of precision.
+</DL>
+<P>
+
+This three-element list may be abbreviated in two ways.  First, the
+symbol <CODE>normal</CODE> may be used, which is equivalent to the list
+<CODE>(normal 0 normal)</CODE>.  Second, the third element of the list,
+<VAR>format-type</VAR>, may be omitted, in which case it defaults to
+<CODE>normal</CODE>.
+</P><P>
+
+The default value for <CODE>flonum-unparser-cutoff</CODE> is <CODE>normal</CODE>.
+If it is bound to a value different from those described here,
+<CODE>number-&#62;string</CODE> issues a warning and acts as though the value had
+been <CODE>normal</CODE>.
+</DL>
+</P><P>
+
+Some examples of <CODE>flonum-unparser-cutoff</CODE>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(number-&#62;string (* 4 (atan 1 1)))
+                                    => "3.141592653589793"
+(fluid-let ((flonum-unparser-cutoff '(relative 5)))
+  (number-&#62;string (* 4 (atan 1 1))))
+                                    => "3.1416"
+(fluid-let ((flonum-unparser-cutoff '(relative 5)))
+  (number-&#62;string (* 4000 (atan 1 1))))
+                                    => "3141.6"
+(fluid-let ((flonum-unparser-cutoff '(relative 5 scientific)))
+  (number-&#62;string (* 4000 (atan 1 1))))
+                                    => "3.1416e3"
+(fluid-let ((flonum-unparser-cutoff '(relative 5 scientific)))
+  (number-&#62;string (* 40000 (atan 1 1))))
+                                    => "3.1416e4"
+(fluid-let ((flonum-unparser-cutoff '(relative 5 engineering)))
+  (number-&#62;string (* 40000 (atan 1 1))))
+                                    => "31.416e3"
+(fluid-let ((flonum-unparser-cutoff '(absolute 5)))
+  (number-&#62;string (* 4 (atan 1 1))))
+                                    => "3.14159"
+(fluid-let ((flonum-unparser-cutoff '(absolute 5)))
+  (number-&#62;string (* 4000 (atan 1 1))))
+                                    => "3141.59265"
+(fluid-let ((flonum-unparser-cutoff '(absolute -4)))
+  (number-&#62;string (* 4e10 (atan 1 1))))
+                                    => "31415930000."
+(fluid-let ((flonum-unparser-cutoff '(absolute -4 scientific)))
+  (number-&#62;string (* 4e10 (atan 1 1))))
+                                    => "3.141593e10"
+(fluid-let ((flonum-unparser-cutoff '(absolute -4 engineering)))
+  (number-&#62;string (* 4e10 (atan 1 1))))
+                                    => "31.41593e9"
+(fluid-let ((flonum-unparser-cutoff '(absolute -5)))
+  (number-&#62;string (* 4e10 (atan 1 1))))
+                                    => "31415900000."
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX519"></A>
+<DL>
+<DT><U>procedure:</U> <B>string-&#62;number</B> <I>string [radix]</I>
+<DD>Returns a number of the maximally precise representation expressed by
+the given <VAR>string</VAR>.  <VAR>Radix</VAR> must be an exact integer, either 2,
+8, 10, or 16.  If supplied, <VAR>radix</VAR> is a default radix that may be
+overridden by an explicit radix prefix in <VAR>string</VAR> (e.g.
+<CODE>"#o177"</CODE>).  If <VAR>radix</VAR> is not supplied, then the default radix
+is 10.  If <VAR>string</VAR> is not a syntactically valid notation for a
+number, then <CODE>string-&#62;number</CODE> returns <CODE>#f</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-&#62;number "100")        =>  100
+(string-&#62;number "100" 16)     =>  256
+(string-&#62;number "1e2")        =>  100.0
+(string-&#62;number "15##")       =>  1500.0
+</pre></td></tr></table></P><P>
+
+Note that a numeric representation using a decimal point or an exponent
+marker is not recognized unless <VAR>radix</VAR> is <CODE>10</CODE>.
+</DL>
+</P><P>
+
+<A NAME="Fixnum and Flonum Operations"></A>
+<HR SIZE="6">
+<A NAME="SEC50"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC49"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC51"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC43"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC43"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC53"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.7 Fixnum and Flonum Operations </H2>
+<!--docid::SEC50::-->
+<P>
+
+This section describes numerical operations that are restricted forms of
+the operations described above.  These operations are useful because
+they compile very efficiently.  However, care should be exercised: if
+used improperly, these operations can return incorrect answers, or even
+malformed objects that confuse the garbage collector.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_5.html#SEC51">4.7.1 Fixnum Operations</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_5.html#SEC52">4.7.2 Flonum Operations</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Fixnum Operations"></A>
+<HR SIZE="6">
+<A NAME="SEC51"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC50"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC52"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC49"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC50"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC53"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 4.7.1 Fixnum Operations </H3>
+<!--docid::SEC51::-->
+<P>
+
+<A NAME="IDX520"></A>
+A <EM>fixnum</EM> is an exact integer that is small enough to fit in a
+machine word.  In MIT Scheme, fixnums are typically 24 or 26 bits,
+depending on the machine; it is reasonable to assume that fixnums are at
+least 24 bits.  Fixnums are signed; they are encoded using 2's
+complement.
+</P><P>
+
+All exact integers that are small enough to be encoded as fixnums are
+always encoded as fixnums -- in other words, any exact integer that is
+not a fixnum is too big to be encoded as such.  For this reason, small
+constants such as <CODE>0</CODE> or <CODE>1</CODE> are guaranteed to be fixnums.
+</P><P>
+
+<A NAME="IDX521"></A>
+<DL>
+<DT><U>procedure+:</U> <B>fix:fixnum?</B> <I>object</I>
+<DD><A NAME="IDX522"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a fixnum; otherwise returns
+<CODE>#f</CODE>.
+</DL>
+</P><P>
+
+Here is an expression that determines the largest fixnum:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(let loop ((n 1))
+  (if (fix:fixnum? n)
+      (loop (* n 2))
+      (- n 1)))
+</pre></td></tr></table></P><P>
+
+A similar expression determines the smallest fixnum.
+</P><P>
+
+<A NAME="IDX523"></A>
+<DL>
+<DT><U>procedure+:</U> <B>fix:=</B> <I>fixnum fixnum</I>
+<DD><A NAME="IDX524"></A>
+<DT><U>procedure+:</U> <B>fix:&#60;</B> <I>fixnum fixnum</I>
+<DD><A NAME="IDX525"></A>
+<DT><U>procedure+:</U> <B>fix:&#62;</B> <I>fixnum fixnum</I>
+<DD><A NAME="IDX526"></A>
+<DT><U>procedure+:</U> <B>fix:&#60;=</B> <I>fixnum fixnum</I>
+<DD><A NAME="IDX527"></A>
+<DT><U>procedure+:</U> <B>fix:&#62;=</B> <I>fixnum fixnum</I>
+<DD><A NAME="IDX528"></A>
+These are the standard order and equality predicates on fixnums.  When
+compiled, they do not check the types of their arguments.
+</DL>
+</P><P>
+
+<A NAME="IDX529"></A>
+<DL>
+<DT><U>procedure+:</U> <B>fix:zero?</B> <I>fixnum</I>
+<DD><A NAME="IDX530"></A>
+<DT><U>procedure+:</U> <B>fix:positive?</B> <I>fixnum</I>
+<DD><A NAME="IDX531"></A>
+<DT><U>procedure+:</U> <B>fix:negative?</B> <I>fixnum</I>
+<DD>These procedures compare their argument to zero.  When compiled, they do
+not check the type of their argument.  The code produced by the
+following expressions is identical:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(fix:zero? <VAR>fixnum</VAR>)
+(fix:= <VAR>fixnum</VAR> 0)
+</pre></td></tr></table></P><P>
+
+Similarly, <CODE>fix:positive?</CODE> and <CODE>fix:negative?</CODE> produce code
+identical to equivalent expressions using <CODE>fix:&#62;</CODE> and <CODE>fix:&#60;</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX532"></A>
+<DL>
+<DT><U>procedure+:</U> <B>fix:+</B> <I>fixnum fixnum</I>
+<DD><A NAME="IDX533"></A>
+<DT><U>procedure+:</U> <B>fix:-</B> <I>fixnum fixnum</I>
+<DD><A NAME="IDX534"></A>
+<DT><U>procedure+:</U> <B>fix:*</B> <I>fixnum fixnum</I>
+<DD><A NAME="IDX535"></A>
+<DT><U>procedure+:</U> <B>fix:quotient</B> <I>fixnum fixnum</I>
+<DD><A NAME="IDX536"></A>
+<DT><U>procedure+:</U> <B>fix:remainder</B> <I>fixnum fixnum</I>
+<DD><A NAME="IDX537"></A>
+<DT><U>procedure+:</U> <B>fix:gcd</B> <I>fixnum fixnum</I>
+<DD><A NAME="IDX538"></A>
+<DT><U>procedure+:</U> <B>fix:1+</B> <I>fixnum</I>
+<DD><A NAME="IDX539"></A>
+<DT><U>procedure+:</U> <B>fix:-1+</B> <I>fixnum</I>
+<DD>These procedures are the standard arithmetic operations on fixnums.
+When compiled, they do not check the types of their arguments.
+Furthermore, they do not check to see if the result can be encoded as a
+fixnum.  If the result is too large to be encoded as a fixnum, a
+malformed object is returned, with potentially disastrous effect on the
+garbage collector.
+</DL>
+</P><P>
+
+<A NAME="IDX540"></A>
+<DL>
+<DT><U>procedure+:</U> <B>fix:divide</B> <I>fixnum fixnum</I>
+<DD><A NAME="IDX541"></A>
+<A NAME="IDX542"></A>
+<A NAME="IDX543"></A>
+This procedure is like <CODE>integer-divide</CODE>, except that its arguments
+and its results must be fixnums.  It should be used in conjunction with
+<CODE>integer-divide-quotient</CODE> and <CODE>integer-divide-remainder</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX544"></A>
+<A NAME="IDX545"></A>
+The following are <EM>bitwise-logical</EM> operations on fixnums.
+</P><P>
+
+<A NAME="IDX546"></A>
+<DL>
+<DT><U>procedure+:</U> <B>fix:not</B> <I>fixnum</I>
+<DD>This returns the bitwise-logical inverse of its argument.  When
+compiled, it does not check the type of its argument.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(fix:not 0)                             =>  -1
+(fix:not -1)                            =>  0
+(fix:not 1)                             =>  -2
+(fix:not -34)                           =>  33
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX547"></A>
+<DL>
+<DT><U>procedure+:</U> <B>fix:and</B> <I>fixnum fixnum</I>
+<DD>This returns the bitwise-logical "and" of its arguments.  When
+compiled, it does not check the types of its arguments.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(fix:and #x43 #x0f)                     =>  3
+(fix:and #x43 #xf0)                     =>  #x40
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX548"></A>
+<DL>
+<DT><U>procedure+:</U> <B>fix:andc</B> <I>fixnum fixnum</I>
+<DD>Returns the bitwise-logical "and" of the first argument with the
+bitwise-logical inverse of the second argument.  When compiled, it does
+not check the types of its arguments.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(fix:andc #x43 #x0f)                    =>  #x40
+(fix:andc #x43 #xf0)                    =>  3
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX549"></A>
+<DL>
+<DT><U>procedure+:</U> <B>fix:or</B> <I>fixnum fixnum</I>
+<DD>This returns the bitwise-logical "inclusive or" of its arguments.
+When compiled, it does not check the types of its arguments.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(fix:or #x40 3)                         => #x43
+(fix:or #x41 3)                         => #x43
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX550"></A>
+<DL>
+<DT><U>procedure+:</U> <B>fix:xor</B> <I>fixnum fixnum</I>
+<DD>This returns the bitwise-logical "exclusive or" of its arguments.
+When compiled, it does not check the types of its arguments.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(fix:xor #x40 3)                        => #x43
+(fix:xor #x41 3)                        => #x42
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX551"></A>
+<DL>
+<DT><U>procedure+:</U> <B>fix:lsh</B> <I>fixnum1 fixnum2</I>
+<DD>This procedure returns the result of logically shifting <VAR>fixnum1</VAR> by
+<VAR>fixnum2</VAR> bits.  If <VAR>fixnum2</VAR> is positive, <VAR>fixnum1</VAR> is
+shifted left; if negative, it is shifted right.  When compiled, it does
+not check the types of its arguments, nor the validity of its result.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(fix:lsh 1 10)                          =>  #x400
+(fix:lsh #x432 -10)                     =>  1
+(fix:lsh -1 3)                          =>  -8
+(fix:lsh -128 -4)                       =>  #x3FFFF8
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Flonum Operations"></A>
+<HR SIZE="6">
+<A NAME="SEC52"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC51"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC53"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC49"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC50"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC53"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 4.7.2 Flonum Operations </H3>
+<!--docid::SEC52::-->
+<P>
+
+<A NAME="IDX552"></A>
+A <EM>flonum</EM> is an inexact real number that is implemented as a
+floating-point number.  In MIT Scheme, all inexact real numbers are
+flonums.  For this reason, constants such as <CODE>0.</CODE> and <CODE>2.3</CODE>
+are guaranteed to be flonums.
+</P><P>
+
+<A NAME="IDX553"></A>
+<DL>
+<DT><U>procedure+:</U> <B>flo:flonum?</B> <I>object</I>
+<DD><A NAME="IDX554"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a flonum; otherwise returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX555"></A>
+<DL>
+<DT><U>procedure+:</U> <B>flo:=</B> <I>flonum1 flonum2</I>
+<DD><A NAME="IDX556"></A>
+<DT><U>procedure+:</U> <B>flo:&#60;</B> <I>flonum1 flonum2</I>
+<DD><A NAME="IDX557"></A>
+<DT><U>procedure+:</U> <B>flo:&#62;</B> <I>flonum1 flonum2</I>
+<DD><A NAME="IDX558"></A>
+These procedures are the standard order and equality predicates on
+flonums.  When compiled, they do not check the types of their arguments.
+</DL>
+</P><P>
+
+<A NAME="IDX559"></A>
+<DL>
+<DT><U>procedure+:</U> <B>flo:zero?</B> <I>flonum</I>
+<DD><A NAME="IDX560"></A>
+<DT><U>procedure+:</U> <B>flo:positive?</B> <I>flonum</I>
+<DD><A NAME="IDX561"></A>
+<DT><U>procedure+:</U> <B>flo:negative?</B> <I>flonum</I>
+<DD>Each of these procedures compares its argument to zero.  When compiled,
+they do not check the type of their argument.
+</DL>
+</P><P>
+
+<A NAME="IDX562"></A>
+<DL>
+<DT><U>procedure+:</U> <B>flo:+</B> <I>flonum1 flonum2</I>
+<DD><A NAME="IDX563"></A>
+<DT><U>procedure+:</U> <B>flo:-</B> <I>flonum1 flonum2</I>
+<DD><A NAME="IDX564"></A>
+<DT><U>procedure+:</U> <B>flo:*</B> <I>flonum1 flonum2</I>
+<DD><A NAME="IDX565"></A>
+<DT><U>procedure+:</U> <B>flo:/</B> <I>flonum1 flonum2</I>
+<DD>These procedures are the standard arithmetic operations on flonums.
+When compiled, they do not check the types of their arguments.
+</DL>
+</P><P>
+
+<A NAME="IDX566"></A>
+<DL>
+<DT><U>procedure+:</U> <B>flo:negate</B> <I>flonum</I>
+<DD>This procedure returns the negation of its argument.  When compiled, it
+does not check the type of its argument.  Equivalent to <CODE>(flo:- 0.
+<VAR>flonum</VAR>)</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX567"></A>
+<DL>
+<DT><U>procedure+:</U> <B>flo:abs</B> <I>flonum</I>
+<DD><A NAME="IDX568"></A>
+<DT><U>procedure+:</U> <B>flo:exp</B> <I>flonum</I>
+<DD><A NAME="IDX569"></A>
+<DT><U>procedure+:</U> <B>flo:log</B> <I>flonum</I>
+<DD><A NAME="IDX570"></A>
+<DT><U>procedure+:</U> <B>flo:sin</B> <I>flonum</I>
+<DD><A NAME="IDX571"></A>
+<DT><U>procedure+:</U> <B>flo:cos</B> <I>flonum</I>
+<DD><A NAME="IDX572"></A>
+<DT><U>procedure+:</U> <B>flo:tan</B> <I>flonum</I>
+<DD><A NAME="IDX573"></A>
+<DT><U>procedure+:</U> <B>flo:asin</B> <I>flonum</I>
+<DD><A NAME="IDX574"></A>
+<DT><U>procedure+:</U> <B>flo:acos</B> <I>flonum</I>
+<DD><A NAME="IDX575"></A>
+<DT><U>procedure+:</U> <B>flo:atan</B> <I>flonum</I>
+<DD><A NAME="IDX576"></A>
+<DT><U>procedure+:</U> <B>flo:sqrt</B> <I>flonum</I>
+<DD><A NAME="IDX577"></A>
+<DT><U>procedure+:</U> <B>flo:expt</B> <I>flonum1 flonum2</I>
+<DD><A NAME="IDX578"></A>
+<DT><U>procedure+:</U> <B>flo:floor</B> <I>flonum</I>
+<DD><A NAME="IDX579"></A>
+<DT><U>procedure+:</U> <B>flo:ceiling</B> <I>flonum</I>
+<DD><A NAME="IDX580"></A>
+<DT><U>procedure+:</U> <B>flo:truncate</B> <I>flonum</I>
+<DD><A NAME="IDX581"></A>
+<DT><U>procedure+:</U> <B>flo:round</B> <I>flonum</I>
+<DD><A NAME="IDX582"></A>
+<DT><U>procedure+:</U> <B>flo:floor-&#62;exact</B> <I>flonum</I>
+<DD><A NAME="IDX583"></A>
+<DT><U>procedure+:</U> <B>flo:ceiling-&#62;exact</B> <I>flonum</I>
+<DD><A NAME="IDX584"></A>
+<DT><U>procedure+:</U> <B>flo:truncate-&#62;exact</B> <I>flonum</I>
+<DD><A NAME="IDX585"></A>
+<DT><U>procedure+:</U> <B>flo:round-&#62;exact</B> <I>flonum</I>
+<DD>These procedures are flonum versions of the corresponding procedures.
+When compiled, they do not check the types of their arguments.
+</DL>
+</P><P>
+
+<A NAME="IDX586"></A>
+<DL>
+<DT><U>procedure+:</U> <B>flo:atan2</B> <I>flonum1 flonum2</I>
+<DD><A NAME="IDX587"></A>
+This is the flonum version of <CODE>atan</CODE> with two arguments.  When
+compiled, it does not check the types of its arguments.
+</DL>
+</P><P>
+
+<A NAME="Random Numbers"></A>
+<HR SIZE="6">
+<A NAME="SEC53"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC52"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC50"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC43"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.8 Random Numbers </H2>
+<!--docid::SEC53::-->
+<P>
+
+MIT Scheme provides a facility for generating pseudo-random numbers.
+The current implementation is a "subtract-with-carry" random-number
+generator, based on the algorithm from <CITE>A New Class of Random
+Number Generators</CITE>, George Marsaglia and Arif Zaman, <CITE>The Annals of
+Applied Probability</CITE>, Vol. 1, No. 3, 1991.  At the time it was
+implemented, this was a good algorithm for general purposes, but the
+state of the art in random-number generation is constantly changing.  If
+necessary, the implementation will be updated to use a new algorithm
+while retaining the same interface.
+</P><P>
+
+The interface described here is very similar to that of Common Lisp.
+</P><P>
+
+<A NAME="IDX588"></A>
+<DL>
+<DT><U>procedure+:</U> <B>random</B> <I>modulus [state]</I>
+<DD><VAR>Modulus</VAR> must be a positive real number.  <CODE>random</CODE> returns a
+pseudo-random number between zero (inclusive) and <VAR>modulus</VAR>
+(exclusive).  The exactness of the returned number is the same as the
+exactness of <VAR>modulus</VAR>.  Additionally, if <VAR>modulus</VAR> is an exact
+integer, the returned number will be also.  Usually, <VAR>modulus</VAR> is
+either an exact integer or an inexact real; the current implementation
+has been tuned to make these two cases fast.
+</P><P>
+
+If <VAR>state</VAR> is given and not <CODE>#f</CODE>, it must be a random-state
+object; otherwise, it defaults to the value of the variable
+<CODE>*random-state*</CODE>.  This object is used to maintain the state of the
+pseudo-random-number generator and is altered as a side effect of the
+<CODE>random</CODE> procedure.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(random 1.0)    => .32744744667719056
+(random 1.0)    => .01668326768172354
+(random 10)     => 3
+(random 10)     => 8
+(random 100)    => 38
+(random 100)    => 63
+(random 100/3)  => 130501475769920525/6755399441055744
+(random 100/3)  => 170571694016427575/13510798882111488
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX589"></A>
+<DL>
+<DT><U>procedure+:</U> <B>flo:random-unit</B> <I>state</I>
+<DD><VAR>State</VAR> must be a random-state object.  <CODE>flo:random-unit</CODE>
+returns a pseudo-random number between zero inclusive and one exclusive;
+the returned number is always a flonum and therefore an inexact real
+number.  <CODE>flo:random-unit</CODE> is equivalent to <CODE>random</CODE> with a
+<VAR>modulus</VAR> of <CODE>1.0</CODE>, except that it is faster.
+</DL>
+</P><P>
+
+The next three definitions concern random-state objects.  In addition to
+these definitions, it is important to know that random-state objects are
+specifically designed so that they can be saved to disk using the
+<CODE>fasdump</CODE> procedure, and later restored using the <CODE>fasload</CODE>
+procedure.  This allows a particular random-state object to be saved in
+order to replay a particular pseudo-random sequence.
+</P><P>
+
+<A NAME="IDX590"></A>
+<DL>
+<DT><U>variable+:</U> <B>*random-state*</B>
+<DD>This variable holds a data structure, a random-state object, that
+encodes the internal state of the random-number generator that
+<CODE>random</CODE> uses by default.  A call to <CODE>random</CODE> will perform a
+side effect on this data structure.  This variable may be changed, using
+<CODE>set!</CODE> or <CODE>fluid-let</CODE>, to hold a new random-state object.
+</DL>
+</P><P>
+
+<A NAME="IDX591"></A>
+<DL>
+<DT><U>procedure+:</U> <B>make-random-state</B> <I>[state]</I>
+<DD>This procedure returns a new random-state object, suitable for use as
+the value of the variable <CODE>*random-state*</CODE>, or as the <VAR>state</VAR>
+argument to <CODE>random</CODE>.  If <VAR>state</VAR> is not given or <CODE>#f</CODE>,
+<CODE>make-random-state</CODE> returns a <EM>copy</EM> of the current
+random-number state object (the value of the variable
+<CODE>*random-state*</CODE>).  If <VAR>state</VAR> is a random-state object, a copy
+of that object is returned.  If <VAR>state</VAR> is <CODE>#t</CODE>, then a new
+random-state object is returned that has been "randomly" initialized
+by some means (such as by a time-of-day clock).
+</DL>
+</P><P>
+
+<A NAME="IDX592"></A>
+<DL>
+<DT><U>procedure+:</U> <B>random-state?</B> <I>object</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>object</VAR> is a random-state object, otherwise
+returns <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="Characters"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC50"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

@@ -1,0 +1,849 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme Reference: Characters</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme Reference: Characters">
+<META NAME="keywords" CONTENT="MIT Scheme Reference: Characters">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC54"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC53"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC55"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC43"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 5. Characters </H1>
+<!--docid::SEC54::-->
+<P>
+
+<A NAME="IDX593"></A>
+Characters are objects that represent printed characters, such as
+letters and digits.<A NAME="DOCF5" HREF="scheme_fot.html#FOOT5">(5)</A>
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_6.html#SEC55">5.1 External Representation of Characters</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_6.html#SEC56">5.2 Comparison of Characters</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_6.html#SEC57">5.3 Miscellaneous Character Operations</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_6.html#SEC58">5.4 Internal Representation of Characters</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_6.html#SEC59">5.5 ASCII Characters</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_6.html#SEC60">5.6 Character Sets</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="External Representation of Characters"></A>
+<HR SIZE="6">
+<A NAME="SEC55"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC56"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.1 External Representation of Characters </H2>
+<!--docid::SEC55::-->
+<P>
+
+<A NAME="IDX594"></A>
+<A NAME="IDX595"></A>
+Characters are written using the notation <CODE>#\<VAR>character</VAR></CODE> or
+<CODE>#\<VAR>character-name</VAR></CODE>.  For example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#\a                     ; lowercase letter
+#\A                     ; uppercase letter
+#\(                     ; left parenthesis
+#\space                 ; the space character
+#\newline               ; the newline character
+</pre></td></tr></table><A NAME="IDX596"></A>
+<A NAME="IDX597"></A>
+</P><P>
+
+Case is significant in <CODE>#\<VAR>character</VAR></CODE>, but not in
+<CODE>#\<VAR>character-name</VAR></CODE>.  If <VAR>character</VAR> in
+<CODE>#\<VAR>character</VAR></CODE> is a letter, <VAR>character</VAR> must be followed
+by a delimiter character such as a space or parenthesis.  Characters
+written in the <CODE>#\</CODE> notation are self-evaluating; you don't need to
+quote them.
+</P><P>
+
+<A NAME="IDX598"></A>
+<A NAME="IDX599"></A>
+<A NAME="IDX600"></A>
+<A NAME="IDX601"></A>
+<A NAME="IDX602"></A>
+<A NAME="IDX603"></A>
+A character name may include one or more <EM>bucky bit</EM> prefixes to
+indicate that the character includes one or more of the keyboard shift
+keys Control, Meta, Super, Hyper, or Top (note that the Control bucky
+bit prefix is not the same as the <FONT SIZE="-1">ASCII</FONT> control key).  The bucky
+bit prefixes and their meanings are as follows (case is not
+significant):
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>Key             Bucky bit prefix        Bucky bit
+---             ----------------        ---------
+
+Meta            M- or Meta-                 1
+Control         C- or Control-              2
+Super           S- or Super-                4
+Hyper           H- or Hyper-                8
+Top             T- or Top-                 16
+</pre></td></tr></table></P><P>
+
+For example,
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#\c-a                   ; Control-a
+#\meta-b                ; Meta-b
+#\c-s-m-h-a             ; Control-Meta-Super-Hyper-A
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX604"></A>
+<A NAME="IDX605"></A>
+The following <VAR>character-name</VAR>s are supported, shown here with their
+<FONT SIZE="-1">ASCII</FONT> equivalents:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>Character Name          ASCII Name
+--------------          ----------
+
+altmode                 ESC
+backnext                US
+backspace               BS
+call                    SUB
+linefeed                LF
+page                    FF
+return                  CR
+rubout                  DEL
+space
+tab                     HT
+</pre></td></tr></table><A NAME="IDX606"></A>
+<A NAME="IDX607"></A>
+<A NAME="IDX608"></A>
+<A NAME="IDX609"></A>
+<A NAME="IDX610"></A>
+<A NAME="IDX611"></A>
+<A NAME="IDX612"></A>
+<A NAME="IDX613"></A>
+<A NAME="IDX614"></A>
+<A NAME="IDX615"></A>
+</P><P>
+
+<A NAME="IDX616"></A>
+<A NAME="IDX617"></A>
+In addition, <CODE>#\newline</CODE> is the same as <CODE>#\linefeed</CODE> (but this
+may change in the future, so you should not depend on it).  All of the
+standard <FONT SIZE="-1">ASCII</FONT> names for non-printing characters are supported:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>NUL     SOH     STX     ETX     EOT     ENQ     ACK     BEL
+BS      HT      LF      VT      FF      CR      SO      SI
+DLE     DC1     DC2     DC3     DC4     NAK     SYN     ETB
+CAN     EM      SUB     ESC     FS      GS      RS      US
+DEL
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX618"></A>
+<DL>
+<DT><U>procedure+:</U> <B>char-&#62;name</B> <I>char [slashify?]</I>
+<DD>Returns a string corresponding to the printed representation of
+<VAR>char</VAR>.  This is the <VAR>character</VAR> or <VAR>character-name</VAR>
+component of the external representation, combined with the appropriate
+bucky bit prefixes.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(char-&#62;name #\a)                        =>  "a"
+(char-&#62;name #\space)                    =>  "Space"
+(char-&#62;name #\c-a)                      =>  "C-a"
+(char-&#62;name #\control-a)                =>  "C-a"
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX619"></A>
+<VAR>Slashify?</VAR>, if specified and true, says to insert the necessary
+backslash characters in the result so that <CODE>read</CODE> will parse it
+correctly.  In other words, the following generates the external
+representation of <VAR>char</VAR>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-append "#\\" (char-&#62;name <VAR>char</VAR> #t))
+</pre></td></tr></table></P><P>
+
+If <VAR>slashify?</VAR> is not specified, it defaults to <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX620"></A>
+<DL>
+<DT><U>procedure+:</U> <B>name-&#62;char</B> <I>string</I>
+<DD>Converts a string that names a character into the character specified.
+If <VAR>string</VAR> does not name any character, <CODE>name-&#62;char</CODE> signals
+an error.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(name-&#62;char "a")                        =>  #\a
+(name-&#62;char "space")                    =>  #\Space
+(name-&#62;char "c-a")                      =>  #\C-a
+(name-&#62;char "control-a")                =>  #\C-a
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Comparison of Characters"></A>
+<HR SIZE="6">
+<A NAME="SEC56"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC55"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC57"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.2 Comparison of Characters </H2>
+<!--docid::SEC56::-->
+<P>
+
+<A NAME="IDX621"></A>
+<DL>
+<DT><U>procedure:</U> <B>char=?</B> <I>char1 char2</I>
+<DD><A NAME="IDX622"></A>
+<DT><U>procedure:</U> <B>char&#60;?</B> <I>char1 char2</I>
+<DD><A NAME="IDX623"></A>
+<DT><U>procedure:</U> <B>char&#62;?</B> <I>char1 char2</I>
+<DD><A NAME="IDX624"></A>
+<DT><U>procedure:</U> <B>char&#60;=?</B> <I>char1 char2</I>
+<DD><A NAME="IDX625"></A>
+<DT><U>procedure:</U> <B>char&#62;=?</B> <I>char1 char2</I>
+<DD><A NAME="IDX626"></A>
+<DT><U>procedure:</U> <B>char-ci=?</B> <I>char1 char2</I>
+<DD><A NAME="IDX627"></A>
+<DT><U>procedure:</U> <B>char-ci&#60;?</B> <I>char1 char2</I>
+<DD><A NAME="IDX628"></A>
+<DT><U>procedure:</U> <B>char-ci&#62;?</B> <I>char1 char2</I>
+<DD><A NAME="IDX629"></A>
+<DT><U>procedure:</U> <B>char-ci&#60;=?</B> <I>char1 char2</I>
+<DD><A NAME="IDX630"></A>
+<DT><U>procedure:</U> <B>char-ci&#62;=?</B> <I>char1 char2</I>
+<DD><A NAME="IDX631"></A>
+Returns <CODE>#t</CODE> if the specified characters are have the appropriate
+order relationship to one another; otherwise returns <CODE>#f</CODE>.  The
+<CODE>-ci</CODE> procedures don't distinguish uppercase and lowercase letters.
+</P><P>
+
+Character ordering follows these rules:
+</P><P>
+
+<UL>
+<LI>
+The digits are in order; for example, <CODE>(char&#60;? #\0 #\9)</CODE> returns
+<CODE>#t</CODE>.
+<P>
+
+<LI>
+The uppercase characters are in order; for example, <CODE>(char&#60;? #\A
+#\B)</CODE> returns <CODE>#t</CODE>.
+<P>
+
+<LI>
+The lowercase characters are in order; for example, <CODE>(char&#60;? #\a
+#\b)</CODE> returns <CODE>#t</CODE>.
+</UL>
+<P>
+
+<A NAME="IDX632"></A>
+<A NAME="IDX633"></A>
+<A NAME="IDX634"></A>
+In addition, MIT Scheme orders those characters that satisfy
+<CODE>char-standard?</CODE> the same way that <FONT SIZE="-1">ASCII</FONT> does.  Specifically,
+all the digits precede all the uppercase letters, and all the upper-case
+letters precede all the lowercase letters.
+</P><P>
+
+Characters are ordered by first comparing their bucky bits part and then
+their code part.  In particular, characters without bucky bits come
+before characters with bucky bits.
+</DL>
+</P><P>
+
+<A NAME="Miscellaneous Character Operations"></A>
+<HR SIZE="6">
+<A NAME="SEC57"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC56"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC58"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.3 Miscellaneous Character Operations </H2>
+<!--docid::SEC57::-->
+<P>
+
+<A NAME="IDX635"></A>
+<DL>
+<DT><U>procedure:</U> <B>char?</B> <I>object</I>
+<DD><A NAME="IDX636"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a character; otherwise returns
+<CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX637"></A>
+<DL>
+<DT><U>procedure:</U> <B>char-upcase</B> <I>char</I>
+<DD><A NAME="IDX638"></A>
+<DT><U>procedure:</U> <B>char-downcase</B> <I>char</I>
+<DD><A NAME="IDX639"></A>
+<A NAME="IDX640"></A>
+<A NAME="IDX641"></A>
+<A NAME="IDX642"></A>
+Returns the uppercase or lowercase equivalent of <VAR>char</VAR> if
+<VAR>char</VAR> is a letter; otherwise returns <VAR>char</VAR>.  These procedures
+return a character <VAR>char2</VAR> such that <CODE>(char-ci=? <VAR>char</VAR>
+<VAR>char2</VAR>)</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX643"></A>
+<DL>
+<DT><U>procedure+:</U> <B>char-&#62;digit</B> <I>char [radix]</I>
+<DD>If <VAR>char</VAR> is a character representing a digit in the given
+<VAR>radix</VAR>, returns the corresponding integer value.  If you specify
+<VAR>radix</VAR> (which must be an exact integer between 2 and 36 inclusive),
+the conversion is done in that base, otherwise it is done in base 10.
+If <VAR>char</VAR> doesn't represent a digit in base <VAR>radix</VAR>,
+<CODE>char-&#62;digit</CODE> returns <CODE>#f</CODE>.
+</P><P>
+
+Note that this procedure is insensitive to the alphabetic case of
+<VAR>char</VAR>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(char-&#62;digit #\8)                       =>  8
+(char-&#62;digit #\e 16)                    =>  14
+(char-&#62;digit #\e)                       =>  #f
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX644"></A>
+<DL>
+<DT><U>procedure+:</U> <B>digit-&#62;char</B> <I>digit [radix]</I>
+<DD>Returns a character that represents <VAR>digit</VAR> in the radix given by
+<VAR>radix</VAR>.  <VAR>Radix</VAR> must be an exact integer between 2 and 36
+(inclusive), and defaults to 10.  <VAR>Digit</VAR>, which must be an
+exact non-negative integer, should be less than <VAR>radix</VAR>; if
+<VAR>digit</VAR> is greater than or equal to <VAR>radix</VAR>, <CODE>digit-&#62;char</CODE>
+returns <CODE>#f</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(digit-&#62;char 8)                         =>  #\8
+(digit-&#62;char 14 16)                     =>  #\E
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Internal Representation of Characters"></A>
+<HR SIZE="6">
+<A NAME="SEC58"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC57"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC59"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.4 Internal Representation of Characters </H2>
+<!--docid::SEC58::-->
+<P>
+
+<A NAME="IDX645"></A>
+<A NAME="IDX646"></A>
+<A NAME="IDX647"></A>
+<A NAME="IDX648"></A>
+<A NAME="IDX649"></A>
+An MIT Scheme character consists of a <EM>code</EM> part and a <EM>bucky
+bits</EM> part.  The MIT Scheme set of characters can represent more
+characters than <FONT SIZE="-1">ASCII</FONT> can; it includes characters with Super,
+Hyper, and Top bucky bits, as well as Control and Meta.  Every
+<FONT SIZE="-1">ASCII</FONT> character corresponds to some MIT Scheme character, but not
+vice versa.<A NAME="DOCF6" HREF="scheme_fot.html#FOOT6">(6)</A>
+</P><P>
+
+MIT Scheme uses a 16-bit character code with 5 bucky bits.  Normally,
+Scheme uses the least significant 7 bits of the character code to
+contain the <FONT SIZE="-1">ASCII</FONT> representation for the character.  The
+representation is expanded in order to allow for future accomodation of
+international character sets.
+</P><P>
+
+<A NAME="IDX650"></A>
+<DL>
+<DT><U>procedure+:</U> <B>make-char</B> <I>code bucky-bits</I>
+<DD><A NAME="IDX651"></A>
+Builds a character from <VAR>code</VAR> and <VAR>bucky-bits</VAR>.  Both
+<VAR>code</VAR> and <VAR>bucky-bits</VAR> must be exact non-negative integers in
+the appropriate range.  Use <CODE>char-code</CODE> and <CODE>char-bits</CODE> to
+extract the code and bucky bits from the character.  If <CODE>0</CODE> is
+specified for <VAR>bucky-bits</VAR>, <CODE>make-char</CODE> produces an ordinary
+character; otherwise, the appropriate bits are turned on as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>1               Meta
+2               Control
+4               Super
+8               Hyper
+16              Top
+</pre></td></tr></table></P><P>
+
+For example,
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(make-char 97 0)                        =>  #\a
+(make-char 97 1)                        =>  #\M-a
+(make-char 97 2)                        =>  #\C-a
+(make-char 97 3)                        =>  #\C-M-a
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX652"></A>
+<DL>
+<DT><U>procedure+:</U> <B>char-bits</B> <I>char</I>
+<DD><A NAME="IDX653"></A>
+<A NAME="IDX654"></A>
+Returns the exact integer representation of <VAR>char</VAR>'s bucky bits.
+For example,
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(char-bits #\a)                         =>  0
+(char-bits #\m-a)                       =>  1
+(char-bits #\c-a)                       =>  2
+(char-bits #\c-m-a)                     =>  3
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX655"></A>
+<DL>
+<DT><U>procedure+:</U> <B>char-code</B> <I>char</I>
+<DD>Returns the character code of <VAR>char</VAR>, an exact integer.  For
+example,
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(char-code #\a)                         =>  97
+(char-code #\c-a)                       =>  97
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX656"></A>
+<DL>
+<DT><U>variable+:</U> <B>char-code-limit</B>
+<DD><A NAME="IDX657"></A>
+<DT><U>variable+:</U> <B>char-bits-limit</B>
+<DD>These variables define the (exclusive) upper limits for the character
+code and bucky bits (respectively).  The character code and bucky bits
+are always exact non-negative integers, and are strictly less than the
+value of their respective limit variable.
+</DL>
+</P><P>
+
+<A NAME="IDX658"></A>
+<DL>
+<DT><U>procedure:</U> <B>char-&#62;integer</B> <I>char</I>
+<DD><A NAME="IDX659"></A>
+<DT><U>procedure:</U> <B>integer-&#62;char</B> <I>k</I>
+<DD><CODE>char-&#62;integer</CODE> returns the character code representation for
+<VAR>char</VAR>.  <CODE>integer-&#62;char</CODE> returns the character whose character
+code representation is <VAR>k</VAR>.
+</P><P>
+
+<A NAME="IDX660"></A>
+<A NAME="IDX661"></A>
+In MIT Scheme, if <CODE>(char-ascii? <VAR>char</VAR>)</CODE> is true, then
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(eqv? (char-&#62;ascii <VAR>char</VAR>) (char-&#62;integer <VAR>char</VAR>))
+</pre></td></tr></table></P><P>
+
+However, this behavior is not required by the Scheme standard, and
+code that depends on it is not portable to other implementations.
+</P><P>
+
+<A NAME="IDX662"></A>
+<A NAME="IDX663"></A>
+These procedures implement order isomorphisms between the set of
+characters under the <CODE>char&#60;=?</CODE> ordering and some subset of the
+integers under the <CODE>&#60;=</CODE> ordering.  That is, if
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(char&#60;=? a b)  =>  #t    and    (&#60;= x y)  =>  #t
+</pre></td></tr></table></P><P>
+
+and <CODE>x</CODE> and <CODE>y</CODE> are in the range of <CODE>char-&#62;integer</CODE>,
+then
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(&#60;= (char-&#62;integer a)
+    (char-&#62;integer b))                  =>  #t
+(char&#60;=? (integer-&#62;char x)
+         (integer-&#62;char y))             =>  #t
+</pre></td></tr></table></P><P>
+
+Note: If the argument to <CODE>char-&#62;integer</CODE> or <CODE>integer-&#62;char</CODE> is
+a constant, the compiler will constant-fold the call, replacing it with
+the corresponding result.  This is a very useful way to denote unusual
+character constants or <FONT SIZE="-1">ASCII</FONT> codes.
+</DL>
+</P><P>
+
+<A NAME="IDX664"></A>
+<DL>
+<DT><U>variable+:</U> <B>char-integer-limit</B>
+<DD>The range of <CODE>char-&#62;integer</CODE> is defined to be the exact
+non-negative integers that are less than the value of this variable
+(exclusive).
+</DL>
+</P><P>
+
+<A NAME="ASCII Characters"></A>
+<HR SIZE="6">
+<A NAME="SEC59"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC58"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC60"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.5 ASCII Characters </H2>
+<!--docid::SEC59::-->
+<P>
+
+MIT Scheme internally uses <FONT SIZE="-1">ASCII</FONT> codes for I/O, and stores
+character objects in a fashion that makes it convenient to convert
+between <FONT SIZE="-1">ASCII</FONT> codes and characters.  Also, character strings are
+implemented as byte vectors whose elements are <FONT SIZE="-1">ASCII</FONT> codes; these
+codes are converted to character objects when accessed.  For these
+reasons it is sometimes desirable to be able to convert between
+<FONT SIZE="-1">ASCII</FONT> codes and characters.
+</P><P>
+
+<A NAME="IDX665"></A>
+<A NAME="IDX666"></A>
+Not all characters can be represented as <FONT SIZE="-1">ASCII</FONT> codes.  A character
+that has an equivalent <FONT SIZE="-1">ASCII</FONT> representation is called an <EM>ASCII
+character</EM>.
+</P><P>
+
+<A NAME="IDX667"></A>
+<DL>
+<DT><U>procedure+:</U> <B>char-ascii?</B> <I>char</I>
+<DD>Returns the <FONT SIZE="-1">ASCII</FONT> code for <VAR>char</VAR> if <VAR>char</VAR> has an
+<FONT SIZE="-1">ASCII</FONT> representation; otherwise returns <CODE>#f</CODE>.
+</P><P>
+
+<A NAME="IDX668"></A>
+In the current implementation, the characters that satisfy this
+predicate are those in which the Control, Super, Hyper, and Top bucky
+bits are turned off.  All characters for which the <CODE>char-bits</CODE>
+procedure returns <CODE>0</CODE> or <CODE>1</CODE> (i.e. no bucky bits, or just
+Meta) count as legal <FONT SIZE="-1">ASCII</FONT> characters.
+</DL>
+</P><P>
+
+<A NAME="IDX669"></A>
+<DL>
+<DT><U>procedure+:</U> <B>char-&#62;ascii</B> <I>char</I>
+<DD>Returns the <FONT SIZE="-1">ASCII</FONT> code for <VAR>char</VAR>.  An error
+<CODE>condition-type:bad-range-argument</CODE> is signalled if <VAR>char</VAR>
+doesn't have an <FONT SIZE="-1">ASCII</FONT> representation.
+<A NAME="IDX670"></A>
+</DL>
+</P><P>
+
+<A NAME="IDX671"></A>
+<DL>
+<DT><U>procedure+:</U> <B>ascii-&#62;char</B> <I>code</I>
+<DD><VAR>Code</VAR> must be the exact integer representation of an <FONT SIZE="-1">ASCII</FONT>
+code.  This procedure returns the character corresponding to <VAR>code</VAR>.
+</DL>
+</P><P>
+
+<A NAME="Character Sets"></A>
+<HR SIZE="6">
+<A NAME="SEC60"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC59"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.6 Character Sets </H2>
+<!--docid::SEC60::-->
+<P>
+
+MIT Scheme's character-set abstraction is used to represent groups of
+characters, such as the letters or digits.  Character sets may contain
+only <FONT SIZE="-1">ASCII</FONT> characters; in the future this may be changed to
+allow the full range of characters.
+</P><P>
+
+There is no meaningful external representation for character sets; use
+<CODE>char-set-members</CODE> to examine their contents.  There is (at
+present) no specific equivalence predicate for character sets; use
+<CODE>equal?</CODE> for this purpose.
+</P><P>
+
+<A NAME="IDX672"></A>
+<DL>
+<DT><U>procedure+:</U> <B>char-set?</B> <I>object</I>
+<DD><A NAME="IDX673"></A>
+Returns <CODE>#t</CODE> if <VAR>object</VAR> is a character set; otherwise returns
+<CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX674"></A>
+<DL>
+<DT><U>variable+:</U> <B>char-set:upper-case</B>
+<DD><A NAME="IDX675"></A>
+<DT><U>variable+:</U> <B>char-set:lower-case</B>
+<DD><A NAME="IDX676"></A>
+<DT><U>variable+:</U> <B>char-set:alphabetic</B>
+<DD><A NAME="IDX677"></A>
+<DT><U>variable+:</U> <B>char-set:numeric</B>
+<DD><A NAME="IDX678"></A>
+<DT><U>variable+:</U> <B>char-set:alphanumeric</B>
+<DD><A NAME="IDX679"></A>
+<DT><U>variable+:</U> <B>char-set:whitespace</B>
+<DD><A NAME="IDX680"></A>
+<DT><U>variable+:</U> <B>char-set:not-whitespace</B>
+<DD><A NAME="IDX681"></A>
+<DT><U>variable+:</U> <B>char-set:graphic</B>
+<DD><A NAME="IDX682"></A>
+<DT><U>variable+:</U> <B>char-set:not-graphic</B>
+<DD><A NAME="IDX683"></A>
+<DT><U>variable+:</U> <B>char-set:standard</B>
+<DD>These variables contain predefined character sets.
+To see the contents of one of these sets, use <CODE>char-set-members</CODE>.
+</P><P>
+
+<A NAME="IDX684"></A>
+<A NAME="IDX685"></A>
+<A NAME="IDX686"></A>
+<A NAME="IDX687"></A>
+<A NAME="IDX688"></A>
+<A NAME="IDX689"></A>
+<A NAME="IDX690"></A>
+<A NAME="IDX691"></A>
+<A NAME="IDX692"></A>
+<A NAME="IDX693"></A>
+<A NAME="IDX694"></A>
+<A NAME="IDX695"></A>
+<A NAME="IDX696"></A>
+<A NAME="IDX697"></A>
+<A NAME="IDX698"></A>
+<A NAME="IDX699"></A>
+<A NAME="IDX700"></A>
+<A NAME="IDX701"></A>
+<EM>Alphabetic</EM> characters are the 52 upper and lower case letters.
+<EM>Numeric</EM> characters are the 10 decimal digits.  <EM>Alphanumeric</EM>
+characters are those in the union of these two sets.  <EM>Whitespace</EM>
+characters are <CODE>#\space</CODE>, <CODE>#\tab</CODE>, <CODE>#\page</CODE>,
+<CODE>#\linefeed</CODE>, and <CODE>#\return</CODE>.  <VAR>Graphic</VAR> characters are
+the printing characters and <CODE>#\space</CODE>.  <VAR>Standard</VAR> characters
+are the printing characters, <CODE>#\space</CODE>, and <CODE>#\newline</CODE>.
+These are the printing characters:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>! " # $ % &#38; ' ( ) * + , - . /
+0 1 2 3 4 5 6 7 8 9
+: ; &#60; = &#62; ? @
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+[ \ ] ^ _ `
+a b c d e f g h i j k l m n o p q r s t u v w x y z
+{ | } ~
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX702"></A>
+<DL>
+<DT><U>procedure:</U> <B>char-upper-case?</B> <I>char</I>
+<DD><A NAME="IDX703"></A>
+<DT><U>procedure:</U> <B>char-lower-case?</B> <I>char</I>
+<DD><A NAME="IDX704"></A>
+<DT><U>procedure:</U> <B>char-alphabetic?</B> <I>char</I>
+<DD><A NAME="IDX705"></A>
+<DT><U>procedure:</U> <B>char-numeric?</B> <I>char</I>
+<DD><A NAME="IDX706"></A>
+<DT><U>procedure+:</U> <B>char-alphanumeric?</B> <I>char</I>
+<DD><A NAME="IDX707"></A>
+<DT><U>procedure:</U> <B>char-whitespace?</B> <I>char</I>
+<DD><A NAME="IDX708"></A>
+<DT><U>procedure+:</U> <B>char-graphic?</B> <I>char</I>
+<DD><A NAME="IDX709"></A>
+<DT><U>procedure+:</U> <B>char-standard?</B> <I>object</I>
+<DD>These predicates are defined in terms of the respective character sets
+defined above.
+</DL>
+</P><P>
+
+<A NAME="IDX710"></A>
+<DL>
+<DT><U>procedure+:</U> <B>char-set-members</B> <I>char-set</I>
+<DD>Returns a newly allocated list of the characters in <VAR>char-set</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX711"></A>
+<DL>
+<DT><U>procedure+:</U> <B>char-set-member?</B> <I>char-set char</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>char</VAR> is in <VAR>char-set</VAR>; otherwise returns
+<CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX712"></A>
+<DL>
+<DT><U>procedure+:</U> <B>char-set</B> <I>char <small>...</small></I>
+<DD><A NAME="IDX713"></A>
+Returns a character set consisting of the specified <FONT SIZE="-1">ASCII</FONT>
+characters.  With no arguments, <CODE>char-set</CODE> returns an empty
+character set.
+</DL>
+</P><P>
+
+<A NAME="IDX714"></A>
+<DL>
+<DT><U>procedure+:</U> <B>chars-&#62;char-set</B> <I>chars</I>
+<DD>Returns a character set consisting of <VAR>chars</VAR>, which must be a list
+of <FONT SIZE="-1">ASCII</FONT> characters.  This is equivalent to <CODE>(apply char-set
+<VAR>chars</VAR>)</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX715"></A>
+<DL>
+<DT><U>procedure+:</U> <B>string-&#62;char-set</B> <I>string</I>
+<DD>Returns a character set consisting of all the characters that occur in
+<VAR>string</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX716"></A>
+<DL>
+<DT><U>procedure+:</U> <B>ascii-range-&#62;char-set</B> <I>lower upper</I>
+<DD><VAR>Lower</VAR> and <VAR>upper</VAR> must be exact non-negative integers
+representing <FONT SIZE="-1">ASCII</FONT> character codes, and <VAR>lower</VAR> must be less
+than or equal to <VAR>upper</VAR>.  This procedure creates and returns a new
+character set consisting of the characters whose <FONT SIZE="-1">ASCII</FONT> codes are
+between <VAR>lower</VAR> (inclusive) and <VAR>upper</VAR> (exclusive).
+</DL>
+</P><P>
+
+<A NAME="IDX717"></A>
+<DL>
+<DT><U>procedure+:</U> <B>predicate-&#62;char-set</B> <I>predicate</I>
+<DD><VAR>Predicate</VAR> must be a procedure of one argument.
+<CODE>predicate-&#62;char-set</CODE> creates and returns a character set
+consisting of the <FONT SIZE="-1">ASCII</FONT> characters for which <VAR>predicate</VAR> is
+true.
+</DL>
+</P><P>
+
+<A NAME="IDX718"></A>
+<DL>
+<DT><U>procedure+:</U> <B>char-set-difference</B> <I>char-set1 char-set2</I>
+<DD>Returns a character set consisting of the characters that are in
+<VAR>char-set1</VAR> but aren't in <VAR>char-set2</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX719"></A>
+<DL>
+<DT><U>procedure+:</U> <B>char-set-intersection</B> <I>char-set <small>...</small></I>
+<DD>Returns a character set consisting of the characters that are in all of
+the <VAR>char-set</VAR>s.
+</DL>
+</P><P>
+
+<A NAME="IDX720"></A>
+<DL>
+<DT><U>procedure+:</U> <B>char-set-union</B> <I>char-set <small>...</small></I>
+<DD>Returns a character set consisting of the characters that are in at
+least one o the <VAR>char-set</VAR>s.
+</DL>
+</P><P>
+
+<A NAME="IDX721"></A>
+<DL>
+<DT><U>procedure+:</U> <B>char-set-invert</B> <I>char-set</I>
+<DD>Returns a character set consisting of the <FONT SIZE="-1">ASCII</FONT> characters that are
+not in <VAR>char-set</VAR>.
+</DL>
+</P><P>
+
+<A NAME="Strings"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_6.html#SEC54"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_7.html#SEC61"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

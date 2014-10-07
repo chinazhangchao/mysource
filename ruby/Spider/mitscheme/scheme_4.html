@@ -1,0 +1,350 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme Reference: Equivalence Predicates</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme Reference: Equivalence Predicates">
+<META NAME="keywords" CONTENT="MIT Scheme Reference: Equivalence Predicates">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC42"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC41"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC43"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC43"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 3. Equivalence Predicates </H1>
+<!--docid::SEC42::-->
+<P>
+
+<A NAME="IDX344"></A>
+<A NAME="IDX345"></A>
+<A NAME="IDX346"></A>
+<A NAME="IDX347"></A>
+<A NAME="IDX348"></A>
+<A NAME="IDX349"></A>
+<A NAME="IDX350"></A>
+A <EM>predicate</EM> is a procedure that always returns a boolean value
+(<CODE>#t</CODE> or <CODE>#f</CODE>).  An <EM>equivalence predicate</EM> is the
+computational analogue of a mathematical equivalence relation (it is
+symmetric, reflexive, and transitive).  Of the equivalence predicates
+described in this section, <CODE>eq?</CODE> is the finest or most
+discriminating, and <CODE>equal?</CODE> is the coarsest.  <CODE>eqv?</CODE> is
+slightly less discriminating than <CODE>eq?</CODE>.
+</P><P>
+
+<A NAME="IDX351"></A>
+<DL>
+<DT><U>procedure:</U> <B>eqv?</B> <I>obj1 obj2</I>
+<DD>The <CODE>eqv?</CODE> procedure defines a useful equivalence relation on
+objects.  Briefly, it returns <CODE>#t</CODE> if <VAR>obj1</VAR> and <VAR>obj2</VAR>
+should normally be regarded as the same object.
+</P><P>
+
+The <CODE>eqv?</CODE> procedure returns <CODE>#t</CODE> if:
+</P><P>
+
+<UL>
+<LI>
+<VAR>obj1</VAR> and <VAR>obj2</VAR> are both <CODE>#t</CODE> or both <CODE>#f</CODE>.
+<P>
+
+<LI>
+<VAR>obj1</VAR> and <VAR>obj2</VAR> are both interned symbols and
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string=? (symbol-&#62;string <VAR>obj1</VAR>)
+          (symbol-&#62;string <VAR>obj2</VAR>))
+     => #t
+</pre></td></tr></table><A NAME="IDX352"></A>
+<A NAME="IDX353"></A>
+</P><P>
+
+<LI>
+<VAR>obj1</VAR> and <VAR>obj2</VAR> are both numbers, are numerically equal
+according to the <CODE>=</CODE> procedure, and are either both exact or both
+inexact (see section <A HREF="scheme_5.html#SEC43">4. Numbers</A>).
+<A NAME="IDX354"></A>
+<P>
+
+<LI>
+<VAR>obj1</VAR> and <VAR>obj2</VAR> are both characters and are the same character
+according to the <CODE>char=?</CODE> procedure (see section <A HREF="scheme_6.html#SEC54">5. Characters</A>).
+<A NAME="IDX355"></A>
+<P>
+
+<LI>
+both <VAR>obj1</VAR> and <VAR>obj2</VAR> are the empty list.
+<P>
+
+<LI>
+<VAR>obj1</VAR> and <VAR>obj2</VAR> are procedures whose location tags are equal.
+<P>
+
+<LI>
+<VAR>obj1</VAR> and <VAR>obj2</VAR> are pairs, vectors, strings, bit strings,
+records, cells, or weak pairs that denote the same locations in the
+store.
+</UL>
+<P>
+
+The <CODE>eqv?</CODE> procedure returns <CODE>#f</CODE> if:
+</P><P>
+
+<UL>
+<LI>
+<VAR>obj1</VAR> and <VAR>obj2</VAR> are of different types.
+<P>
+
+<LI>
+one of <VAR>obj1</VAR> and <VAR>obj2</VAR> is <CODE>#t</CODE> but the other is
+<CODE>#f</CODE>.
+<P>
+
+<LI>
+<VAR>obj1</VAR> and <VAR>obj2</VAR> are symbols but
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string=? (symbol-&#62;string <VAR>obj1</VAR>)
+          (symbol-&#62;string <VAR>obj2</VAR>))
+     => #f
+</pre></td></tr></table><A NAME="IDX356"></A>
+<A NAME="IDX357"></A>
+</P><P>
+
+<LI>
+one of <VAR>obj1</VAR> and <VAR>obj2</VAR> is an exact number but the other is an
+inexact number.
+<P>
+
+<LI>
+<VAR>obj1</VAR> and <VAR>obj2</VAR> are numbers for which the <CODE>=</CODE> procedure
+returns <CODE>#f</CODE>.
+<A NAME="IDX358"></A>
+<P>
+
+<LI>
+<VAR>obj1</VAR> and <VAR>obj2</VAR> are characters for which the <CODE>char=?</CODE>
+procedure returns <CODE>#f</CODE>.
+<A NAME="IDX359"></A>
+<P>
+
+<LI>
+one of <VAR>obj1</VAR> and <VAR>obj2</VAR> is the empty list but the other is not.
+<P>
+
+<LI>
+<VAR>obj1</VAR> and <VAR>obj2</VAR> are procedures that would behave differently
+(return a different value or have different side effects) for some
+arguments.
+<P>
+
+<LI>
+<VAR>obj1</VAR> and <VAR>obj2</VAR> are pairs, vectors, strings, bit strings,
+records, cells, or weak pairs that denote distinct locations.
+</UL>
+<P>
+
+Some examples:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(eqv? 'a 'a)                    =>  #t
+(eqv? 'a 'b)                    =>  #f
+(eqv? 2 2)                      =>  #t
+(eqv? '() '())                  =>  #t
+(eqv? 100000000 100000000)      =>  #t
+(eqv? (cons 1 2) (cons 1 2))    =>  #f
+(eqv? (lambda () 1)
+      (lambda () 2))            =>  #f
+(eqv? #f 'nil)                  =>  #f
+(let ((p (lambda (x) x)))
+  (eqv? p p))                   =>  #t
+</pre></td></tr></table></P><P>
+
+The following examples illustrate cases in which the above rules do not
+fully specify the behavior of <CODE>eqv?</CODE>.  All that can be said about
+such cases is that the value returned by <CODE>eqv?</CODE> must be a boolean.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(eqv? "" "")                    =>  unspecified
+(eqv? '#() '#())                =>  unspecified
+(eqv? (lambda (x) x)
+      (lambda (x) x))           =>  unspecified
+(eqv? (lambda (x) x)
+      (lambda (y) y))           =>  unspecified
+</pre></td></tr></table></P><P>
+
+The next set of examples shows the use of <CODE>eqv?</CODE> with procedures
+that have local state.  <CODE>gen-counter</CODE> must return a distinct
+procedure every time, since each procedure has its own internal counter.
+<CODE>gen-loser</CODE>, however, returns equivalent procedures each time,
+since the local state does not affect the value or side effects of the
+procedures.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define gen-counter
+  (lambda ()
+    (let ((n 0))
+      (lambda () (set! n (+ n 1)) n))))
+(let ((g (gen-counter)))
+  (eqv? g g))                   =>  #t
+(eqv? (gen-counter) (gen-counter))
+                                =>  #f
+
+(define gen-loser
+  (lambda ()
+    (let ((n 0))
+      (lambda () (set! n (+ n 1)) 27))))
+(let ((g (gen-loser)))
+  (eqv? g g))                   =>  #t
+(eqv? (gen-loser) (gen-loser))
+                                =>  unspecified
+
+(letrec ((f (lambda () (if (eqv? f g) 'both 'f)))
+         (g (lambda () (if (eqv? f g) 'both 'g)))
+  (eqv? f g))
+                                =>  unspecified
+
+(letrec ((f (lambda () (if (eqv? f g) 'f 'both)))
+         (g (lambda () (if (eqv? f g) 'g 'both)))
+  (eqv? f g))
+                                =>  #f
+</pre></td></tr></table></P><P>
+
+Objects of distinct types must never be regarded as the same object.
+</P><P>
+
+Since it is an error to modify constant objects (those returned by
+literal expressions), the implementation may share structure between
+constants where appropriate.  Thus the value of <CODE>eqv?</CODE> on constants
+is sometimes unspecified.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(let ((x '(a)))
+  (eqv? x x))                    =>  #t
+(eqv? '(a) '(a))                 =>  unspecified
+(eqv? "a" "a")                   =>  unspecified
+(eqv? '(b) (cdr '(a b)))         =>  unspecified
+</pre></td></tr></table></P><P>
+
+Rationale: The above definition of <CODE>eqv?</CODE> allows implementations
+latitude in their treatment of procedures and literals: implementations
+are free either to detect or to fail to detect that two procedures or
+two literals are equivalent to each other, and can decide whether or not
+to merge representations of equivalent objects by using the same pointer
+or bit pattern to represent both.
+</DL>
+</P><P>
+
+<A NAME="IDX360"></A>
+<DL>
+<DT><U>procedure:</U> <B>eq?</B> <I>obj1 obj2</I>
+<DD><CODE>eq?</CODE> is similar to <CODE>eqv?</CODE> except that in some cases it is
+capable of discerning distinctions finer than those detectable by
+<CODE>eqv?</CODE>.
+</P><P>
+
+<CODE>eq?</CODE> and <CODE>eqv?</CODE> are guaranteed to have the same behavior on
+symbols, booleans, the empty list, pairs, records, and non-empty strings
+and vectors.  <CODE>eq?</CODE>'s behavior on numbers and characters is
+implementation-dependent, but it will always return either true or
+false, and will return true only when <CODE>eqv?</CODE> would also return
+true.  <CODE>eq?</CODE> may also behave differently from <CODE>eqv?</CODE> on empty
+vectors and empty strings.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(eq? 'a 'a)                     =>  #t
+(eq? '(a) '(a))                 =>  unspecified
+(eq? (list 'a) (list 'a))       =>  #f
+(eq? "a" "a")                   =>  unspecified
+(eq? "" "")                     =>  unspecified
+(eq? '() '())                   =>  #t
+(eq? 2 2)                       =>  unspecified
+(eq? #\A #\A)                   =>  unspecified
+(eq? car car)                   =>  #t
+(let ((n (+ 2 3)))
+  (eq? n n))                    =>  unspecified
+(let ((x '(a)))
+  (eq? x x))                    =>  #t
+(let ((x '#()))
+  (eq? x x))                    =>  #t
+(let ((p (lambda (x) x)))
+  (eq? p p))                    =>  #t
+</pre></td></tr></table></P><P>
+
+Rationale: It will usually be possible to implement <CODE>eq?</CODE> much more
+efficiently than <CODE>eqv?</CODE>, for example, as a simple pointer
+comparison instead of as some more complicated operation.  One reason is
+that it may not be possible to compute <CODE>eqv?</CODE> of two numbers in
+constant time, whereas <CODE>eq?</CODE> implemented as pointer comparison will
+always finish in constant time.  <CODE>eq?</CODE> may be used like <CODE>eqv?</CODE>
+in applications using procedures to implement objects with state since
+it obeys the same constraints as <CODE>eqv?</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX361"></A>
+<DL>
+<DT><U>procedure:</U> <B>equal?</B> <I>obj1 obj2</I>
+<DD><A NAME="IDX362"></A>
+<CODE>equal?</CODE> recursively compares the contents of pairs, vectors, and
+strings, applying <CODE>eqv?</CODE> on other objects such as numbers, symbols,
+and records.  A rule of thumb is that objects are generally
+<CODE>equal?</CODE> if they print the same.  <CODE>equal?</CODE> may fail to
+terminate if its arguments are circular data structures.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(equal? 'a 'a)                  =>  #t
+(equal? '(a) '(a))              =>  #t
+(equal? '(a (b) c)
+        '(a (b) c))             =>  #t
+(equal? "abc" "abc")            =>  #t
+(equal? 2 2)                    =>  #t
+(equal? (make-vector 5 'a)
+        (make-vector 5 'a))     =>  #t
+(equal? (lambda (x) x)
+        (lambda (y) y))         =>  unspecified
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Numbers"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_5.html#SEC43"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

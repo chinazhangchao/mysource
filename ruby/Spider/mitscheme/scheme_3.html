@@ -1,0 +1,1930 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme Reference: Special Forms</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme Reference: Special Forms">
+<META NAME="keywords" CONTENT="MIT Scheme Reference: Special Forms">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC29"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC28"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC30"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_4.html#SEC42"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 2. Special Forms </H1>
+<!--docid::SEC29::-->
+<P>
+
+<A NAME="IDX163"></A>
+A special form is an expression that follows special evaluation rules.
+This chapter describes the basic Scheme special forms.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_3.html#SEC30">2.1 Lambda Expressions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_3.html#SEC31">2.2 Lexical Binding</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_3.html#SEC32">2.3 Dynamic Binding</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_3.html#SEC33">2.4 Definitions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_3.html#SEC36">2.5 Assignments</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_3.html#SEC37">2.6 Quoting</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_3.html#SEC38">2.7 Conditionals</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_3.html#SEC39">2.8 Sequencing</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_3.html#SEC40">2.9 Iteration</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_3.html#SEC41">2.10 Structure Definitions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Lambda Expressions"></A>
+<HR SIZE="6">
+<A NAME="SEC30"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC31"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_4.html#SEC42"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.1 Lambda Expressions </H2>
+<!--docid::SEC30::-->
+<P>
+
+<A NAME="IDX164"></A>
+<DL>
+<DT><U>special form:</U> <B>lambda</B> <I>formals expression expression <small>...</small></I>
+<DD><A NAME="IDX165"></A>
+<A NAME="IDX166"></A>
+<A NAME="IDX167"></A>
+<A NAME="IDX168"></A>
+<A NAME="IDX169"></A>
+<A NAME="IDX170"></A>
+<A NAME="IDX171"></A>
+<A NAME="IDX172"></A>
+<A NAME="IDX173"></A>
+<A NAME="IDX174"></A>
+A <CODE>lambda</CODE> expression evaluates to a procedure.  The environment in
+effect when the <CODE>lambda</CODE> expression is evaluated is remembered as
+part of the procedure; it is called the <EM>closing environment</EM>.  When
+the procedure is later called with some arguments, the closing
+environment is extended by binding the variables in the formal parameter
+list to fresh locations, and the locations are filled with the arguments
+according to rules about to be given.  The new environment created by
+this process is referred to as the <EM>invocation environment</EM>.
+</P><P>
+
+<A NAME="IDX175"></A>
+<A NAME="IDX176"></A>
+Once the invocation environment has been constructed, the
+<VAR>expression</VAR>s in the body of the <CODE>lambda</CODE> expression are
+evaluated sequentially in it.  This means that the region of the
+variables bound by the <CODE>lambda</CODE> expression is all of the
+<VAR>expression</VAR>s in the body.  The result of evaluating the last
+<VAR>expression</VAR> in the body is returned as the result of the procedure
+call.
+</P><P>
+
+<A NAME="IDX177"></A>
+<A NAME="IDX178"></A>
+<A NAME="IDX179"></A>
+<VAR>Formals</VAR>, the formal parameter list, is often referred to as a
+<EM>lambda list</EM>.
+</P><P>
+
+The process of matching up formal parameters with arguments is somewhat
+involved.  There are three types of parameters, and the matching treats
+each in sequence:
+</P><P>
+
+<DL COMPACT>
+<DT>Required
+<DD>All of the <EM>required</EM> parameters are matched against the arguments
+first.  If there are fewer arguments than required parameters, an error
+of type <CODE>condition-type:wrong-number-of-arguments</CODE> is signalled;
+this error is also signalled if there are more arguments than required
+parameters and there are no further parameters.
+<A NAME="IDX180"></A>
+<A NAME="IDX181"></A>
+<A NAME="IDX182"></A>
+<P>
+
+<DT>Optional
+<DD>Once the required parameters have all been matched, the <EM>optional</EM>
+parameters are matched against the remaining arguments.  If there are
+fewer arguments than optional parameters, the unmatched parameters are
+bound to special objects called <EM>default objects</EM>.  If there are
+more arguments than optional parameters, and there are no further
+parameters, an error of type
+<CODE>condition-type:wrong-number-of-arguments</CODE> is signalled.
+<A NAME="IDX183"></A>
+<A NAME="IDX184"></A>
+<A NAME="IDX185"></A>
+<A NAME="IDX186"></A>
+<P>
+
+<A NAME="IDX187"></A>
+The predicate <CODE>default-object?</CODE>, which is true only of default
+objects, can be used to determine which optional parameters were
+supplied, and which were defaulted.
+</P><P>
+
+<DT>Rest
+<DD>Finally, if there is a <EM>rest</EM> parameter (there can only be one), any
+remaining arguments are made into a list, and the list is bound to the
+rest parameter.  (If there are no remaining arguments, the rest
+parameter is bound to the empty list.)
+<A NAME="IDX188"></A>
+<A NAME="IDX189"></A>
+<P>
+
+In Scheme, unlike some other Lisp implementations, the list to which a
+rest parameter is bound is always freshly allocated.  It has infinite
+extent and may be modified without affecting the procedure's caller.
+</DL>
+<P>
+
+<A NAME="IDX190"></A>
+<A NAME="IDX191"></A>
+Specially recognized keywords divide the <VAR>formals</VAR> parameters into
+these three classes.  The keywords used here are <SAMP>`#!optional'</SAMP>,
+<SAMP>`.'</SAMP>, and <SAMP>`#!rest'</SAMP>.  Note that only <SAMP>`.'</SAMP> is defined by
+standard Scheme -- the other keywords are MIT Scheme extensions.
+<SAMP>`#!rest'</SAMP> has the same meaning as <SAMP>`.'</SAMP> in <VAR>formals</VAR>.
+</P><P>
+
+The use of these keywords is best explained by means of examples.  The
+following are typical lambda lists, followed by descriptions of which
+parameters are required, optional, and rest.  We will use <SAMP>`#!rest'</SAMP>
+in these examples, but anywhere it appears <SAMP>`.'</SAMP> could be used
+instead.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>(a b c)</CODE>
+<DD><CODE>a</CODE>, <CODE>b</CODE>, and <CODE>c</CODE> are all required.  The procedure must
+be passed exactly three arguments.
+<P>
+
+<DT><CODE>(a b #!optional c)</CODE>
+<DD><CODE>a</CODE> and <CODE>b</CODE> are required, <CODE>c</CODE> is optional.  The procedure
+may be passed either two or three arguments.
+<P>
+
+<DT><CODE>(#!optional a b c)</CODE>
+<DD><CODE>a</CODE>, <CODE>b</CODE>, and <CODE>c</CODE> are all optional.  The procedure may be
+passed any number of arguments between zero and three, inclusive.
+<P>
+
+<DT><CODE>a</CODE>
+<DD><DT><CODE>(#!rest a)</CODE>
+<DD>These two examples are equivalent.  <CODE>a</CODE> is a rest parameter.  The
+procedure may be passed any number of arguments.  Note: this is the only
+case in which <SAMP>`.'</SAMP> cannot be used in place of <SAMP>`#!rest'</SAMP>.
+<P>
+
+<DT><CODE>(a b #!optional c d #!rest e)</CODE>
+<DD><CODE>a</CODE> and <CODE>b</CODE> are required, <CODE>c</CODE> and <CODE>d</CODE> are optional,
+and <CODE>e</CODE> is rest.  The procedure may be passed two or more
+arguments.
+</DL>
+<P>
+
+Some examples of <CODE>lambda</CODE> expressions:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(lambda (x) (+ x x))            =>  #[compound-procedure 53]
+
+((lambda (x) (+ x x)) 4)                =>  8
+
+(define reverse-subtract
+  (lambda (x y)
+    (- y x)))
+(reverse-subtract 7 10)                 =>  3
+
+(define foo
+  (let ((x 4))
+    (lambda (y) (+ x y))))
+(foo 6)                                 =>  10
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX192"></A>
+<DL>
+<DT><U>special form+:</U> <B>named-lambda</B> <I>formals expression expression <small>...</small></I>
+<DD><A NAME="IDX193"></A>
+The <CODE>named-lambda</CODE> special form is similar to <CODE>lambda</CODE>, except
+that the first "required parameter" in <VAR>formals</VAR> is not a
+parameter but the <EM>name</EM> of the resulting procedure; thus
+<VAR>formals</VAR> must have at least one required parameter.  This name has
+no semantic meaning, but is included in the external representation of
+the procedure, making it useful for debugging.  In MIT Scheme,
+<CODE>lambda</CODE> is implemented as <CODE>named-lambda</CODE>, with a special name
+that means "unnamed".
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(named-lambda (f x) (+ x x))    =>  #[compound-procedure 53 f]
+((named-lambda (f x) (+ x x)) 4)        =>  8
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Lexical Binding"></A>
+<HR SIZE="6">
+<A NAME="SEC31"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC30"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC32"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_4.html#SEC42"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.2 Lexical Binding </H2>
+<!--docid::SEC31::-->
+<P>
+
+<A NAME="IDX194"></A>
+<A NAME="IDX195"></A>
+<A NAME="IDX196"></A>
+The three binding constructs <CODE>let</CODE>, <CODE>let*</CODE>, and <CODE>letrec</CODE>,
+give Scheme block structure.  The syntax of the three constructs is
+identical, but they differ in the regions they establish for their
+variable bindings.  In a <CODE>let</CODE> expression, the initial values are
+computed before any of the variables become bound.  In a <CODE>let*</CODE>
+expression, the evaluations and bindings are sequentially interleaved.
+And in a <CODE>letrec</CODE> expression, all the bindings are in effect while
+the initial values are being computed (thus allowing mutually recursive
+definitions).
+</P><P>
+
+<A NAME="IDX197"></A>
+<DL>
+<DT><U>special form:</U> <B>let</B> <I>((<VAR>variable</VAR> <VAR>init</VAR>) <small>...</small>) expression expression <small>...</small></I>
+<DD><A NAME="IDX198"></A>
+<A NAME="IDX199"></A>
+The <VAR>init</VAR>s are evaluated in the current environment (in some
+unspecified order), the <VAR>variable</VAR>s are bound to fresh locations
+holding the results, the <VAR>expression</VAR>s are evaluated sequentially in
+the extended environment, and the value of the last <VAR>expression</VAR> is
+returned.  Each binding of a <VAR>variable</VAR> has the <VAR>expression</VAR>s as
+its region.
+</P><P>
+
+MIT Scheme allows any of the <VAR>init</VAR>s to be omitted, in which
+case the corresponding <VAR>variable</VAR>s are unassigned.
+</P><P>
+
+<A NAME="IDX200"></A>
+Note that the following are equivalent:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(let ((<VAR>variable</VAR> <VAR>init</VAR>) <small>...</small>) <VAR>expression</VAR> <VAR>expression</VAR> <small>...</small>)
+((lambda (<VAR>variable</VAR> <small>...</small>) <VAR>expression</VAR> <VAR>expression</VAR> <small>...</small>) <VAR>init</VAR> <small>...</small>)
+</pre></td></tr></table></P><P>
+
+Some examples:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(let ((x 2) (y 3))
+  (* x y))                              =>  6
+
+(let ((x 2) (y 3))
+  (let ((foo (lambda (z) (+ x y z)))
+        (x 7))
+    (foo 4)))                           =>  9
+</pre></td></tr></table></P><P>
+
+See section <A HREF="scheme_3.html#SEC40">2.9 Iteration</A>, for information on "named <CODE>let</CODE>".
+</DL>
+</P><P>
+
+<A NAME="IDX201"></A>
+<DL>
+<DT><U>special form:</U> <B>let*</B> <I>((<VAR>variable</VAR> <VAR>init</VAR>) <small>...</small>) expression expression <small>...</small></I>
+<DD><A NAME="IDX202"></A>
+<A NAME="IDX203"></A>
+<CODE>let*</CODE> is similar to <CODE>let</CODE>, but the bindings are performed
+sequentially from left to right, and the region of a binding is that
+part of the <CODE>let*</CODE> expression to the right of the binding.  Thus
+the second binding is done in an environment in which the first binding
+is visible, and so on.
+</P><P>
+
+Note that the following are equivalent:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(let* ((<VAR>variable1</VAR> <VAR>init1</VAR>)
+       (<VAR>variable2</VAR> <VAR>init2</VAR>)
+       <small>...</small>
+       (<VAR>variableN</VAR> <VAR>initN</VAR>))
+   <VAR>expression</VAR>
+   <VAR>expression</VAR> <small>...</small>)
+
+(let ((<VAR>variable1</VAR> <VAR>init1</VAR>))
+  (let ((<VAR>variable2</VAR> <VAR>init2</VAR>))
+    <small>...</small>
+      (let ((<VAR>variableN</VAR> <VAR>initN</VAR>))
+        <VAR>expression</VAR>
+        <VAR>expression</VAR> <small>...</small>)
+    <small>...</small>))
+</pre></td></tr></table></P><P>
+
+An example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(let ((x 2) (y 3))
+  (let* ((x 7)
+         (z (+ x y)))
+    (* z x)))                           =>  70
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX204"></A>
+<DL>
+<DT><U>special form:</U> <B>letrec</B> <I>((<VAR>variable</VAR> <VAR>init</VAR>) <small>...</small>) expression expression <small>...</small></I>
+<DD><A NAME="IDX205"></A>
+<A NAME="IDX206"></A>
+The <VAR>variable</VAR>s are bound to fresh locations holding unassigned
+values, the <VAR>init</VAR>s are evaluated in the extended environment (in
+some unspecified order), each <VAR>variable</VAR> is assigned to the result
+of the corresponding <VAR>init</VAR>, the <VAR>expression</VAR>s are evaluated
+sequentially in the extended environment, and the value of the last
+<VAR>expression</VAR> is returned.  Each binding of a <VAR>variable</VAR> has the
+entire <CODE>letrec</CODE> expression as its region, making it possible to
+define mutually recursive procedures.
+</P><P>
+
+MIT Scheme allows any of the <VAR>init</VAR>s to be omitted, in which
+case the corresponding <VAR>variable</VAR>s are unassigned.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(letrec ((even?
+          (lambda (n)
+            (if (zero? n)
+                #t
+                (odd? (- n 1)))))
+         (odd?
+          (lambda (n)
+            (if (zero? n)
+                #f
+                (even? (- n 1))))))
+  (even? 88))                           =>  #t
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX207"></A>
+<A NAME="IDX208"></A>
+One restriction on <CODE>letrec</CODE> is very important: it shall be possible
+to evaluated each <VAR>init</VAR> without assigning or referring to the value
+of any <VAR>variable</VAR>.  If this restriction is violated, then it is an
+error.  The restriction is necessary because Scheme passes arguments by
+value rather than by name.  In the most common uses of <CODE>letrec</CODE>,
+all the <VAR>init</VAR>s are <CODE>lambda</CODE> or <CODE>delay</CODE> expressions and
+the restriction is satisfied automatically.
+</DL>
+</P><P>
+
+<A NAME="Dynamic Binding"></A>
+<HR SIZE="6">
+<A NAME="SEC32"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC31"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC33"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_4.html#SEC42"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.3 Dynamic Binding </H2>
+<!--docid::SEC32::-->
+<P>
+
+<A NAME="IDX209"></A>
+<DL>
+<DT><U>special form+:</U> <B>fluid-let</B> <I>((<VAR>variable</VAR> <VAR>init</VAR>) <small>...</small>) expression expression <small>...</small></I>
+<DD><A NAME="IDX210"></A>
+<A NAME="IDX211"></A>
+<A NAME="IDX212"></A>
+<A NAME="IDX213"></A>
+The <VAR>init</VAR>s are evaluated in the current environment (in some
+unspecified order), the current values of the <VAR>variable</VAR>s are saved,
+the results are assigned to the <VAR>variable</VAR>s, the <VAR>expression</VAR>s
+are evaluated sequentially in the current environment, the
+<VAR>variable</VAR>s are restored to their original values, and the value of
+the last <VAR>expression</VAR> is returned.
+</P><P>
+
+<A NAME="IDX214"></A>
+The syntax of this special form is similar to that of <CODE>let</CODE>, but
+<CODE>fluid-let</CODE> temporarily rebinds existing variables.  Unlike
+<CODE>let</CODE>, <CODE>fluid-let</CODE> creates no new bindings; instead it
+<EM>assigns</EM> the value of each <VAR>init</VAR> to the binding (determined
+by the rules of lexical scoping) of its corresponding <VAR>variable</VAR>.
+</P><P>
+
+<A NAME="IDX215"></A>
+MIT Scheme allows any of the <VAR>init</VAR>s to be omitted, in which
+case the corresponding <VAR>variable</VAR>s are temporarily unassigned.
+</P><P>
+
+An error of type <CODE>condition-type:unbound-variable</CODE> is signalled if
+any of the <VAR>variable</VAR>s are unbound.  However, because
+<CODE>fluid-let</CODE> operates by means of side effects, it is valid for any
+<VAR>variable</VAR> to be unassigned when the form is entered.
+<A NAME="IDX216"></A>
+</P><P>
+
+Here is an example showing the difference between <CODE>fluid-let</CODE> and
+<CODE>let</CODE>.  First see how <CODE>let</CODE> affects the binding of a variable:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define variable #t)
+(define (access-variable) variable)
+variable                                =>  #t
+(let ((variable #f))
+  (access-variable))                    =>  #t
+variable                                =>  #t
+</pre></td></tr></table></P><P>
+
+<CODE>access-variable</CODE> returns <CODE>#t</CODE> in this case because it
+is defined in an environment with <CODE>variable</CODE> bound to
+<CODE>#t</CODE>.  <CODE>fluid-let</CODE>, on the other hand, temporarily reuses an
+existing variable:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>variable                                =>  #t
+(fluid-let ((variable #f))              ;reuses old binding
+  (access-variable))                    =>  #f
+variable                                =>  #t
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX217"></A>
+The <EM>extent</EM> of a dynamic binding is defined to be the time period
+during which the variable contains the new value.  Normally this time
+period begins when the body is entered and ends when it is exited; on a
+sequential machine it is normally a contiguous time period.  However,
+because Scheme has first-class continuations, it is possible to leave
+the body and then reenter it, as many times as desired.  In this
+situation, the extent becomes non-contiguous.
+</P><P>
+
+<A NAME="IDX218"></A>
+<A NAME="IDX219"></A>
+When the body is exited by invoking a continuation, the new value is
+saved, and the variable is set to the old value.  Then, if the body is
+reentered by invoking a continuation, the old value is saved, and the
+variable is set to the new value.  In addition, side effects to the
+variable that occur both inside and outside of body are preserved, even
+if continuations are used to jump in and out of body repeatedly.
+</DL>
+</P><P>
+
+Here is a complicated example that shows the interaction between dynamic
+binding and continuations:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (complicated-dynamic-binding)
+  (let ((variable 1)
+        (inside-continuation))
+    (write-line variable)
+    (call-with-current-continuation
+     (lambda (outside-continuation)
+       (fluid-let ((variable 2))
+         (write-line variable)
+         (set! variable 3)
+         (call-with-current-continuation
+          (lambda (k)
+            (set! inside-continuation k)
+            (outside-continuation #t)))
+         (write-line variable)
+         (set! inside-continuation #f))))
+    (write-line variable)
+    (if inside-continuation
+        (begin
+          (set! variable 4)
+          (inside-continuation #f)))))
+</pre></td></tr></table></P><P>
+
+Evaluating <SAMP>`(complicated-dynamic-binding)'</SAMP> writes the following on
+the console:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>1
+2
+1
+3
+4
+</pre></td></tr></table></P><P>
+
+Commentary: the first two values written are the initial binding of
+<CODE>variable</CODE> and its new binding after the <CODE>fluid-let</CODE>'s body is
+entered.  Immediately after they are written, <CODE>variable</CODE> is set to
+<SAMP>`3'</SAMP>, and then <CODE>outside-continuation</CODE> is invoked, causing us to
+exit the body.  At this point, <SAMP>`1'</SAMP> is written, demonstrating that
+the original value of <CODE>variable</CODE> has been restored, because we have
+left the body.  Then we set <CODE>variable</CODE> to <SAMP>`4'</SAMP> and reenter the
+body by invoking <CODE>inside-continuation</CODE>.  At this point, <SAMP>`3'</SAMP> is
+written, indicating that the side effect that previously occurred within
+the body has been preserved.  Finally, we exit body normally, and write
+<SAMP>`4'</SAMP>, demonstrating that the side effect that occurred outside of
+the body was also preserved.
+</P><P>
+
+<A NAME="Definitions"></A>
+<HR SIZE="6">
+<A NAME="SEC33"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC32"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC34"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC36"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.4 Definitions </H2>
+<!--docid::SEC33::-->
+<P>
+
+<A NAME="IDX220"></A>
+<DL>
+<DT><U>special form:</U> <B>define</B> <I>variable [expression]</I>
+<DD><A NAME="IDX221"></A>
+<DT><U>special form:</U> <B>define</B> <I><VAR>formals</VAR> expression expression <small>...</small></I>
+<DD><A NAME="IDX222"></A>
+<A NAME="IDX223"></A>
+<A NAME="IDX224"></A>
+<A NAME="IDX225"></A>
+<A NAME="IDX226"></A>
+<A NAME="IDX227"></A>
+<A NAME="IDX228"></A>
+<A NAME="IDX229"></A>
+<A NAME="IDX230"></A>
+<A NAME="IDX231"></A>
+Definitions are valid in some but not all contexts where expressions are
+allowed.  Definitions may only occur at the top level of a program and
+at the beginning of a lambda body (that is, the body of a <CODE>lambda</CODE>,
+<CODE>let</CODE>, <CODE>let*</CODE>, <CODE>letrec</CODE>, <CODE>fluid-let</CODE>, or "procedure
+<CODE>define</CODE>" expression).  A definition that occurs at the top level
+of a program is called a <EM>top-level definition</EM>, and a definition
+that occurs at the beginning of a body is called an <EM>internal
+definition</EM>.
+</P><P>
+
+<A NAME="IDX232"></A>
+<A NAME="IDX233"></A>
+<A NAME="IDX234"></A>
+<A NAME="IDX235"></A>
+In the second form of <CODE>define</CODE> (called "<EM>procedure
+<CODE>define</CODE></EM>"), the component <VAR>formals</VAR> is identical to the
+component of the same name in a <CODE>named-lambda</CODE> expression.  In
+fact, these two expressions are equivalent:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (<VAR>name1</VAR> <VAR>name2</VAR> <small>...</small>)
+  <VAR>expression</VAR>
+  <VAR>expression</VAR> <small>...</small>)
+
+(define <VAR>name1</VAR>
+  (named-lambda (<VAR>name1</VAR> <VAR>name2</VAR> <small>...</small>)
+    <VAR>expression</VAR>
+    <VAR>expression</VAR> <small>...</small>))
+</pre></td></tr></table></DL>
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_3.html#SEC34">2.4.1 Top-Level Definitions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_3.html#SEC35">2.4.2 Internal Definitions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Top-Level Definitions"></A>
+<HR SIZE="6">
+<A NAME="SEC34"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC33"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC35"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC32"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC33"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC36"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 2.4.1 Top-Level Definitions </H3>
+<!--docid::SEC34::-->
+<P>
+
+<A NAME="IDX236"></A>
+A top-level definition,
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define <VAR>variable</VAR> <VAR>expression</VAR>)
+</pre></td></tr></table></P><P>
+
+has essentially the same effect as this assignment expression, if
+<VAR>variable</VAR> is bound:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(set! <VAR>variable</VAR> <VAR>expression</VAR>)
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX237"></A>
+<A NAME="IDX238"></A>
+If <VAR>variable</VAR> is not bound, however, <CODE>define</CODE> binds
+<VAR>variable</VAR> to a new location in the current environment before
+performing the assignment (it is an error to perform a <CODE>set!</CODE> on an
+unbound variable).  If you omit <VAR>expression</VAR>, the variable becomes
+unassigned; an attempt to reference such a variable is an error.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define add3
+   (lambda (x) (+ x 3)))                =>  unspecified
+(add3 3)                                =>  6
+
+(define first car)                      =>  unspecified
+(first '(1 2))                          =>  1
+
+(define bar)                            =>  unspecified
+bar                                     error--> Unassigned variable
+</pre></td></tr></table></P><P>
+
+<A NAME="Internal Definitions"></A>
+<HR SIZE="6">
+<A NAME="SEC35"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC34"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC36"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC32"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC33"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC36"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 2.4.2 Internal Definitions </H3>
+<!--docid::SEC35::-->
+<P>
+
+<A NAME="IDX239"></A>
+<A NAME="IDX240"></A>
+<A NAME="IDX241"></A>
+<A NAME="IDX242"></A>
+<A NAME="IDX243"></A>
+<A NAME="IDX244"></A>
+<A NAME="IDX245"></A>
+<A NAME="IDX246"></A>
+<A NAME="IDX247"></A>
+<A NAME="IDX248"></A>
+An <EM>internal definition</EM> is a definition that occurs at the
+beginning of a <VAR>body</VAR> (that is, the body of a <CODE>lambda</CODE>,
+<CODE>let</CODE>, <CODE>let*</CODE>, <CODE>letrec</CODE>, <CODE>fluid-let</CODE>, or "procedure
+<CODE>define</CODE>" expression), rather than at the top level of a program.
+The variable defined by an internal definition is local to the
+<VAR>body</VAR>.  That is, <VAR>variable</VAR> is bound rather than assigned, and
+the region of the binding is the entire <VAR>body</VAR>.  For example,
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(let ((x 5))
+  (define foo (lambda (y) (bar x y)))
+  (define bar (lambda (a b) (+ (* a b) a)))
+  (foo (+ x 3)))                        =>  45
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX249"></A>
+A <VAR>body</VAR> containing internal definitions can always be converted
+into a completely equivalent <CODE>letrec</CODE> expression.  For example, the
+<CODE>let</CODE> expression in the above example is equivalent to
+</P><P>
+
+<A NAME="IDX250"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(let ((x 5))
+  (letrec ((foo (lambda (y) (bar x y)))
+           (bar (lambda (a b) (+ (* a b) a))))
+    (foo (+ x 3))))
+</pre></td></tr></table></P><P>
+
+<A NAME="Assignments"></A>
+<HR SIZE="6">
+<A NAME="SEC36"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC35"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC37"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC33"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_4.html#SEC42"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.5 Assignments </H2>
+<!--docid::SEC36::-->
+<P>
+
+<A NAME="IDX251"></A>
+<DL>
+<DT><U>special form:</U> <B>set!</B> <I>variable [expression]</I>
+<DD><A NAME="IDX252"></A>
+<A NAME="IDX253"></A>
+If <VAR>expression</VAR> is specified, evaluates <VAR>expression</VAR> and stores
+the resulting value in the location to which <VAR>variable</VAR> is bound.
+If <VAR>expression</VAR> is omitted, <VAR>variable</VAR> is altered to be
+unassigned; a subsequent reference to such a <VAR>variable</VAR> is an error.
+In either case, the value of the <CODE>set!</CODE> expression is unspecified.
+</P><P>
+
+<VAR>Variable</VAR> must be bound either in some region enclosing the
+<CODE>set!</CODE> expression, or at the top level.  However, <VAR>variable</VAR> is
+permitted to be unassigned when the <CODE>set!</CODE> form is entered.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define x 2)                            =>  unspecified
+(+ x 1)                                 =>  3
+(set! x 4)                              =>  unspecified
+(+ x 1)                                 =>  5
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX254"></A>
+<A NAME="IDX255"></A>
+<VAR>Variable</VAR> may be an <CODE>access</CODE> expression
+(see section <A HREF="scheme_14.html#SEC125">13. Environments</A>).  This allows you to assign variables in an
+arbitrary environment.  For example,
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define x (let ((y 0)) (the-environment)))
+(define y 'a)
+y                                       =>  a
+(access y x)                            =>  0
+(set! (access y x) 1)                   =>  unspecified
+y                                       =>  a
+(access y x)                            =>  1
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Quoting"></A>
+<HR SIZE="6">
+<A NAME="SEC37"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC36"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC38"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_4.html#SEC42"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.6 Quoting </H2>
+<!--docid::SEC37::-->
+<P>
+
+This section describes the expressions that are used to modify or
+prevent the evaluation of objects.
+</P><P>
+
+<A NAME="IDX256"></A>
+<DL>
+<DT><U>special form:</U> <B>quote</B> <I>datum</I>
+<DD><A NAME="IDX257"></A>
+<A NAME="IDX258"></A>
+<A NAME="IDX259"></A>
+<CODE>(quote <VAR>datum</VAR>)</CODE> evaluates to <VAR>datum</VAR>.  <VAR>Datum</VAR> may be
+any external representation of a Scheme object
+(see section <A HREF="scheme_2.html#SEC13">1.2.6 External Representations</A>).
+Use <CODE>quote</CODE> to include literal constants in
+Scheme code.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(quote a)                               =>  a
+(quote #(a b c))                        =>  #(a b c)
+(quote (+ 1 2))                         =>  (+ 1 2)
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX260"></A>
+<A NAME="IDX261"></A>
+<A NAME="IDX262"></A>
+<A NAME="IDX263"></A>
+<CODE>(quote <VAR>datum</VAR>)</CODE> may be abbreviated as <CODE>'<VAR>datum</VAR></CODE>.
+The two notations are equivalent in all respects.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>'a                                      =>  a
+'#(a b c)                               =>  #(a b c)
+'(+ 1 2)                                =>  (+ 1 2)
+'(quote a)                              =>  (quote a)
+''a                                     =>  (quote a)
+</pre></td></tr></table></P><P>
+
+Numeric constants, string constants, character constants, and boolean
+constants evaluate to themselves, so they don't need to be quoted.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>'"abc"                                  =>  "abc"
+"abc"                                   =>  "abc"
+'145932                                 =>  145932
+145932                                  =>  145932
+'#t                                     =>  #t
+#t                                      =>  #t
+'#\a                                    =>  #\a
+#\a                                     =>  #\a
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX264"></A>
+<DL>
+<DT><U>special form:</U> <B>quasiquote</B> <I>template</I>
+<DD><A NAME="IDX265"></A>
+<A NAME="IDX266"></A>
+<A NAME="IDX267"></A>
+<A NAME="IDX268"></A>
+"Backquote" or "quasiquote" expressions are useful for constructing
+a list or vector structure when most but not all of the desired
+structure is known in advance.  If no commas appear within the
+<VAR>template</VAR>, the result of evaluating <CODE>`<VAR>template</VAR></CODE> is
+equivalent (in the sense of <CODE>equal?</CODE>) to the result of evaluating
+<CODE>'<VAR>template</VAR></CODE>.  If a comma appears within the <VAR>template</VAR>,
+however, the expression following the comma is evaluated ("unquoted")
+and its result is inserted into the structure instead of the comma and
+the expression.  If a comma appears followed immediately by an at-sign
+(@), then the following expression shall evaluate to a list; the
+opening and closing parentheses of the list are then "stripped away"
+and the elements of the list are inserted in place of the comma at-sign
+expression sequence.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>`(list ,(+ 1 2) 4)                       =>  (list 3 4)
+
+(let ((name 'a)) `(list ,name ',name))   =>  (list a 'a)
+
+`(a ,(+ 1 2) ,@(map abs '(4 -5 6)) b)    =>  (a 3 4 5 6 b)
+
+`((foo ,(- 10 3)) ,@(cdr '(c)) . ,(car '(cons)))
+                                         =>  ((foo 7) . cons)
+
+`#(10 5 ,(sqrt 4) ,@(map sqrt '(16 9)) 8)
+                                         =>  #(10 5 2 4 3 8)
+
+`,(+ 2 3)                                =>  5
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX269"></A>
+Quasiquote forms may be nested.  Substitutions are made only for
+unquoted components appearing at the same nesting level as the outermost
+backquote.  The nesting level increases by one inside each successive
+quasiquotation, and decreases by one inside each unquotation.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>`(a `(b ,(+ 1 2) ,(foo ,(+ 1 3) d) e) f)
+     =>  (a `(b ,(+ 1 2) ,(foo 4 d) e) f)
+
+(let ((name1 'x)
+      (name2 'y))
+   `(a `(b ,,name1 ,',name2 d) e))
+     =>  (a `(b ,x ,'y d) e)
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX270"></A>
+<A NAME="IDX271"></A>
+<A NAME="IDX272"></A>
+<A NAME="IDX273"></A>
+<A NAME="IDX274"></A>
+<A NAME="IDX275"></A>
+<A NAME="IDX276"></A>
+<A NAME="IDX277"></A>
+<A NAME="IDX278"></A>
+<A NAME="IDX279"></A>
+The notations <CODE>`<VAR>template</VAR></CODE> and (<CODE>quasiquote
+<VAR>template</VAR></CODE>) are identical in all respects.
+<CODE>,<VAR>expression</VAR></CODE> is identical to <CODE>(unquote
+<VAR>expression</VAR>)</CODE> and <CODE>,@<VAR>expression</VAR></CODE> is identical to
+<CODE>(unquote-splicing <VAR>expression</VAR>)</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(quasiquote (list (unquote (+ 1 2)) 4))
+     =>  (list 3 4)
+
+'(quasiquote (list (unquote (+ 1 2)) 4))
+     =>  `(list ,(+ 1 2) 4)
+     <EM>i.e.,</EM> (quasiquote (list (unquote (+ 1 2)) 4))
+</pre></td></tr></table></P><P>
+
+Unpredictable behavior can result if any of the symbols
+<CODE>quasiquote</CODE>, <CODE>unquote</CODE>, or <CODE>unquote-splicing</CODE> appear in
+a <VAR>template</VAR> in ways otherwise than as described above.
+</DL>
+</P><P>
+
+<A NAME="Conditionals"></A>
+<HR SIZE="6">
+<A NAME="SEC38"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC37"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC39"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_4.html#SEC42"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.7 Conditionals </H2>
+<!--docid::SEC38::-->
+<P>
+
+<A NAME="IDX280"></A>
+<A NAME="IDX281"></A>
+<A NAME="IDX282"></A>
+<A NAME="IDX283"></A>
+<A NAME="IDX284"></A>
+<A NAME="IDX285"></A>
+The behavior of the <EM>conditional expressions</EM> is determined by
+whether objects are true or false.  The conditional expressions count
+only <CODE>#f</CODE> as false.  They count everything else, including
+<CODE>#t</CODE>, pairs, symbols, numbers, strings, vectors, and procedures as
+true (but see section <A HREF="scheme_2.html#SEC12">1.2.5 True and False</A>).
+</P><P>
+
+In the descriptions that follow, we say that an object has "a true
+value" or "is true" when the conditional expressions treat it as
+true, and we say that an object has "a false value" or "is false"
+when the conditional expressions treat it as false.
+</P><P>
+
+<A NAME="IDX286"></A>
+<DL>
+<DT><U>special form:</U> <B>if</B> <I>predicate consequent [alternative]</I>
+<DD><VAR>Predicate</VAR>, <VAR>consequent</VAR>, and <VAR>alternative</VAR> are
+expressions.  An <CODE>if</CODE> expression is evaluated as follows: first,
+<VAR>predicate</VAR> is evaluated.  If it yields a true value, then
+<VAR>consequent</VAR> is evaluated and its value is returned.  Otherwise
+<VAR>alternative</VAR> is evaluated and its value is returned.  If
+<VAR>predicate</VAR> yields a false value and no <VAR>alternative</VAR> is
+specified, then the result of the expression is unspecified.
+</P><P>
+
+An <CODE>if</CODE> expression evaluates either <VAR>consequent</VAR> or
+<VAR>alternative</VAR>, never both.  Programs should not depend on the value
+of an <CODE>if</CODE> expression that has no <VAR>alternative</VAR>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(if (&#62; 3 2) 'yes 'no)                   =>  yes
+(if (&#62; 2 3) 'yes 'no)                   =>  no
+(if (&#62; 3 2)
+    (- 3 2)
+    (+ 3 2))                            =>  1
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX287"></A>
+<DL>
+<DT><U>special form:</U> <B>cond</B> <I>clause clause <small>...</small></I>
+<DD><A NAME="IDX288"></A>
+<A NAME="IDX289"></A>
+Each <VAR>clause</VAR> has this form:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(<VAR>predicate</VAR> <VAR>expression</VAR> <small>...</small>)
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX290"></A>
+<A NAME="IDX291"></A>
+where <VAR>predicate</VAR> is any expression.  The last <VAR>clause</VAR> may be
+an <EM><CODE>else</CODE> clause</EM>, which has the form:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(else <VAR>expression</VAR> <VAR>expression</VAR> <small>...</small>)
+</pre></td></tr></table></P><P>
+
+A <CODE>cond</CODE> expression does the following:
+</P><P>
+
+<OL>
+<LI>
+Evaluates the <VAR>predicate</VAR> expressions of successive <VAR>clause</VAR>s in
+order, until one of the <VAR>predicate</VAR>s evaluates to a true
+value.
+<P>
+
+<LI>
+When a <VAR>predicate</VAR> evaluates to a true value, <CODE>cond</CODE> evaluates
+the <VAR>expression</VAR>s in the associated <VAR>clause</VAR> in left to right
+order, and returns the result of evaluating the last <VAR>expression</VAR> in
+the <VAR>clause</VAR> as the result of the entire <CODE>cond</CODE> expression.
+<P>
+
+If the selected <VAR>clause</VAR> contains only the <VAR>predicate</VAR> and no
+<VAR>expression</VAR>s, <CODE>cond</CODE> returns the value of the <VAR>predicate</VAR>
+as the result.
+</P><P>
+
+<LI>
+If all <VAR>predicate</VAR>s evaluate to false values, and there is no
+<CODE>else</CODE> clause, the result of the conditional expression is
+unspecified; if there is an <CODE>else</CODE> clause, <CODE>cond</CODE> evaluates
+its <VAR>expression</VAR>s (left to right) and returns the value of the last
+one.
+</OL>
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(cond ((&#62; 3 2) 'greater)
+      ((&#60; 3 2) 'less))                  =>  greater
+
+(cond ((&#62; 3 3) 'greater)
+      ((&#60; 3 3) 'less)
+      (else 'equal))                    =>  equal
+</pre></td></tr></table></P><P>
+
+Normally, programs should not depend on the value of a <CODE>cond</CODE>
+expression that has no <CODE>else</CODE> clause.  However, some Scheme
+programmers prefer to write <CODE>cond</CODE> expressions in which at least
+one of the <VAR>predicate</VAR>s is always true.  In this style, the final
+<VAR>clause</VAR> is equivalent to an <CODE>else</CODE> clause.
+</P><P>
+
+<A NAME="IDX292"></A>
+<A NAME="IDX293"></A>
+Scheme supports an alternative <VAR>clause</VAR> syntax:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(<VAR>predicate</VAR> =&#62; <VAR>recipient</VAR>)
+</pre></td></tr></table></P><P>
+
+where <VAR>recipient</VAR> is an expression.  If <VAR>predicate</VAR> evaluates to
+a true value, then <VAR>recipient</VAR> is evaluated.  Its value must be a
+procedure of one argument; this procedure is then invoked on the value
+of the <VAR>predicate</VAR>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(cond ((assv 'b '((a 1) (b 2))) =&#62; cadr)
+      (else #f))                        =>  2
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX294"></A>
+<DL>
+<DT><U>special form:</U> <B>case</B> <I>key clause clause <small>...</small></I>
+<DD><A NAME="IDX295"></A>
+<A NAME="IDX296"></A>
+<VAR>Key</VAR> may be any expression.  Each <VAR>clause</VAR> has this
+form:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>((<VAR>object</VAR> <small>...</small>) <VAR>expression</VAR> <VAR>expression</VAR> <small>...</small>)
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX297"></A>
+<A NAME="IDX298"></A>
+No <VAR>object</VAR> is evaluated, and all the <VAR>object</VAR>s must be
+distinct.  The last <VAR>clause</VAR> may be an <EM><CODE>else</CODE> clause</EM>,
+which has the form:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(else <VAR>expression</VAR> <VAR>expression</VAR> <small>...</small>)
+</pre></td></tr></table></P><P>
+
+A <CODE>case</CODE> expression does the following:
+</P><P>
+
+<OL>
+<LI>
+Evaluates <VAR>key</VAR> and compares the result with each
+<VAR>object</VAR>.
+<P>
+
+<LI>
+If the result of evaluating <VAR>key</VAR> is equivalent (in the sense of
+<CODE>eqv?</CODE>; see section <A HREF="scheme_4.html#SEC42">3. Equivalence Predicates</A>) to an <VAR>object</VAR>,
+<CODE>case</CODE> evaluates the <VAR>expression</VAR>s in the corresponding
+<VAR>clause</VAR> from left to right and returns the result of evaluating the
+last <VAR>expression</VAR> in the <VAR>clause</VAR> as the result of the
+<CODE>case</CODE> expression.
+<A NAME="IDX299"></A>
+<P>
+
+<LI>
+If the result of evaluating <VAR>key</VAR> is different from every
+<VAR>object</VAR>, and if there's an <CODE>else</CODE> clause, <CODE>case</CODE>
+evaluates its <VAR>expression</VAR>s and returns the result of the last one
+as the result of the <CODE>case</CODE> expression.  If there's no <CODE>else</CODE>
+clause, <CODE>case</CODE> returns an unspecified result.  Programs should not
+depend on the value of a <CODE>case</CODE> expression that has no <CODE>else</CODE>
+clause.
+</OL>
+<P>
+
+For example,
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(case (* 2 3)
+   ((2 3 5 7) 'prime)
+   ((1 4 6 8 9) 'composite))            =>  composite
+
+(case (car '(c d))
+   ((a) 'a)
+   ((b) 'b))                            =>  unspecified
+
+(case (car '(c d))
+   ((a e i o u) 'vowel)
+   ((w y) 'semivowel)
+   (else 'consonant))                   =>  consonant
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX300"></A>
+<DL>
+<DT><U>special form:</U> <B>and</B> <I>expression <small>...</small></I>
+<DD>The <VAR>expression</VAR>s are evaluated from left to right, and the value of
+the first <VAR>expression</VAR> that evaluates to a false value is returned.
+Any remaining <VAR>expression</VAR>s are not evaluated.  If all the
+<VAR>expression</VAR>s evaluate to true values, the value of the last
+<VAR>expression</VAR> is returned.  If there are no <VAR>expression</VAR>s then
+<CODE>#t</CODE> is returned.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(and (= 2 2) (&#62; 2 1))                   =>  #t
+(and (= 2 2) (&#60; 2 1))                   =>  #f
+(and 1 2 'c '(f g))                     =>  (f g)
+(and)                                   =>  #t
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX301"></A>
+<DL>
+<DT><U>special form:</U> <B>or</B> <I>expression <small>...</small></I>
+<DD>The <VAR>expression</VAR>s are evaluated from left to right, and the value of
+the first <VAR>expression</VAR> that evaluates to a true value is returned.
+Any remaining <VAR>expression</VAR>s are not evaluated.  If all
+<VAR>expression</VAR>s evaluate to false values, the value of the last
+<VAR>expression</VAR> is returned.  If there are no <VAR>expression</VAR>s then
+<CODE>#f</CODE> is returned.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(or (= 2 2) (&#62; 2 1))                    =>  #t
+(or (= 2 2) (&#60; 2 1))                    =>  #t
+(or #f #f #f)                           =>  #f
+(or (memq 'b '(a b c)) (/ 3 0))         =>  (b c)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Sequencing"></A>
+<HR SIZE="6">
+<A NAME="SEC39"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC38"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC40"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_4.html#SEC42"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.8 Sequencing </H2>
+<!--docid::SEC39::-->
+<P>
+
+The <CODE>begin</CODE> special form is used to evaluate expressions in a
+particular order.
+</P><P>
+
+<A NAME="IDX302"></A>
+<DL>
+<DT><U>special form:</U> <B>begin</B> <I>expression expression <small>...</small></I>
+<DD>The <VAR>expression</VAR>s are evaluated sequentially from left to right, and
+the value of the last <VAR>expression</VAR> is returned.  This expression
+type is used to sequence side effects such as input and output.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define x 0)
+(begin (set! x 5)
+       (+ x 1))                 =>  6
+
+(begin (display "4 plus 1 equals ")
+       (display (+ 4 1)))
+                                -|  4 plus 1 equals 5
+                                =>  unspecified
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX303"></A>
+Often the use of <CODE>begin</CODE> is unnecessary, because many special forms
+already support sequences of expressions (that is, they have an implicit
+<CODE>begin</CODE>).  Some of these special forms are:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>case
+cond
+define          ;``procedure <CODE>define</CODE>'' only
+do
+fluid-let
+lambda
+let
+let*
+letrec
+named-lambda
+</pre></td></tr></table><A NAME="IDX304"></A>
+<A NAME="IDX305"></A>
+<A NAME="IDX306"></A>
+<A NAME="IDX307"></A>
+<A NAME="IDX308"></A>
+<A NAME="IDX309"></A>
+<A NAME="IDX310"></A>
+<A NAME="IDX311"></A>
+<A NAME="IDX312"></A>
+<A NAME="IDX313"></A>
+</P><P>
+
+<A NAME="IDX314"></A>
+The obsolete special form <CODE>sequence</CODE> is identical to <CODE>begin</CODE>.
+It should not be used in new code.
+</DL>
+</P><P>
+
+<A NAME="Iteration"></A>
+<HR SIZE="6">
+<A NAME="SEC40"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC39"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC41"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_4.html#SEC42"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.9 Iteration </H2>
+<!--docid::SEC40::-->
+<P>
+
+<A NAME="IDX315"></A>
+<A NAME="IDX316"></A>
+<A NAME="IDX317"></A>
+<A NAME="IDX318"></A>
+The <EM>iteration expressions</EM> are: "named <CODE>let</CODE>" and <CODE>do</CODE>.
+They are also binding expressions, but are more commonly referred to as
+iteration expressions.  Because Scheme is properly tail-recursive, you
+don't need to use these special forms to express iteration; you can
+simply use appropriately written "recursive" procedure calls.
+</P><P>
+
+<A NAME="IDX319"></A>
+<DL>
+<DT><U>special form:</U> <B>let</B> <I>name ((<VAR>variable</VAR> <VAR>init</VAR>) <small>...</small>) expression expression <small>...</small></I>
+<DD><A NAME="IDX320"></A>
+MIT Scheme permits a variant on the syntax of <CODE>let</CODE> called
+"named <CODE>let</CODE>" which provides a more general looping construct
+than <CODE>do</CODE>, and may also be used to express recursions.
+</P><P>
+
+Named <CODE>let</CODE> has the same syntax and semantics as ordinary
+<CODE>let</CODE> except that <VAR>name</VAR> is bound within the <VAR>expression</VAR>s
+to a procedure whose formal arguments are the <VAR>variable</VAR>s and whose
+body is the <VAR>expression</VAR>s.  Thus the execution of the
+<VAR>expression</VAR>s may be repeated by invoking the procedure named by
+<VAR>name</VAR>.
+</P><P>
+
+<A NAME="IDX321"></A>
+MIT Scheme allows any of the <VAR>init</VAR>s to be omitted, in which
+case the corresponding <VAR>variable</VAR>s are unassigned.
+</P><P>
+
+Note: the following expressions are equivalent:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(let <VAR>name</VAR> ((<VAR>variable</VAR> <VAR>init</VAR>) <small>...</small>)
+  <VAR>expression</VAR>
+  <VAR>expression</VAR> <small>...</small>)
+
+((letrec ((<VAR>name</VAR>
+           (named-lambda (<VAR>name</VAR> <VAR>variable</VAR> <small>...</small>)
+             <VAR>expression</VAR>
+             <VAR>expression</VAR> <small>...</small>)))
+   <VAR>name</VAR>)
+ <VAR>init</VAR> <small>...</small>)
+</pre></td></tr></table></P><P>
+
+Here is an example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(let loop
+     ((numbers '(3 -2 1 6 -5))
+      (nonneg '())
+      (neg '()))
+  (cond ((null? numbers)
+         (list nonneg neg))
+        ((&#62;= (car numbers) 0)
+         (loop (cdr numbers)
+               (cons (car numbers) nonneg)
+               neg))
+        (else
+         (loop (cdr numbers)
+               nonneg
+               (cons (car numbers) neg)))))
+
+     =>  ((6 1 3) (-5 -2))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX322"></A>
+<DL>
+<DT><U>special form:</U> <B>do</B> <I>((<VAR>variable</VAR> <VAR>init</VAR> <VAR>step</VAR>) <small>...</small>) (<VAR>test</VAR> <VAR>expression</VAR> <small>...</small>) command <small>...</small></I>
+<DD><CODE>do</CODE> is an iteration construct.  It specifies a set of variables to
+be bound, how they are to be initialized at the start, and how they are
+to be updated on each iteration.  When a termination condition is met,
+the loop exits with a specified result value.
+</P><P>
+
+<CODE>do</CODE> expressions are evaluated as follows: The <VAR>init</VAR>
+expressions are evaluated (in some unspecified order), the
+<VAR>variable</VAR>s are bound to fresh locations, the results of the
+<VAR>init</VAR> expressions are stored in the bindings of the
+<VAR>variable</VAR>s, and then the iteration phase begins.
+</P><P>
+
+Each iteration begins by evaluating <VAR>test</VAR>; if the result is false,
+then the <VAR>command</VAR> expressions are evaluated in order for effect,
+the <VAR>step</VAR> expressions are evaluated in some unspecified order, the
+<VAR>variable</VAR>s are bound to fresh locations, the results of the
+<VAR>step</VAR>s are stored in the bindings of the <VAR>variable</VAR>s, and the
+next iteration begins.
+</P><P>
+
+If <VAR>test</VAR> evaluates to a true value, then the <VAR>expression</VAR>s are
+evaluated from left to right and the value of the last <VAR>expression</VAR>
+is returned as the value of the <CODE>do</CODE> expression.  If no
+<VAR>expression</VAR>s are present, then the value of the <CODE>do</CODE>
+expression is unspecified in standard Scheme; in MIT Scheme, the
+value of <VAR>test</VAR> is returned.
+</P><P>
+
+<A NAME="IDX323"></A>
+<A NAME="IDX324"></A>
+The region of the binding of a <VAR>variable</VAR> consists of the entire
+<CODE>do</CODE> expression except for the <VAR>init</VAR>s.  It is an error for a
+<VAR>variable</VAR> to appear more than once in the list of <CODE>do</CODE>
+variables.
+</P><P>
+
+A <VAR>step</VAR> may be omitted, in which case the effect is the same as if
+<CODE>(<VAR>variable</VAR> <VAR>init</VAR> <VAR>variable</VAR>)</CODE> had been written
+instead of <CODE>(<VAR>variable</VAR> <VAR>init</VAR>)</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(do ((vec (make-vector 5))
+      (i 0 (+ i 1)))
+    ((= i 5) vec)
+   (vector-set! vec i i))               =>  #(0 1 2 3 4)
+
+(let ((x '(1 3 5 7 9)))
+   (do ((x x (cdr x))
+        (sum 0 (+ sum (car x))))
+       ((null? x) sum)))                =>  25
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Structure Definitions"></A>
+<HR SIZE="6">
+<A NAME="SEC41"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC40"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_4.html#SEC42"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_4.html#SEC42"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.10 Structure Definitions </H2>
+<!--docid::SEC41::-->
+<P>
+
+This section provides examples and describes the options and syntax of
+<CODE>define-structure</CODE>, an MIT Scheme macro that is very similar to
+<CODE>defstruct</CODE> in Common Lisp.  The differences between them are
+summarized at the end of this section.  For more information, see
+Steele's Common Lisp book.
+</P><P>
+
+<A NAME="IDX325"></A>
+<DL>
+<DT><U>special form+:</U> <B>define-structure</B> <I>(name structure-option <small>...</small>) slot-description <small>...</small></I>
+<DD>Each <VAR>slot-description</VAR> takes one of the following forms:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre><VAR>slot-name</VAR>
+(<VAR>slot-name</VAR> <VAR>default-init</VAR> [<VAR>slot-option</VAR> <VAR>value</VAR>]*)
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX326"></A>
+<A NAME="IDX327"></A>
+The fields <VAR>name</VAR> and <VAR>slot-name</VAR> must both be symbols.  The
+field <VAR>default-init</VAR> is an expression for the initial value of the
+slot.  It is evaluated each time a new instance is constructed.  If it
+is not specified, the initial content of the slot is undefined.  Default
+values are only useful with a BOA constructor with argument list or
+a keyword constructor (see below).
+</P><P>
+
+Evaluation of a <CODE>define-structure</CODE> expression defines a structure
+descriptor and a set of procedures to manipulate instances of the
+structure.  These instances are represented as records by default
+(see section <A HREF="scheme_11.html#SEC99">10.4 Records</A>) but may alternately be lists or vectors.  The
+accessors and modifiers are marked with compiler declarations so that
+calls to them are automatically transformed into appropriate references.
+Often, no options are required, so a simple call to
+<CODE>define-structure</CODE> looks like:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-structure foo a b c)
+</pre></td></tr></table></P><P>
+
+This defines a type descriptor <CODE>foo</CODE>, a constructor
+<CODE>make-foo</CODE>, a predicate <CODE>foo?</CODE>, accessors <CODE>foo-a</CODE>,
+<CODE>foo-b</CODE>, and <CODE>foo-c</CODE>, and modifiers <CODE>set-foo-a!</CODE>,
+<CODE>set-foo-b!</CODE>, and <CODE>set-foo-c!</CODE>.
+</P><P>
+
+In general, if no options are specified, <CODE>define-structure</CODE> defines
+the following (using the simple call above as an example):
+</P><P>
+
+<DL COMPACT>
+<DT>type descriptor
+<DD>The name of the type descriptor is the same as the name of the
+structure, e.g. <SAMP>`foo'</SAMP>.  The type descriptor satisfies the
+predicate <CODE>record-type?</CODE>.
+<P>
+
+<DT>constructor
+<DD>The name of the constructor is <CODE>"make-"</CODE> followed by the name of
+the structure, e.g. <SAMP>`make-foo'</SAMP>.  The number of arguments accepted
+by the constructor is the same as the number of slots; the arguments are
+the initial values for the slots, and the order of the arguments matches
+the order of the slot definitions.
+<P>
+
+<DT>predicate
+<DD>The name of the predicate is the name of the structure followed by
+<CODE>"?"</CODE>, e.g. <SAMP>`foo?'</SAMP>.  The predicate is a procedure of one
+argument, which returns <CODE>#t</CODE> if its argument is a record of the
+type defined by this structure definition, and <CODE>#f</CODE> otherwise.
+<P>
+
+<DT>accessors
+<DD>For each slot, an accessor is defined.  The name of the accessor is
+formed by appending the name of the structure, a hyphen, and the name of
+the slot, e.g. <SAMP>`foo-a'</SAMP>.  The accessor is a procedure of one
+argument, which must be a record of the type defined by this structure
+definition.  The accessor extracts the contents of the corresponding
+slot in that record and returns it.
+<P>
+
+<DT>modifiers
+<DD>For each slot, a modifier is defined.  The name of the modifier is
+formed by appending <CODE>"set-"</CODE>, the name of the accessor, and
+<CODE>"!"</CODE>, e.g. <SAMP>`set-foo-a!'</SAMP>.  The modifier is a procedure of
+two arguments, the first of which must be a record of the type defined
+by this structure definition, and the second of which may be any object.
+The modifier modifies the contents of the corresponding slot in that
+record to be that object, and returns an unspecified value.
+</DL>
+<P>
+
+When options are not supplied, <CODE>(<VAR>name</VAR>)</CODE> may be abbreviated to
+<VAR>name</VAR>.  This convention holds equally for <VAR>structure-options</VAR>
+and <VAR>slot-options</VAR>.  Hence, these are equivalent:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-structure foo a b c)
+(define-structure (foo) (a) b (c))
+</pre></td></tr></table></P><P>
+
+as are
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-structure (foo keyword-constructor) a b c)
+(define-structure (foo (keyword-constructor)) a b c)
+</pre></td></tr></table></P><P>
+
+When specified as option values, <CODE>false</CODE> and <CODE>nil</CODE> are
+equivalent to <CODE>#f</CODE>, and <CODE>true</CODE> and <CODE>t</CODE> are equivalent to
+<CODE>#t</CODE>.
+</DL>
+</P><P>
+
+Possible <VAR>slot-options</VAR> are:
+</P><P>
+
+<A NAME="IDX328"></A>
+<DL>
+<DT><U>slot option:</U> <B>read-only</B> <I>value</I>
+<DD>When given a <VAR>value</VAR> other than <CODE>#f</CODE>, this specifies that no
+modifier should be created for the slot.
+</DL>
+</P><P>
+
+<A NAME="IDX329"></A>
+<DL>
+<DT><U>slot option:</U> <B>type</B> <I>type-descriptor</I>
+<DD>This is accepted but not presently used.
+</DL>
+</P><P>
+
+Possible <VAR>structure-options</VAR> are:
+</P><P>
+
+<A NAME="IDX330"></A>
+<DL>
+<DT><U>structure option:</U> <B>predicate</B> <I>[name]</I>
+<DD>This option controls the definition of a predicate procedure for the
+structure.  If <VAR>name</VAR> is not given, the predicate is defined with
+the default name (see above).  If <VAR>name</VAR> is <CODE>#f</CODE>, the predicate
+is not defined at all.  Otherwise, <VAR>name</VAR> must be a symbol, and
+the predicate is defined with that symbol as its name.
+</DL>
+</P><P>
+
+<A NAME="IDX331"></A>
+<DL>
+<DT><U>structure option:</U> <B>copier</B> <I>[name]</I>
+<DD>This option controls the definition of a procedure to copy instances of
+the structure.  This is a procedure of one argument, a structure
+instance, that makes a newly allocated copy of the structure and returns
+it.  If <VAR>name</VAR> is not given, the copier is defined, and the name
+of the copier is <CODE>"copy-"</CODE> followed by the structure name (e.g.
+<SAMP>`copy-foo'</SAMP>).  If <VAR>name</VAR> is <CODE>#f</CODE>, the copier is not
+defined.  Otherwise, <VAR>name</VAR> must be a symbol, and the copier is
+defined with that symbol as its name.
+</DL>
+</P><P>
+
+<A NAME="IDX332"></A>
+<DL>
+<DT><U>structure option:</U> <B>print-procedure</B> <I>expression</I>
+<DD>Evaluating <VAR>expression</VAR> must yield a procedure of two arguments,
+which is used to print instances of the structure.  The procedure is an
+<EM>unparser method</EM> (see section <A HREF="scheme_15.html#SEC137">14.7 Custom Output</A>).  If the structure
+instances are records, this option has the same effect as calling
+<CODE>set-record-type-unparser-method!</CODE>.
+<A NAME="IDX333"></A>
+</DL>
+</P><P>
+
+<A NAME="IDX334"></A>
+<DL>
+<DT><U>structure option:</U> <B>constructor</B> <I>[name [argument-list]]</I>
+<DD><A NAME="IDX335"></A>
+This option controls the definition of constructor procedures.  These
+constructor procedures are called "BOA constructors", for "By
+Order of Arguments", because the arguments to the constructor specify
+the initial contents the structure's slots by the order in which they
+are given.  This is as opposed to "keyword constructors", which
+specify the initial contents using keywords, and in which the order of
+arguments is irrelevant.
+</P><P>
+
+If <VAR>name</VAR> is not given, a constructor is defined with the default
+name and arguments (see above).  If <VAR>name</VAR> is <CODE>#f</CODE>, no
+constructor is defined; <VAR>argument-list</VAR> may not be specified in this
+case.  Otherwise, <VAR>name</VAR> must be a symbol, and a constructor is
+defined with that symbol as its name.  If <VAR>name</VAR> is a symbol,
+<VAR>argument-list</VAR> is optionally allowed; if it is omitted, the
+constructor accepts one argument for each slot in the structure
+definition, in the same order in which the slots appear in the
+definition.  Otherwise, <VAR>argument-list</VAR> must be a lambda list
+(see section <A HREF="scheme_3.html#SEC30">2.1 Lambda Expressions</A>), and each of the parameters of the lambda
+list must be the name of a slot in the structure.  The arguments
+accepted by the constructor are defined by this lambda list.  Any slot
+that is not specified by the lambda list is initialized to the
+<VAR>default-init</VAR> as specified above; likewise for any slot specified
+as an optional parameter when the corresponding argument is not
+supplied.
+</P><P>
+
+If the <CODE>constructor</CODE> option is specified, the default constructor
+is not defined.  Additionally, the <CODE>constructor</CODE> option may be
+specified multiple times to define multiple constructors with
+different names and argument lists.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-structure (foo
+                   (constructor make-foo (#!optional a b)))
+  (a 6 read-only #t)
+  (b 9))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX336"></A>
+<DL>
+<DT><U>structure option:</U> <B>keyword-constructor</B> <I>[name]</I>
+<DD><A NAME="IDX337"></A>
+This option controls the definition of keyword constructor procedures.
+A <EM>keyword constructor</EM> is a procedure that accepts arguments that
+are alternating slot names and values.  If <VAR>name</VAR> is omitted, a
+keyword constructor is defined, and the name of the constructor is
+<CODE>"make-"</CODE> followed by the name of the structure (e.g.
+<SAMP>`make-foo'</SAMP>).  Otherwise, <VAR>name</VAR> must be a symbol, and a keyword
+constructor is defined with this symbol as its name.
+</P><P>
+
+If the <CODE>keyword-constructor</CODE> option is specified, the default
+constructor is not defined.  Additionally, the
+<CODE>keyword-constructor</CODE> option may be specified multiple times to
+define multiple keyword constructors; this is usually not done since
+such constructors would all be equivalent.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-structure (foo (keyword-constructor make-bar)) a b)
+(foo-a (make-bar 'b 20 'a 19))         => 19
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX338"></A>
+<DL>
+<DT><U>structure option:</U> <B>type-descriptor</B> <I>name</I>
+<DD>This option cannot be used with the <CODE>type</CODE> or <CODE>named</CODE> options.
+</P><P>
+
+By default, structures are implemented as records.  The name of the
+structure is defined to hold the type descriptor of the record defined
+by the structure.  The <CODE>type-descriptor</CODE> option specifies a
+different name to hold the type descriptor.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-structure foo a b)
+foo             => #[record-type 18]
+
+(define-structure (bar (type-descriptor bar-rtd)) a b)
+bar             error--> Unbound variable: bar
+bar-rtd         => #[record-type 19]
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX339"></A>
+<DL>
+<DT><U>structure option:</U> <B>conc-name</B> <I>[name]</I>
+<DD>By default, the prefix for naming accessors and modifiers is the name of
+the structure followed by a hyphen.  The <CODE>conc-name</CODE> option can be
+used to specify an alternative.  If <VAR>name</VAR> is not given, the prefix
+is the name of the structure followed by a hyphen (the default).  If
+<VAR>name</VAR> is <CODE>#f</CODE>, the slot names are used directly, without
+prefix.  Otherwise, <VAR>name</VAR> must a symbol, and that symbol is used as
+the prefix.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre><CODE>(define-structure (foo (conc-name moby/)) a b)</CODE>
+</pre></td></tr></table></P><P>
+
+defines accessors <CODE>moby/a</CODE> and <CODE>moby/b</CODE>, and modifiers
+<CODE>set-moby/a!</CODE> and <CODE>set-moby/b!</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre><CODE>(define-structure (foo (conc-name #f)) a b)</CODE>
+</pre></td></tr></table></P><P>
+
+defines accessors <CODE>a</CODE> and <CODE>b</CODE>, and modifiers <CODE>set-a!</CODE> and
+<CODE>set-b!</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX340"></A>
+<DL>
+<DT><U>structure option:</U> <B>type</B> <I>representation-type</I>
+<DD>This option cannot be used with the <CODE>type-descriptor</CODE> option.
+</P><P>
+
+By default, structures are implemented as records.  The <CODE>type</CODE>
+option overrides this default, allowing the programmer to specify that
+the structure be implemented using another data type.  The option value
+<VAR>representation-type</VAR> specifies the alternate data type; it is
+allowed to be one of the symbols <CODE>vector</CODE> or <CODE>list</CODE>, and the
+data type used is the one corresponding to the symbol.
+</P><P>
+
+If this option is given, and the <CODE>named</CODE> option is not specified,
+the representation will not be tagged, and neither a predicate nor a
+type descriptor will be defined; also, the <CODE>print-procedure</CODE>
+option may not be given.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-structure (foo (type list)) a b) 
+(make-foo 1 2)                          => (1 2)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX341"></A>
+<DL>
+<DT><U>structure option:</U> <B>named</B> <I>[expression]</I>
+<DD>This is valid only in conjunction with the <CODE>type</CODE> option and
+specifies that the structure instances be tagged to make them
+identifiable as instances of this structure type.  This option cannot be
+used with the <CODE>type-descriptor</CODE> option.
+</P><P>
+
+In the usual case, where <VAR>expression</VAR> is not given, the <CODE>named</CODE>
+option causes a type descriptor and predicate to be defined for the
+structure (recall that the <CODE>type</CODE> option without <CODE>named</CODE>
+suppresses their definition), and also defines a default unparser method
+for the structure instances (which can be overridden by the
+<CODE>print-procedure</CODE> option).  If the default unparser method is not
+wanted then the <CODE>print-procedure</CODE> option should be specified as
+<CODE>#F</CODE>.  This causes the structure to be printed in its native
+representation, as a list or vector, which includes the type descriptor.
+The type descriptor is a unique object, <EM>not</EM> a record type, that
+describes the structure instances and is additionally stored in the
+structure instances to identify them: if the representation type is
+<CODE>vector</CODE>, the type descriptor is stored in the zero-th slot of the
+vector, and if the representation type is <CODE>list</CODE>, it is stored as
+the first element of the list.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-structure (foo (type vector) named) a b c)
+(vector-ref (make-foo 1 2 3) 0) => #[structure-type 52]
+</pre></td></tr></table></P><P>
+
+If <VAR>expression</VAR> is specified, it is an expression that is evaluated
+to yield a tag object.  The <VAR>expression</VAR> is evaluated once when the
+structure definition is evaluated (to specify the unparser method), and
+again whenever a predicate or constructor is called.  Because of this,
+<VAR>expression</VAR> is normally a variable reference or a constant.  The
+value yielded by <VAR>expression</VAR> may be any object at all.  That object
+is stored in the structure instances in the same place that the type
+descriptor is normally stored, as described above.  If <VAR>expression</VAR>
+is specified, no type descriptor is defined, only a predicate.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-structure (foo (type vector) (named 'foo)) a b c)
+(vector-ref (make-foo 1 2 3) 0) => foo
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX342"></A>
+<DL>
+<DT><U>structure option:</U> <B>safe-accessors</B> <I>[boolean]</I>
+<DD>This option allows the programmer to have some control over the safety
+of the slot accessors (and modifiers) generated by
+<CODE>define-structure</CODE>.  If <CODE>safe-accessors</CODE> is not specified, or
+if <VAR>boolean</VAR> is <CODE>#f</CODE>, then the accessors are optimized for
+speed at the expense of safety; when compiled, the accessors will turn
+into very fast inline sequences, usually one to three machine
+instructions in length.  However, if <CODE>safe-accessors</CODE> is specified
+and <VAR>boolean</VAR> is either omitted or <CODE>#t</CODE>, then the accessors are
+optimized for safety, will check the type and structure of their
+argument, and will be close-coded.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-structure (foo safe-accessors) a b c)
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX343"></A>
+<DL>
+<DT><U>structure option:</U> <B>initial-offset</B> <I>offset</I>
+<DD>This is valid only in conjunction with the <CODE>type</CODE> option.
+<VAR>Offset</VAR> must be an exact non-negative integer and specifies the
+number of slots to leave open at the beginning of the structure instance
+before the specified slots are allocated.  Specifying an <VAR>offset</VAR> of
+zero is equivalent to omitting the <CODE>initial-offset</CODE> option.
+</P><P>
+
+If the <CODE>named</CODE> option is specified, the structure tag appears in
+the first slot, followed by the "offset" slots, and then the regular
+slots.  Otherwise, the "offset" slots come first, followed by the
+regular slots.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-structure (foo (type vector) (initial-offset 3))
+  a b c)
+(make-foo 1 2 3)                => #(() () () 1 2 3)
+</pre></td></tr></table></DL>
+</P><P>
+
+The essential differences between MIT Scheme's <CODE>define-structure</CODE>
+and Common Lisp's <CODE>defstruct</CODE> are:
+</P><P>
+
+<UL>
+<LI>
+The default constructor procedure takes positional arguments, in the
+same order as specified in the definition of the structure.  A keyword
+constructor may be specified by giving the option
+<CODE>keyword-constructor</CODE>.
+<P>
+
+<LI>
+BOA constructors are described using Scheme lambda lists.  Since there
+is nothing corresponding to <CODE>&#38;aux</CODE> in Scheme lambda lists, this
+functionality is not implemented.
+<P>
+
+<LI>
+By default, no <CODE>copier</CODE> procedure is defined.
+<P>
+
+<LI>
+The side-effect procedure corresponding to the accessor <CODE>foo</CODE> is
+given the name <CODE>set-foo!</CODE>.
+<P>
+
+<LI>
+Keywords are ordinary symbols -- use <CODE>foo</CODE> instead of <CODE>:foo</CODE>.
+<P>
+
+<LI>
+The option values <CODE>false</CODE>, <CODE>nil</CODE>, <CODE>true</CODE>, and <CODE>t</CODE>
+are treated as if the appropriate boolean constant had been specified
+instead.
+<P>
+
+<LI>
+The <CODE>print-function</CODE> option is named <CODE>print-procedure</CODE>.  Its
+argument is a procedure of two arguments (the unparser state and the
+structure instance) rather than three as in Common Lisp.
+<P>
+
+<LI>
+By default, named structures are tagged with a unique object of some
+kind.  In Common Lisp, the structures are tagged with symbols.  This
+depends on the Common Lisp package system to help generate unique tags;
+MIT Scheme has no such way to generate unique symbols.
+<P>
+
+<LI>
+The <CODE>named</CODE> option may optionally take an argument, which is
+normally the name of a variable (any expression may be used, but it is
+evaluated whenever the tag name is needed).  If used, structure
+instances will be tagged with that variable's value.  The variable must
+be defined when <CODE>define-structure</CODE> is evaluated.
+<P>
+
+<LI>
+The <CODE>type</CODE> option is restricted to the values <CODE>vector</CODE> and
+<CODE>list</CODE>.
+<P>
+
+<LI>
+The <CODE>include</CODE> option is not implemented.
+</UL>
+<P>
+
+<A NAME="Equivalence Predicates"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_3.html#SEC29"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_4.html#SEC42"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

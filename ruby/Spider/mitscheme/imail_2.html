@@ -1,0 +1,107 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>IMAIL User's Manual: Getting Started</TITLE>
+
+<META NAME="description" CONTENT="IMAIL User's Manual: Getting Started">
+<META NAME="keywords" CONTENT="IMAIL User's Manual: Getting Started">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC2"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_1.html#SEC1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 2. Getting Started </H1>
+<!--docid::SEC2::-->
+<P>
+
+<A NAME="IDX8"></A>
+At present, <FONT SIZE="-1">IMAIL</FONT> has only a very simple mechanism for
+connecting to an <FONT SIZE="-1">IMAP</FONT> server: it makes an unencrypted
+connection to the server, and logs in with a user name and a password.
+In the near future, we will implement <FONT SIZE="-1">CRAM-MD5</FONT> authentication
+(defined in <A HREF="http://www.ietf.org/rfc/rfc2095.txt"><FONT SIZE="-1">RFC</FONT>
+2095</A>).  However, we have no plans to implement data-stream encryption
+for the connection.<A NAME="DOCF1" HREF="imail_fot.html#FOOT1">(1)</A>
+</P><P>
+
+To use <FONT SIZE="-1">IMAIL</FONT>, you must create an Edwin init file, called
+<TT>`~/.edwin'</TT> on unix machines or <TT>`edwin.ini'</TT> on Windows or OS/2
+machines.  This file contains arbitrary Scheme expressions that are
+evaluated in the Edwin environment when Edwin is started.  In addition
+to any other customizations you put in this file, you must include the
+following expression:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(load-option 'imail)
+</pre></td></tr></table></P><P>
+
+Next, you must tell Edwin where to find your <FONT SIZE="-1">IMAP</FONT> server, by
+setting some variables; the expression to do this must follow the call
+to <CODE>load-option</CODE>.  Here is an example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(load-option 'imail)
+(set-variable! imail-default-imap-server "imap.foo.org")
+</pre></td></tr></table></P><P>
+
+Note that this is syntactically similar to Scheme's <CODE>set!</CODE> special
+form, but that it modifies the value of an Edwin editor variable rather
+than a Scheme variable.  There are several other variables that control
+how <FONT SIZE="-1">IMAIL</FONT> connects to the server.  See section <A HREF="imail_4.html#SEC15">4.3 Multiple Folders</A>,
+for a complete list.  By default, <FONT SIZE="-1">IMAIL</FONT> tries to connect to
+<SAMP>`localhost'</SAMP> using port <CODE>143</CODE>, and to log in using the user
+name that you are logged in as.  This is the right default if you are
+using stunnel on the client.
+</P><P>
+
+After you are finished creating the init file, you can either restart
+Edwin, or you can load the file using <KBD>M-x load-file</KBD>.  At this
+point, you are ready to run <FONT SIZE="-1">IMAIL</FONT>.  To start <FONT SIZE="-1">IMAIL</FONT>
+and read the mail in the <SAMP>`inbox'</SAMP> folder on your <FONT SIZE="-1">IMAP</FONT>
+server, type <KBD>M-x imail</KBD>.
+</P><P>
+
+<A NAME="Concepts"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_3.html#SEC3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_6.html#SEC28">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="imail_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

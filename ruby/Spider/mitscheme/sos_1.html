@@ -1,0 +1,125 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>The SOS Reference Manual: Introduction</TITLE>
+
+<META NAME="description" CONTENT="The SOS Reference Manual: Introduction">
+<META NAME="keywords" CONTENT="The SOS Reference Manual: Introduction">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC1"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC2"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC2"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_9.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<A NAME="Introduction"></A>
+<H1> Introduction </H1>
+<!--docid::SEC1::-->
+<P>
+
+SOS is a Scheme <EM>object system</EM> derived from Tiny CLOS
+<A NAME="DOCF1" HREF="sos_fot.html#FOOT1">(1)</A>,
+which in turn was loosely derived from CLOS, the Common Lisp Object
+System.  Its basic design and philosophy is closely related to Tiny
+CLOS, but there are differences in naming and interface.
+</P><P>
+
+This document is a reference manual, and as such does not attempt to
+teach the reader about object-oriented programming.  It is assumed that
+you already have a passing familiarity with CLOS and with Scheme.
+</P><P>
+
+In the procedure descriptions that follow, certain argument names imply
+restrictions on the corresponding argument.  Here is a table of those
+names.  The parenthesised name in each entry is the name of the
+predicate procedure that the argument must satisfy.
+</P><P>
+
+<DL COMPACT>
+<DT><VAR>class</VAR>
+<DD>The argument must be a <EM>class</EM> (<CODE>class?</CODE>).
+<P>
+
+<DT><VAR>instance</VAR>
+<DD>The argument must be an <EM>instance</EM> (<CODE>instance?</CODE>).
+<P>
+
+<DT><VAR>name</VAR>
+<DD>The argument must be a symbol (<CODE>symbol?</CODE>); sometimes this is also
+allowed to be <CODE>#f</CODE> (<CODE>false?</CODE>).
+<P>
+
+<DT><VAR>generic-procedure</VAR>
+<DD>The argument must be a <EM>generic procedure</EM>
+(<CODE>generic-procedure?</CODE>).
+<P>
+
+<DT><VAR>method</VAR>
+<DD>The argument must be a <EM>method</EM> (<CODE>method?</CODE>).
+<P>
+
+<DT><VAR>specializer</VAR>
+<DD>The argument must be a <EM>method specializer</EM> (<CODE>specializer?</CODE>).
+<P>
+
+<DT><VAR>procedure</VAR>
+<DD>The argument must be a procedure (<CODE>procedure?</CODE>).
+<P>
+
+<DT><VAR>slot</VAR>
+<DD>The argument must be a <EM>slot descriptor</EM> (<CODE>slot-descriptor?</CODE>).
+</DL>
+<P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sos_2.html#SEC2">1. Classes</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sos_3.html#SEC7">2. Instances</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sos_4.html#SEC8">3. Slots</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sos_5.html#SEC13">4. Generic Procedures</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sos_6.html#SEC17">5. Methods</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sos_7.html#SEC22">6. Printing</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Classes"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_2.html#SEC2"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_9.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

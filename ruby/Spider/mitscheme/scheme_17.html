@@ -1,0 +1,2248 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>MIT Scheme Reference: Error System</TITLE>
+
+<META NAME="description" CONTENT="MIT Scheme Reference: Error System">
+<META NAME="keywords" CONTENT="MIT Scheme Reference: Error System">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC168"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC167"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC169"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_16.html#SEC146"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 16. Error System </H1>
+<!--docid::SEC168::-->
+<P>
+
+<A NAME="IDX2195"></A>
+The MIT Scheme error system provides a uniform mechanism for the
+signalling of errors and other exceptional conditions.  The simplest and
+most generally useful procedures in the error system are:
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>error</CODE>
+<DD>is used to signal simple errors, specifying a message and some irritant
+objects (see section <A HREF="scheme_17.html#SEC169">16.1 Condition Signalling</A>).  Errors are usually handled by
+stopping the computation and putting the user in an error REPL.
+<P>
+
+<DT><CODE>warn</CODE>
+<DD>is used to signal warnings (see section <A HREF="scheme_17.html#SEC169">16.1 Condition Signalling</A>).  Warnings are
+usually handled by printing a message on the console and continuing the
+computation normally.
+<P>
+
+<DT><CODE>ignore-errors</CODE>
+<DD>is used to suppress the normal handling of errors within a given dynamic
+extent (see section <A HREF="scheme_17.html#SEC171">16.3 Condition Handling</A>).  Any error that occurs within the
+extent is trapped, returning immediately to the caller of
+<CODE>ignore-errors</CODE>.
+</DL>
+<P>
+
+More demanding applications require more powerful facilities.  To give a
+concrete example, suppose you want floating-point division to return a very
+large number whenever the denominator is zero.  This behavior can be
+implemented using the error system.
+</P><P>
+
+The Scheme arithmetic system can signal many different kinds of errors,
+including floating-point divide by zero.  In our example, we would like to
+handle this particular condition specially, allowing the system to handle
+other arithmetic errors in its usual way.
+</P><P>
+
+The error system supports this kind of application by providing
+mechanisms for distinguishing different types of error conditions and
+for specifying where control should be transferred should a given
+condition arise.  In this example, there is a specific object that
+represents the "floating-point divide by zero" condition type, and it
+is possible to dynamically specify an arbitrary Scheme procedure to be
+executed when a condition of that type is signalled.  This procedure
+then finds the stack frame containing the call to the division operator,
+and returns the appropriate value from that frame.
+</P><P>
+
+Another useful kind of behavior is the ability to specify uniform
+handling for related classes of conditions.  For example, it might be
+desirable, when opening a file for input, to gracefully handle a variety of
+different conditions associated with the file system.  One such condition
+might be that the file does not exist, in which case the program will try
+some other action, perhaps opening a different file instead.  Another
+related condition is that the file exists, but is read protected, so it
+cannot be opened for input.  If these or any other related conditions
+occur, the program would like to skip this operation and move on to
+something else.
+</P><P>
+
+At the same time, errors unrelated to the file system should be treated in
+their usual way.  For example, calling <CODE>car</CODE> on the argument <CODE>3</CODE>
+should signal an error.  Or perhaps the name given for the file is
+syntactically incorrect, a condition that probably wants to be handled
+differently from the case of the file not existing.
+</P><P>
+
+<A NAME="IDX2196"></A>
+<A NAME="IDX2197"></A>
+<A NAME="IDX2198"></A>
+To facilitate the handling of classes of conditions, the error system
+taxonomically organizes all condition types.  The types are related to one
+another by <EM>taxonomical links</EM>, which specify that one type is a "kind
+of" another type.  If two types are linked this way, one is considered to
+be a <EM>specialization</EM> of the other; or vice-versa, the second is a
+<EM>generalization</EM> of the first.  In our example, all of the errors
+associated with opening an input file would be specializations of the
+condition type "cannot open input file".
+</P><P>
+
+<A NAME="IDX2199"></A>
+<A NAME="IDX2200"></A>
+<A NAME="IDX2201"></A>
+<A NAME="IDX2202"></A>
+The taxonomy of condition types permits any condition type to have no
+more than one immediate generalization.  Thus, the condition types form
+a forest (set of trees).  While users can create new trees, the standard
+taxonomy (see section <A HREF="scheme_17.html#SEC182">16.7 Condition-Type Taxonomy</A>) is rooted at
+<CODE>condition-type:serious-condition</CODE>, <CODE>condition-type:warning</CODE>,
+<CODE>condition-type:simple-condition</CODE>, and
+<CODE>condition-type:breakpoint</CODE>; users are encouraged to add new
+subtypes to these condition types rather than create new trees in the
+forest.
+</P><P>
+
+To summarize, the error system provides facilities for the following tasks.
+The sections that follow will describe these facilities in more
+detail.
+</P><P>
+
+<DL COMPACT>
+<DT>Signalling a condition
+<DD><A NAME="IDX2203"></A>
+A condition may be signalled in a number of different ways.  Simple
+errors may be signalled, without explicitly defining a condition type,
+using <CODE>error</CODE>.  The <CODE>signal-condition</CODE> procedure provides the
+most general signalling mechanism.
+<P>
+
+<DT>Handling a condition
+<DD><A NAME="IDX2204"></A>
+The programmer can dynamically specify handlers for particular condition
+types or for classes of condition types, by means of the
+<CODE>bind-condition-handler</CODE> procedure.  Individual handlers have
+complete control over the handling of a condition, and additionally may
+decide not to handle a particular condition, passing it on to previously
+bound handlers.
+<P>
+
+<DT>Restarting from a handler
+<DD><A NAME="IDX2205"></A>
+The <CODE>with-restart</CODE> procedure provides a means for
+condition-signalling code to communicate to condition-handling code what
+must be done to proceed past the condition.  Handlers can examine the
+restarts in effect when a condition was signalled, allowing a structured
+way to continue an interrupted computation.
+<P>
+
+<DT>Packaging condition state
+<DD>Each condition is represented by an explicit object.  Condition objects
+contain information about the nature of the condition, information that
+describes the state of the computation from which the condition arose,
+and information about the ways the computation can be restarted.
+<P>
+
+<DT>Classification of conditions
+<DD><A NAME="IDX2206"></A>
+<A NAME="IDX2207"></A>
+<A NAME="IDX2208"></A>
+<A NAME="IDX2209"></A>
+Each condition has a type, represented by a condition type object.  Each
+condition type may be a specialization of some other condition types.  A
+group of types that share a common generalization can be handled
+uniformly by specifying a handler for the generalization.
+</DL>
+<P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_17.html#SEC169">16.1 Condition Signalling</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_17.html#SEC170">16.2 Error Messages</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_17.html#SEC171">16.3 Condition Handling</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_17.html#SEC172">16.4 Restarts</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_17.html#SEC177">16.5 Condition Instances</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_17.html#SEC181">16.6 Condition Types</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_17.html#SEC182">16.7 Condition-Type Taxonomy</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Condition Signalling"></A>
+<HR SIZE="6">
+<A NAME="SEC169"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC170"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 16.1 Condition Signalling </H2>
+<!--docid::SEC169::-->
+<P>
+
+<A NAME="IDX2210"></A>
+<A NAME="IDX2211"></A>
+<A NAME="IDX2212"></A>
+Once a condition instance has been created using <CODE>make-condition</CODE>
+(or any condition constructor), it can be <EM>signalled</EM>.  The act of
+signalling a condition is separated from the act of creating the
+condition to allow more flexibility in how conditions are handled.  For
+example, a condition instance could be returned as the value of a
+procedure, indicating that something unusual has happened, to allow the
+caller to clean up some state.  The caller could then signal the
+condition once it is ready.
+</P><P>
+
+A more important reason for having a separate condition-signalling
+mechanism is that it allows <EM>resignalling</EM>.  When a signalled
+condition has been caught by a particular handler, and the handler decides
+that it doesn't want to process that particular condition, it can signal
+the condition again.  This is one way to allow other handlers to get a
+chance to see the condition.
+</P><P>
+
+<A NAME="IDX2213"></A>
+<DL>
+<DT><U>procedure+:</U> <B>error</B> <I>reason argument...</I>
+<DD><A NAME="IDX2214"></A>
+<A NAME="IDX2215"></A>
+<A NAME="IDX2216"></A>
+This is the simplest and most common way to signal a condition that
+requires intervention before a computation can proceed (when
+intervention is not required, <CODE>warn</CODE> is more appropriate).
+<CODE>error</CODE> signals a condition (using <CODE>signal-condition</CODE>), and if
+no handler for that condition alters the flow of control (by invoking a
+restart, for example) it calls the procedure
+<CODE>standard-error-handler</CODE>, which normally prints an error message
+and stops the computation, entering an error REPL.  Under normal
+circumstances <CODE>error</CODE> will not return a value (although an
+interactive debugger can be used to force this to occur).
+</P><P>
+
+<A NAME="IDX2217"></A>
+<A NAME="IDX2218"></A>
+Precisely what condition is signalled depends on the first argument to
+<CODE>error</CODE>.  If <VAR>reason</VAR> is a condition, then that condition is
+signalled and the <VAR>argument</VAR>s are ignored.  If <VAR>reason</VAR> is a
+condition type, then a new instance of this type is generated and
+signalled; the <VAR>argument</VAR>s are used to generate the values of the
+fields for this condition type (they are passed as the <VAR>field-plist</VAR>
+argument to <CODE>make-condition</CODE>).  In the most common case, however,
+<VAR>reason</VAR> is neither a condition nor a condition type, but rather a
+string or symbol.  In this case a condition of type
+<CODE>condition-type:simple-error</CODE> is created with the <VAR>message</VAR>
+field containing the <VAR>reason</VAR> and the <VAR>irritants</VAR> field
+containing the <VAR>argument</VAR>s.
+</DL>
+</P><P>
+
+<A NAME="IDX2219"></A>
+<DL>
+<DT><U>procedure+:</U> <B>warn</B> <I>reason argument...</I>
+<DD><A NAME="IDX2220"></A>
+<A NAME="IDX2221"></A>
+<A NAME="IDX2222"></A>
+When a condition is not severe enough to warrant intervention, it is
+appropriate to signal the condition with <CODE>warn</CODE> rather than
+<CODE>error</CODE>.  As with <CODE>error</CODE>, <CODE>warn</CODE> first calls
+<CODE>signal-condition</CODE>; the condition that is signalled is chosen
+exactly as in <CODE>error</CODE> except that a condition of type
+<CODE>condition-type:simple-warning</CODE> is signalled if <VAR>reason</VAR> is
+neither a condition nor a condition type.  If the condition is not
+handled, <CODE>warn</CODE> calls the procedure
+<CODE>standard-warning-handler</CODE>, which normally prints a warning message
+and continues the computation by returning from <CODE>warn</CODE>.
+</P><P>
+
+<A NAME="IDX2223"></A>
+<CODE>warn</CODE> establishes a restart named <CODE>muffle-warning</CODE> before
+calling <CODE>signal-condition</CODE>.  This allows a signal handler to
+prevent the generation of the warning message by calling
+<CODE>muffle-warning</CODE>.  The value of a call to <CODE>warn</CODE> is
+unspecified.
+</DL>
+</P><P>
+
+<A NAME="IDX2224"></A>
+<DL>
+<DT><U>procedure+:</U> <B>signal-condition</B> <I>condition</I>
+<DD><A NAME="IDX2225"></A>
+<A NAME="IDX2226"></A>
+<A NAME="IDX2227"></A>
+<A NAME="IDX2228"></A>
+<A NAME="IDX2229"></A>
+This is the fundamental operation for signalling a condition.  The
+precise operation of <CODE>signal-condition</CODE> depends on the condition
+type of which <VAR>condition</VAR> is an instance, the condition types set by
+<CODE>break-on-signals</CODE>, and the handlers established by
+<CODE>bind-condition-handler</CODE> and <CODE>bind-default-condition-handler</CODE>.
+</P><P>
+
+<A NAME="IDX2230"></A>
+If the <VAR>condition</VAR> is an instance of a type that is a specialization
+of any of the types specified by <CODE>break-on-signals</CODE>, then a
+breakpoint REPL is initiated.  Otherwise (or when that REPL
+returns), the handlers established by <CODE>bind-condition-handler</CODE> are
+checked, most recent first.  Each applicable handler is invoked, and the
+search for a handler continues if the handler returns normally.  If all
+applicable handlers return, then the applicable handlers established by
+<CODE>bind-default-condition-handler</CODE> are checked, again most recent
+first.  Finally, if no handlers apply (or all return in a normal
+manner), <CODE>signal-condition</CODE> returns an unspecified value.
+</P><P>
+
+<EM>Note:</EM> unlike many other systems, the MIT Scheme runtime library
+does <EM>not</EM> establish handlers of any kind.  (However, the Edwin
+text editor uses condition handlers extensively.)  Thus, calls to
+<CODE>signal-condition</CODE> will return to the caller unless there are user
+supplied condition handlers, as the following example shows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(signal-condition
+ (make-condition
+  condition-type:error
+  (call-with-current-continuation (lambda (x) x))
+  '()    ; no restarts
+  '()))  ; no fields
+=>  unspecified
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Error Messages"></A>
+<HR SIZE="6">
+<A NAME="SEC170"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC169"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC171"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 16.2 Error Messages </H2>
+<!--docid::SEC170::-->
+<P>
+
+<A NAME="IDX2231"></A>
+<A NAME="IDX2232"></A>
+By convention, error messages (and in general, the reports generated by
+<CODE>write-condition-report</CODE>) should consist of one or more complete
+sentences.  The usual rules for sentences should be followed: the first
+word of the sentence should be capitalized, and the sentence should be
+terminated by a period.  The message should not contain extraneous
+whitespace such as line breaks or indentation.
+</P><P>
+
+The error system provides a simple formatting language that allows the
+programmer to have some control over the printing of error messages.
+This formatting language will probably be redesigned in a future
+release.
+</P><P>
+
+<A NAME="IDX2233"></A>
+<A NAME="IDX2234"></A>
+Error messages typically consist of a string describing the error,
+followed by some irritant objects.  The string is printed using
+<CODE>display</CODE>, and the irritants are printed using <CODE>write</CODE>,
+typically with a space between each irritant.  To allow simple
+formatting, we introduce a <EM>noise</EM> object, printed using
+<CODE>display</CODE>.  The irritant list may contain ordinary objects
+interspersed with noise objects.  Each noise object is printed using
+<CODE>display</CODE>, with no extra whitespace, while each normal object is
+printed using <CODE>write</CODE>, prefixed by a single space character.
+</P><P>
+
+Here is an example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (error-within-procedure message irritant procedure)
+  (error message
+         irritant
+         (error-irritant/noise "within procedure")    
+         procedure      
+         (error-irritant/noise ".")))
+</pre></td></tr></table></P><P>
+
+This would format as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(error-within-procedure "Bad widget" 'widget-32 'invert-widget) error-->
+
+Bad widget widget-32 within procedure invert-widget.
+</pre></td></tr></table></P><P>
+
+Here are the operations supporting error messages:
+</P><P>
+
+<A NAME="IDX2235"></A>
+<DL>
+<DT><U>procedure+:</U> <B>format-error-message</B> <I>message irritants port</I>
+<DD><VAR>Message</VAR> is typically a string (although this is not required),
+<VAR>irritants</VAR> a list of irritant objects, and <VAR>port</VAR> an output
+port.  Formats <VAR>message</VAR> and <VAR>irritants</VAR> to <VAR>port</VAR> in the
+standard way.  Note that, during the formatting process, the depth and
+breadth to which lists are printed are each limited to small numbers, to
+guarantee that the output from each irritant is not arbitrarily large.
+</DL>
+</P><P>
+
+<A NAME="IDX2236"></A>
+<DL>
+<DT><U>procedure+:</U> <B>error-irritant/noise</B> <I>value</I>
+<DD>Creates and returns a noise object whose value is <VAR>value</VAR>.
+</DL>
+</P><P>
+
+<A NAME="Condition Handling"></A>
+<HR SIZE="6">
+<A NAME="SEC171"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC170"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC172"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 16.3 Condition Handling </H2>
+<!--docid::SEC171::-->
+<P>
+
+<A NAME="IDX2237"></A>
+<A NAME="IDX2238"></A>
+<A NAME="IDX2239"></A>
+<A NAME="IDX2240"></A>
+The occurrence of a condition is signalled using
+<CODE>signal-condition</CODE>.  <CODE>signal-condition</CODE> attempts to locate and
+invoke a <EM>condition handler</EM> that is prepared to deal with the type
+of condition that has occurred.  A condition handler is a procedure of
+one parameter, the condition that is being signalled.  A procedure is
+installed as a condition handler by calling
+<CODE>bind-condition-handler</CODE> (to establish a handler that is in effect
+only while a particular thunk is executing) or
+<CODE>bind-default-condition-handler</CODE> (to establish a handler that is in
+effect permanently).  As implied by the name, handlers created by
+<CODE>bind-default-condition-handler</CODE> are invoked only after all other
+applicable handlers have been invoked.
+</P><P>
+
+A <VAR>handler</VAR> may process a signal in any way it deems appropriate,
+but the common patterns are:
+</P><P>
+
+<DL COMPACT>
+<DT>Ignore the condition.
+<DD>By returning from the handler in the usual manner.
+<P>
+
+<DT>Handle the condition.
+<DD>By doing some processing and then invoking a restart (or, less
+preferably, a continuation) that was established at some point prior to
+the call to <CODE>signal-condition</CODE>.
+<P>
+
+<DT>Resignal a condition.
+<DD>By doing some processing and calling <CODE>signal-condition</CODE> with either
+the same condition or a newly created one.  In order to support this,
+<CODE>signal-condition</CODE> runs <VAR>handler</VAR> in such a way that a
+subsequent call to <CODE>signal-condition</CODE> sees only the handlers that
+were established prior to this one.
+</DL>
+<P>
+
+<A NAME="IDX2241"></A>
+<A NAME="IDX2242"></A>
+As an aid to debugging condition handlers, Scheme maintains a set of
+condition types that will cause an interactive breakpoint to occur prior
+to normal condition signalling.  That is, <CODE>signal-condition</CODE>
+creates a new REPL prior to its normal operation when its argument
+is a condition that is a specialization of any of these types.  The
+procedure <CODE>break-on-signals</CODE> establishes this set of condition
+types.
+</P><P>
+
+<A NAME="IDX2243"></A>
+<DL>
+<DT><U>procedure+:</U> <B>ignore-errors</B> <I>thunk</I>
+<DD><A NAME="IDX2244"></A>
+<A NAME="IDX2245"></A>
+Executes <VAR>thunk</VAR> with a condition handler that intercepts the
+signalling of any specialization of <CODE>condition-type:error</CODE>
+(including those produced by calls to <CODE>error</CODE>) and immediately
+terminates the execution of <VAR>thunk</VAR> and returns from the call to
+<CODE>ignore-errors</CODE> with the signalled condition as its value.  If
+<VAR>thunk</VAR> returns normally, its value is returned from
+<CODE>ignore-errors</CODE>.
+</P><P>
+
+Notice that <CODE>ignore-errors</CODE> does not "turn off signalling" or
+condition handling.  Condition handling takes place in the normal manner
+but conditions specialized from <CODE>condition-type:error</CODE> are trapped
+rather than propogated as they would be by default.
+</DL>
+</P><P>
+
+<A NAME="IDX2246"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bind-condition-handler</B> <I>condition-types handler thunk</I>
+<DD><A NAME="IDX2247"></A>
+Invokes <VAR>thunk</VAR> after adding <VAR>handler</VAR> as a condition handler
+for the conditions specified by <VAR>condition-types</VAR>.
+<VAR>Condition-types</VAR> must be a list of condition types; signalling a
+condition whose type is a specialization of any of these types will
+cause the <VAR>handler</VAR> to be invoked.  See <CODE>signal-condition</CODE> for
+a description of the mechanism used to invoke handlers.
+</P><P>
+
+By special extension, if <VAR>condition-types</VAR> is the empty list then
+the <VAR>handler</VAR> is called for all conditions.
+</DL>
+</P><P>
+
+<A NAME="IDX2248"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bind-default-condition-handler</B> <I>condition-types handler</I>
+<DD><A NAME="IDX2249"></A>
+Installs <VAR>handler</VAR> as a (permanent) condition handler for the
+conditions specified by <VAR>condition-types</VAR>.  <VAR>Condition-types</VAR>
+must be a list of condition types; signalling a condition whose type is
+a specialization of any of these types will cause the <VAR>handler</VAR> to
+be invoked.  See <CODE>signal-condition</CODE> for a description of the
+mechanism used to invoke handlers.
+</P><P>
+
+By special extension, if <VAR>condition-types</VAR> is the empty list then
+the <VAR>handler</VAR> is called for all conditions.
+</DL>
+</P><P>
+
+<A NAME="IDX2250"></A>
+<DL>
+<DT><U>procedure+:</U> <B>break-on-signals</B> <I>condition-types</I>
+<DD><A NAME="IDX2251"></A>
+<A NAME="IDX2252"></A>
+Arranges for <CODE>signal-condition</CODE> to create an interactive REPL
+before it signals a condition that is a specialization of any of the
+types in the list of <VAR>condition-types</VAR>.  This can be extremely
+helpful when trying to debug code that uses custom condition handlers.
+In order to create a REPL when <EM>any</EM> condition type is
+signalled it is best to actually put a breakpoint on entry to
+<CODE>signal-condition</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2253"></A>
+<DL>
+<DT><U>procedure+:</U> <B>standard-error-handler</B> <I>condition</I>
+<DD><A NAME="IDX2254"></A>
+<A NAME="IDX2255"></A>
+<A NAME="IDX2256"></A>
+<A NAME="IDX2257"></A>
+Called internally by <CODE>error</CODE> after it calls
+<CODE>signal-condition</CODE>.  Normally creates creates a new REPL with
+the prompt <CODE>"error>"</CODE> (but see <CODE>standard-error-hook</CODE>).  In
+order to simulate the effect of calling <CODE>error</CODE>, code may call
+<CODE>signal-condition</CODE> directly and then call
+<CODE>standard-error-handler</CODE> if <CODE>signal-condition</CODE> returns.
+</DL>
+</P><P>
+
+<A NAME="IDX2258"></A>
+<DL>
+<DT><U>variable+:</U> <B>standard-error-hook</B>
+<DD><A NAME="IDX2259"></A>
+<A NAME="IDX2260"></A>
+<A NAME="IDX2261"></A>
+<A NAME="IDX2262"></A>
+This variable controls the behavior of the procedure
+<CODE>standard-error-handler</CODE>, and hence <CODE>error</CODE>.  It is intended
+to be bound with <CODE>fluid-let</CODE> and is normally <CODE>#f</CODE>.  It may be
+changed to a procedure of one argument and will then be invoked (with
+<CODE>standard-error-hook</CODE> rebound to <CODE>#f</CODE>) by
+<CODE>standard-error-handler</CODE> just prior to starting the error
+REPL.  It is passed one argument, the condition being signalled.
+</DL>
+</P><P>
+
+<A NAME="IDX2263"></A>
+<DL>
+<DT><U>procedure+:</U> <B>standard-warning-handler</B> <I>condition</I>
+<DD><A NAME="IDX2264"></A>
+<A NAME="IDX2265"></A>
+<A NAME="IDX2266"></A>
+<A NAME="IDX2267"></A>
+This is the procedure called internally by <CODE>warn</CODE> after it calls
+<CODE>signal-condition</CODE>.  The normal behavior of
+<CODE>standard-warning-handler</CODE> is to print a message (but see
+<CODE>standard-warning-hook</CODE>).  More precisely, the message is printed
+to the port returned by <CODE>notification-output-port</CODE>.  The message is
+formed by first printing the string <CODE>"Warning: "</CODE> to this port, and
+then calling <CODE>write-condition-report</CODE> on <VAR>condition</VAR> and the port.
+</P><P>
+
+<A NAME="IDX2268"></A>
+In order to simulate the effect of calling <CODE>warn</CODE>, code may call
+<CODE>signal-condition</CODE> directly and then call
+<CODE>standard-warning-handler</CODE> if <CODE>signal-condition</CODE> returns.
+(This is not sufficient to implement the <CODE>muffle-warning</CODE> protocol,
+however.  For that purpose an explicit restart must be provided.)
+</DL>
+</P><P>
+
+<A NAME="IDX2269"></A>
+<DL>
+<DT><U>variable+:</U> <B>standard-warning-hook</B>
+<DD><A NAME="IDX2270"></A>
+<A NAME="IDX2271"></A>
+<A NAME="IDX2272"></A>
+This variable controls the behavior of the procedure
+<CODE>standard-warning-handler</CODE>, and hence <CODE>warn</CODE>.  It is intended
+to be bound with <CODE>fluid-let</CODE> and is normally <CODE>#f</CODE>.  It may be
+changed to a procedure of one argument and will then be invoked (with
+<CODE>standard-warning-hook</CODE> rebound to <CODE>#f</CODE>) by
+<CODE>standard-warning-handler</CODE> in lieu of writing the warning message.
+It is passed one argument, the condition being signalled.
+</DL>
+</P><P>
+
+<A NAME="Restarts"></A>
+<HR SIZE="6">
+<A NAME="SEC172"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC171"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC173"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC177"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 16.4 Restarts </H2>
+<!--docid::SEC172::-->
+<P>
+
+<A NAME="IDX2273"></A>
+<A NAME="IDX2274"></A>
+<A NAME="IDX2275"></A>
+<A NAME="IDX2276"></A>
+<A NAME="IDX2277"></A>
+The Scheme error system provides a mechanism, known as <EM>restarts</EM>,
+that helps coordinate condition-signalling code with condition-handling
+code.  A module of code that detects and signals conditions can provide
+procedures (using <CODE>with-simple-restart</CODE> or <CODE>with-restart</CODE>) to
+be invoked by handlers that wish to continue, abort, or restart the
+computation.  These procedures, called <EM>restart effectors</EM>, are
+encapsulated in restart objects.
+</P><P>
+
+<A NAME="IDX2278"></A>
+<A NAME="IDX2279"></A>
+<A NAME="IDX2280"></A>
+When a condition object is created, it contains a set of restart
+objects, each of which contains a restart effector.  Condition handlers
+can inspect the condition they are handling (using <CODE>find-restart</CODE>
+to find restarts by name, or <CODE>condition/restarts</CODE> to see the entire
+set), and they can invoke the associated effectors (using
+<CODE>invoke-restart</CODE> or <CODE>invoke-restart-interactively</CODE>).
+Effectors can take arguments, and these may be computed directly by the
+condition-handling code or by gathering them interactively from the
+user.
+</P><P>
+
+<A NAME="IDX2281"></A>
+<A NAME="IDX2282"></A>
+<A NAME="IDX2283"></A>
+<A NAME="IDX2284"></A>
+<A NAME="IDX2285"></A>
+<A NAME="IDX2286"></A>
+<A NAME="IDX2287"></A>
+<A NAME="IDX2288"></A>
+The names of restarts can be chosen arbitrarily, but the choice of name
+is significant.  These names are used to coordinate between the
+signalling code (which supplies names for restarts) and the handling
+code (which typically chooses a restart effector by the name of its
+restart).  Thus, the names specify the <EM>restart protocol</EM>
+implemented by the signalling code and invoked by the handling code.
+The protocol indicates the number of arguments required by the effector
+code as well as the semantics of the arguments.
+</P><P>
+
+Scheme provides a conventional set of names (hence, protocols) for
+common use.  By choosing the names of restarts from this set, signalling
+code can indicate that it is able to perform a small set of fairly
+common actions (<CODE>abort</CODE>, <CODE>continue</CODE>, <CODE>muffle-warning</CODE>,
+<CODE>retry</CODE>, <CODE>store-value</CODE>, <CODE>use-value</CODE>).  In turn, simple
+condition-handling code can look for the kind of action it wishes to
+perform and simply invoke it by name.  All of Scheme's conventional
+names are symbols, although in general restart names are not restricted
+to any particular data type.  In addition, the object <CODE>#f</CODE> is
+reserved to indicate the "not for automated use" protocol: these
+restarts should be activated only under human control.
+</P><P>
+
+<A NAME="IDX2289"></A>
+Restarts themselves are first-class objects.  They encapsulate their
+name, a procedure (known as the <VAR>effector</VAR>) to be executed if they
+are invoked, and a thunk (known as the <VAR>reporter</VAR>) that can be
+invoked to display a description of the restart (used, for example, by
+the interactive debugger).  Invoking a restart is an indication that a
+handler has chosen to accept control for a condition; as a consequence,
+the <VAR>effector</VAR> of the restart should not return, since this would
+indicate that the handler declined to handle the condition.  Thus, the
+<VAR>effector</VAR> should call a continuation captured before the
+condition-signalling process began.  The most common pattern of usage by
+signalling code is encapsulated in <CODE>with-simple-restart</CODE>.
+</P><P>
+
+Within this chapter, a parameter named <VAR>restarts</VAR> will accept any of
+the following values:
+</P><P>
+
+<UL>
+<LI>
+A list of restart objects.
+<P>
+
+<LI>
+A condition.  The procedure <CODE>condition/restarts</CODE> is called on the
+condition, and the resulting list of restarts is used in place of the
+condition.
+<P>
+
+<LI>
+The symbol <CODE>bound-restarts</CODE>.  The procedure <CODE>bound-restarts</CODE>
+is called (with no arguments), and the resulting list of restarts is
+used in place of the symbol.
+<P>
+
+<LI>
+If the <VAR>restarts</VAR> parameter is optional and is not supplied, it is
+equivalent to having specified the symbol <CODE>bound-restarts</CODE>.
+</UL>
+<P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_17.html#SEC173">16.4.1 Establishing Restart Code</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_17.html#SEC174">16.4.2 Invoking Standard Restart Code</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_17.html#SEC175">16.4.3 Finding and Invoking General Restart Code</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_17.html#SEC176">16.4.4 The Named Restart Abstraction</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Establishing Restart Code"></A>
+<HR SIZE="6">
+<A NAME="SEC173"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC172"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC174"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC171"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC172"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC177"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 16.4.1 Establishing Restart Code </H3>
+<!--docid::SEC173::-->
+<P>
+
+<A NAME="IDX2290"></A>
+<DL>
+<DT><U>procedure+:</U> <B>with-simple-restart</B> <I>name reporter thunk</I>
+<DD>Invokes <VAR>thunk</VAR> in a dynamic environment created by adding a restart
+named <VAR>name</VAR> to the existing named restarts.  <VAR>Reporter</VAR> may be
+used during the execution of <VAR>thunk</VAR> to produce a description of the
+newly created restart; it must either be a procedure of one argument (a
+port) or a string.  By convention, the description generated by
+<VAR>reporter</VAR> should be a short complete sentence, with first word
+capitalized and terminated by a period.  The sentence should fit on one
+line with a little room to spare (see the examples below); usually this
+means that the sentence should be 70 characters or less in length.
+</P><P>
+
+If the restart created by <CODE>with-simple-restart</CODE> is invoked it
+simply aborts the computation in progress by returning an unspecified
+value from the call to <CODE>with-simple-restart</CODE>.  Otherwise
+<CODE>with-simple-restart</CODE> returns the value computed by <VAR>thunk</VAR>.
+</DL>
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(with-simple-restart 'george "This restart is named george."
+  (lambda () 3)) => 3
+  
+(with-simple-restart 'george "This restart is named george."
+  (lambda ()
+    (invoke-restart (find-restart 'george)))) => <CODE>unspecific</CODE>
+
+(with-simple-restart 'george "This restart is named george."
+  (lambda () (car 3)))
+;The object 3, passed as the first argument to car,
+; is not the correct type.
+;To continue, call RESTART with an option number:
+; (RESTART 3) =&#62; Specify an argument to use in its place.
+; (RESTART 2) =&#62; This restart is named george.
+; (RESTART 1) =&#62; Return to read-eval-print level 1.
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX2291"></A>
+<DL>
+<DT><U>procedure+:</U> <B>with-restart</B> <I>name reporter effector interactor thunk</I>
+<DD><A NAME="IDX2292"></A>
+Invokes <VAR>thunk</VAR> in a dynamic environment created by adding a restart
+named <VAR>name</VAR> to the existing named restarts.  <VAR>Reporter</VAR> may be
+used during the execution of <VAR>thunk</VAR> to produce a description of the
+newly created restart; it must either be a procedure of one argument (a
+port) or a string.  <VAR>Effector</VAR> is a procedure which will be called
+when the restart is invoked by <CODE>invoke-restart</CODE>.  <VAR>Interactor</VAR>
+specifies the arguments that are to be passed to <VAR>effector</VAR> when it
+is invoked interactively; it may be either a procedure of no arguments,
+or <CODE>#f</CODE>.  If <VAR>interactor</VAR> is <CODE>#f</CODE>, this restart is not
+meant to be invoked interactively.
+</P><P>
+
+The value returned by <CODE>with-restart</CODE> is the value returned by
+<VAR>thunk</VAR>.  Should the restart be invoked by a condition handler,
+however, the <VAR>effector</VAR> will not return back to the handler that
+invoked it.  Instead, the <VAR>effector</VAR> should call a continuation
+created before the condition-signalling process began, and
+<CODE>with-restart</CODE> will therefore not return in the normal manner.
+</DL>
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define (by-george! thunk)
+  ; This code handles conditions that arise while executing <VAR>thunk</VAR>
+  ; by invoking the GEORGE restart, passing 1 and 2 to the restart's
+  ; <VAR>effector</VAR> code.
+  (bind-condition-handler '() ; All conditions
+   (lambda (condition)
+     (invoke-restart (find-restart 'george) 1 2))
+   thunk))
+
+(define (can-george! thunk)
+  ; This code provides a way of handling errors: the GEORGE restart.
+  ; In order to GEORGE you must supply two values.
+  (lambda ()
+    (call-with-current-continuation
+     (lambda (kappa)
+       (with-restart
+        'george                         ; Name
+        "This restart is named george." ; Reporter
+        (lambda (a b)                   ; Effector
+          (kappa (list 'george a b)))
+        values                          ; Interactor
+        thunk)))))                      ; Thunk
+
+(by-george! (can-george! (lambda () -3))        => -3
+(by-george! (can-george! (lambda () (car 'x)))) => (george 1 2)
+</pre></td></tr></table></P><P>
+
+<A NAME="Invoking Standard Restart Code"></A>
+<HR SIZE="6">
+<A NAME="SEC174"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC173"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC175"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC171"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC172"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC177"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 16.4.2 Invoking Standard Restart Code </H3>
+<!--docid::SEC174::-->
+<P>
+
+Scheme supports six standard protocols for restarting from a condition,
+each encapsulated using a named restart (for use by condition-signalling
+code) and a simple procedure (for use by condition-handling code).
+Unless otherwise specified, if one of these procedures is unable to find
+its corresponding restart, it returns immediately with an unspecified
+value.
+</P><P>
+
+Each of these procedures accepts an optional argument <VAR>restarts</VAR>,
+which is described above in <A HREF="scheme_17.html#SEC172">16.4 Restarts</A>.
+</P><P>
+
+<A NAME="IDX2293"></A>
+<DL>
+<DT><U>procedure+:</U> <B>abort</B> <I>[restarts]</I>
+<DD><A NAME="IDX2294"></A>
+Abort the computation, using the restart named <CODE>abort</CODE>.  The
+corresponding effector takes no arguments and abandons the current line
+of computation.  This is the restart provided by Scheme's REPL.
+</P><P>
+
+<A NAME="IDX2295"></A>
+If there is no restart named <CODE>abort</CODE>, this procedure signals an
+error of type <CODE>condition-type:no-such-restart</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2296"></A>
+<DL>
+<DT><U>procedure+:</U> <B>continue</B> <I>[restarts]</I>
+<DD>Continue the current computation, using the restart named
+<CODE>continue</CODE>.  The corresponding effector takes no arguments and
+continues the computation beyond the point at which the condition was
+signalled.
+</DL>
+</P><P>
+
+<A NAME="IDX2297"></A>
+<DL>
+<DT><U>procedure+:</U> <B>muffle-warning</B> <I>[restarts]</I>
+<DD><A NAME="IDX2298"></A>
+Continue the current computation, using the restart named
+<CODE>muffle-warning</CODE>.  The corresponding effector takes no arguments
+and continues the computation beyond the point at which any warning
+message resulting from the condition would be presented to the user.
+The procedure <CODE>warn</CODE> establishes a <CODE>muffle-warning</CODE> restart
+for this purpose.
+</P><P>
+
+<A NAME="IDX2299"></A>
+If there is no restart named <CODE>muffle-warning</CODE>, this procedure
+signals an error of type <CODE>condition-type:no-such-restart</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2300"></A>
+<DL>
+<DT><U>procedure+:</U> <B>retry</B> <I>[restarts]</I>
+<DD>Retry the current computation, using the restart named <CODE>retry</CODE>.
+The corresponding effector takes no arguments and simply retries the
+same computation that triggered the condition.  The condition may
+reoccur, of course, if the root cause has not been eliminated.  The code
+that signals a "file does not exist" error can be expected to supply a
+<CODE>retry</CODE> restart.  The restart would be invoked after first creating
+the missing file, since the computation is then likely to succeed if it
+is simply retried.
+</DL>
+</P><P>
+
+<A NAME="IDX2301"></A>
+<DL>
+<DT><U>procedure+:</U> <B>store-value</B> <I>new-value [restarts]</I>
+<DD>Retry the current computation, using the restart named
+<CODE>store-value</CODE>, after first storing <VAR>new-value</VAR>.  The
+corresponding effector takes one argument, <VAR>new-value</VAR>, and stores
+it away in a restart-dependent location, then retries the same
+computation that triggered the condition.  The condition may reoccur, of
+course, if the root cause has not been eliminated.  The code that
+signals an "unassigned variable" error can be expected to supply a
+<CODE>store-value</CODE> restart; this would store the value in the variable
+and continue the computation.
+</DL>
+</P><P>
+
+<A NAME="IDX2302"></A>
+<DL>
+<DT><U>procedure+:</U> <B>use-value</B> <I>new-value [restarts]</I>
+<DD><A NAME="IDX2303"></A>
+<A NAME="IDX2304"></A>
+Retry the current computation, using the restart named <CODE>use-value</CODE>,
+but substituting <VAR>new-value</VAR> for a value that previously caused a
+failure.  The corresponding effector takes one argument,
+<VAR>new-value</VAR>, and retries the same computation that triggered the
+condition with the new value substituted for the failing value.  The
+condition may reoccur, of course, if the new value also induces the
+condition.
+</P><P>
+
+The code that signals an "unassigned variable" error can be expected
+to supply a <CODE>use-value</CODE> restart; this would simply continue the
+computation with <VAR>new-value</VAR> instead of the value of the variable.
+Contrast this with the <CODE>retry</CODE> and <CODE>store-value</CODE> restarts.  If
+the <CODE>retry</CODE> restart is used it will fail because the variable still
+has no value.  The <CODE>store-value</CODE> restart could be used, but it
+would alter the value of the variable, so that future references to the
+variable would not be detected.
+</DL>
+</P><P>
+
+<A NAME="Finding and Invoking General Restart Code"></A>
+<HR SIZE="6">
+<A NAME="SEC175"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC174"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC176"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC171"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC172"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC177"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 16.4.3 Finding and Invoking General Restart Code </H3>
+<!--docid::SEC175::-->
+<P>
+
+<A NAME="IDX2305"></A>
+<A NAME="IDX2306"></A>
+<A NAME="IDX2307"></A>
+<A NAME="IDX2308"></A>
+<A NAME="IDX2309"></A>
+<A NAME="IDX2310"></A>
+Restarts are a general mechanism for establishing a protocol between
+condition-signalling and condition-handling code.  The Scheme error
+system provides "packaging" for a number of common protocols.  It also
+provides lower-level hooks that are intended for implementing customized
+protocols.  The mechanism used by signalling code (<CODE>with-restart</CODE>
+and <CODE>with-simple-restart</CODE>) is used for both purposes.
+</P><P>
+
+Four additional operations are provided for the use of
+condition-handling code.  Two operations (<CODE>bound-restarts</CODE> and
+<CODE>find-restart</CODE>) allow condition-handling code to locate active
+restarts.  The other two operations (<CODE>invoke-restart</CODE> and
+<CODE>invoke-restart-interactively</CODE>) allow restart effectors to be
+invoked once the restart object has been located.
+</P><P>
+
+In addition, there is a data abstraction that provides access to the
+information encapsulated in restart objects.
+</P><P>
+
+<A NAME="IDX2311"></A>
+<DL>
+<DT><U>procedure+:</U> <B>bound-restarts</B>
+<DD>Returns a list of all currently active restart objects, most recently
+installed first.  <CODE>bound-restarts</CODE> should be used with caution by
+condition-handling code, since it reveals all restarts that are active
+at the time it is called, rather than at the time the condition was
+signalled.  It is useful, however, for collecting the list of restarts
+for inclusion in newly generated condition objects or for inspecting the
+current state of the system.
+</DL>
+</P><P>
+
+<A NAME="IDX2312"></A>
+<DL>
+<DT><U>procedure+:</U> <B>find-restart</B> <I>name [restarts]</I>
+<DD>Returns the first restart object named <VAR>name</VAR> in the list of
+<VAR>restarts</VAR> (permissible values for <VAR>restarts</VAR> are described
+above in <A HREF="scheme_17.html#SEC172">16.4 Restarts</A>).  When used in a condition handler,
+<CODE>find-restart</CODE> is usually passed the name of a particular restart
+<EM>and</EM> the condition object that has been signalled.  In this way
+the handler finds only restarts that were available when the condition
+was created (usually the same as when it was signalled).  If
+<VAR>restarts</VAR> is omitted, the currently active restarts would be used,
+and these often include restarts added after the condition ocurred.
+</DL>
+</P><P>
+
+<A NAME="IDX2313"></A>
+<DL>
+<DT><U>procedure+:</U> <B>invoke-restart</B> <I>restart argument...</I>
+<DD><A NAME="IDX2314"></A>
+Calls the restart effector encapsulated in <VAR>restart</VAR>, passing the
+specified <VAR>argument</VAR>s to it.  <CODE>invoke-restart</CODE> is intended for
+use by condition-handling code that understands the protocol implemented
+by <VAR>restart</VAR>, and can therefore calculate and pass an appropriate
+set of arguments.
+</P><P>
+
+If a condition handler needs to interact with a user to gather the
+arguments for an effector (e.g. if it does not understand the protocol
+implemented by <VAR>restart</VAR>) <CODE>invoke-restart-interactively</CODE> should
+be used instead of <CODE>invoke-restart</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2315"></A>
+<DL>
+<DT><U>procedure+:</U> <B>invoke-restart-interactively</B> <I>restart</I>
+<DD>First calls the interactor encapsulated in <VAR>restart</VAR> to
+interactively gather the arguments needed for <VAR>restart</VAR>'s effector.
+It then calls the effector, passing these arguments to it.
+</P><P>
+
+<A NAME="IDX2316"></A>
+<CODE>invoke-restart-interactively</CODE> is intended for calling interactive
+restarts (those for which <CODE>restart/interactor</CODE> is not <CODE>#f</CODE>).
+For convenience, <CODE>invoke-restart-interactively</CODE> will call the
+restart's effector with no arguments if the restart has no interactor;
+this behavior may change in the future.
+</DL>
+</P><P>
+
+<A NAME="The Named Restart Abstraction"></A>
+<HR SIZE="6">
+<A NAME="SEC176"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC175"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC177"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC171"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC172"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC177"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 16.4.4 The Named Restart Abstraction </H3>
+<!--docid::SEC176::-->
+<P>
+
+A restart object is very simple, since it encapsulates only a name,
+effector, interactor, and description.
+</P><P>
+
+<A NAME="IDX2317"></A>
+<DL>
+<DT><U>procedure+:</U> <B>restart?</B> <I>object</I>
+<DD>Returns <CODE>#f</CODE> if and only if <VAR>object</VAR> is not a restart.
+</DL>
+</P><P>
+
+<A NAME="IDX2318"></A>
+<DL>
+<DT><U>procedure+:</U> <B>restart/name</B> <I>restart</I>
+<DD><A NAME="IDX2319"></A>
+Returns the name of <VAR>restart</VAR>.  While the Scheme error system uses
+only symbols and the object <CODE>#f</CODE> for its predefined names, programs
+may use arbitrary objects (name equivalence is tested using <CODE>eq?</CODE>).
+</DL>
+</P><P>
+
+<A NAME="IDX2320"></A>
+<DL>
+<DT><U>procedure+:</U> <B>restart/effector</B> <I>restart</I>
+<DD><A NAME="IDX2321"></A>
+<A NAME="IDX2322"></A>
+Returns the effector encapsulated in <VAR>restart</VAR>.  Normally this
+procedure is not used since <CODE>invoke-restart</CODE> and
+<CODE>invoke-restart-interactively</CODE> capture the most common invocation
+patterns.
+</DL>
+</P><P>
+
+<A NAME="IDX2323"></A>
+<DL>
+<DT><U>procedure+:</U> <B>restart/interactor</B> <I>restart</I>
+<DD><A NAME="IDX2324"></A>
+Returns the interactor encapsulated in <VAR>restart</VAR>.  This is either a
+procedure of no arguments or the object <CODE>#f</CODE>.  Normally this
+procedure is not used since <CODE>invoke-restart-interactively</CODE> captures
+the most common usage.  Thus <CODE>restart/interactor</CODE> is most useful as
+a predicate to determine if <VAR>restart</VAR> is intended to be invoked
+interactively.
+</DL>
+</P><P>
+
+<A NAME="IDX2325"></A>
+<DL>
+<DT><U>procedure+:</U> <B>write-restart-report</B> <I>restart port</I>
+<DD>Writes a description of <VAR>restart</VAR> to <VAR>port</VAR>.  This works by
+either displaying (if it is a string) or calling (if it is a procedure)
+the <VAR>reporter</VAR> that was supplied when the restart was created.
+</DL>
+</P><P>
+
+<A NAME="Condition Instances"></A>
+<HR SIZE="6">
+<A NAME="SEC177"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC176"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC178"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC172"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC181"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 16.5 Condition Instances </H2>
+<!--docid::SEC177::-->
+<P>
+
+<A NAME="IDX2326"></A>
+<A NAME="IDX2327"></A>
+<A NAME="IDX2328"></A>
+A <EM>condition</EM>, in addition to the information associated with its
+type, usually contains other information that is not shared with other
+conditions of the same type.  For example, the condition type associated
+with "unbound variable" errors does not specify the name of the
+variable that was unbound.  The additional information is captured in a
+<EM>condition</EM> object, also called a <EM>condition instance</EM>.
+</P><P>
+
+In addition to information that is specific to a given type of condition
+(such as the variable name for "unbound variable" conditions), every
+condition instance also contains a continuation that encapsulates the
+state of the computation in which the condition occurred.  This
+continuation is used for analyzing the computation to learn more about
+the context in which the condition occurred. It is <EM>not</EM> intended
+to provide a mechanism for continuing the computation; that mechanism is
+provided by restarts.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_17.html#SEC178">16.5.1 Generating Operations on Conditions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_17.html#SEC179">16.5.2 Condition Abstraction</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="scheme_17.html#SEC180">16.5.3 Simple Operations on Condition Instances</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Generating Operations on Conditions"></A>
+<HR SIZE="6">
+<A NAME="SEC178"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC177"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC179"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC172"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC177"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC181"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 16.5.1 Generating Operations on Conditions </H3>
+<!--docid::SEC178::-->
+<P>
+
+<A NAME="IDX2329"></A>
+<A NAME="IDX2330"></A>
+<A NAME="IDX2331"></A>
+<A NAME="IDX2332"></A>
+Scheme provides four procedures that take a condition type as input and
+produce operations on the corresponding condition object.  These are
+reminiscent of the operations on record types that produce record
+operators (see section <A HREF="scheme_11.html#SEC99">10.4 Records</A>).  Given a condition type it is possible to
+generate: a constructor for instances of the type (using
+<CODE>condition-constructor</CODE>); an accessor to extract the contents of a
+field in instances of the type (using <CODE>condition-accessor</CODE>); a
+predicate to test for instances of the type (using
+<CODE>condition-predicate</CODE>); and a procedure to create and signal an
+instance of the type (using <CODE>condition-signaller</CODE>).
+</P><P>
+
+Notice that the creation of a condition object is distinct from
+signalling an occurrence of the condition.  Condition objects are
+first-class; they may be created and never signalled, or they may be
+signalled more than once.  Further notice that there are no procedures
+for modifying conditions; once created, a condition cannot be altered.
+</P><P>
+
+<A NAME="IDX2333"></A>
+<DL>
+<DT><U>procedure+:</U> <B>condition-constructor</B> <I>condition-type field-names</I>
+<DD><A NAME="IDX2334"></A>
+<A NAME="IDX2335"></A>
+<A NAME="IDX2336"></A>
+Returns a constructor procedure that takes as arguments values for the
+fields specified in <VAR>field-names</VAR> and creates a condition of type
+<VAR>condition-type</VAR>.  <VAR>Field-names</VAR> must be a list of symbols that
+is a subset of the <VAR>field-names</VAR> in <VAR>condition-type</VAR>.  The
+constructor procedure returned by <CODE>condition-constructor</CODE> has
+signature
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(lambda (<VAR>continuation</VAR> <VAR>restarts</VAR> . <VAR>field-values</VAR>) ...)
+</pre></td></tr></table></P><P>
+
+where the <VAR>field-names</VAR> correspond to the <VAR>field-values</VAR>.  The
+constructor argument <VAR>restarts</VAR> is described in <A HREF="scheme_17.html#SEC172">16.4 Restarts</A>.
+Conditions created by the constructor procedure have <CODE>#f</CODE> for the
+values of all fields other than those specified by <VAR>field-names</VAR>.
+</P><P>
+
+For example, the following procedure <CODE>make-simple-warning</CODE>
+constructs a condition of type <CODE>condition-type:simple-warning</CODE>
+given a continuation (where the condition occurred), a description of
+the restarts to be made available, a warning message, and a list of
+irritants that caused the warning:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define make-simple-warning
+  (condition-constructor condition-type:simple-warning
+                         '(message irritants)))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2337"></A>
+<DL>
+<DT><U>procedure+:</U> <B>condition-accessor</B> <I>condition-type field-name</I>
+<DD><A NAME="IDX2338"></A>
+Returns a procedure that takes as input a condition object of type
+<VAR>condition-type</VAR> and extracts the contents of the specified
+<VAR>field-name</VAR>.  <CODE>condition-accessor</CODE> signals
+<CODE>error:bad-range-argument</CODE> if the <VAR>field-name</VAR> isn't one of the
+named fields of <VAR>condition-type</VAR>; the returned procedure will signal
+<CODE>error:wrong-type-argument</CODE> if passed an object other than a
+condition of type <VAR>condition-type</VAR> or one of its specializations.
+</P><P>
+
+<A NAME="IDX2339"></A>
+If it is known in advance that a particular field of a condition will be
+accessed repeatedly it is worth constructing an accessor for the field
+using <CODE>condition-accessor</CODE> rather than using the (possibly more
+convenient, but slower) <CODE>access-condition</CODE> procedure.
+</DL>
+</P><P>
+
+<A NAME="IDX2340"></A>
+<DL>
+<DT><U>procedure+:</U> <B>condition-predicate</B> <I>condition-type</I>
+<DD><A NAME="IDX2341"></A>
+Returns a predicate procedure for testing whether an object is a
+condition of type <VAR>condition-type</VAR> or one of its specializations
+(there is no predefined way to test for a condition of a given type but
+<EM>not</EM> a specialization of that type).
+</DL>
+</P><P>
+
+<A NAME="IDX2342"></A>
+<DL>
+<DT><U>procedure+:</U> <B>condition-signaller</B> <I>condition-type field-names default-handler</I>
+<DD>Returns a signalling procedure with parameters <VAR>field-names</VAR>.  When
+the signalling procedure is called it creates and signals a condition of
+type <VAR>condition-type</VAR>.  If the condition isn't handled (i.e. if no
+handler is invoked that causes an escape from the current continuation)
+the signalling procedure reduces to a call to <VAR>default-handler</VAR> with
+the condition as its argument.
+</P><P>
+
+There are several standard procedures that are conventionally used for
+<VAR>default-handler</VAR>.  If <VAR>condition-type</VAR> is a specialization of
+<CODE>condition-type:error</CODE>, <VAR>default-handler</VAR> should be the
+procedure<BR> <CODE>standard-error-handler</CODE>.  If <VAR>condition-type</VAR> is a
+specialization of <CODE>condition-type:warning</CODE>, <VAR>default-handler</VAR>
+should be the procedure <CODE>standard-warning-handler</CODE>.  If
+<VAR>condition-type</VAR> is a specialization of
+<CODE>condition-type:breakpoint</CODE>, <VAR>default-handler</VAR> should be the
+procedure <CODE>standard-breakpoint-handler</CODE>.
+</DL>
+</P><P>
+
+<A NAME="Condition State"></A>
+<HR SIZE="6">
+<A NAME="SEC179"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC178"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC180"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC172"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC177"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC181"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 16.5.2 Condition Abstraction </H3>
+<!--docid::SEC179::-->
+<P>
+
+The condition data type is abstracted through a predicate
+<CODE>condition?</CODE> and a set of accessor procedures.
+</P><P>
+
+<A NAME="IDX2343"></A>
+<DL>
+<DT><U>procedure+:</U> <B>condition?</B> <I>object</I>
+<DD>Returns <CODE>#f</CODE> if and only if <VAR>object</VAR> is not a condition.
+</DL>
+</P><P>
+
+<A NAME="IDX2344"></A>
+<DL>
+<DT><U>procedure+:</U> <B>condition/type</B> <I>condition</I>
+<DD>Returns the condition type of which <VAR>condition</VAR> is an instance.
+</DL>
+</P><P>
+
+<A NAME="IDX2345"></A>
+<DL>
+<DT><U>procedure+:</U> <B>condition/error?</B> <I>condition</I>
+<DD><A NAME="IDX2346"></A>
+<A NAME="IDX2347"></A>
+Returns <CODE>#t</CODE> if the <VAR>condition</VAR> is an instance of condition
+type <CODE>condition-type:error</CODE> or a specialization of it, <CODE>#f</CODE>
+otherwise.
+</DL>
+</P><P>
+
+<A NAME="IDX2348"></A>
+<DL>
+<DT><U>procedure+:</U> <B>condition/restarts</B> <I>condition</I>
+<DD>Returns the list of restarts specified when <VAR>condition</VAR> was created.
+</DL>
+</P><P>
+
+<A NAME="IDX2349"></A>
+<DL>
+<DT><U>procedure+:</U> <B>condition/continuation</B> <I>condition</I>
+<DD>Returns the continuation specified when <VAR>condition</VAR> was created.
+This is provided for inspecting the state of the system when the
+condition occurred, <EM>not</EM> for continuing or restarting the
+computation.
+</DL>
+</P><P>
+
+<A NAME="IDX2350"></A>
+<DL>
+<DT><U>procedure+:</U> <B>write-condition-report</B> <I>condition port</I>
+<DD>Writes a description of <VAR>condition</VAR> to <VAR>port</VAR>, using the
+reporter function from the condition type associated with
+<VAR>condition</VAR>.  See also <CODE>condition/report-string</CODE>.
+</DL>
+</P><P>
+
+<A NAME="Simple Condition Instance Operations"></A>
+<HR SIZE="6">
+<A NAME="SEC180"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC179"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC181"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC172"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC177"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC181"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H3> 16.5.3 Simple Operations on Condition Instances </H3>
+<!--docid::SEC180::-->
+<P>
+
+The simple procedures described in this section are built on top of the
+more detailed abstraction of condition objects described above.  While
+these procedures are sometimes easier to use, they are often less
+efficient.
+</P><P>
+
+<A NAME="IDX2351"></A>
+<DL>
+<DT><U>procedure+:</U> <B>make-condition</B> <I>condition-type continuation restarts field-plist</I>
+<DD><A NAME="IDX2352"></A>
+<A NAME="IDX2353"></A>
+<A NAME="IDX2354"></A>
+Create a new condition object as an instance of <VAR>condition-type</VAR>,
+associated with <VAR>continuation</VAR>.  The <VAR>continuation</VAR> is provided
+for inspection purposes only, <EM>not</EM> for restarting the computation.
+The <VAR>restarts</VAR> argument is described in <A HREF="scheme_17.html#SEC172">16.4 Restarts</A>.  The
+<VAR>field-plist</VAR> is an alternating list of field names and values for
+those fields, where the field names are those that would be returned by
+<CODE>(condition-type/field-names <VAR>condition-type</VAR>)</CODE>.  It is used to
+provide values for fields in the condition object; fields with no value
+specified are set to <CODE>#f</CODE>.  Once a condition object has been
+created there is no way to alter the values of these fields.
+</DL>
+</P><P>
+
+<A NAME="IDX2355"></A>
+<DL>
+<DT><U>procedure+:</U> <B>access-condition</B> <I>condition field-name</I>
+<DD><A NAME="IDX2356"></A>
+Returns the value stored in the field <VAR>field-name</VAR> within
+<VAR>condition</VAR>.  <VAR>Field-name</VAR> must be one of the names returned by
+<CODE>(condition-type/field-names (condition/type <VAR>condition</VAR>))</CODE>.
+<CODE>access-condition</CODE> looks up the <VAR>field-name</VAR> at runtime, so it
+is more efficient to use <CODE>condition-accessor</CODE> to create an access
+function if the same field is to be extracted from several instances of
+the same condition type.
+</DL>
+</P><P>
+
+<A NAME="IDX2357"></A>
+<DL>
+<DT><U>procedure+:</U> <B>condition/report-string</B> <I>condition</I>
+<DD><A NAME="IDX2358"></A>
+Returns a string containing a report of the <VAR>condition</VAR>.  This is
+generated by calling <CODE>write-condition-report</CODE> on <VAR>condition</VAR>
+and a string output port, and returning the output collected by the port
+as a string.
+</DL>
+</P><P>
+
+<A NAME="Condition Types"></A>
+<HR SIZE="6">
+<A NAME="SEC181"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC180"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC182"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC177"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 16.6 Condition Types </H2>
+<!--docid::SEC181::-->
+<P>
+
+<A NAME="IDX2359"></A>
+<A NAME="IDX2360"></A>
+Each condition has a <EM>condition type</EM> object associated with it.
+These objects are used as a means of focusing on related classes of
+conditions, first by concentrating all of the information about a
+specific class of condition in a single place, and second by specifying
+an inheritance relationship between types.  This inheritance
+relationship forms the taxonomic structure of the condition hierarchy
+(see section <A HREF="scheme_17.html#SEC182">16.7 Condition-Type Taxonomy</A>).
+</P><P>
+
+The following procedures consititute the abstraction for condition
+types.
+</P><P>
+
+<A NAME="IDX2361"></A>
+<DL>
+<DT><U>procedure+:</U> <B>make-condition-type</B> <I>name generalization field-names reporter</I>
+<DD><A NAME="IDX2362"></A>
+Creates and returns a (new) condition type that is a specialization of
+<VAR>generalization</VAR> (if it is a condition type) or is the root of a new
+tree of condition types (if <VAR>generalization</VAR> is <CODE>#f</CODE>).  For
+debugging purposes, the condition type has a <VAR>name</VAR>, and instances
+of this type contain storage for the fields specified by
+<VAR>field-names</VAR> (a list of symbols) in addition to the fields common
+to all conditions (<VAR>type</VAR>, <VAR>continuation</VAR> and <VAR>restarts</VAR>).
+</P><P>
+
+<VAR>Reporter</VAR> is used to produce a description of a particular
+condition of this type.  It may be a string describing the condition, a
+procedure of arity two (the first argument will be a condition of this
+type and the second a port) that will <CODE>write</CODE> the message to the
+given port, or <CODE>#f</CODE> to specify that the reporter should be taken
+from the condition type <VAR>generalization</VAR> (or produce an
+"undocumented condition of type ..." message if <VAR>generalization</VAR>
+is <CODE>#f</CODE>).  The conventions used to form descriptions are spelled
+out in <A HREF="scheme_17.html#SEC170">16.2 Error Messages</A>.
+</DL>
+</P><P>
+
+<A NAME="IDX2363"></A>
+<DL>
+<DT><U>procedure+:</U> <B>condition-type/error?</B> <I>condition-type</I>
+<DD><A NAME="IDX2364"></A>
+<A NAME="IDX2365"></A>
+Returns <CODE>#t</CODE> if the <VAR>condition-type</VAR> is
+<CODE>condition-type:error</CODE> or a specialization of it, <CODE>#f</CODE>
+otherwise.
+</DL>
+</P><P>
+
+<A NAME="IDX2366"></A>
+<DL>
+<DT><U>procedure+:</U> <B>condition-type/field-names</B> <I>condition-type</I>
+<DD><A NAME="IDX2367"></A>
+Returns a list of all of the field names for a condition of type
+<VAR>condition-type</VAR>.  This is the set union of the fields specified
+when this <VAR>condition-type</VAR> was created with the
+<CODE>condition-type/field-names</CODE> of the generalization of this
+<VAR>condition-type</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX2368"></A>
+<DL>
+<DT><U>procedure+:</U> <B>condition-type/generalizations</B> <I>condition-type</I>
+<DD><A NAME="IDX2369"></A>
+Returns a list of all of the generalizations of <VAR>condition-type</VAR>.
+Notice that every condition type is considered a generalization of
+itself.
+</DL>
+</P><P>
+
+<A NAME="IDX2370"></A>
+<DL>
+<DT><U>procedure+:</U> <B>condition-type?</B> <I>object</I>
+<DD>Returns <CODE>#f</CODE> if and only if <VAR>object</VAR> is not a condition type.
+</DL>
+</P><P>
+
+<A NAME="Taxonomy"></A>
+<HR SIZE="6">
+<A NAME="SEC182"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC181"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 16.7 Condition-Type Taxonomy </H2>
+<!--docid::SEC182::-->
+<P>
+
+The MIT Scheme error system provides a rich set of predefined condition
+types.  These are organized into a forest through taxonomic links
+providing the relationships for "specializes" and "generalizes".
+The chart appearing below shows these relationships by indenting all the
+specializations of a given type relative to the type.  Note that the
+variables that are bound to these condition types are prefixed by
+<SAMP>`condition-type:'</SAMP>; for example, the type appearing in the following
+table as <SAMP>`simple-error'</SAMP> is stored in the variable
+<CODE>condition-type:simple-error</CODE>.  Users are encouraged to add new
+condition types by creating specializations of existing ones.
+</P><P>
+
+Following the chart are detailed descriptions of the predefined
+condition types.  Some of these types are marked as <EM>abstract</EM>
+types.  Abstract types are not intended to be used directly as the type
+of a condition; they are to be used as generalizations of other types,
+and for binding condition handlers.  Types that are not marked as
+abstract are <EM>concrete</EM>; they are intended to be explicitly used as
+a condition's type.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>serious-condition 
+    error 
+        simple-error
+        illegal-datum
+            wrong-type-datum
+                wrong-type-argument
+                wrong-number-of-arguments
+            datum-out-of-range 
+                bad-range-argument
+            inapplicable-object
+        file-error
+            file-operation-error
+            derived-file-error
+        port-error
+            derived-port-error
+        variable-error
+            unbound-variable
+            unassigned-variable
+        arithmetic-error
+            divide-by-zero
+            floating-point-overflow
+            floating-point-underflow
+        control-error
+            no-such-restart
+        not-loading 
+        primitive-procedure-error
+            system-call-error
+warning
+    simple-warning
+simple-condition
+breakpoint
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX2371"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:serious-condition</B>
+<DD>This is an abstract type.  All serious conditions that require some form
+of intervention should inherit from this type.  In particular, all
+errors inherit from this type.
+</DL>
+</P><P>
+
+<A NAME="IDX2372"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:error</B>
+<DD>This is an abstract type.  All errors should inherit from this type.
+</DL>
+</P><P>
+
+<A NAME="IDX2373"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:simple-error</B> <I>message irritants</I>
+<DD>This is the condition generated by the <CODE>error</CODE> procedure when its
+first argument is not a condition or condition type.  The fields
+<VAR>message</VAR> and <VAR>irritants</VAR> are taken directly from the arguments
+to <CODE>error</CODE>; <VAR>message</VAR> contains an object (usually a string) and
+<VAR>irritants</VAR> contains a list of objects.  The reporter for this type
+uses <CODE>format-error-message</CODE> to generate its output from
+<VAR>message</VAR> and <VAR>irritants</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX2374"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:illegal-datum</B> <I>datum</I>
+<DD>This is an abstract type.  This type indicates the class of errors in
+which a program discovers an object that lacks specific required
+properties.  Most commonly, the object is of the wrong type or is
+outside a specific range.  The <VAR>datum</VAR> field contains the offending
+object.
+</DL>
+</P><P>
+
+<A NAME="IDX2375"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:wrong-type-datum</B> <I>datum type</I>
+<DD>This type indicates the class of errors in which a program discovers an
+object that is of the wrong type.  The <VAR>type</VAR> field contains a
+string describing the type that was expected, and the <VAR>datum</VAR> field
+contains the object that is of the wrong type.
+</DL>
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(error:wrong-type-datum 3.4 "integer")  error-->
+;The object 3.4 is not an integer.
+;To continue, call RESTART with an option number:
+; (RESTART 1) =&#62; Return to read-eval-print level 1.
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX2376"></A>
+<DL>
+<DT><U>procedure+:</U> <B>error:wrong-type-datum</B> <I>datum type</I>
+<DD>This procedure signals a condition of type
+<CODE>condition-type:wrong-type-datum</CODE>.  The <VAR>datum</VAR> and <VAR>type</VAR>
+fields of the condition are filled in from the corresponding arguments
+to the procedure.
+</DL>
+</P><P>
+
+<A NAME="IDX2377"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:wrong-type-argument</B> <I>datum type operator operand</I>
+<DD>This type indicates that a procedure was passed an argument of the wrong
+type.  The <VAR>operator</VAR> field contains the procedure (or a symbol
+naming the procedure), the <VAR>operand</VAR> field indicates the argument
+position that was involved (this field contains either a symbol, a
+non-negative integer, or <CODE>#f</CODE>), the <VAR>type</VAR> field contains a
+string describing the type that was expected, and the <VAR>datum</VAR> field
+contains the offending argument.
+</DL>
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(+ 'a 3)                                error-->
+;The object a, passed as the first argument to integer-add,
+; is not the correct type.
+;To continue, call RESTART with an option number:
+; (RESTART 2) =&#62; Specify an argument to use in its place.
+; (RESTART 1) =&#62; Return to read-eval-print level 1.
+
+(list-copy 3)
+;The object 3, passed as an argument to list-copy, is not a list.
+;To continue, call RESTART with an option number:
+; (RESTART 1) =&#62; Return to read-eval-print level 1.
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX2378"></A>
+<DL>
+<DT><U>procedure+:</U> <B>error:wrong-type-argument</B> <I>datum type operator</I>
+<DD>This procedure signals a condition of type
+<CODE>condition-type:wrong-type-argument</CODE>.  The <VAR>datum</VAR>, <VAR>type</VAR>
+and <VAR>operator</VAR> fields of the condition are filled in from the
+corresponding arguments to the procedure; the <VAR>operand</VAR> field of the
+condition is set to <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2379"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:wrong-number-of-arguments</B> <I>datum type operands</I>
+<DD>This type indicates that a procedure was called with the wrong number of
+arguments.  The <VAR>datum</VAR> field contains the procedure being called,
+the <VAR>type</VAR> field contains the number of arguments that the procedure
+accepts, and the <VAR>operands</VAR> field contains a list of the arguments
+that were passed to the procedure.
+</DL>
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(car 3 4)                               error-->
+;The procedure car has been called with 2 arguments;
+; it requires exactly 1 argument.
+;To continue, call RESTART with an option number:
+; (RESTART 1) =&#62; Return to read-eval-print level 1.
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX2380"></A>
+<DL>
+<DT><U>procedure+:</U> <B>error:wrong-number-of-arguments</B> <I>datum type operands</I>
+<DD>This procedure signals a condition of type
+<CODE>condition-type:wrong-number-of-arguments</CODE>.  The <VAR>datum</VAR>,
+<VAR>type</VAR> and <VAR>operands</VAR> fields of the condition are filled in from
+the corresponding arguments to the procedure.
+</DL>
+</P><P>
+
+<A NAME="IDX2381"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:datum-out-of-range</B> <I>datum</I>
+<DD>This type indicates the class of errors in which a program discovers an
+object that is of the correct type but is otherwise out of range.  Most
+often, this type indicates that an index to some data structure is
+outside of the range of indices for that structure.  The <VAR>datum</VAR>
+field contains the offending object.
+</DL>
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(error:datum-out-of-range 3)            error-->
+;The object 3 is not in the correct range.
+;To continue, call RESTART with an option number:
+; (RESTART 1) =&#62; Return to read-eval-print level 1.
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX2382"></A>
+<DL>
+<DT><U>procedure+:</U> <B>error:datum-out-of-range</B> <I>datum</I>
+<DD>This procedure signals a condition of type
+<CODE>condition-type:datum-out-of-range</CODE>.  The <VAR>datum</VAR> field of the
+condition is filled in from the corresponding argument to the procedure.
+</DL>
+</P><P>
+
+<A NAME="IDX2383"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:bad-range-argument</B> <I>datum operator operand</I>
+<DD>This type indicates that a procedure was passed an argument that is of
+the correct type but is otherwise out of range.  Most often, this type
+indicates that an index to some data structure is outside of the range
+of indices for that structure.  The <VAR>operator</VAR> field contains the
+procedure (or a symbol naming the procedure), the <VAR>operand</VAR> field
+indicates the argument position that was involved (this field contains
+either a symbol, a non-negative integer, or <CODE>#f</CODE>), and the
+<VAR>datum</VAR> field is the offending argument.
+</DL>
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(string-ref "abc" 3)                    error-->
+;The object 3, passed as the second argument to string-ref,
+; is not in the correct range.
+;To continue, call RESTART with an option number:
+; (RESTART 2) =&#62; Specify an argument to use in its place.
+; (RESTART 1) =&#62; Return to read-eval-print level 1.
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX2384"></A>
+<DL>
+<DT><U>procedure+:</U> <B>error:bad-range-argument</B> <I>datum operator</I>
+<DD>This procedure signals a condition of type
+<CODE>condition-type:bad-range-argument</CODE>.  The <VAR>datum</VAR> and
+<VAR>operator</VAR> fields of the condition are filled in from the
+corresponding arguments to the procedure; the <VAR>operand</VAR> field of the
+condition is set to <CODE>#f</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2385"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:inapplicable-object</B> <I>datum operands</I>
+<DD>This type indicates an error in which a program attempted to apply an
+object that is not a procedure.  The object being applied is saved in
+the <VAR>datum</VAR> field, and the arguments being passed to the object are
+saved as a list in the <VAR>operands</VAR> field.
+</DL>
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(3 4)                                   error-->
+;The object 3 is not applicable.
+;To continue, call RESTART with an option number:
+; (RESTART 2) =&#62; Specify a procedure to use in its place.
+; (RESTART 1) =&#62; Return to read-eval-print level 1.
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX2386"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:file-error</B> <I>filename</I>
+<DD>This is an abstract type.  It indicates that an error associated with a
+file has occurred.  For example, attempting to delete a nonexistent file
+will signal an error.  The <VAR>filename</VAR> field contains a filename or
+pathname associated with the operation that failed.
+</DL>
+</P><P>
+
+<A NAME="IDX2387"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:file-operation-error</B> <I>filename verb noun reason operator operands</I>
+<DD>This is the most common condition type for file system errors.  The
+<VAR>filename</VAR> field contains the filename or pathname that was being
+operated on.  The <VAR>verb</VAR> field contains a string which is the verb
+or verb phrase describing the operation being performed, and the
+<VAR>noun</VAR> field contains a string which is a noun or noun phrase
+describing the object being operated on.  The <VAR>reason</VAR> field
+contains a string describing the error that occurred.  The
+<VAR>operator</VAR> field contains the procedure performing the operation (or
+a symbol naming that procedure), and the <VAR>operands</VAR> field contains a
+list of the arguments that were passed to that procedure.  For example,
+an attempt to delete a nonexistent file would have the following field
+values:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>filename        "/zu/cph/tmp/no-such-file"
+verb            "delete"
+noun            "file"
+reason          "no such file or directory"
+operator        file-remove
+operands        ("/zu/cph/tmp/no-such-file")
+</pre></td></tr></table></P><P>
+
+and would generate a message like this:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(delete-file "/zu/cph/tmp/no-such-file") error-->
+;Unable to delete file "/zu/cph/tmp/no-such-file" because:
+; No such file or directory.
+;To continue, call RESTART with an option number:
+; (RESTART 3) =&#62; Try to delete the same file again.
+; (RESTART 2) =&#62; Try to delete a different file.
+; (RESTART 1) =&#62; Return to read-eval-print level 1.
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX2388"></A>
+<DL>
+<DT><U>procedure+:</U> <B>error:file-operation-error</B> <I>filename verb noun reason operator operands</I>
+<DD>This procedure signals a condition of type
+<CODE>condition-type:file-operation-error</CODE>.  The fields of the condition
+are filled in from the corresponding arguments to the procedure.
+</DL>
+</P><P>
+
+<A NAME="IDX2389"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:derived-file-error</B> <I>filename condition</I>
+<DD>This is another kind of file error, which is generated by obscure
+file-system errors that do not fit into the standard categories.  The
+<VAR>filename</VAR> field contains the filename or pathname that was being
+operated on, and the <VAR>condition</VAR> field contains a condition
+describing the error in more detail.  Usually the <VAR>condition</VAR> field
+contains a condition of type <CODE>condition-type:system-call-error</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2390"></A>
+<DL>
+<DT><U>procedure+:</U> <B>error:derived-file</B> <I>filename condition</I>
+<DD>This procedure signals a condition of type
+<CODE>condition-type:derived-file-error</CODE>.  The <VAR>filename</VAR> and
+<VAR>condition</VAR> fields of the condition are filled in from the
+corresponding arguments to the procedure.
+</DL>
+</P><P>
+
+<A NAME="IDX2391"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:port-error</B> <I>port</I>
+<DD>This is an abstract type.  It indicates that an error associated with a
+I/O port has occurred.  For example, writing output to a file port can
+signal an error if the disk containing the file is full; that error
+would be signalled as a port error.  The <VAR>port</VAR> field contains the
+associated port.
+</DL>
+</P><P>
+
+<A NAME="IDX2392"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:derived-port-error</B> <I>port condition</I>
+<DD>This is a concrete type that is signalled when port errors occur.  The
+<VAR>port</VAR> field contains the port associated with the error, and the
+<VAR>condition</VAR> field contains a condition object that describes the
+error in more detail.  Usually the <VAR>condition</VAR> field contains a
+condition of type <CODE>condition-type:system-call-error</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX2393"></A>
+<DL>
+<DT><U>procedure+:</U> <B>error:derived-port</B> <I>port condition</I>
+<DD>This procedure signals a condition of type
+<CODE>condition-type:derived-port-error</CODE>.  The <VAR>port</VAR> and
+<VAR>condition</VAR> fields of the condition are filled in from the
+corresponding arguments to the procedure.
+</DL>
+</P><P>
+
+<A NAME="IDX2394"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:variable-error</B> <I>location environment</I>
+<DD>This is an abstract type.  It indicates that an error associated with a
+variable has occurred.  The <VAR>location</VAR> field contains the name of
+the variable, and the <VAR>environment</VAR> field contains the environment
+in which the variable was referenced.
+</DL>
+</P><P>
+
+<A NAME="IDX2395"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:unbound-variable</B> <I>location environment</I>
+<DD>This type is generated when a program attempts to access or modify a
+variable that is not bound.  The <VAR>location</VAR> field contains the name
+of the variable, and the <VAR>environment</VAR> field contains the
+environment in which the reference occurred.
+</DL>
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>foo                                     error-->
+;Unbound variable: foo
+;To continue, call RESTART with an option number:
+; (RESTART 3) =&#62; Specify a value to use instead of foo.
+; (RESTART 2) =&#62; Define foo to a given value.
+; (RESTART 1) =&#62; Return to read-eval-print level 1.
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX2396"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:unassigned-variable</B> <I>location environment</I>
+<DD>This type is generated when a program attempts to access a variable that
+is not assigned.  The <VAR>location</VAR> field contains the name of the
+variable, and the <VAR>environment</VAR> field contains the environment in
+which the reference occurred.
+</DL>
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>foo                                     error-->
+;Unassigned variable: foo
+;To continue, call RESTART with an option number:
+; (RESTART 3) =&#62; Specify a value to use instead of foo.
+; (RESTART 2) =&#62; Set foo to a given value.
+; (RESTART 1) =&#62; Return to read-eval-print level 1.
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX2397"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:arithmetic-error</B> <I>operator operands</I>
+<DD>This is an abstract type.  It indicates that a numerical operation was
+unable to complete because of an arithmetic error.  (For example,
+division by zero.)  The <VAR>operator</VAR> field contains the procedure that
+implements the operation (or a symbol naming the procedure), and the
+<VAR>operands</VAR> field contains a list of the arguments that were passed
+to the procedure.
+</DL>
+</P><P>
+
+<A NAME="IDX2398"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:divide-by-zero</B> <I>operator operands</I>
+<DD>This type is generated when a program attempts to divide by zero.  The
+<VAR>operator</VAR> field contains the procedure that implements the failing
+operation (or a symbol naming the procedure), and the <VAR>operands</VAR>
+field contains a list of the arguments that were passed to the
+procedure.
+</DL>
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(/ 1 0)
+;Division by zero signalled by /.
+;To continue, call RESTART with an option number:
+; (RESTART 1) =&#62; Return to read-eval-print level 1.
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX2399"></A>
+<DL>
+<DT><U>procedure+:</U> <B>error:divide-by-zero</B> <I>operator operands</I>
+<DD>This procedure signals a condition of type
+<CODE>condition-type:divide-by-zero</CODE>.  The <VAR>operator</VAR> and
+<VAR>operands</VAR> fields of the condition are filled in from the
+corresponding arguments to the procedure.
+</DL>
+</P><P>
+
+<A NAME="IDX2400"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:floating-point-overflow</B> <I>operator operands</I>
+<DD>This type is generated when a program performs an arithmetic operation
+that results in a floating-point overflow.  The <VAR>operator</VAR> field
+contains the procedure that implements the operation (or a symbol naming
+the procedure), and the <VAR>operands</VAR> field contains a list of the
+arguments that were passed to the procedure.
+</DL>
+</P><P>
+
+<A NAME="IDX2401"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:floating-point-underflow</B> <I>operator operands</I>
+<DD>This type is generated when a program performs an arithmetic operation
+that results in a floating-point underflow.  The <VAR>operator</VAR> field
+contains the procedure that implements the operation (or a symbol naming
+the procedure), and the <VAR>operands</VAR> field contains a list of the
+arguments that were passed to the procedure.
+</DL>
+</P><P>
+
+<A NAME="IDX2402"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:primitive-procedure-error</B> <I>operator operands</I>
+<DD>This is an abstract type.  It indicates that an error was generated by a
+primitive procedure call.  Primitive procedures are distinguished from
+ordinary procedures in that they are not written in Scheme but instead
+in the underlying language of the Scheme implementation.  The
+<VAR>operator</VAR> field contains the procedure that implements the
+operation (or a symbol naming the procedure), and the <VAR>operands</VAR>
+field contains a list of the arguments that were passed to the
+procedure.
+</DL>
+</P><P>
+
+<A NAME="IDX2403"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:system-call-error</B> <I>operator operands system-call error-type</I>
+<DD>This is the most common condition type generated by primitive
+procedures.  A condition of this type indicates that the primitive made
+a system call to the operating system, and that the system call
+signalled an error.  The system-call error is reflected back to Scheme
+as a condition of this type, except that many common system-call errors
+are automatically translated by the Scheme implementation into more
+useful forms; for example, a system-call error that occurs while trying
+to delete a file will be translated into a condition of type
+<CODE>condition-type:file-operation-error</CODE>.  The <VAR>operator</VAR> field
+contains the procedure that implements the operation (or a symbol naming
+the procedure), and the <VAR>operands</VAR> field contains a list of the
+arguments that were passed to the procedure.  The <VAR>system-call</VAR> and
+<VAR>error-type</VAR> fields contain symbols that describe the specific
+system call that was being made and the error that occurred,
+respectively; these symbols are completely operating-system dependent.
+</DL>
+</P><P>
+
+<A NAME="IDX2404"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:control-error</B>
+<DD>This is an abstract type.  It describes a class of errors relating to
+program control flow.
+</DL>
+</P><P>
+
+<A NAME="IDX2405"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:no-such-restart</B> <I>name</I>
+<DD>This type indicates that a named restart was not active when it was
+expected to be.  Conditions of this type are signalled by several
+procedures that look for particular named restarts, for example
+<CODE>muffle-warning</CODE>.  The <VAR>name</VAR> field contains the name that was
+being searched for.
+</DL>
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(muffle-warning)                        error-->
+;The restart named muffle-warning is not bound.
+;To continue, call RESTART with an option number:
+; (RESTART 1) =&#62; Return to read-eval-print level 1.
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX2406"></A>
+<DL>
+<DT><U>procedure+:</U> <B>error:no-such-restart</B> <I>name</I>
+<DD>This procedure signals a condition of type
+<CODE>condition-type:no-such-restart</CODE>.  The <VAR>name</VAR> field of the
+condition is filled in from the corresponding argument to the procedure.
+</DL>
+</P><P>
+
+<A NAME="IDX2407"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:not-loading</B>
+<DD>A condition of this type is generated when the procedure
+<CODE>current-load-pathname</CODE> is called from somewhere other than inside
+a file being loaded.
+</DL>
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(current-load-pathname)                 error-->
+;No file being loaded.
+;To continue, call RESTART with an option number:
+; (RESTART 1) =&#62; Return to read-eval-print level 1.
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX2408"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:warning</B>
+<DD>This is an abstract type.  All warnings should inherit from this type.
+Warnings are a class of conditions that are usually handled by informing
+the user of the condition and proceeding the computation normally.
+</DL>
+</P><P>
+
+<A NAME="IDX2409"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:simple-warning</B> <I>message irritants</I>
+<DD>This is the condition generated by the <CODE>warn</CODE> procedure.  The
+fields <VAR>message</VAR> and <VAR>irritants</VAR> are taken directly from the
+arguments to <CODE>warn</CODE>; <VAR>message</VAR> contains an object (usually a
+string) and <VAR>irritants</VAR> contains a list of objects.  The reporter
+for this type uses <CODE>format-error-message</CODE> to generate its output
+from <VAR>message</VAR> and <VAR>irritants</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX2410"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:simple-condition</B> <I>message irritants</I>
+<DD>This is an unspecialized condition that does not fall into any of the
+standard condition classes.  The <VAR>message</VAR> field contains an object
+(usually a string) and <VAR>irritants</VAR> contains a list of objects.  The
+reporter for this type uses <CODE>format-error-message</CODE> to generate its
+output from <VAR>message</VAR> and <VAR>irritants</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX2411"></A>
+<DL>
+<DT><U>condition type+:</U> <B>condition-type:breakpoint</B> <I>environment message prompt</I>
+<DD>A condition of this type is generated by the breakpoint mechanism.  The
+contents of its fields are beyond the scope of this document.
+</DL>
+</P><P>
+
+<A NAME="Graphics"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_17.html#SEC168"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_18.html#SEC183"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_21.html#SEC216">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="scheme_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

@@ -1,0 +1,309 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 18  2001 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>The SOS Reference Manual: Generic Procedures</TITLE>
+
+<META NAME="description" CONTENT="The SOS Reference Manual: Generic Procedures">
+<META NAME="keywords" CONTENT="The SOS Reference Manual: Generic Procedures">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC13"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_4.html#SEC12"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_5.html#SEC14"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_4.html#SEC8"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC17"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_9.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 4. Generic Procedures </H1>
+<!--docid::SEC13::-->
+<P>
+
+<A NAME="IDX112"></A>
+Like an ordinary Scheme procedure, a generic procedure takes arguments,
+performs a series of operations, and perhaps returns useful values.  An
+ordinary procedure has a single body of code that is always executed
+when the procedure is called.  A generic procedure has a set of multiple
+bodies of code, called methods, from which a subset is selected for
+execution.  The selected bodies of code and the manner of their
+combination are determined by the classes of one or more of the
+arguments to the generic procedure.
+</P><P>
+
+Ordinary procedures and generic procedures are called with identical
+procedure-call syntax.
+</P><P>
+
+Generic procedures are true procedures that can be passed as arguments,
+returned as values, and otherwise used in all the ways an ordinary
+procedure may be used.  In particular, generic procedures satisfy the
+predicate <CODE>procedure?</CODE>.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sos_5.html#SEC14">4.1 Generic Procedure Datatype</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sos_5.html#SEC15">4.2 Method Storage</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="sos_5.html#SEC16">4.3 Effective Method Procedure</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Generic Procedure Datatype"></A>
+<HR SIZE="6">
+<A NAME="SEC14"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_5.html#SEC13"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_5.html#SEC15"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_5.html#SEC13"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_5.html#SEC13"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC17"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_9.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.1 Generic Procedure Datatype </H2>
+<!--docid::SEC14::-->
+<P>
+
+The following definitions are used to construct and inspect generic
+procedures.
+</P><P>
+
+<A NAME="IDX113"></A>
+<DL>
+<DT><U>Procedure:</U> <B>make-generic-procedure</B> <I>arity [name]</I>
+<DD>Creates and returns a new generic procedure.  The generic procedure
+requires <VAR>arity</VAR> arguments.
+</P><P>
+
+<VAR>Arity</VAR> may take one of the following forms.  An exact positive
+integer specifies that the procedure will accept exactly that number of
+arguments.  A pair of two exact positive integers specifies inclusive
+lower and upper bounds, respectively, on the number of arguments
+accepted; the CDR may be <CODE>#f</CODE> indicating no upper bound.
+</P><P>
+
+<VAR>Name</VAR> is used for debugging: it is a symbol that has no role in the
+semantics of the generic procedure.  <VAR>Name</VAR> may be <CODE>#f</CODE> to
+indicate that the generic procedure is anonymous.  If <VAR>name</VAR> is not
+specified, it defaults to <CODE>#f</CODE>.
+</P><P>
+
+Examples:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define foo-bar (make-generic-procedure 2))
+
+(define foo-baz (make-generic-procedure '(1 . 2) 'foo-baz))
+
+(define foo-mum (make-generic-procedure '(1 . #f)))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX114"></A>
+<DL>
+<DT><U>Syntax:</U> <B>define-generic</B> <I>name lambda-list</I>
+<DD>Defines <VAR>name</VAR> to be a generic procedure.  <VAR>Lambda-list</VAR> is an
+ordinary parameter list, which is exactly like the parameter list in a
+<CODE>lambda</CODE> special form.  This expands into
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define <VAR>name</VAR>
+  (make-generic-procedure <VAR>arity</VAR>
+                          (quote <VAR>name</VAR>)))
+</pre></td></tr></table></P><P>
+
+where <VAR>arity</VAR> is determined from <VAR>lambda-list</VAR>.
+</P><P>
+
+Examples (compare to examples of <CODE>make-generic-procedure</CODE>):
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(define-generic foo-bar (x y))
+
+(define-generic foo-baz (x #!optional y))
+
+(define-generic foo-mum (x . y))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX115"></A>
+<DL>
+<DT><U>Procedure:</U> <B>generic-procedure?</B> <I>object</I>
+<DD>Returns <CODE>#t</CODE> if <VAR>object</VAR> is a generic procedure, otherwise
+returns <CODE>#f</CODE>.  Note that every generic procedure satisfies the
+predicate <CODE>procedure?</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX116"></A>
+<DL>
+<DT><U>Procedure:</U> <B>generic-procedure-arity</B> <I>generic-procedure</I>
+<DD>Returns the arity of <VAR>generic-procedure</VAR>, as specified in the call
+to <CODE>make-generic-procedure</CODE>.  The returned arity must not be
+modified.
+</DL>
+</P><P>
+
+<A NAME="IDX117"></A>
+<DL>
+<DT><U>Procedure:</U> <B>generic-procedure-name</B> <I>generic-procedure</I>
+<DD>Returns the name of <VAR>generic-procedure</VAR>, as specified in the call to
+<CODE>make-generic-procedure</CODE>.
+</DL>
+</P><P>
+
+<A NAME="Method Storage"></A>
+<HR SIZE="6">
+<A NAME="SEC15"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_5.html#SEC14"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_5.html#SEC16"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_5.html#SEC13"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_5.html#SEC13"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC17"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_9.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.2 Method Storage </H2>
+<!--docid::SEC15::-->
+<P>
+
+Methods are stored in generic procedures.  When a generic procedure is
+called, it selects a subset of its stored methods (using
+<CODE>method-applicable?</CODE>), and arranges to invoke one or more of the
+methods as necessary.  The following definitions provide the means for
+adding methods to and removing them from a generic procedure.
+</P><P>
+
+<A NAME="IDX118"></A>
+<DL>
+<DT><U>Procedure:</U> <B>add-method</B> <I>generic-procedure method</I>
+<DD>Adds <VAR>method</VAR> to <VAR>generic-procedure</VAR>.  If
+<VAR>generic-procedure</VAR> already has a method with the same specializers
+as <VAR>method</VAR>, then the old method is discarded and <VAR>method</VAR> is
+used in its place.
+</DL>
+</P><P>
+
+<A NAME="IDX119"></A>
+<DL>
+<DT><U>Procedure:</U> <B>delete-method</B> <I>generic-procedure method</I>
+<DD>Removes <VAR>method</VAR> from <VAR>generic-procedure</VAR>.  Does nothing if
+<VAR>generic-procedure</VAR> does not contain <VAR>method</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX120"></A>
+<DL>
+<DT><U>Procedure:</U> <B>add-methods</B> <I>generic-procedure methods</I>
+<DD>Adds <VAR>methods</VAR>, which must be a list of methods, to
+<VAR>generic-procedure</VAR>.  Equivalent to calling <CODE>add-method</CODE> on
+each method in <VAR>methods</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX121"></A>
+<DL>
+<DT><U>Procedure:</U> <B>generic-procedure-methods</B> <I>generic-procedure</I>
+<DD>Returns a list of the methods contained in <VAR>generic-procedure</VAR>.  The
+returned list must not be modified.
+</DL>
+</P><P>
+
+<A NAME="Effective Method Procedure"></A>
+<HR SIZE="6">
+<A NAME="SEC16"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_5.html#SEC15"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC17"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_5.html#SEC13"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_5.html#SEC13"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC17"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_9.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.3 Effective Method Procedure </H2>
+<!--docid::SEC16::-->
+<P>
+
+<A NAME="IDX122"></A>
+<A NAME="IDX123"></A>
+When a generic procedure is called, it arranges to invoke a subset of
+its methods.  This is done by <EM>combining</EM> the selected methods into
+an <EM>effective method procedure</EM>, or EMP, then tail-recursively
+invoking the EMP.  <CODE>compute-effective-method-procedure</CODE> is the
+procedure that is called to select the applicable methods and combine
+them into an EMP.
+</P><P>
+
+<A NAME="IDX124"></A>
+<DL>
+<DT><U>Procedure:</U> <B>compute-effective-method-procedure</B> <I>generic-procedure classes</I>
+<DD>Collects the applicable methods of <VAR>generic-procedure</VAR> by calling
+<CODE>method-applicable?</CODE> on each method and on <VAR>classes</VAR>.  Combines
+the resulting methods together into an effective method procedure, and
+returns that EMP.
+</DL>
+</P><P>
+
+<A NAME="IDX125"></A>
+<DL>
+<DT><U>Procedure:</U> <B>compute-method</B> <I>generic-procedure classes</I>
+<DD>This procedure is like <CODE>compute-effective-method-procedure</CODE>, except
+that it returns the result as a method whose specializers are
+<VAR>classes</VAR>.
+</P><P>
+
+<CODE>compute-method</CODE> is equivalent to
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(make-method <VAR>classes</VAR>
+             (compute-effective-method-procedure <VAR>generic-procedure</VAR>
+                                                 <VAR>classes</VAR>))
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="Methods"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_5.html#SEC13"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_6.html#SEC17"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_9.html#SEC25">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="sos_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Chris Hanson</I> on <I>July, 18  2001</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>
