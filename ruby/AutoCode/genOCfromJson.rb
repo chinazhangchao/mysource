@@ -5,10 +5,10 @@ require '../Util/helper.rb'
 require 'rails'
 
 module ParseConfig
-  TypeMap = {"".class => "@property (nonatomic,copy)   NSString*", 1.class => "@property (nonatomic,assign) NSInteger", 1.0.class => "@property (nonatomic,assign)   float",
+  TypeMap = {"".class => "@property (nonatomic,copy)   NSString*", 1.class => "@property (nonatomic,assign) long", 1.0.class => "@property (nonatomic,assign)   float",
     true.class => "@property (nonatomic,assign)   BOOL", false.class => "@property (nonatomic,assign)   BOOL"}
 
-  ToFuncMap = {1.class => "integerValue", 1.0.class => "floatValue",
+  ToFuncMap = {1.class => "longValue", 1.0.class => "floatValue",
     true.class => "boolValue", false.class => "boolValue"}
 
   NeedDealloc = ["".class, [].class]

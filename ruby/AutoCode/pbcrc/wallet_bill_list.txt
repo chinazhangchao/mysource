@@ -11,7 +11,8 @@
                 "bank_logo": "http://www.rztong.com.cn/uploadfiles/20092411333807.jpg",
                 "pbcrc_name": "包商银行咖啡节",
                 "pbcrc_id": 123,
-                "money": 1232
+                "money": 1232,
+                "time":"2014-9-27"
             },
             {
                 "card_id": 2,
@@ -22,7 +23,8 @@
                 "bank_logo": "http://www.rztong.com.cn/uploadfiles/20092411333807.jpg",
                 "pbcrc_name": "包商银行咖啡节",
                 "pbcrc_id": 123,
-                "money": 1232
+                "money": 1232,
+                "time":"2014-9-4"
             }
         ]
     }
