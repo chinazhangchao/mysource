@@ -257,9 +257,6 @@ module Spider
         begTime = Time.now
         eventMachineDown(downList, successList, failedList, callBack)
         endTime = Time.now
-        puts "use time:#{endTime-begTime} seconds"
-        puts "successList size:#{successList.size}"
-        puts "failedList size:#{failedList.size}"
       }
     end
 
