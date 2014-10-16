@@ -41,7 +41,7 @@ module Spider
           w=EventMachine::HttpRequest.new(e.href).get :redirects => DownLoadConfig::MaxRedirects
           w.callback {
             s = w.response_header.status
-            File.new(e.locPath, "w") << Helper.toUtf8( w.response)
+            File.open(e.locPath, "w") { |f| f << Helper.toUtf8( w.response) }
             successList << DownStruct::LinkStruct.new(e.href, e.locPath)
           }
           w.errback {
@@ -108,7 +108,6 @@ def batchDownList(downList, callbackPro)
 end
 
 def parseDownLoadUrl(url, downDir, fileName, callbackPro)
-  puts callbackPro
   Spider.evenMachineStart(url, downDir, fileName, callbackPro)
 end
 
@@ -119,7 +118,7 @@ class GetRelative
     @baseUrl = baseUrl
     @downDir = downDir
 
-    @downNodes = proc do |multi, successList, failedList, baseUrl, downDir, callback|
+    def downNodes (multi, successList, failedList, baseUrl, downDir, callback)
       puts "success"
       puts successList.size
       puts "error"
@@ -165,18 +164,18 @@ class GetRelative
       end
     end
 
-    @downOtherNode = proc do |multi, successList, failedList|
+    def downOtherNode (multi, successList, failedList)
       puts "downOtherNode"
       @getDepth = @getDepth - 1
       puts "depth:#{@getDepth}"
       if @getDepth <= 0
-        @downNodes.call(multi, successList, failedList, @baseUrl, @downDir, @eventAllComplete);
+        downNodes(multi, successList, failedList, @baseUrl, @downDir, method(:eventAllComplete));
       else
-        @downNodes.call(multi, successList, failedList, @baseUrl, @downDir, @downOtherNode);
+        downNodes(multi, successList, failedList, @baseUrl, @downDir, method(:downOtherNode));
       end
     end
 
-    @eventAllComplete = proc do |multi, successList, failedList|
+    def eventAllComplete (multi, successList, failedList)
       puts "all complete"
       puts "success"
       puts successList.size
@@ -200,9 +199,9 @@ class GetRelative
     @getDepth = @getDepth - 1
     puts @getDepth
     if @getDepth <= 0
-      parseDownLoadUrl(@baseUrl, @downDir, indexFileName, @eventAllComplete)
+      parseDownLoadUrl(@baseUrl, @downDir, indexFileName, method(:eventAllComplete))
     else
-      parseDownLoadUrl(@baseUrl, @downDir, indexFileName, @downOtherNode)
+      parseDownLoadUrl(@baseUrl, @downDir, indexFileName, method(:downOtherNode))
     end
   end
 
