@@ -13,21 +13,26 @@ module DownLoadConfig
 end
 
 module DownStruct
-  LinkStruct = Struct.new(:href, :locPath)
+  class LinkStruct
+    def initialize(href, locPath, httpMethod = :get, params = {})
+      @href = href
+      @locPath = locPath
+      @httpMethod = httpMethod
+      @params = params
+    end
+    attr_accessor :href, :locPath, :httpMethod, :params
+
+  end
+  #LinkStruct = Struct.new(:href, :locPath, :httpMethod, :params)
 end
 
 module Spider
 
   class << self
 
-    def eventBatchDownList(downList, callBack = nil)
-      puts "eventBatchDownList"
+    def eventMachineDown(linkStructList, callBack = nil)
       failedList = []
       successList = []
-      eventMachineDown(downList, successList, failedList, callBack)
-    end
-
-    def eventMachineDown(linkStructList, successList, failedList, callBack = nil)
       puts "eventMachineDown callBack:#{callBack}"
       multi = EventMachine::MultiRequest.new
       noJob = true
@@ -39,6 +44,7 @@ module Spider
         else
           noJob = false
           w=EventMachine::HttpRequest.new(e.href).get :redirects => DownLoadConfig::MaxRedirects
+          w = w.post :body => e.params if e.httpMethod == :post
           w.callback {
             s = w.response_header.status
             File.open(e.locPath, "w") { |f| f << Helper.toUtf8( w.response) }
@@ -90,12 +96,20 @@ module Spider
       downList = []
       downList << DownStruct::LinkStruct.new(url, downDir + fileName)
       EventMachine.run {
-        failedList = []
-        successList = []
         index = 0
         puts "total size:#{downList.size}"
         begTime = Time.now
-        eventMachineDown(downList, successList, failedList, callBack)
+        eventMachineDown(downList, callBack)
+        endTime = Time.now
+      }
+    end
+
+    def evenMachineStartList(downList, callBack = nil)
+      EventMachine.run {
+        index = 0
+        puts "total size:#{downList.size}"
+        begTime = Time.now
+        eventMachineDown(downList, callBack)
         endTime = Time.now
       }
     end
@@ -103,12 +117,16 @@ module Spider
   end#self end
 end#Spider end
 
-def batchDownList(downList, callbackPro)
-  Spider.eventBatchDownList(downList, callbackPro)
+def batchDownList(downList, callBack = nil)
+  Spider.eventMachineDown(downList, callBack)
 end
 
-def parseDownLoadUrl(url, downDir, fileName, callbackPro)
-  Spider.evenMachineStart(url, downDir, fileName, callbackPro)
+def evenMachineStartList(downList, callBack = nil)
+  Spider.evenMachineStartList(downList, callBack)
+end
+
+def parseDownLoadUrl(url, downDir, fileName, callBack = nil)
+  Spider.evenMachineStart(url, downDir, fileName, callBack)
 end
 
 class GetRelative
@@ -118,7 +136,7 @@ class GetRelative
     @baseUrl = baseUrl
     @downDir = downDir
 
-    def downNodes (multi, successList, failedList, baseUrl, downDir, callback)
+    def downNodes (multi, successList, failedList, baseUrl, downDir, callBack)
       puts "success"
       puts successList.size
       puts "error"
@@ -160,7 +178,7 @@ class GetRelative
           downList.push( DownStruct::LinkStruct.new(baseUrl + href, locPath))
         end
         puts "down list complete,size:#{downList.size}"
-        batchDownList(downList, callback)
+        batchDownList(downList, callBack)
       end
     end
 
