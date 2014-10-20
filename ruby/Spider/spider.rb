@@ -12,18 +12,15 @@ module DownLoadConfig
   OverrideExist = false
 end
 
-module DownStruct
-  class LinkStruct
-    def initialize(href, locPath, httpMethod = :get, params = {})
-      @href = href
-      @locPath = locPath
-      @httpMethod = httpMethod
-      @params = params
-    end
-    attr_accessor :href, :locPath, :httpMethod, :params
-
+class LinkStruct
+  def initialize(href, locPath, httpMethod = :get, params = {})
+    @href = href
+    @locPath = locPath
+    @httpMethod = httpMethod
+    @params = params
   end
-  #LinkStruct = Struct.new(:href, :locPath, :httpMethod, :params)
+  attr_accessor :href, :locPath, :httpMethod, :params
+
 end
 
 module Spider
@@ -40,20 +37,25 @@ module Spider
 
       foreachPro = proc do |e|
         if !DownLoadConfig::OverrideExist && File.exist?(e.locPath)
-          successList << DownStruct::LinkStruct.new(e.href, e.locPath)
+          successList << LinkStruct.new(e.href, e.locPath)
         else
           noJob = false
-          w=EventMachine::HttpRequest.new(e.href).get :redirects => DownLoadConfig::MaxRedirects
-          w = w.post :body => e.params if e.httpMethod == :post
+          if e.httpMethod == :post
+            w=EventMachine::HttpRequest.new(e.href).post :redirects => DownLoadConfig::MaxRedirects, :body => e.params
+          else
+            w=EventMachine::HttpRequest.new(e.href).get :redirects => DownLoadConfig::MaxRedirects
+          end
+
           w.callback {
             s = w.response_header.status
+            locDir = File.dirname(e.locPath)
+            FileUtils.mkdir_p(locDir) unless Dir.exist?(locDir)
             File.open(e.locPath, "w") { |f| f << Helper.toUtf8( w.response) }
-            successList << DownStruct::LinkStruct.new(e.href, e.locPath)
+            successList << LinkStruct.new(e.href, e.locPath)
           }
           w.errback {
-            s = w.response_header.status
-            puts "errback:#{s}"
-            failedList.push( DownStruct::LinkStruct.new(e.href, e.locPath))
+            puts "errback:#{w.response_header}"
+            failedList.push( LinkStruct.new(e.href, e.locPath))
           }
           multi.add e.locPath, w
         end
@@ -94,7 +96,7 @@ module Spider
       downDir << "/" unless downDir.end_with?("/")
       FileUtils.mkdir_p(downDir) unless Dir.exist?(downDir)
       downList = []
-      downList << DownStruct::LinkStruct.new(url, downDir + fileName)
+      downList << LinkStruct.new(url, downDir + fileName)
       EventMachine.run {
         index = 0
         puts "total size:#{downList.size}"
@@ -175,7 +177,7 @@ class GetRelative
 
           locPath = downDir + href
 
-          downList.push( DownStruct::LinkStruct.new(baseUrl + href, locPath))
+          downList.push( LinkStruct.new(baseUrl + href, locPath))
         end
         puts "down list complete,size:#{downList.size}"
         batchDownList(downList, callBack)

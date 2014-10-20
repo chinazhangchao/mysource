@@ -1,5 +1,5 @@
 require 'em-http-request'
-require_relative '../Util/helper'
+require_relative '../../Util/helper'
 
 def eventMachineDown(linkStructList, successList, failedList)
   multi = EventMachine::MultiRequest.new
@@ -44,7 +44,7 @@ EventMachine.run {
   for i in 1..5
     #http = conn.post :keepalive => true, :body => {"issueQuery.lotteryType" => 1, "issueQuery.beginTimeTo" => "2014-09-02 20:59:00", "page" => i}
   conn = EventMachine::HttpRequest.new("http://caipiao.jd.com/notice/betResult_noticeInfo.html") 
-    http = conn.post  :body => {"issueQuery.lotteryType" => 1, "issueQuery.beginTimeTo" => "2014-09-02 20:59:00", "page" => i}
+  http = conn.post  :body => {"issueQuery.lotteryType" => 1, "issueQuery.beginTimeTo" => "2014-09-02 20:59:00", "page" => i}
 
     http.errback {
       p 'Uh oh'
