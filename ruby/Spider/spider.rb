@@ -27,6 +27,10 @@ module Spider
 
   class << self
 
+    def setHeaderOptions(optHash)
+      @@headerOptions = optHash
+    end
+
     def eventMachineDown(linkStructList, callBack = nil)
       failedList = []
       successList = []
@@ -40,10 +44,13 @@ module Spider
           successList << LinkStruct.new(e.href, e.locPath)
         else
           noJob = false
+          opt = {:redirects => DownLoadConfig::MaxRedirects}
+          opt[:head] = @@headerOptions if defined? @@headerOptions
           if e.httpMethod == :post
-            w=EventMachine::HttpRequest.new(e.href).post :redirects => DownLoadConfig::MaxRedirects, :body => e.params
+            opt[:body] = e.params unless e.params.empty?
+            w=EventMachine::HttpRequest.new(e.href).post opt
           else
-            w=EventMachine::HttpRequest.new(e.href).get :redirects => DownLoadConfig::MaxRedirects
+            w=EventMachine::HttpRequest.new(e.href).get opt
           end
 
           w.callback {
