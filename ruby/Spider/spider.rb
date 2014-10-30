@@ -2,7 +2,7 @@ require 'em-http-request'
 require 'nokogiri'
 require 'fileutils'
 require 'set'
-require_relative '../Util/helper'
+require File.expand_path('../../Util/helper', __FILE__)
 
 module DownLoadConfig
   TimeOutLimit = 3*60 #3 minutes
