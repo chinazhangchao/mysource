@@ -3,6 +3,7 @@ require 'nokogiri'
 require 'fileutils'
 require 'set'
 require File.expand_path('../../Util/helper', __FILE__)
+require "addressable/uri"
 
 module DownLoadConfig
   TimeOutLimit = 3*60 #3 minutes
@@ -13,22 +14,33 @@ module DownLoadConfig
 end
 
 class LinkStruct
-  def initialize(href, locPath, httpMethod = :get, params = {})
+  def initialize(href, locPath, httpMethod: :get, params: {}, extraData: nil)
     @href = href
+    if @href.class == "".class
+      @href = Addressable::URI.parse(href)
+      @href.normalize!
+    end
     @locPath = locPath
     @httpMethod = httpMethod
     @params = params
+    @extraData = extraData
   end
-  attr_accessor :href, :locPath, :httpMethod, :params
+  attr_accessor :href, :locPath, :httpMethod, :params, :extraData
 
 end
 
 module Spider
 
+  @@converToUtf8 = false
+
   class << self
 
     def setHeaderOptions(optHash)
       @@headerOptions = optHash
+    end
+
+    def converToUtf8
+      @@converToUtf8 = true
     end
 
     def eventMachineDown(linkStructList, callBack = nil)
@@ -41,7 +53,7 @@ module Spider
 
       foreachPro = proc do |e|
         if !DownLoadConfig::OverrideExist && File.exist?(e.locPath)
-          successList << LinkStruct.new(e.href, e.locPath)
+          successList << e
         else
           noJob = false
           opt = {:redirects => DownLoadConfig::MaxRedirects}
@@ -57,12 +69,18 @@ module Spider
             s = w.response_header.status
             locDir = File.dirname(e.locPath)
             FileUtils.mkdir_p(locDir) unless Dir.exist?(locDir)
-            File.open(e.locPath, "w") { |f| f << Helper.toUtf8( w.response) }
-            successList << LinkStruct.new(e.href, e.locPath)
+            File.open(e.locPath, "w") do |f|
+              if @@converToUtf8 == true
+                f << Helper.toUtf8( w.response)
+              else
+                f << w.response
+              end
+            end
+            successList << e
           }
           w.errback {
             puts "errback:#{w.response_header}"
-            failedList.push( LinkStruct.new(e.href, e.locPath))
+            failedList << e
           }
           multi.add e.locPath, w
         end
