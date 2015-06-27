@@ -74,6 +74,13 @@ let OmniCpp_GlobalScopeSearch=1
 let OmniCpp_DisplayMode=1
 let OmniCpp_DefaultNamespaces=["std"]
 
+"RSense
+let g:rsenseHome = $RSENSE_HOME
+"let g:rsenseUseOmniFunc = 1
+"let g:acp_behaviorSnipmateLength = 1
+nnoremap <silent> <leader>rd :RSenseJumpToDefinition<CR>
+nnoremap <silent> <leader>rw :RSenseWhereIs<CR>
+
 "NERD Tree
 let NERDChristmasTree=1
 let NERDTreeAutoCenter=1
@@ -87,7 +94,12 @@ let NERDTreeWinPos='left'
 let NERDTreeWinSize=31
 nnoremap <F2> :NERDTreeToggle<CR>
 
+"Grep
+nnoremap <silent> <F10> :Rfgrep<CR>
+let Grep_Skip_Files = 'tags'
+
 map <F3> :TlistToggle<CR>
+map <F4> :!ruby %<CR>
 map <F5> :!python %<CR>
 
 "cscope setting
@@ -111,4 +123,9 @@ nmap <F12>e :cs find e <C-R>=expand("<cword>")<CR><CR>
 nmap <F12>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
 nmap <F12>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
 nmap <F12>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+
+inoremap ( ()<ESC>i
+inoremap [ []<ESC>i
+inoremap { {<CR><CR>}<ESC>ki<Tab>
+inoremap < <><ESC>i
 " ~/.vimrc ends here
