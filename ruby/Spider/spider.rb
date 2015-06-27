@@ -158,10 +158,11 @@ end
 
 class GetRelative
 
-  def initialize(baseUrl,downDir,getDepth = 2)
+  def initialize(baseUrl,downDir,getDepth = 2,suffix=".html")
     @getDepth = getDepth
     @baseUrl = baseUrl
     @downDir = downDir
+    @suffix = suffix
 
     def downNodes (multi, successList, failedList, baseUrl, downDir, callBack)
       puts "success"
@@ -185,9 +186,9 @@ class GetRelative
         setList = Set.new
         linkList.each do |link|
           href = link['href']
-          next if href.nil? || !href.include?(".html") 
+          next if href.nil? || !href.include?(@suffix) 
           #process such as "scheme_2.html#SEC15"
-          href = href[0, href.index(".html") + 5]
+          href = href[0, href.index(@suffix) + 5]
           #process such as "./preface.html"
           href = href[2..-1] if href.start_with?("./")
 
@@ -250,7 +251,7 @@ class GetRelative
     end
   end
 
-  def self.Get(baseUrl,downDir,getDepth = 2)
-    GetRelative.new(baseUrl,downDir,getDepth).start
+  def self.Get(baseUrl,downDir,getDepth = 2,suffix = ".html")
+    GetRelative.new(baseUrl,downDir,getDepth,suffix).start
   end
 end #GetRelative
