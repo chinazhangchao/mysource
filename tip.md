@@ -12,3 +12,10 @@ svn rm Images.xcassets/主页/prodCome.imageset/prodCome@2x.jpg@
 
 svn add Images.xcassets/主页/prodCome.imageset/prodCome@2x.png@
 
+##git
+
+1.修改配置后记得commit reset author
+
+git config user.email yournewemail@example.org
+
+git commit --amend --reset-author
