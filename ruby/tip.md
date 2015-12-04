@@ -20,7 +20,7 @@ config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 
 ###application.rb
 config.time_zone = 'Beijing'
-config.i18n.default_locale = "zh-CN"
+config.i18n.default_locale = 'zh-CN'
 
 ###命令
 

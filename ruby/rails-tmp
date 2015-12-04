@@ -1,0 +1,2 @@
+#!/bin/sh
+rails new $1 -m ~/github/mysource/ruby/template.rb
