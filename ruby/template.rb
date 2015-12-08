@@ -36,3 +36,31 @@ FileUtils.cp("#{src_dir}rails.gitignore", '.gitignore')
 
 FileUtils.cp("#{src_dir}devise.zh-CN.yml", 'config/locales')
 FileUtils.cp("#{src_dir}devise-view-zh-CN.yml", 'config/locales')
+
+bootstrap_dir = '/Users/zhangchao/jslib/bootstrap-3.3.5/dist/'
+
+FileUtils.cp("#{bootstrap_dir}css/bootstrap.css", "vendor/assets/stylesheets")
+FileUtils.cp("#{bootstrap_dir}css/bootstrap.min.css", "vendor/assets/stylesheets")
+FileUtils.cp("#{bootstrap_dir}js/bootstrap.js", "vendor/assets/javascripts")
+FileUtils.cp("#{bootstrap_dir}js/bootstrap.min.js", "vendor/assets/javascripts")
+
+FileUtils.cp("/Users/zhangchao/jslib/angularjs1.2.8/angular.min.js", "vendor/assets/javascripts")
+
+FileUtils.cp("/Users/zhangchao/github/bootstrap/ui-bootstrap-tpls-0.9.0.min.js", "vendor/assets/javascripts")
+
+appjs_append = '
+//= require bootstrap.min
+//= require angular.min
+//= require ui-bootstrap-tpls-0.9.0.min'
+
+appjs_file = File.new('app/assets/javascripts/application.js', 'r+')
+appjscontent = appjs_file.read + appjs_append + "\n"
+appjs_file.write(appjscontent)
+appjs_file.close
+
+appcss_file = File.new('app/assets/stylesheets/application.css', 'r+')
+appcss_file.seek(-3, IO::SEEK_END)
+csstail = appcss_file.read
+appcss_file.seek(-3, IO::SEEK_END)
+appcss_file.write("*= require bootstrap.min\n" + csstail)
+appcss_file.close
