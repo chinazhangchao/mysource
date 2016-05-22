@@ -1,3 +1,7 @@
+#翻墙
+
+https://github.com/getlantern/lantern/releases/tag/latest
+
 #运算
 ##1.经典浮点误差示例：
 
