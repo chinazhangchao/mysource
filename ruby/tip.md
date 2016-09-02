@@ -1,11 +1,15 @@
 #源
-1.RubyGems 镜像 - rubychina
+#1.RubyGems镜像 - rubychina
 
 https://gems.ruby-china.org/
 
 gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/
 
 https://github.com/ruby-china/rubygems-mirror/wiki#%E5%85%B3%E4%BA%8E-windows-%E4%B8%8B%E8%AF%81%E4%B9%A6%E6%97%A0%E6%B3%95%E9%AA%8C%E8%AF%81%E9%97%AE%E9%A2%98-certificate-verify-failed
+
+#2.rbenv镜像 - rubychina
+
+git clone https://github.com/andorchen/rbenv-china-mirror.git ~/.rbenv/plugins/rbenv-china-mirror
 
 #encoding
 每一个字符串都有一个 Encoding 对象，也就是说在创建字符串的时候就要为它指定一个 Encoding 对象。

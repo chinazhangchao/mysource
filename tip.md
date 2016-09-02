@@ -9,6 +9,8 @@ https://github.com/getlantern/lantern/releases/tag/latest
 
 0.1 + 0.2 = 0.30000000000000004
 
+0.65 - 0.6 = 0.050000000000000044
+
 #svn
 ##1.文件名中存在@时，svn提示does not exist，解决方法竟然是在文件名末尾再加一个@。（作者脑袋被驴踢）
 
@@ -51,3 +53,36 @@ sudo hostname your-desired-host-name
 sudo scutil --set LocalHostName $(hostname)
 
 sudo scutil --set HostName $(hostname)
+
+#Ubuntu
+##1.程序安装
+
+sudo apt-get install -y build-essential
+
+sudo add-apt-repository ppa:git-core/ppa
+
+sudo apt-get update
+
+sudo apt-get install git
+
+sudo add-apt-repository ppa:webupd8team/sublime-text-2
+
+sudo apt-get update
+
+sudo apt-get install sublime-text
+
+curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+
+sudo apt-get install -y nodejs
+
+sudo add-apt-repository ppa:ubuntu-mozilla-daily/firefox-aurora
+
+sudo apt-get update
+
+sudo apt-get install firefox
+
+sudo apt-get install -f libxss1 libappindicator1 libindicator7
+
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+
+sudo dpkg -i google-chrome*.deb
