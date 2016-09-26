@@ -47,6 +47,14 @@ compound index校验：
 validates_uniqueness_of :visit_key_word, :scope => [:source, :date, :visit_number, :deal_key_word, :deal_number]
 ```
 
+#gem
+
+##install pg
+
+sudo find / -name "pg_config"
+
+sudo gem install pg -- --with-pg-config=/Users/zhangchao/PostgreSQL/pg95/bin/pg_config
+
 #rails
 
 ##1.devise
