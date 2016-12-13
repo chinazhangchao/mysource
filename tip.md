@@ -28,6 +28,9 @@ git config user.email yournewemail@example.org
 
 git commit --amend --reset-author
 
+##2.文件大小写重命名
+git mv FileNameCase filenamecase
+
 #mysql
 ##1.mysql单表多timestamp的current_timestamp设置问题
 
@@ -86,3 +89,19 @@ sudo apt-get install -f libxss1 libappindicator1 libindicator7
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 
 sudo dpkg -i google-chrome*.deb
+
+#vagrant
+
+vagrant box add dev-box package.box
+vagrant init dev-box
+
+VBoxManage setextradata ruby-dev-machine VBoxInternal2/SharedFoldersEnableSymlinksCreate/projects 1
+vagrant up
+
+wget https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub -O .ssh/authorized_keys
+
+chmod 700 .ssh
+
+chmod 600 .ssh/authorized_keys
+
+chown -R vagrant:vagrant .ssh
