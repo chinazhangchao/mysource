@@ -11,6 +11,30 @@ https://github.com/ruby-china/rubygems-mirror/wiki#%E5%85%B3%E4%BA%8E-windows-%E
 
 git clone https://github.com/andorchen/rbenv-china-mirror.git ~/.rbenv/plugins/rbenv-china-mirror
 
+env RUBY_BUILD_MIRROR_URL=file:///user/zhangchao/Downloads/ruby-2.4.2.tar.gz# ~/.rbenv/bin/rbenv install 2.4.2
+
+cd ~/.rbenv/plugins/ruby-build
+
+git pull
+
+rbenv install 2.4.1
+
+rbenv global 2.4.1
+
+gem install bundler
+
+每个项目下执行
+bundle install --local
+
+如果执行rbenv install 2.4.1时无法下载文件，手动下载：
+
+wget https://cache.ruby-lang.org/pub/ruby/2.4/ruby-2.4.1.tar.bz2
+
+export RUBY_BUILD_CACHE_PATH=包地址
+
+然后再执行rbenv install 2.4.1
+
+
 #encoding
 每一个字符串都有一个 Encoding 对象，也就是说在创建字符串的时候就要为它指定一个 Encoding 对象。
 
@@ -53,9 +77,13 @@ validates_uniqueness_of :visit_key_word, :scope => [:source, :date, :visit_numbe
 
 sudo find / -name "pg_config"
 
-sudo gem install pg -- --with-pg-config=/Users/zhangchao/PostgreSQL/pg95/bin/pg_config
+sudo gem install pg -- --with-pg-config=/Library/PostgreSQL/9.6/bin/pg_config
 
 #rails
+
+
+Rack::Utils::SYMBOL_TO_STATUS_CODE 
+
 
 ##1.devise
 ###Gemfile
@@ -83,3 +111,22 @@ rails g devise user
 rails g devise:views:i18n_templates
 
 rake secret
+
+##ActiveAdmin
+ActiveAdmin页面不包含application.js、application.css文件的内容，可以在active_admin.js.coffee、active_admin.scss文件中添加，或者在config/active_admin.rb文件中配置：
+
+```ruby
+# config/active_admin.rb
+
+# == Register Stylesheets & Javascripts
+#
+# We recommend using the built in Active Admin layout and loading
+# up your own stylesheets / javascripts to customize the look
+# and feel.
+#
+# To load a stylesheet:
+  config.register_stylesheet 'my_stylesheet.css'
+#
+# To load a javascript file:
+  config.register_javascript 'my_javascript.js'
+```

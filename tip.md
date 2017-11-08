@@ -20,6 +20,25 @@ svn rm Images.xcassets/主页/prodCome.imageset/prodCome@2x.jpg@
 
 svn add Images.xcassets/主页/prodCome.imageset/prodCome@2x.png@
 
+#npm
+##淘宝镜像
+
+npm install --registry=http://registry.npm.taobao.org
+
+npm config set registry https://registry.npm.taobao.org
+
+--ignore-scripts
+
+yarn config set registry https://registry.yarnpkg.com
+
+yarn config set registry https://registry.npm.taobao.org --global
+
+yarn config set disturl https://npm.taobao.org/dist --global
+
+npm config set registry https://registry.npm.taobao.org --global
+
+npm config set disturl https://npm.taobao.org/dist --global
+
 #git
 
 ##1.修改配置后记得commit reset author
