@@ -114,10 +114,12 @@ sudo dpkg -i google-chrome*.deb
 #vagrant
 
 vagrant box add dev-box package.box
-vagrant init dev-box
+vagrant init dev-box
 
 VBoxManage setextradata ruby-dev-machine VBoxInternal2/SharedFoldersEnableSymlinksCreate/projects 1
-vagrant up
+vagrant up
+
+vagrant plugin install vagrant-vbguest
 
 wget https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub -O .ssh/authorized_keys
 
