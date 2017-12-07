@@ -23,6 +23,8 @@ svn add Images.xcassets/主页/prodCome.imageset/prodCome@2x.png@
 #npm
 ##淘宝镜像
 
+npm install chromedriver --chromedriver_cdnurl=http://cdn.npm.taobao.org/dist/chromedriver
+
 npm install --registry=http://registry.npm.taobao.org
 
 npm config set registry https://registry.npm.taobao.org
