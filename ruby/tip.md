@@ -5,6 +5,8 @@ https://gems.ruby-china.org/
 
 gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/
 
+bundle config mirror.https://rubygems.org https://gems.ruby-china.org
+
 https://github.com/ruby-china/rubygems-mirror/wiki#%E5%85%B3%E4%BA%8E-windows-%E4%B8%8B%E8%AF%81%E4%B9%A6%E6%97%A0%E6%B3%95%E9%AA%8C%E8%AF%81%E9%97%AE%E9%A2%98-certificate-verify-failed
 
 #2.rbenv镜像 - rubychina
